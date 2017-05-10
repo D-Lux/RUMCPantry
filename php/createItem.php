@@ -48,7 +48,7 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColorSuccess('<form action="../ap_io1.html"><input type="submit" value="Go back" /></form>');
+        echoDivWithColorSuccess( '<button onclick="goBack()">Go Back</button>');
 
         echoDivWithColorSuccess("Item created successfully");
         echoDivWithColorSuccess("Category: $category" );
@@ -63,7 +63,7 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 
        
     } else {
-        echoDivWithColorFail('<form action="../ap_io1.html"><input type="submit" value="Go back" /></form>');
+        echoDivWithColorFail('<button onclick="goBack()">Go Back</button>');
         echoDivWithColorFail("Error, failed to connect to database.");
      
         
@@ -73,3 +73,8 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 }
 
 ?>
+<script type="text/javascript">
+function goBack() {
+    window.history.back();
+}
+   </script>
