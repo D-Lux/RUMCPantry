@@ -1,18 +1,6 @@
 <?php
 
-function echoDivWithColorSuccess($message)
-{
-    echo  '<div style="color: green;">'; /*must do color like this, can't do these three lines on the same line*/
-    echo $message;
-    echo  '</div>';
-}
-
-function echoDivWithColorFail($message)
-{
-    echo  '<div style="color: red;">'; /*must do color like this, can't do these three lines on the same line*/
-    echo $message;
-    echo  '</div>';
-}
+include 'utilities.php';
 
 if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 {
@@ -48,23 +36,23 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColorSuccess( '<button onclick="goBack()">Go Back</button>');
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
 
-        echoDivWithColorSuccess("Item created successfully");
-        echoDivWithColorSuccess("Category: $category" );
-        echoDivWithColorSuccess("Display Name: $displayName" );
-        echoDivWithColorSuccess("Item name: $itemName" );
-        echoDivWithColorSuccess("Price: $price" );
-        echoDivWithColorSuccess("Family allotment for size 1-2: $small" );
-        echoDivWithColorSuccess("Family allotment for size 3-4: $medium" );     
-        echoDivWithColorSuccess("Family allotment for size 5-6: $large" );
-        echoDivWithColorSuccess("Family allotment for walk ins: $walkIn" );       
-        echoDivWithColorSuccess("Factor: $factor" );
+        echoDivWithColor("Item created successfully", "green" );
+        echoDivWithColor("Category: $category", "green" );
+        echoDivWithColor("Display Name: $displayName", "green" );
+        echoDivWithColor("Item name: $itemName", "green" );
+        echoDivWithColor("Price: $price", "green" );
+        echoDivWithColor("Family allotment for size 1-2: $small", "green" );
+        echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
+        echoDivWithColor("Family allotment for size 5-6: $large", "green" );
+        echoDivWithColor("Family allotment for walk ins: $walkIn", "green" );       
+        echoDivWithColor("Factor: $factor", "green" );
 
        
     } else {
-        echoDivWithColorFail('<button onclick="goBack()">Go Back</button>');
-        echoDivWithColorFail("Error, failed to connect to database.");
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database.", "red" );
      
         
     }
