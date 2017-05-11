@@ -6,23 +6,37 @@
 		<!--<link href='style.css' rel='stylesheet'>-->
 
 	</head>
+	<style>
+	.error {
+		color : red;
+	}
+	</style>
+
+	
 	<body>
 		<h1>Roselle United Methodist Church</h1>
 		<h2>Food Pantry</h2>
 		<h3>Log In Page</h3>
-	
-		<form method = "post" action="php/login.php">
+		
+		<form method = "post" action="<?php echo htmlspecialchars("php/login.php");?>">
 		  Log In: <input type="text" name="login" value="">
 		  <br>
 		  Password: <input type="text" name="password" value="">
 		  <br><br>
+		  <?php
+			if (isset($_GET['err'])) {
+				if ($_GET['err'] == 1) {
+					echo "<p class=error>";
+					echo "Incorrect login or password";
+					echo "</p>";
+				}
+			}
+			$_POST['err']=""
+		  ?>
 		  <input type="submit" value="Submit">
 		</form>
- 
-	<?php
-	if ($_SERVER["REQUEST_METHOD"] == "POST") {
-		echo "Incorrect name or password.";
-	}
-	?>
+	
+	
+
 	</body>
 </html>
