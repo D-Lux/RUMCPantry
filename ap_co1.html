@@ -3,6 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
+	<script src="js/clientOps.js"></script>
     <title>ap_co1</title>
 </head>
 
@@ -11,18 +12,25 @@
     <h1>
         First admin page for selecting clients
     </h1>
-    <form method="get" action="ciup.html">
-        Last name: <input type="text" name="lname"><br>
-        <select>
-                <option value="0">person 0</option>
-                <option value="1">person 1</option>
-            </select>
+	
+	<!-- Give the user a text field to start typing a name, fill in the options as we go -->
+	<!--<form action="php/clientOps.php" method="post">
+		<input type="hidden" name="action" value="submit" />-->
+	<form method="get" action="php/clientOps.php">
+        Last name: <input type="search" name="lname">
+        <select id="clientSelected">
+			<option>Begin typing a name...</option>
+		</select>
         </br>
-        <input type="submit" value="Update information">
+		<input id="UpdateInfo" type="submit" name="submit" value="Update information">
+        <input id="Appointment" type="submit" name="submit" value="New Appointment">
     </form>
-    <form method="get" action="cap.html">
-        <input type="submit" value="Make an appointment">
+	
+	<br>
+	<!-- Split out new client button for ease of scripting -->
+	<form action="ap_co2.html">
+		<input id="CreateNew" type="submit" name="submit" value="Create New">
     </form>
+	
 </body>
-
 </html>

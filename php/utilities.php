@@ -8,4 +8,19 @@ function echoDivWithColor($message, $color)
     echo  '</div>';
 }
 
+
+function debugEchoPOST()
+{
+	echo '<pre>';
+	var_dump($_POST);
+	echo '</pre>';
+}
+
+
+function fixInput($data) {
+	$data = trim($data);
+	$data = stripslashes($data);
+	$data = htmlspecialchars($data);
+	return $data;
+}
 ?>
