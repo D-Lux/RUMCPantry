@@ -22,6 +22,12 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
     $username = "root";
     $password = "";
     $dbname = "foodpantry";
+
+
+
+
+
+
     /* previous lines set up the strings for connextion*/
 
     /* Create connection*/
@@ -31,15 +37,33 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "INSERT INTO item (itemName, category, displayName, price, timestamp, isDeleted, small, medium, large, walkIn, factor)
-    VALUES ('$itemName', '$category', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$walkIn', '$factor')"; /*standard insert statement using the variables pulled*/
+    //check to see if category ecists, if not create it.
+    $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
+    if($result->num_rows == 0) {
+         $sql = "INSERT INTO category (name, small, medium, large, walkIn)
+         VALUES ('$category', 0, 0, 0, 0)";
+          if ($conn->query($sql) === TRUE) {
+              echoDivWithColor( "New category created: $category", "green");
+          }
+          else{
+            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+            echoDivWithColor("Error, failed to connect to database at category insert.", "red" );
+          }
+          
+
+    } else {
+       echoDivWithColor( "$category category already in database", "green");
+    }
+
+
+    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, walkIn, factor)
+    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$walkIn', '$factor')"; /*standard insert statement using the variables pulled*/
 
     if ($conn->query($sql) === TRUE) {
 
         echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
 
         echoDivWithColor("Item created successfully", "green" );
-        echoDivWithColor("Category: $category", "green" );
         echoDivWithColor("Display Name: $displayName", "green" );
         echoDivWithColor("Item name: $itemName", "green" );
         echoDivWithColor("Price: $price", "green" );
@@ -52,7 +76,7 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
        
     } else {
         echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database.", "red" );
+        echoDivWithColor("Error, failed to connect to database at item insert.", "red" );
      
         
     }

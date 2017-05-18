@@ -20,34 +20,9 @@
     <form name="addItem" action="php/createItem.php" onSubmit="return validateItemAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
         <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
-        <div id="category">Category
-
-
-            <?php 
-
-            $servername = "127.0.0.1";
-            $username = "root";
-            $password = "";
-            $dbname = "foodpantry";
-            /* previous lines set up the strings for connextion*/
-
-            mysql_connect($servername, $username, $password);
-            mysql_select_db($dbname);
-
-            $sql = "SELECT DISTINCT name FROM Category";
-            $result = mysql_query($sql);
-
-            echo "<input list='browsers' name='browser'>";
-            
-            echo "<datalist id='browsers'>";
-            
-            while ($row = mysql_fetch_array($result)) {
-                echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
-            }
-            echo "</datalist>";
-
-            ?>
-            </select>
+        <div id="category">
+            Category
+            <?php include 'php/dataLists/categoryName.php';?>
         </div>
 
         <div id="itemName">Item name (used for the database): <input type="text" name="itemName"></div>
