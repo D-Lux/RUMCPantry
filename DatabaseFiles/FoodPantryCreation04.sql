@@ -176,7 +176,7 @@ ENGINE = InnoDB;
 -- Table `FoodPantry`.`Category`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FoodPantry`.`Category` (
-  `idCategory` INT NOT NULL,
+  `idCategory` INT NOT NULL AUTO_INCREMENT,
   `name` VARCHAR(45) NULL,
   `small` INT NULL,
   `medium` INT NULL,
