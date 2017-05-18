@@ -23,4 +23,8 @@ function fixInput($data) {
 	$data = htmlspecialchars($data);
 	return $data;
 }
+
+function createCookie($cookieName, $cookieValue, $duration) {
+	setcookie($cookieName, $cookieValue, time() + $duration, "/");
+}
 ?>

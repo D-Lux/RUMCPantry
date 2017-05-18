@@ -4,8 +4,6 @@
 	<head>
 		<title>Roselle United Methodist Church Food Pantry</title>
 		<!--<link href='style.css' rel='stylesheet'>-->
-		<?php include 'php/login.php';?>
-		<?php $GLOBALS['loggedin'] = false; ?>
 	</head>
 	
 	<style>
@@ -20,7 +18,7 @@
 		<h2>Food Pantry</h2>
 		<h3>Log In Page</h3>
 		
-		<form method = "post" action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]);?>">
+		<form method = "POST" action="php/login.php">
 		  Log In: <input type="text" name="login" value="">
 		  <br>
 		  Password: <input type="password" name="password" value="">
@@ -30,13 +28,15 @@
 				if ($_GET['err'] == 1) {
 					echo "<p>Incorrect login or password</p>";
 				}
+				else if ($_GET['err'] == 2) {
+					echo "<p>Please log in</p>";
+				}
 			}
-			$_POST['err']=""
 		  ?>
 		  <input type="submit" value="Submit">
 		</form>
 	
-	
+		
 
 	</body>
 </html>
