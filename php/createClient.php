@@ -43,24 +43,13 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	if ($conn->query($sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
-		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, $clientID, timestamp)
-				VALUES ('$clientFirstName','$clientLastName', TRUE, '$birthDate', now())";
+		
+		// Create the insert string and perform the insertion
+		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp)
+				VALUES ('$clientFirstName','$clientLastName', TRUE, '$birthDate', '$clientID' now())";
 		if ($conn->query($sql) === TRUE) {
-			// Successfully added client and family member (head of household)
-			//TODO Change button to go to update client info page
-			echoDivWithColor( '<button onclick="goToUpdate()">View Details</button>', "green");
-			echoDivWithColor("Client added successfully", "green" );
-			echoDivWithColor("First Name: $clientFirstName", "green" );
-			echoDivWithColor("Last Name: $clientLastName", "green" );
-			echoDivWithColor("Birth Date: $birthDate", "green" );
-			
-			echoDivWithColor("Email: $email", "green" );
-			echoDivWithColor("Phone Number: $phoneNo", "green" );
-			
-			echoDivWithColor("Number of Adults: $numAdults", "green" );
-			echoDivWithColor("Number of Kids: $numKids", "green" );
-			
-			echoDivWithColor("Address: $addressStreet <br>$addressCity, $addressState $addressZip", "green" );
+			// Successfully added client and family member (head of household) - go to update page
+			header("/RUMCPantry/ap_co3.html?new=1,id=$clientID");
 		}   
 	} 
 	else {
@@ -76,8 +65,4 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 function goBack() {
     window.history.back();
 }
-
-function goToUpdate() {
-    window.location.href = "/RUMCPantry/ap_co3.html";
-}
-   </script>
+</script>

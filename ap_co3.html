@@ -3,24 +3,17 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	
-    <title>ap_co2</title>
+    <title>ap_co3</title>
 	
-	<style>
-	.required label:after {
-		color: red;
-		content: ' *';
-		display:inline;
-	}
-	</style>
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
-	<h1>Add New Client</h1>
-	<form name="addClient" action="php/createClient.php" onSubmit="return validateNewClient()" method="post">
+	<h1>Update Client Information</h1>
+	<!--<form name="addClient" action="php/createClient.php" onSubmit="return validateNewClient()" method="post">-->
+	<form name="addClient" action="php/createClient.php" onSubmit="" method="post">
 	
 		<!-- Required fields -->
 		<div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
