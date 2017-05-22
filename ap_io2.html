@@ -25,8 +25,12 @@
             <?php include 'php/dataLists/categoryName.php';?>
         </div>
 
-        <div id="itemName">Item name (used for the database): <input type="text" name="itemName"></div>
-        <div id="displayName">Display name (what you want the item to be called): <input type="text" name="displayName"></div>
+        <div id="itemName">Item name (used for the database):
+            <?php include 'php/dataLists/itemName.php';?>
+        </div>
+        <div id="displayName">Display name (what you want the item to be called):
+            <?php include 'php/dataLists/displayName.php';?>
+        </div>
         <div id="price">Price: <input type="number" min="0" max="100000" value="0.00" step="0.01" name="price" /></div>
         <div id="household">How many of each can a household take?</div>
         <div id="small"> 1 to 2:
