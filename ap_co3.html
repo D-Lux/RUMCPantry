@@ -6,14 +6,37 @@
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	
     <title>ap_co3</title>
-	
+	<script>
+	function getQueryVariable(variable)
+	{
+       var query = window.location.search.substring(1);
+       var vars = query.split("&");
+       for (var i=0;i<vars.length;i++) {
+               var pair = vars[i].split("=");
+               if(pair[0] == variable){return pair[1];}
+       }
+       return(false);
+	}
+	</script>
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
 	<h1>Update Client Information</h1>
-	<!--<form name="addClient" action="php/createClient.php" onSubmit="return validateNewClient()" method="post">-->
-	<form name="addClient" action="php/createClient.php" onSubmit="" method="post">
+	
+	<script>
+		var isNew = getQueryVariable("new");
+		if (isNew != 0) {
+			window.alert("New Client Added!");
+		}
+	</script>
+	
+	<!-- Get connection to database and fill in fields with appropriate information -->
+	<!-- Add familyMember section with individual family member information -->
+	<!-- Add "Add Member" button -->
+	<!-- Add Member page (mimic add client) -->
+	
+	<form name="updateClient" action="php/clientOps.php" >
 	
 		<!-- Required fields -->
 		<div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
@@ -54,7 +77,7 @@
 		<div id="addressZip">Zip Code: <input type="number" name="addressZip"></div>
 		
 		<br>
-        <input type="submit" value="Create" name="submit">
+        <input type="submit" value="Update" name="submit">
     </form>
 
 </body>

@@ -4,30 +4,133 @@
 <head>
     <script src="js/utilities.js"></script>
 	<script src="js/clientOps.js"></script>
+	<?php include 'php/utilities.php'; ?>
+	
+	<style>
+		.btn_trash {
+			background-image: url(images/TEMP_Trash.png);
+		}
+	</style>
+
     <title>ap_co1</title>
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
     <h1>
-        First admin page for selecting clients
+        First admin page for client operations
     </h1>
 	
-	<!-- Give the user a text field to start typing a name, fill in the options as we go -->
-	<!--<form action="php/clientOps.php" method="post">
-		<input type="hidden" name="action" value="submit" />-->
-	<form method="get" action="php/clientOps.php">
+	<!-- Search for a name TODO
+	<form method="get" action="<?php //echo "$_SERVER['PHP_SELF']";?>">
         Last name: <input type="search" name="lname">
-        <select id="clientSelected">
-			<option>Begin typing a name...</option>
-		</select>
         </br>
-		<input id="UpdateInfo" type="submit" name="submit" value="Update information">
-        <input id="Appointment" type="submit" name="submit" value="New Appointment">
-    </form>
+		<input id="Search" type="submit" name="submit" value="Search">
+    </form> 
+	-->
 	
-	<br>
-	<!-- Split out new client button for ease of scripting -->
+	<!-- Display all of the clients in a table format -->
+	<!-- This generates a table with all clients in one place -->
+	<!-- TODO: Limit this by pages -->
+	<!-- see this: https://www.w3schools.com/howto/howto_js_tabs.asp -->
+	<!-- or this: https://www.w3schools.com/php/php_mysql_select_limit.asp (using parameters) -->
+	
+	<?php
+		// Set up server connection
+		$servername = "127.0.0.1";
+		$username = "root";
+		$password = "";
+		$dbname = "foodpantry";
+
+		// Create and check connection
+		$conn = new mysqli($servername, $username, $password, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		// Create our query string
+		// Grab all data, since we can pick and choose what to display
+		$sql = "select * from familymember 
+				join client 
+				where client.clientID=familymember.clientid and 
+				familymember.isheadofhousehold=true";
+		$result = $conn->query($sql);
+
+		// loop through the query results
+		if ($result->num_rows > 0) {
+		
+			// Create the client table and add in the headers
+			// Future scope: Set options to change what displays
+			echo "<table> <tr> <th></th>";
+			echo "<th>Client Name</th><th>Family Size</th>";
+			echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+			echo "<th></th></tr>";
+			
+		// TODO: Limit rows based off a searched name (will be in the address bar)
+			while($row = $result->fetch_assoc()) {
+				// Start the form for this row
+				echo "<form action='php/clientOps.php' >";
+				
+				// Get the client ID so we can properly do the update and delete operations
+				$id = $row["clientID"];
+				echo "<input type='hidden' name='id' value='$id'>";
+				
+				// Start Table
+				echo "<tr>";
+
+				// Update button				
+				echo "<td><input type='submit' name='Update' value='Update'></td>";
+				
+				// Various basic information fields
+				echo "<td>" . $row['lastName'] . "</td>";
+				$familySize = $row["numOfAdults"] + $row["numOfKids"];
+				echo "<td>$familySize</td>";
+				
+				// Display the email or 'unknown' if not set
+				if ( $row['email'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['email'] . "</td>";
+				}
+				
+				// Display the phone number or '-' if not set
+				if ( $row['phoneNumber'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['phoneNumber'] . "</td>";
+				}
+				// Display Yes/No/Unknown for foodstamps based on True/False/Null
+				switch ($row['foodStamps']){
+					case true:
+						echo "<td>Yes</td>";
+						break;
+					case false:
+						echo "<td>No</td>";
+						break;
+					default:
+						echo "<td>Unknown</td>";
+						break;
+				}
+				
+				// Delete button - TODO: Fix icon
+				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' </td>";
+				
+				// Close off the row and form
+				echo "</tr></form>";
+			}
+			echo "</table>";
+		} else {
+			echo "No clients in database.";
+		}
+		
+		
+		$conn->close();
+	?>
+	<br><br><br>
+	
+	<!-- NEW Client -->
 	<form action="ap_co2.html">
 		<input id="CreateNew" type="submit" name="submit" value="Create New">
     </form>

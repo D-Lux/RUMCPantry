@@ -38,7 +38,7 @@ function validateNewClient() {
 }
 
 function validateNewClientMember() {
-    var response = ""; // TODO
+    var response = "";
 	var clientFirstName = document.forms["addClient"]["clientFirsttName"].value;
     var clientLastName = document.forms["addClient"]["clientLastName"].value;
     var errors = 0;

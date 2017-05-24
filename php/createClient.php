@@ -13,7 +13,7 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	$birthDate = $_POST['birthDate'];
 	$numKids = $_POST['numKids'];
 	$email = fixInput($_POST['email']);
-	$phoneNo = $_POST['phoneNo'];
+	$phoneNo = storePhoneNo($_POST['phoneNo']);
 		
 	// Address fields
 	$addressStreet = fixInput($_POST['addressStreet']);
@@ -37,20 +37,23 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, email, phoneNumber, address, city, state, zip)
 	VALUES ('$numAdults','$numKids',now(),'$email','$phoneNo','$addressStreet','$addressCity','$addressState','$addressZip')";
 	
-	//TODO: go to client info update page with this client selected
-	
 	// Perform and test insertion
 	if ($conn->query($sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
-		
 		// Create the insert string and perform the insertion
 		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp)
-				VALUES ('$clientFirstName','$clientLastName', TRUE, '$birthDate', '$clientID' now())";
+				VALUES ('$clientFirstName','$clientLastName', TRUE, '$birthDate', '$clientID', now())";
 		if ($conn->query($sql) === TRUE) {
 			// Successfully added client and family member (head of household) - go to update page
-			header("/RUMCPantry/ap_co3.html?new=1,id=$clientID");
-		}   
+			// Pass along a 'new' parameter so we can display a special message (this is the same as update client page normally)
+			// Pass along the clientID so we know which client to pull up on the update page
+			header("location: /RUMCPantry/ap_co3.html?new=1&id=$clientID");
+		}
+		else {
+			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+			echoDivWithColor("Error, failed to create.", "red" );	
+		}
 	} 
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
@@ -58,6 +61,9 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	}
 
 	$conn->close();
+}
+else {
+	header("location: /RUMCPantry/mainpage.html");
 }
 
 ?>
