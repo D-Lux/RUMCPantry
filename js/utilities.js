@@ -7,13 +7,13 @@ function goBack() {
 /*
 Usage
 Example URL:
-http://www.example.com/index.php?id=1&image=awesome.jpg
+.../index.php?id=1&image=awesome.jpg
 
 Calling getQueryVariable("id") - would return "1".
 Calling getQueryVariable("image") - would return "awesome.jpg".
 
 Note: For multiple parameters, this currently requiers '&' be used as the separater.
-Future scope would be to allow for ',' or other alternatives
+Future scope should allow for ',' or other alternatives
 */
 function getQueryVariable(variable)
 {

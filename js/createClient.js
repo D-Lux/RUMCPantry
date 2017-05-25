@@ -37,6 +37,20 @@ function validateNewClient() {
     }
 }
 
+function validateUpdatedClient() {
+
+    var numAdults = document.forms["updateClient"]["numAdults"].value;
+ 
+
+    if (numAdults == "" || numAdults.length == 0 || numAdults == null || numAdults == "0") {
+        getElementAndColorIt("numAdults", "red");
+        alert("Clients must have at least one adult. \nPlease fix and resubmit.");
+    }
+	else {
+        return true;
+    }
+}
+
 function validateNewClientMember() {
     var response = "";
 	var clientFirstName = document.forms["addClient"]["clientFirsttName"].value;

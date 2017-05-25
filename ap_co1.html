@@ -10,7 +10,15 @@
 		.btn_trash {
 			background-image: url(images/TEMP_Trash.png);
 		}
+		table, th, td {
+			border: 1px solid black;
+			text-align:center
+		}
 	</style>
+</head>
+
+<body>
+
 
     <title>ap_co1</title>
 </head>
@@ -27,6 +35,7 @@
         </br>
 		<input id="Search" type="submit" name="submit" value="Search">
     </form> 
+	// See SQL Wildcards for this query
 	-->
 	
 	<!-- Display all of the clients in a table format -->
@@ -50,10 +59,10 @@
 		
 		// Create our query string
 		// Grab all data, since we can pick and choose what to display
-		$sql = "select * from familymember 
-				join client 
-				where client.clientID=familymember.clientid and 
-				familymember.isheadofhousehold=true";
+		$sql = "SELECT * FROM FamilyMember 
+				JOIN Client 
+				WHERE Client.clientID=FamilyMember.clientID AND 
+				FamilyMember.isHeadOfHousehold=true";
 		$result = $conn->query($sql);
 
 		// loop through the query results
@@ -68,14 +77,14 @@
 			
 		// TODO: Limit rows based off a searched name (will be in the address bar)
 			while($row = $result->fetch_assoc()) {
-				// Start the form for this row
+				// Start the form for this row (so buttons act correctly based on client)
 				echo "<form action='php/clientOps.php' >";
 				
 				// Get the client ID so we can properly do the update and delete operations
 				$id = $row["clientID"];
 				echo "<input type='hidden' name='id' value='$id'>";
 				
-				// Start Table
+				// Start Table row
 				echo "<tr>";
 
 				// Update button				
@@ -99,7 +108,7 @@
 					echo "<td>-</td>";
 				}
 				else {
-					echo "<td>" . $row['phoneNumber'] . "</td>";
+					echo "<td>" . displayPhoneNo($row['phoneNumber']) . "</td>";
 				}
 				// Display Yes/No/Unknown for foodstamps based on True/False/Null
 				switch ($row['foodStamps']){

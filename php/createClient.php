@@ -14,6 +14,7 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	$numKids = $_POST['numKids'];
 	$email = fixInput($_POST['email']);
 	$phoneNo = storePhoneNo($_POST['phoneNo']);
+	$foodstamps = $_POST['foodstamps'];
 		
 	// Address fields
 	$addressStreet = fixInput($_POST['addressStreet']);
@@ -34,8 +35,8 @@ if(isset($_POST['submit'])) /*when the button is pressed on post request*/
 	} 
 
 	// Create insertion string
-	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, email, phoneNumber, address, city, state, zip)
-	VALUES ('$numAdults','$numKids',now(),'$email','$phoneNo','$addressStreet','$addressCity','$addressState','$addressZip')";
+	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, email, phoneNumber, address, city, state, zip, foodStamps)
+	VALUES ('$numAdults','$numKids',now(),'$email','$phoneNo','$addressStreet','$addressCity','$addressState','$addressZip', '$foodstamps')";
 	
 	// Perform and test insertion
 	if ($conn->query($sql) === TRUE) {

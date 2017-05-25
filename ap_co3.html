@@ -3,26 +3,33 @@
 
 <head>
     <script src="js/utilities.js"></script>
+	<script src="js/createClient.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
+	<?php include 'php/utilities.php'; ?>
 	
     <title>ap_co3</title>
-	<script>
-	function getQueryVariable(variable)
-	{
-       var query = window.location.search.substring(1);
-       var vars = query.split("&");
-       for (var i=0;i<vars.length;i++) {
-               var pair = vars[i].split("=");
-               if(pair[0] == variable){return pair[1];}
-       }
-       return(false);
+	
+	<style>
+	.required label:after {
+		color: red;
+		content: ' *';
+		display:inline;
 	}
-	</script>
+	
+	.notes
+	{
+		rows="10";
+		cols="80";
+	}
+	</style>
+
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
 	<h1>Update Client Information</h1>
+	
+	<?php echo "<h3>This will update the client: ". $_GET['id'] . "</h3>"; ?>
 	
 	<script>
 		var isNew = getQueryVariable("new");
@@ -35,50 +42,197 @@
 	<!-- Add familyMember section with individual family member information -->
 	<!-- Add "Add Member" button -->
 	<!-- Add Member page (mimic add client) -->
+	<?php
+	// Set up server connection
+		$servername = "127.0.0.1";
+		$username = "root";
+		$password = "";
+		$dbname = "foodpantry";
+
+		// Create and check connection
+		$conn = new mysqli($servername, $username, $password, $dbname);
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		// *************************************************
+		// Query the database
+		// It'll be easy to just grab the queries here for all the data we will display layer
+		
+		// Grab client information
+		$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, notes
+				FROM Client
+				WHERE clientID=" . $_GET['id'];
+		$clientInfo = $conn->query($sql);
+		
+		// Grab family member information
+		// TODO: Had some issues checking the isDeleted flag in the SELECT statement returning nothing
+		// So for now I will just check it when the member is going to be displayed
+		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted
+				FROM FamilyMember
+				WHERE clientID=" . $_GET['id'];
+		$familyInfo = $conn->query($sql);
+		
+		// Grab invoice information
+		$sql = "SELECT visitDate, hasBeenFilled, inProgress
+				FROM Invoice
+				WHERE clientID=" . $_GET['id'];
+		$invoiceInfo = $conn->query($sql);
+		
+		// Grab the client family name
+		$sql = "SELECT lastName FROM FamilyMember
+				JOIN Client
+				ON FamilyMember.ClientID = Client.ClientID
+				WHERE isHeadOfHousehold = TRUE";
+		$clientNameInfo = $conn->query($sql)->fetch_assoc();
+		$clientName = $clientNameInfo['lastName'];
+		
+		// Close the connection as we've gotten all the information we should need
+		// Using function in utilities.php to close the database
+		closeDB($conn);
 	
-	<form name="updateClient" action="php/clientOps.php" >
+		// ***********************************************************************
+		// DISPLAY CLIENT INFORMATION
+		// Fills in all fields with values from the database
+		// "Update" button at end will take all values and update the client entry with those values
+		if (($clientInfo->num_rows > 0) AND ($familyInfo->num_rows > 0)) {
+			$clientRow = $clientInfo->fetch_assoc();
+			echo "Client Family Name: $clientName <br><br><br>";
+			
+			echo "<form name='updateClient' action='php/updateClient.php' method='post' onSubmit='return validateUpdatedClient()' >";
+			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
+			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
+			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
+			
+			$foodStampStatus = $clientRow['foodStamps'];
+			echo "<div id='foodStamps'>Foodstamp Status: <select name='foodStamps'> 
+				<option value=null " . optionSelected($foodStampStatus,null) . ">Unknown</option>
+				<option value=true " . optionSelected($foodStampStatus,true) . ">Yes</option>
+				<option value=false " . optionSelected($foodStampStatus,false) . ">No</option>
+				</select> </div>";
+			
+			echo "<div id='email'>Email: <input type='email' name='email' value=" . $clientRow['email'] . "></div>";
+			echo "<div id='phoneNo'>Phone Number: <input type='tel' name='phoneNo' value=" . displayPhoneNo($clientRow['phoneNumber']) . "></div>";
+			echo "<div id='addressStreet'>Street Address: <input type='text' name='addressStreet' value=" . $clientRow['address'] . "></div>";
+			//echo "<div id='addressCity'>City: <input type='text' name='addressCity' value=" . $clientRow['city'] . "></div>";
+			echo "<div id='addressCity'>City: <input type='text' name='addressCity' value=" . $clientRow['city'] . "></div>";
+			// Dropdown for state
+			echo "<div id='addressState'>State:
+				<select name='addressState'> <option value=" . $clientRow['state'] . ">" . $clientRow['state'] . "</option>
+				<option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option>
+				<option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option>
+				<option value='DC'>DC</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option>
+				<option value='ID'>ID</option> <option value='IL'>IL</option> <option value='IN'>IN</option> <option value='IA'>IA</option>
+				<option value='KS'>KS</option> <option value='KY'>KY</option> <option value='LA'>LA</option> <option value='ME'>ME</option>
+				<option value='MD'>MD</option> <option value='MA'>MA</option> <option value='MI'>MI</option> <option value='MN'>MN</option>
+				<option value='MS'>MS</option> <option value='MO'>MO</option> <option value='MT'>MT</option> <option value='NE'>NE</option>
+				<option value='NV'>NV</option> <option value='NH'>NH</option> <option value='NJ'>NJ</option> <option value='NM'>NM</option>
+				<option value='NY'>NY</option> <option value='NC'>NC</option> <option value='ND'>ND</option> <option value='OH'>OH</option>
+				<option value='OK'>OK</option> <option value='OR'>OR</option> <option value='PA'>PA</option> <option value='RI'>RI</option>
+				<option value='SC'>SC</option> <option value='SD'>SD</option> <option value='TN'>TN</option> <option value='TX'>TX</option>
+				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
+				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
+			</select> </div>";
+			echo "<div id='addressZip'>Zip Code: <input type='number' name='addressZip' value=" . $clientRow['zip'] . "></div>";
+			
+			// TODO: Get this looking like a proper 'notes' box
+			echo "<br><div id='notes' >Notes: <input class='notes' type='text' maxlength='256' name='notes' value=" . $clientRow['notes'] . "></div>";
+			echo "<br><br>";
+			echo "<input type='submit' name='Update' value='Update'>";
+			echo "</form>";
+		}
+			
 	
-		<!-- Required fields -->
-		<div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
+		
+		// ***********************************************************************
+		// DISPLAY FAMILY MEMBERS
+		// Pulls all members of the family starting from the head of household
+		// TODO: Figure out an easy way to change head of household
+		
+		
+		/* <div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
 			<div class="tooltiptext">This name should be for the head of the household</div>
 			</div>
 			<input type="text" name="clientFirstName" maxlength="45">
 		</div>
-			
-		</div><br>
-        <div id="clientLastName" class="required"><label>Last Name:</label> <input type="text" name="clientLastName" maxlength="45"></div><br>
-        <div id="numAdults" class="required"><label>Number of Adults:</label> <input type="number" name="numAdults" value="0"></div>
-		
-		<!-- Optional fields -->
-		<div id="numKids">Number of Children: <input type="number" name="numKids" value="0"></div><br>
 		<div id="birthDate">Birthday: <input type="date" name="birthDate" min="1900-01-01"></div><br>
-		<div id="email">Email: <input type="email" name="email"></div>
-		<div id="phoneNo">Phone Number: <input type="tel" name="phoneNo"></div><br>
-		<div id="addressStreet">Street Address: <input type="text" name="addressStreet"></div>
-		<div id="addressCity">City: <input type="text" name="addressCity"></div>
-		
-		<!-- Dropdown for state -->
-		<div id="addressState">State:
-            <select name="addressState"> <option value=""></option>
-			<option value="AL">AL</option> <option value="AK">AK</option> <option value="AZ">AZ</option> <option value="AR">AR</option>
-			<option value="CA">CA</option> <option value="CO">CO</option> <option value="CT">CT</option> <option value="DE">DE</option>
-			<option value="DC">DC</option> <option value="FL">FL</option> <option value="GA">GA</option> <option value="HI">HI</option>
-			<option value="ID">ID</option> <option value="IL">IL</option> <option value="IN">IN</option> <option value="IA">IA</option>
-			<option value="KS">KS</option> <option value="KY">KY</option> <option value="LA">LA</option> <option value="ME">ME</option>
-			<option value="MD">MD</option> <option value="MA">MA</option> <option value="MI">MI</option> <option value="MN">MN</option>
-			<option value="MS">MS</option> <option value="MO">MO</option> <option value="MT">MT</option> <option value="NE">NE</option>
-			<option value="NV">NV</option> <option value="NH">NH</option> <option value="NJ">NJ</option> <option value="NM">NM</option>
-			<option value="NY">NY</option> <option value="NC">NC</option> <option value="ND">ND</option> <option value="OH">OH</option>
-			<option value="OK">OK</option> <option value="OR">OR</option> <option value="PA">PA</option> <option value="RI">RI</option>
-			<option value="SC">SC</option> <option value="SD">SD</option> <option value="TN">TN</option> <option value="TX">TX</option>
-			<option value="UT">UT</option> <option value="VT">VT</option> <option value="VA">VA</option> <option value="WA">WA</option>
-			<option value="WV">WV</option> <option value="WI">WI</option> <option value="WY">WY</option> 
-		</select> </div>
-		<div id="addressZip">Zip Code: <input type="number" name="addressZip"></div>
 		
 		<br>
         <input type="submit" value="Update" name="submit">
     </form>
+			
+			// Create the client table and add in the headers
+			echo "<table> <tr> <th></th>";
+			echo "<th>Client Name</th><th>Family Size</th>";
+			echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+			echo "<th></th></tr>";
+			
+		// TODO: Limit rows based off a searched name (will be in the address bar)
+			while($row = $result->fetch_assoc()) {
+				// Start the form for this row (so buttons act correctly based on client)
+				echo "<form action='php/clientOps.php' >";
+				
+				// Get the client ID so we can properly do the update and delete operations
+				$id = $row["clientID"];
+				echo "<input type='hidden' name='id' value='$id'>";
+				
+				// Start Table row
+				echo "<tr>";
+
+				// Update button				
+				echo "<td><input type='submit' name='Update' value='Update'></td>";
+				
+				// Various basic information fields
+				echo "<td>" . $row['lastName'] . "</td>";
+				$familySize = $row["numOfAdults"] + $row["numOfKids"];
+				echo "<td>$familySize</td>";
+				
+				// Display the email or 'unknown' if not set
+				if ( $row['email'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['email'] . "</td>";
+				}
+				
+				// Display the phone number or '-' if not set
+				if ( $row['phoneNumber'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['phoneNumber'] . "</td>";
+				}
+				// Display Yes/No/Unknown for foodstamps based on True/False/Null
+				switch ($row['foodStamps']){
+					case true:
+						echo "<td>Yes</td>";
+						break;
+					case false:
+						echo "<td>No</td>";
+						break;
+					default:
+						echo "<td>Unknown</td>";
+						break;
+				}
+				
+				// Delete button - TODO: Fix icon
+				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' </td>";
+				
+				// Close off the row and form
+				echo "</tr></form>";
+			}
+			echo "</table>";
+		} 
+		else {
+			echo "Client was not found.";
+		}
+		*/
+		
+		// ***********************************************************************
+		// SHOW VISITS
+		// Show all of the visits (actionable to view further information)
+		// Add a button to add an appointment
+	?>
 
 </body>
 
