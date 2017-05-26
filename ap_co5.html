@@ -4,10 +4,9 @@
 <head>
     <script src="js/utilities.js"></script>
 	<script src="js/createClient.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	<?php include 'php/utilities.php'; ?>
 	
-    <title>ap_co3</title>
+    <title>ap_co4</title>
 	
 	<style>
 	.required label:after {
@@ -15,37 +14,13 @@
 		content: ' *';
 		display:inline;
 	}
-	
-	.notes
-	{
-		rows="10";
-		cols="80";
-	}
-	
-	.btn_trash {
-		background-image: url(images/TEMP_Trash.png);
-	}
-	table, th, td {
-		border: 1px solid black;
-		text-align:center
-	}
-	
 	</style>
 
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
-	<h1>Update Client Information</h1>
-	
-	<?php echo "<h3>This will update the client: ". $_GET['id'] . "</h3>"; ?>
-	
-	<script>
-		var isNew = getQueryVariable("new");
-		if (isNew != 0) {
-			window.alert("New Client Added!");
-		}
-	</script>
+	<h1>Update Family Member Information</h1>
 	
 	<?php
 	// Set up server connection
@@ -62,21 +37,11 @@
 		
 		// *************************************************
 		// Query the database
-		// It'll be easy to just grab the queries here for all the data we will display layer
-		
-		// Grab client information
-		$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, notes
-				FROM Client
-				WHERE clientID=" . $_GET['id'];
-		$clientInfo = $conn->query($sql);
-		
-		// Grab family member information
-		// TODO: Had some issues checking the isDeleted flag in the SELECT statement returning nothing
-		// So for now I will just check it when the member is going to be displayed
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
 				FROM FamilyMember
 				WHERE clientID=" . $_GET['id'];
 		$familyInfo = $conn->query($sql);
+
 		
 		// Grab invoice information
 		$sql = "SELECT visitDate, hasBeenFilled, inProgress
@@ -88,7 +53,6 @@
 		$sql = "SELECT lastName FROM FamilyMember
 				JOIN Client
 				ON FamilyMember.ClientID = Client.ClientID
-				AND FamilyMember.ClientID = " . $_GET['id'] . "
 				WHERE isHeadOfHousehold = TRUE";
 		$clientNameInfo = $conn->query($sql)->fetch_assoc();
 		$clientName = $clientNameInfo['lastName'];
@@ -101,12 +65,11 @@
 		// DISPLAY CLIENT INFORMATION
 		// Fills in all fields with values from the database
 		// "Update" button at end will take all values and update the client entry with those values
-		
 		if (($clientInfo->num_rows > 0) AND ($familyInfo->num_rows > 0)) {
 			$clientRow = $clientInfo->fetch_assoc();
 			echo "Client Family Name: $clientName <br><br><br>";
 			
-			echo "<form name='updateClient' action='php/clientOps.php' method='post' onSubmit='return validateUpdatedClient()' >";
+			echo "<form name='updateClient' action='php/updateClient.php' method='post' onSubmit='return validateUpdatedClient()' >";
 			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
 			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
 			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
@@ -144,27 +107,29 @@
 			// TODO: Get this looking like a proper 'notes' box
 			echo "<br><div id='notes' >Notes: <input class='notes' type='text' maxlength='256' name='notes' value='" . $clientRow['notes'] . "'></div>";
 			echo "<br><br>";
-			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";
+			echo "<input type='submit' name='Update' value='Update'>";
 			echo "</form>";
+		}
+			
+	
 		
-			echo "<br><br><br><h3>Family Members</h3>";
-			// ***********************************************************************
-			// DISPLAY FAMILY MEMBERS
-			// Pulls all members of the family
-			// firstName | lastName | isHeadOfHousehold | birthdate | notes
+		// ***********************************************************************
+		// DISPLAY FAMILY MEMBERS
+		// Pulls all members of the family
+			// firstName lastName isHeadOfHousehold birthdate notes
 			
 			// Create the client table and add in the headers
 			echo "<table> <tr> <th></th>";
 			echo "<th>First Name</th><th>Last Name</th>";
-			echo "<th>Birth Date</th><th>Head of Household</th><th>Notes</th><th></th></tr>";
+			echo "<th>Birth Date</th><th>Head of Household</th><th>Notes</th></tr>";
 			
-			// Loop through our data and spit it out
+		// Loop through our data and spit it out
 			while($row = $familyInfo->fetch_assoc()) {
 				// Start the form for this row (so buttons act correctly based on client)
-				echo "<form action='ap_co4.html' >";
+				echo "<form action='php/updateClientMember.php' >";
 				
 				// Get the ID so we can properly do the update and delete operations
-				$id = $row['FamilyMemberID'];
+				$id = $row["FamilyMemberID"];
 				echo "<input type='hidden' name='id' value='$id'>";
 				
 				// Start Table row
@@ -174,39 +139,55 @@
 				echo "<td><input type='submit' name='Update' value='Update'></td>";
 				
 				// Various basic information fields
-				echo "<td>" . $row['firstName'] . "</td>";
 				echo "<td>" . $row['lastName'] . "</td>";
-				echo "<td>" . $row['birthDate'] . "</td>";
+				$familySize = $row["numOfAdults"] + $row["numOfKids"];
+				echo "<td>$familySize</td>";
 				
-				// Display 'isHeadOfHousehold' as yes or no
-				$head = ($row['isHeadOfHousehold'] ? "Yes" : "No");
-				echo "<td> $head </td>";
-
-				echo "<td>" . $row['notes'] . "</td>";
+				// Display the email or 'unknown' if not set
+				if ( $row['email'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['email'] . "</td>";
+				}
+				
+				// Display the phone number or '-' if not set
+				if ( $row['phoneNumber'] == NULL ) {
+					echo "<td>-</td>";
+				}
+				else {
+					echo "<td>" . $row['phoneNumber'] . "</td>";
+				}
+				// Display Yes/No/Unknown for foodstamps based on True/False/Null
+				switch ($row['foodStamps']){
+					case true:
+						echo "<td>Yes</td>";
+						break;
+					case false:
+						echo "<td>No</td>";
+						break;
+					default:
+						echo "<td>Unknown</td>";
+						break;
+				}
 				
 				// Delete button - TODO: Fix icon
-				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' ></td>";
+				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' </td>";
 				
 				// Close off the row and form
 				echo "</tr></form>";
 			}
 			echo "</table>";
-			
-			echo "<form action='ap_co4.html'>";
-			echo "<input type='hidden' name='id' value=" . $_GET['id'] . ">";
-			echo "<input type='hidden' name='lnamedefault' value='" . $clientName . "'>";	// Send along the client last name so we can autofill the last name
-			echo "<input id='newMember' type='submit' name='newMember' value='New Family Member'>";	
-			echo "</form>";
-			
-			// ***********************************************************************
-			// SHOW VISITS
-			// Show all of the visits (actionable to view further information)
-			// Add a button to add an appointment
-
 		} 
 		else {
 			echo "Client was not found.";
-		}	
+		}
+		
+		
+		// ***********************************************************************
+		// SHOW VISITS
+		// Show all of the visits (actionable to view further information)
+		// Add a button to add an appointment
 	?>
 
 </body>

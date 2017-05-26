@@ -59,6 +59,7 @@
 		
 		// Create our query string
 		// Grab all data, since we can pick and choose what to display
+		// TODO: Only grab what we want (better practice)
 		$sql = "SELECT * FROM FamilyMember 
 				JOIN Client 
 				WHERE Client.clientID=FamilyMember.clientID AND 
@@ -88,7 +89,7 @@
 				echo "<tr>";
 
 				// Update button				
-				echo "<td><input type='submit' name='Update' value='Update'></td>";
+				echo "<td><input type='submit' name='GoUpdateClient' value='Update'></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['lastName'] . "</td>";
@@ -124,7 +125,7 @@
 				}
 				
 				// Delete button - TODO: Fix icon
-				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' </td>";
+				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' ></td>";
 				
 				// Close off the row and form
 				echo "</tr></form>";
@@ -141,7 +142,7 @@
 	
 	<!-- NEW Client -->
 	<form action="ap_co2.html">
-		<input id="CreateNew" type="submit" name="submit" value="Create New">
+		<input id="CreateNew" type="submit" name="GoNewClient" value="New Client">
     </form>
 	
 </body>

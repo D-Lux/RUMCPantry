@@ -20,7 +20,7 @@
 <body>
     <button onclick="goBack()">Go Back</button>
 	<h1>Add New Client</h1>
-	<form name="addClient" action="php/createClient.php" onSubmit="return validateNewClient()" method="post">
+	<form name="addClient" action="php/clientOps.php" onSubmit="return validateNewClient()" method="post">
 	
 		<!-- Required fields -->
 		<div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
@@ -66,7 +66,7 @@
 		<div id="addressZip">Zip Code: <input type="number" name="addressZip"></div>
 		
 		<br>
-        <input type="submit" value="Create" name="submit">
+        <input type="submit" name="submitClient" value="Create" >
     </form>
 
 </body>

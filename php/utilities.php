@@ -31,6 +31,11 @@ function fixInput($data) {
 	return $data;
 }
 
+// Made this function to turn data into a single-quote string for storing and viewing
+function makeString($data) {
+	return "'" . $data . "'";
+}
+
 function createCookie($cookieName, $cookieValue, $duration) {
 	setcookie($cookieName, $cookieValue, time() + $duration, "/");
 }
@@ -43,7 +48,7 @@ function displayPhoneNo($data) {
 	return '(' . $firstThree . ')-' . $middleThree . '-' . $finalFour;
 }
 
-// Takes in a string and strips all spaces, dashes and non-integers, then saves the first 10
+// Takes in a string and strips all spaces, dashes and non-integers
 function storePhoneNo($data) {
 	return (preg_replace('/[^0-9]/','',$data));
 }
