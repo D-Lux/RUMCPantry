@@ -1,0 +1,3 @@
+Need to be able to remove a category.
+
+All items in the category should be displayed to the user, and should also be flagged as removed if the category is removed.

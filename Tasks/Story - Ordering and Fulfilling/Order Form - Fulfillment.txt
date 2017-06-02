@@ -1,0 +1,3 @@
+Be able to view active orders as an admin and set the order to fulfilled
+
+Bonus: Able to edit the order when certain items are out of stock

@@ -1,0 +1,3 @@
+Need to be able to 'delete' active clients
+
+Bonus points - secondary client view that shows all of the currently inactive clients with an option to reactivate the client.

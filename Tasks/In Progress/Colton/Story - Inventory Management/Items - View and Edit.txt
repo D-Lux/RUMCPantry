@@ -1,0 +1,5 @@
+Must be able to view all items
+
+Should be able to select a category or search to find items
+
+Must be able to edit all fields for a given item when viewing the single item

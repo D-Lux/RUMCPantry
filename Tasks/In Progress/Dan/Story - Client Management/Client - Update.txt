@@ -1,0 +1,1 @@
+Must be able to view client details and update all as needed

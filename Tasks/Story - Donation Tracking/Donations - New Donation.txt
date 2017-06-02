@@ -1,0 +1,17 @@
+Must be able to create a donation from a partner with the following information:
+
+Date of pickup
+network partner (default to RUMC)
+Agency (defualt to 1039a)
+Donor Name (e.g. Jewel, Sam's Club)
+City
+Box QTYs of the following:
+FRZ - Assorted Foods (non meat)
+FRZ - Assorted Meat and Seafood
+FRZ - Assorted Prepared Foods
+RFR - Assorted Bakery & Pastries
+RFR - Assorted Produce
+RFR - Assorted Dairy & Deli Foods
+DRY - Assorted Foods (Shelf-Stable)
+DRY - Assorted Non-Food Products
+DRY - Assorted Food Drive Foods

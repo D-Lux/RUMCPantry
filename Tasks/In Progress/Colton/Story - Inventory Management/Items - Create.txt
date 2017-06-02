@@ -1,0 +1,13 @@
+Must be able to create new items for the inventory with all of the database information:
+
+itemName
+displayName
+price
+
+
+These values might be editable here, but leaving them for the order form would be fine
+small
+medium
+large
+walkin
+factor

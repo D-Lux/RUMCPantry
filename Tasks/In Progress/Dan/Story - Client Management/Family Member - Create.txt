@@ -1,0 +1,7 @@
+Must be able to create a family member with all appropriate data fields
+
+firstName
+lastName
+isHeadOfHousehold
+notes
+birthDate

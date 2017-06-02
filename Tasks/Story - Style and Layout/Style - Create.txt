@@ -1,0 +1,1 @@
+We will need to decide on a project-wide style and begin putting it together in easy terms to translate to css for the second task in this list

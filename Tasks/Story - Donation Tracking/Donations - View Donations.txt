@@ -1,0 +1,1 @@
+Must be able to view all donations from a partner as well as edit the donation if needed
