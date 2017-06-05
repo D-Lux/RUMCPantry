@@ -15,6 +15,21 @@ CREATE SCHEMA IF NOT EXISTS `FoodPantry` DEFAULT CHARACTER SET utf8 ;
 USE `FoodPantry` ;
 
 -- -----------------------------------------------------
+-- Table `FoodPantry`.`Category`
+-- -----------------------------------------------------
+CREATE TABLE IF NOT EXISTS `FoodPantry`.`Category` (
+  `CategoryID` INT NOT NULL AUTO_INCREMENT,
+  `name` VARCHAR(45) NULL,
+  `small` INT NULL,
+  `medium` INT NULL,
+  `large` INT NULL,
+  `walkIn` INT NULL,
+  PRIMARY KEY (`CategoryID`),
+  UNIQUE INDEX `idCategory_UNIQUE` (`CategoryID` ASC))
+ENGINE = InnoDB;
+
+
+-- -----------------------------------------------------
 -- Table `FoodPantry`.`Item`
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FoodPantry`.`Item` (
@@ -29,7 +44,14 @@ CREATE TABLE IF NOT EXISTS `FoodPantry`.`Item` (
   `large` INT NULL COMMENT 'small, medium, large, and walk in are all integers that describe how many of the item each family size can take',
   `walkIn` INT NULL COMMENT 'small, medium, large, and walk in are all integers that describe how many of the item each family size can take',
   `factor` INT NULL COMMENT 'factor for the \"weight\" of the quantity',
-  PRIMARY KEY (`itemID`))
+  `categoryID` INT NOT NULL,
+  PRIMARY KEY (`itemID`, `categoryID`),
+  INDEX `fk_Item_Category1_idx` (`categoryID` ASC),
+  CONSTRAINT `fk_Item_Category1`
+    FOREIGN KEY (`categoryID`)
+    REFERENCES `FoodPantry`.`Category` (`CategoryID`)
+    ON DELETE NO ACTION
+    ON UPDATE NO ACTION)
 ENGINE = InnoDB;
 
 
@@ -169,21 +191,6 @@ CREATE TABLE IF NOT EXISTS `FoodPantry`.`Donation` (
     REFERENCES `FoodPantry`.`DonationPartner` (`DonationPartnerID`)
     ON DELETE NO ACTION
     ON UPDATE NO ACTION)
-ENGINE = InnoDB;
-
-
--- -----------------------------------------------------
--- Table `FoodPantry`.`Category`
--- -----------------------------------------------------
-CREATE TABLE IF NOT EXISTS `FoodPantry`.`Category` (
-  `idCategory` INT NOT NULL AUTO_INCREMENT,
-  `name` VARCHAR(45) NULL,
-  `small` INT NULL,
-  `medium` INT NULL,
-  `large` INT NULL,
-  `walkIn` INT NULL,
-  PRIMARY KEY (`idCategory`),
-  UNIQUE INDEX `idCategory_UNIQUE` (`idCategory` ASC))
 ENGINE = InnoDB;
 
 
