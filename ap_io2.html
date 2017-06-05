@@ -17,7 +17,7 @@
         Add an item to the database:
     </h1>
 
-    <form name="addItem" action="php/createItem.php" onSubmit="return validateItemAdd()" method="post">
+    <form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
         <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
         <div id="category">
@@ -103,7 +103,7 @@
         </select> </br>
 
         </br>
-        <input type="submit" value="Create" name="submit">
+        <input type="submit" value="Create" name="createItem">
     </form>
     <h2>
         <!--  <?php include 'php/createItem.php';?> -->
