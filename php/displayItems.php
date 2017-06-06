@@ -21,6 +21,8 @@ $result = $conn->query($sql);
 if ($result->num_rows > 0) {
     
     // output data of each row
+    $hasDeleted =0;
+    $hasReal =0;
     echo "<table>";
     while($row = $result->fetch_assoc()) {
         if($row["isDeleted"] == false)
@@ -35,9 +37,20 @@ if ($result->num_rows > 0) {
             echo "<td><input type='submit' name='DeleteItem' value='Delete'></td>";
             echo "</form>";
             echo "</tr>";
+            $hasReal++;
             }
+            else
+            {
+                $hasDeleted++;
+            }
+            
     }
    echo "</table>";
+
+   if($hasDeleted > 0 && $hasReal == 0)
+   {
+        echo "There is currently nothing in the items table";
+   }
    
    } else {
     echo "There is currently nothing in the items table";
