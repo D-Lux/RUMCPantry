@@ -140,7 +140,7 @@ elseif (isset($_GET['DeleteItem'])) {
     }
    
 }
-elseif (isset($_GET['insertItem'])) {
+elseif (isset($_GET['updateItem'])) {
 	
 }
 
