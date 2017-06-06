@@ -1,0 +1,64 @@
+<html>
+<head>
+    <script src="js/utilities.js"></script>
+    
+</head>
+<body>
+	<form id="topForm">
+		<input type="button" id="saveAppointments" value="Save">
+		<br><br>
+		<input type="button" id="addTimeSlot" value="New Time Slot">
+		<br><br>
+		<input type="date" id="appDate">
+		<table id="timeTable">
+		</table>
+	</form>
+	
+	
+
+	
+	<script type='text/javascript'>
+		var rowIter = 0;
+		var cellIter = 0;
+		function addSlot() {
+		  var input = document.createElement('input');
+		  input.type = 'time';
+		  input.name = 'timeSlot[]';
+		  return input;
+		}
+		
+		function delButton() {
+		  var input = document.createElement('input');
+		  input.class = 'delButton';
+		  input.type = 'button';
+		  input.name = 'delButton[]';
+		  return input;
+		}
+		
+		function removeSlot() {
+		}
+
+		var form = document.getElementById('container');
+		document.getElementById('addTimeSlot').addEventListener('click', function(e) {
+			// Find a <table> element with id="timeTable":
+			var table = document.getElementById("timeTable");
+			
+			// Create an empty <tr> element and add it to the 1st position of the table:
+			var row = table.insertRow(0);
+
+			// Insert new cells (<td> elements) in the "new" <tr> element:
+			var cell1 = row.insertCell(0);
+			var cell2 = row.insertCell(1);
+			cell2.id = 'TestCell';	// TODO Use dynamic var to create ids
+			var cell3 = row.insertCell(2);
+
+			// Add some text to the new cells:
+			cell1.appendChild(addSlot());
+			//cell2.appendChild(getSuccessOutput('/RUMCPantry/php/dataLists/clientName.php'));
+			cell3.appendChild(delButton());
+		});
+
+	</script>
+</body>
+
+</html>

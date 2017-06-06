@@ -59,8 +59,8 @@ elseif(isset($_POST['submitClient']))
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
 		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp)
-				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, now())";
+		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp, isDeleted)
+				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, now(), FALSE)";
 		if ($conn->query($sql) === TRUE) {
 			// Successfully added client and family member (head of household) - go to update page
 			// Pass along a 'new' parameter so we can display a special message (this is the same as update client page normally)

@@ -58,7 +58,7 @@
 		$familyInfo = $conn->query($sql);
 		
 		// Grab invoice information
-		$sql = "SELECT invoiceID, visitDate, hasBeenFilled, inProgress, clientID
+		$sql = "SELECT invoiceID, visitDate, status, clientID
 				FROM Invoice
 				WHERE clientID=" . $_GET['id'];
 		$invoiceInfo = $conn->query($sql);
@@ -196,7 +196,7 @@
 			// Add a button to add an appointment
 			
 			echo "<br><br><br><h3>Visits</h3>";
-			if ($invoiceInfo->num_rows > 0) {
+			if ($invoiceInfo!=null && $invoiceInfo->num_rows > 0) {
 		
 				// Create the invoice table and add in the headers
 				echo "<table> <tr> <th>Invoice Date</th><th>Status</th></tr>";
