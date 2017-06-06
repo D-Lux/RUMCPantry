@@ -81,9 +81,10 @@ ENGINE = InnoDB;
 -- -----------------------------------------------------
 CREATE TABLE IF NOT EXISTS `FoodPantry`.`Invoice` (
   `invoiceID` INT NOT NULL AUTO_INCREMENT,
-  `visitDate` DATETIME NULL,
+  `visitDate` DATE NULL,
   `clientID` INT NOT NULL,
   `status` INT NULL,
+  `visitTime` TIME NULL,
   PRIMARY KEY (`invoiceID`, `clientID`),
   INDEX `fk_Invoice_Client1_idx` (`clientID` ASC),
   CONSTRAINT `fk_Invoice_Client1`
