@@ -107,12 +107,12 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 			{
 				
 				$sql = "SELECT DISTINCT " . $attributeName ." FROM " .  $tableName . " WHERE isDeleted=0" ;//select distinct values from the collumn in this table
-				echo $sql;
+			
 			}
 			else
 			{
 				$sql = "SELECT DISTINCT " . $attributeName ." FROM " .  $tableName ;//select distinct values from the collumn in this table
-				echo $sql;
+			
 			}
            	
 			$result = mysql_query($sql);
