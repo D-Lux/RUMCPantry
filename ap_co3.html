@@ -53,7 +53,8 @@
 		// Grab family member information
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
 				FROM FamilyMember
-				WHERE clientID=" . $_GET['id'];
+				WHERE clientID=" . $_GET['id'] . "
+				AND isDeleted!=1";
 		$familyInfo = $conn->query($sql);
 		
 		// Grab invoice information
@@ -210,15 +211,8 @@
 					$date = $row["visitDate"];
 					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 					
-					if ($row['hasBeenFilled']) {
-						echo "<td>Filled</td>";
-					}
-					elseif ($row['inProgress']) {
-						echo "<td>In Progress</td>";
-					}
-					else{
-						echo "<td>Created</td>";
-					}
+					// TODO: STATUS information based on var
+					echo "<td>Created</td>";
 					
 					// Close off the row and form
 					echo "</tr></form>";

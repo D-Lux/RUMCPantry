@@ -49,10 +49,10 @@ elseif(isset($_POST['submitClient']))
 	// Create insertion string
 	$sql = "INSERT INTO Client 
 			(numOfAdults, NumOfKids, timestamp, email, phoneNumber, 
-				address, city, state, zip, foodStamps)
+				address, city, state, zip, foodStamps, isDeleted)
 			VALUES 
 			($numAdults,$numKids,now(),$email,$phoneNo,
-				$address,$city,$state,$zip,$foodStamps)";
+				$address,$city,$state,$zip,$foodStamps, FALSE)";
 	
 	// Perform and test insertion
 	if ($conn->query($sql) === TRUE) {
@@ -77,6 +77,7 @@ elseif(isset($_POST['submitClient']))
 	} 
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		echoDivWithColor("Error, failed to connect to database.", "red" );	
 	}
 	closeDB($conn);
@@ -205,10 +206,8 @@ elseif(isset($_POST['submitMember']))
 	}
 	$head = makeString($head);
 	// Create insertion string
-	$sql = "INSERT INTO familyMember (firstName, lastName, isHeadOfHousehold, notes, birthDate, timestamp, clientID)
-	VALUES ($memberFirstName,$memberLastName,$head,$notes,$birthDate, now(), $clientID)";
-	$sql = "INSERT INTO familyMember (firstName, lastName, isHeadOfHousehold, notes, birthDate, timestamp, clientID)
-	VALUES ($memberFirstName,$memberLastName,$head,$notes,$birthDate, now(), $clientID)";
+	$sql = "INSERT INTO familyMember (firstName, lastName, isHeadOfHousehold, notes, birthDate, timestamp, clientID, isDeleted)
+	VALUES ($memberFirstName,$memberLastName,$head,$notes,$birthDate, now(), $clientID, FALSE)";
 	
 	// Perform and test insertion
 	if ($conn->query($sql) === TRUE) {
