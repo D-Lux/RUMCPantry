@@ -80,4 +80,54 @@ function closeDB($conn){
 		$conn->close();
 	}
 }
+
+function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName ,$hasDeletedAttribute)
+{
+	/*
+	argument explanations:
+	$defaultVal - default value you would like to appear in the datalist 
+	$listName - Name of the list make plural (ex categories or itemNames)
+	$tableName - table you wish to pull the attribute from (ex item)
+	$attributeName - name of the attribute (ex displayName)
+	$inputName - the name of the actual input, this is what a post request can grab
+	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
+		out all that has been deleted.
+	*/
+	
+            $servername = "127.0.0.1";
+            $username = "root";
+            $password = "";
+            $dbname = "foodpantry";
+            /* previous lines set up the strings for connextion*/
+
+            mysql_connect($servername, $username, $password);
+            mysql_select_db($dbname);
+            //standard DB stuff up to here
+			if($hasDeletedAttribute == true)
+			{
+				
+				$sql = "SELECT DISTINCT " . $attributeName ." FROM " .  $tableName . " WHERE isDeleted=0" ;//select distinct values from the collumn in this table
+			
+			}
+			else
+			{
+				$sql = "SELECT DISTINCT " . $attributeName ." FROM " .  $tableName ;//select distinct values from the collumn in this table
+			
+			}
+           	
+			$result = mysql_query($sql);
+
+            echo "<input list=$listName name=$inputName value=$defaultVal >";
+            
+            echo "<datalist id=$listName>"; //this id must be the same as the list = above
+            
+            while ($row = mysql_fetch_array($result)) {
+                echo "<option value='" . $row[$attributeName] . "'>" . $row[$attributeName] . "</option>";
+            }
+            echo "</datalist>";
+
+			
+}
+
+
 ?>

@@ -140,6 +140,9 @@ elseif (isset($_GET['DeleteItem'])) {
     }
    
 }
+elseif (isset($_GET['updateItem'])) {
+	
+}
 
 ?>
 <script type="text/javascript">
