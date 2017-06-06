@@ -7,13 +7,19 @@
     $username = "root";
     $password = "";
     $dbname = "foodpantry";
+    $categoryName="";
 
 
 $conn = new mysqli($servername, $username, $password, $dbname);
     /* Check connection*/
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
+
+    
 } 
+
+
+
  //TODO currently I have it pulling the category ID, need to pull the category name
 $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, walkIn, factor, categoryID FROM item";
 $result = $conn->query($sql);
@@ -23,17 +29,28 @@ if ($result->num_rows > 0) {
     // output data of each row
     $hasDeleted =0;
     $hasReal =0;
+
+    
     echo "<table>";
+    echo "<tr><th>Update</th><th>Item ID</th><th>Item Name</th><th>Display Name</th><th>Price</th><th>Small</th><th>Medium</th><th>Large</th><th>Walk In</th><th>Factor</th><th>Category ID</th><th>Category Name</th><th>Delete</th></tr>";
     while($row = $result->fetch_assoc()) {
+        $categoryName ="";
         if($row["isDeleted"] == false)
             {
+            $sql1 = "SELECT DISTINCT name, categoryID FROM Category WHERE categoryID = ". $row['categoryID'];
+            $result1 = $conn->query($sql1);
+            if ($result1->num_rows > 0) {
+                while($row1 = $result1->fetch_assoc()) {
+                    $categoryName = $row1["name"];
+                }
+            }
             echo "<tr>";
             //grab item id
             echo "<form action=''>";
             $itemID=$row["itemID"];
             echo "<input type='hidden' name='itemID' value='$itemID'>";
             echo "<td><input type='submit' name='UpdateItem' value='Update'></td>";
-            echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["walkIn"] . "</td><td>" . $row["factor"] . "</td><td>" . $row["categoryID"] . "</td>";
+            echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["walkIn"] . "</td><td>" . $row["factor"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
             echo "<td><input type='submit' name='DeleteItem' value='Delete'></td>";
             echo "</form>";
             echo "</tr>";
