@@ -15,7 +15,7 @@ if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 
  //TODO currently I have it pulling the category ID, need to pull the category name
-    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, walkIn, factor, categoryID FROM item";
+$sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, walkIn, factor, categoryID FROM item";
 $result = $conn->query($sql);
 
 if ($result->num_rows > 0) {

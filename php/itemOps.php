@@ -125,7 +125,7 @@ elseif (isset($_GET['DeleteItem'])) {
 
 
 
-    //check to see if category ecists, if not create it.
+    
     $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = '$itemID'");
     if($result->num_rows > 0) {
 
@@ -135,12 +135,10 @@ elseif (isset($_GET['DeleteItem'])) {
                 echoDivWithColor( "<h3>Item with item id $itemID deleted</h3>", "green");
           }
           else{
-           
             echoDivWithColor("Error, failed to connect to database at delete.", "red" );
           }
-
-    //header ("location: /RUMCPantry/ap_io1.html?");
     }
+   
 }
 
 ?>
