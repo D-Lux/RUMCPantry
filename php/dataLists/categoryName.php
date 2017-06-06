@@ -1,4 +1,7 @@
 <?php 
+function categoryDatalist($defaultVal)
+{
+ 
 
             $servername = "127.0.0.1";
             $username = "root";
@@ -12,7 +15,7 @@
             $sql = "SELECT DISTINCT name FROM Category "; //select distinct values from the collumn in this table
             $result = mysql_query($sql);
 
-            echo "<input list='categories' name='category'>";
+            echo "<input list='categories' name='category' value=$defaultVal >";
             
             echo "<datalist id='categories'>"; //this id must be the same as the list = above
             
@@ -20,5 +23,8 @@
                 echo "<option value='" . $row['name'] . "'>" . $row['name'] . "</option>";
             }
             echo "</datalist>";
+}
+
+
 
 ?>

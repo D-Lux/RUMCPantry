@@ -6,6 +6,7 @@
     <script src="js/utilities.js"></script>
     <script src="js/createItem.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
+    <?php include 'php/utilities.php'; ?>
 
 
     <title>ap_io2</title>
@@ -22,14 +23,21 @@
         <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
         <div id="category">
             Category
-            <?php include 'php/dataLists/categoryName.php';?>
+            <?php 
+            createDatalist("","categories","category","name","category", false);
+            ?>
         </div>
 
         <div id="itemName">Item name (used for the database):
-            <?php include 'php/dataLists/itemName.php';?>
+            <?php 
+            createDatalist("","itemNames","item","itemName","itemName", true);
+            
+            ?>
         </div>
         <div id="displayName">Display name (what you want the item to be called):
-            <?php include 'php/dataLists/displayName.php';?>
+            <?php 
+            createDatalist("","displayNames","item","displayName","displayName", true);
+            ?>
         </div>
         <div id="price">Price: <input type="number" min="0" max="100000" value="0.00" step="0.01" name="price" /></div>
         <div id="household">How many of each can a household take?</div>
