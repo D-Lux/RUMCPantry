@@ -4,33 +4,10 @@
 <head>
     <script src="js/utilities.js"></script>
 	<script src="js/createClient.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
+	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
 	
-    <title>ap_co3</title>
-	
-	<style>
-	.required label:after {
-		color: red;
-		content: ' *';
-		display:inline;
-	}
-	
-	.notes
-	{
-		rows="10";
-		cols="80";
-	}
-	
-	.btn_trash {
-		background-image: url(images/TEMP_Trash.png);
-	}
-	table, th, td {
-		border: 1px solid black;
-		text-align:center
-	}
-	
-	</style>
+    <title>Update Client Information</title>
 
 </head>
 
@@ -45,17 +22,20 @@
 		if (isNew != 0) {
 			window.alert("New Client Added!");
 		}
+		var memDeleted = getQueryVariable("DelFam");
+		if (memDeleted != 0) {
+			window.alert("Family Member Removed!");
+		}
+		var errDelFam = getQueryVariable("Err_DelFam");
+		if (errDelFam != 0) {
+			window.alert("Cannot Remove The Head of Household");
+		}
+		
 	</script>
 	
 	<?php
-	// Set up server connection
-		$servername = "127.0.0.1";
-		$username = "root";
-		$password = "";
-		$dbname = "foodpantry";
-
-		// Create and check connection
-		$conn = new mysqli($servername, $username, $password, $dbname);
+		// Set up server connection
+		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -71,15 +51,13 @@
 		$clientInfo = $conn->query($sql);
 		
 		// Grab family member information
-		// TODO: Had some issues checking the isDeleted flag in the SELECT statement returning nothing
-		// So for now I will just check it when the member is going to be displayed
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
 				FROM FamilyMember
 				WHERE clientID=" . $_GET['id'];
 		$familyInfo = $conn->query($sql);
 		
 		// Grab invoice information
-		$sql = "SELECT visitDate, hasBeenFilled, inProgress
+		$sql = "SELECT invoiceID, visitDate, hasBeenFilled, inProgress, clientID
 				FROM Invoice
 				WHERE clientID=" . $_GET['id'];
 		$invoiceInfo = $conn->query($sql);
@@ -112,10 +90,11 @@
 			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
 			
 			$foodStampStatus = $clientRow['foodStamps'];
+			// Auto select the correct food stamp selection based on database value
 			echo "<div id='foodStamps'>Foodstamp Status: <select name='foodStamps'> 
-				<option value=null " . optionSelected($foodStampStatus,null) . ">Unknown</option>
-				<option value=true " . optionSelected($foodStampStatus,true) . ">Yes</option>
-				<option value=false " . optionSelected($foodStampStatus,false) . ">No</option>
+				<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>
+				<option value=1 " . ($foodStampStatus == 1 ? "selected" : "") . ">Yes</option>
+				<option value=0 " . ($foodStampStatus == 0 ? "selected" : "") . ">No</option>
 				</select> </div>";
 			
 			echo "<div id='email'>Email: <input type='email' name='email' value='" . $clientRow['email'] . "'></div>";
@@ -147,52 +126,64 @@
 			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";
 			echo "</form>";
 		
-			echo "<br><br><br><h3>Family Members</h3>";
+			
 			// ***********************************************************************
 			// DISPLAY FAMILY MEMBERS
+			
+			echo "<br><br><br><h3>Family Members</h3>";
+			
 			// Pulls all members of the family
 			// firstName | lastName | isHeadOfHousehold | birthdate | notes
-			
-			// Create the client table and add in the headers
+			// Create the family table and add in the headers
 			echo "<table> <tr> <th></th>";
 			echo "<th>First Name</th><th>Last Name</th>";
-			echo "<th>Birth Date</th><th>Head of Household</th><th>Notes</th><th></th></tr>";
+			echo "<th>Birth Date</th><th>Head of Household</th><th>Notes</th>";
+			if ($familyInfo->num_rows > 1) {
+				echo "<th></th>";
+			}
+			echo "</tr>";
 			
 			// Loop through our data and spit it out
 			while($row = $familyInfo->fetch_assoc()) {
-				// Start the form for this row (so buttons act correctly based on client)
-				echo "<form action='ap_co4.html' >";
-				
-				// Get the ID so we can properly do the update and delete operations
-				$id = $row['FamilyMemberID'];
-				echo "<input type='hidden' name='id' value='$id'>";
-				
-				// Start Table row
-				echo "<tr>";
+				if ($row["isDeleted"] != TRUE) {
+					// Start the form for this row (so buttons act correctly based on member)
+					echo "<form action='php/clientOps.php' >";
+					
+					// List the member ID so we can do updates and inactivations
+					echo "<input type='hidden' name='memberID' value=" . $row['FamilyMemberID'] . ">";
+					
+					// Pass along the client ID in case we fudge with the head of household later
+					echo "<input type='hidden' name='clientID' value='" . $_GET['id'] . "'>";
+					
+					// Start Table row
+					echo "<tr>";
 
-				// Update button				
-				echo "<td><input type='submit' name='Update' value='Update'></td>";
-				
-				// Various basic information fields
-				echo "<td>" . $row['firstName'] . "</td>";
-				echo "<td>" . $row['lastName'] . "</td>";
-				echo "<td>" . $row['birthDate'] . "</td>";
-				
-				// Display 'isHeadOfHousehold' as yes or no
-				$head = ($row['isHeadOfHousehold'] ? "Yes" : "No");
-				echo "<td> $head </td>";
+					// Update button				
+					echo "<td><input type='submit' name='GoUpdateMember' value='Update'></td>";
+					
+					// Various basic information fields
+					echo "<td>" . $row['firstName'] . "</td>";
+					echo "<td>" . $row['lastName'] . "</td>";
+					echo "<td>" . $row['birthDate'] . "</td>";
+					
+					// Display 'isHeadOfHousehold' as yes or no
+					$head = ($row['isHeadOfHousehold'] ? "Yes" : "No");
+					echo "<td> $head </td>";
 
-				echo "<td>" . $row['notes'] . "</td>";
-				
-				// Delete button - TODO: Fix icon
-				echo "<td><input id='Delete' type='submit' class='btn_trash' name='Delete' value=' ' ></td>";
-				
-				// Close off the row and form
-				echo "</tr></form>";
+					echo "<td>" . $row['notes'] . "</td>";
+					
+					$DeleteConfirmString = 'Are you sure you want to remove this family member?';
+					if (!$row['isHeadOfHousehold']) {
+						echo "<td><input id='InactiveMember' type='submit' class='btn_trash' name='DeleteMember'";
+						echo "value=' ' onclick='return confirm(" . $DeleteConfirmString . ")'></td>";
+					}				
+					// Close off the row and form
+					echo "</tr></form>";
+				}
 			}
 			echo "</table>";
 			
-			echo "<form action='ap_co4.html'>";
+			echo "<br><form action='ap_co4.html'>";
 			echo "<input type='hidden' name='id' value=" . $_GET['id'] . ">";
 			echo "<input type='hidden' name='lnamedefault' value='" . $clientName . "'>";	// Send along the client last name so we can autofill the last name
 			echo "<input id='newMember' type='submit' name='newMember' value='New Family Member'>";	
@@ -202,7 +193,40 @@
 			// SHOW VISITS
 			// Show all of the visits (actionable to view further information)
 			// Add a button to add an appointment
+			
+			echo "<br><br><br><h3>Visits</h3>";
+			if ($invoiceInfo->num_rows > 0) {
+		
+				// Create the invoice table and add in the headers
+				echo "<table> <tr> <th>Invoice Date</th><th>Status</th></tr>";
+				
+				while($row = $invoiceInfo->fetch_assoc()) {						
+					
+					// Start Table row
+					echo "<tr>";
 
+					// Date, as a link to a view invoice page
+					$invoiceLink = "/RUMCPantry/ap_co6.html?id=" . $row["invoiceID"];;
+					$date = $row["visitDate"];
+					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
+					
+					if ($row['hasBeenFilled']) {
+						echo "<td>Filled</td>";
+					}
+					elseif ($row['inProgress']) {
+						echo "<td>In Progress</td>";
+					}
+					else{
+						echo "<td>Created</td>";
+					}
+					
+					// Close off the row and form
+					echo "</tr></form>";
+				}
+				echo "</table>";
+				} else {
+					echo "No Visits in Database.";
+				}
 		} 
 		else {
 			echo "Client was not found.";

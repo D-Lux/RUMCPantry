@@ -8,17 +8,30 @@ function echoDivWithColor($message, $color)
     echo  '</div>';
 }
 
+// Creating a global connection function so that if we ever need to change the database information
+// it's all in one place
+function createPantryDatabaseConnection()
+{
+	// Set up server connection
+	$servername = "127.0.0.1";
+	$username = "root";
+	$password = "";
+	$dbname = "foodpantry";
+
+	// Create and check connection
+	return( new mysqli($servername, $username, $password, $dbname) );
+}
 
 function debugEchoPOST()
 {
-	echo '<pre>';
+	echo '<b>POST:</b><pre>';
 	var_dump($_POST);
 	echo '</pre>';
 }
 
 function debugEchoGET()
 {
-	echo '<pre>';
+	echo '<b>GET:</b><pre>';
 	var_dump($_GET);
 	echo '</pre>';
 }
@@ -41,25 +54,24 @@ function createCookie($cookieName, $cookieValue, $duration) {
 }
 
 // Displays a phone number as expected (###)-###-####
+// If it is not 10 digits long, just return as is
 function displayPhoneNo($data) {
-	$firstThree = substr($data, 0, 3);
-	$middleThree = substr($data, 3, 3);
-	$finalFour = substr($data, 6, 4);
-	return '(' . $firstThree . ')-' . $middleThree . '-' . $finalFour;
-}
-
-// Takes in a string and strips all spaces, dashes and non-integers
-function storePhoneNo($data) {
-	return (preg_replace('/[^0-9]/','',$data));
-}
-
-// Takes a value that should be True, False or Null and returns the string "selected" if it matches or "" otherwise
-// This is so that when editing a client, we can preset an option more cleaner for foodStamp status
-function optionSelected($data, $compare){
-	if ($data == $compare) {
-		return "selected";
+	$len = strlen((string)$data);
+	if($len == 10) {
+		$firstThree = substr($data, 0, 3);
+		$middleThree = substr($data, 3, 3);
+		$finalFour = substr($data, 6, 4);
+		return '(' . $firstThree . ')-' . $middleThree . '-' . $finalFour;
+	} else {
+		return $data;
 	}
-	return "";
+	
+}
+
+// Takes in a string and strips all spaces, dashes and non-integers and return the first 10 digits
+// Inside single quotes to be stored properly
+function storePhoneNo($data) {
+	return "'" . substr((preg_replace('/[^0-9]/','',$data)), 0, 10) . "'";
 }
 
 // This takes a database connection variable and closes it only if it is open still

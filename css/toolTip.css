@@ -20,3 +20,24 @@
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
+
+.required label:after {
+	color: red;
+	content: ' *';
+	display:inline;
+
+}
+
+.btn_trash {
+	background-image: url(/RUMCPantry/images/TEMP_Trash.png);
+}
+
+table, th, td {
+	border: 1px solid black;
+	text-align:center
+}
+
+.notes	{		
+	rows="10";
+	cols="80";
+}
