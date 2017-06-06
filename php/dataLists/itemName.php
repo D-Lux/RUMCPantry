@@ -9,7 +9,7 @@
             mysql_connect($servername, $username, $password);
             mysql_select_db($dbname);
             //standard DB stuff up to here
-            $sql = "SELECT DISTINCT itemName FROM Item"; //select distinct values from the collumn in this table
+            $sql = "SELECT DISTINCT itemName FROM Item WHERE isDeleted=0"; //select distinct values from the collumn in this table
             $result = mysql_query($sql);
 
             echo "<input list='itemNames' name='itemName'>";
