@@ -88,7 +88,7 @@ function AJAX_SetAppointment(callingSlot) {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var responseData = this.responseText;
-			var findBreak = responseData.search("!BREAK!");
+			var findBreak = responseData.search("!BREAK!");	// TODO: Make this cleaner somehow?
 			
 			// Defaults
 			var familyData ="<td>0</td>";
