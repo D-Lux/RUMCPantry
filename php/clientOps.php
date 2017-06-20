@@ -55,24 +55,33 @@ elseif(isset($_POST['submitClient']))
 				$address,$city,$state,$zip,$foodStamps, FALSE)";
 	
 	// Perform and test insertion
-	if ($conn->query($sql) === TRUE) {
+	if (queryDB($conn, $sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
 		// Create the insert string and perform the insertion
 		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp, isDeleted)
 				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, now(), FALSE)";
-		if ($conn->query($sql) === TRUE) {
-			// Successfully added client and family member (head of household) - go to update page
-			// Pass along a 'new' parameter so we can display a special message (this is the same as update client page normally)
-			// Pass along the clientID so we know which client to pull up on the update page
+		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
-			header("location: /RUMCPantry/ap_co3.html?new=1&id=$clientID");
+			// Successfully added client and family member (head of household) - go to update page
+			// Set a cookie so we can display a 'new' message
+			createCookie("newClient", 1, 30);
+			
+			// Pass along the clientID so we know which client to pull up on the update page
+			header("location: /RUMCPantry/ap_co3.html?id=$clientID");
 		}
 		else {
-			// TODO: DELETE (not set to deleted) the client if the family member failed to add (we don't want blank clients!)
+			// delete the blank client we just made
+			$sql = "DELETE FROM Client
+					WHERE clientID = $clientID";
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create family member.", "red" );	
+			echoDivWithColor("Error, failed to create family member.", "red" );
+			
+			if (queryDB($conn, $sql) === FALSE) {
+				// This is a very bad error (created a blank client and couldn't remove it)
+				echoDivWithColor("<h1>VERY BAD ERROR</h1>Check with developer.", "red" );
+			}	
 		}
 	} 
 	else {
@@ -122,7 +131,7 @@ elseif(isset($_POST['UpdateClient']))
 			WHERE clientID = $clientID";
 	
 	// Perform and test update
-	if ($conn->query($sql) === TRUE) {
+	if (queryDB($conn, $sql) === TRUE) {
 		// Update successful, Alert! - TODO: This doesn't fire
 		echo "<script type='text/javascript'> alert('Update successful!'); </script>";
 		
@@ -153,14 +162,27 @@ elseif(isset($_GET['InactiveClient']))
 	$sql = "UPDATE Client SET isDeleted=1 WHERE clientID=" . $_GET['id'];
 
 	// Perform and test update
-	if ($conn->query($sql) === TRUE) {
-		closeDB($conn);
-		header ("location: /RUMCPantry/ap_co1.html");
-	}
-	else {
+	if (queryDB($conn, $sql) === TRUE) {
+		// Now set all of the family members inactive as well
+		$sql = "UPDATE FamilyMember 
+				SET isDeleted=1 
+				WHERE clientID=" . $_GET['id'];
+
+		// Perform and test update
+		if (queryDB($conn, $sql) === TRUE) {
+			closeDB($conn);
+			header ("location: /RUMCPantry/ap_co1.html");
+		}
+		else {
 			echo "sql error: " . mysqli_error($conn);
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error, failed to update.", "red" );	
+			echoDivWithColor("Error, failed to set family members inactive.", "red" );
+		}
+	}
+	else {
+		echo "sql error: " . mysqli_error($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error, failed to set client inactive.", "red" );	
 	}
 	
 	closeDB($conn);
@@ -199,7 +221,7 @@ elseif(isset($_POST['submitMember']))
 		$sql = "UPDATE familyMember SET isHeadOfHousehold=0 WHERE clientID=$clientID";
 
 		// Perform and test insertion
-		if ($conn->query($sql) === FALSE) {
+		if (queryDB($conn, $sql) === FALSE) {
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error, failed to update head of household.", "red" );
 		}		
@@ -210,7 +232,7 @@ elseif(isset($_POST['submitMember']))
 	VALUES ($memberFirstName,$memberLastName,$head,$notes,$birthDate, now(), $clientID, FALSE)";
 	
 	// Perform and test insertion
-	if ($conn->query($sql) === TRUE) {
+	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		header("location: /RUMCPantry/ap_co3.html?id=$clientID");
 	} 
@@ -243,16 +265,18 @@ elseif(isset($_POST['UpdateMember']))
 	
 	// Head of household is the most tricky one here
 	$head = false;
-	if (isset($_POST['isHeadOfHousehold'])) {
+	if (isset($_POST['head'])) {
 		$head = true;
 	}
 	
 	// If this is the new head of household, set all others to false
 	if ($head) {
-		$sql = "UPDATE familyMember SET isHeadOfHousehold=0 WHERE clientID=$clientID";
+		$sql = "UPDATE familyMember 
+				SET isHeadOfHousehold=0 
+				WHERE clientID=$clientID";
 
 		// Perform and test update
-		if ($conn->query($sql) === FALSE) {
+		if (queryDB($conn, $sql) === FALSE) {
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error, failed to update head of household.", "red" );
 		}		
@@ -263,16 +287,16 @@ elseif(isset($_POST['UpdateMember']))
 	else {
 		// Find another family member who is the head of house
 		$sql = "SELECT firstName FROM FamilyMember 
-			WHERE FamilyMemberID != $memberID
-			AND clientID = $clientID
-			AND isHeadOfHousehold = 1";
+				WHERE FamilyMemberID != $memberID
+				AND clientID = $clientID
+				AND isHeadOfHousehold = 1";
 
 		// Perform the query and check if it is empty
-		$headQuery = $conn->query($sql);
-		if ( $headQuery->num_rows <= 0 ) {
+		$headQuery = queryDB($conn, $sql);
+		if ( ( $headQuery==NULL ) || ( $headQuery->num_rows <= 0 ) ){
 			// If we are empty, it means that this was the head of household, so we can't set head to false
 			// Force it to true
-			$head = true;
+			$head = TRUE;
 		}	
 	}
 	
@@ -283,7 +307,7 @@ elseif(isset($_POST['UpdateMember']))
 			WHERE FamilyMemberID = $memberID";
 	
 	// Perform and test update
-	if ($conn->query($sql) === TRUE) {
+	if (queryDB($conn, $sql) === TRUE) {
 		// Close the Database
 		closeDB($conn);
 		
@@ -309,12 +333,15 @@ elseif(isset($_GET['DeleteMember']))
 		die("Connection failed: " . $conn->connect_error);
 	}
 	
-	$sql = "UPDATE FamilyMember SET isDeleted=1 WHERE FamilyMemberID=" . $_GET['memberID'];
+	$sql = "UPDATE FamilyMember 
+			SET isDeleted=1, timestamp=now() 
+			WHERE FamilyMemberID=" . $_GET['memberID'];
 
 	// Perform and test update
 	if ($conn->query($sql) === TRUE) {
 		closeDB($conn);
-		header ("location: /RUMCPantry/ap_co3.html?id=" . $_GET['clientID'] . "&DelFam=1");
+		createCookie("DelFam", 1, 30);
+		header ("location: /RUMCPantry/ap_co3.html?id=" . $_GET['clientID'] );
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);

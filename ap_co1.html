@@ -44,7 +44,6 @@
 		}
 		
 		// Create our query string
-		// Grab all data, since we can pick and choose what to display
 		$sql = "SELECT Client.clientID, Client.numOfAdults, Client.numOfKids, Client.isDeleted,
 				Client.email, Client.phoneNumber, Client.address, Client.city, Client.state, 
 				Client.zip, Client.foodStamps, Client.notes, FamilyMember.lastName
@@ -53,7 +52,7 @@
 				WHERE Client.clientID=FamilyMember.clientID AND
 				Client.isDeleted=0 AND
 				FamilyMember.isHeadOfHousehold=true";
-		$result = $conn->query($sql);
+		$result = queryDB($conn, $sql);
 		// loop through the query results
 		if ($result!=null && $result->num_rows > 0) {
 		
@@ -65,7 +64,7 @@
 			echo "<th></th></tr>";
 			
 		// TODO: Limit rows based off a searched name (will be in the address bar)
-			while($row = $result->fetch_assoc()) {
+			while($row = sqlFetch($result)) {
 				// Start the form for this row (so buttons act correctly based on client)
 				echo "<form action='php/clientOps.php' >";
 				

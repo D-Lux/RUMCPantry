@@ -1,0 +1,138 @@
+<!doctype html>
+<html>
+
+<head>
+    <script src="js/utilities.js"></script>
+	<script src="js/apptOps.js"></script>
+	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
+	<?php include 'php/utilities.php'; ?>
+    <title>View Appointment Date</title>
+
+</head>
+
+<body>
+    <button onclick="goBack()">Go Back</button>
+	<h1>View Appointment Date: <?php echo $_GET['date']; ?></h1>
+	
+	<script>
+		if (getCookie("newAppt") != "") {
+			window.alert("New Date Added!");
+			removeCookie("newAppt");
+		}
+	</script>
+	
+	<?php
+		// Set up server connection
+		$conn = createPantryDatabaseConnection();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		// *************************************************
+		// Query the database
+		
+		// Grab all of the information we need from Client, FamilyMember and Invoice
+		$sql = "SELECT visitTime, status, invoiceID,
+					fam.firstName AS fName, fam.lastName AS lName, ( fam.numOfAdults + fam.numOfKids) AS familySize
+				FROM Invoice
+				JOIN (
+					SELECT FamilyMember.clientID, FamilyMember.firstName, FamilyMember.lastName,
+							Client.numOfAdults, Client.numOfKids
+					FROM FamilyMember
+					JOIN Client
+					ON FamilyMember.clientID = Client.clientID 
+					WHERE FamilyMember.isHeadOfHousehold=1 ) AS fam
+				ON fam.clientID=Invoice.clientID
+				WHERE visitDate='" . $_GET['date'] . "'
+				ORDER BY visitTime, invoiceID";
+
+		$visitInfo = queryDB($conn, $sql);
+		
+		// *******************************************
+		// ** Generate the datalist for client drop down
+		
+		$sql = "SELECT firstName AS fName, lastName AS lName, clientID
+				FROM FamilyMember
+				WHERE FamilyMember.isHeadOfHousehold=1
+				AND isDeleted=0";
+				
+		$clientInfo = queryDB($conn, $sql);
+
+		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
+			echo "Error, bad SQL Query";
+		}
+		
+		$clientDataList = "<datalist id='Clients'>";
+		while($client = $clientInfo->fetch_assoc()) {
+			$clientDataList .= "<option value='" . $client['lName'] .
+								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'><option/>";
+		}
+		$clientDataList .= "</datalist>";
+		
+		// Close the connection as we've gotten all the information we should need
+		closeDB($conn);
+	
+		// ***********************************************************************
+		// Invoices in time slots
+		// Time | Name | Family Size | Status
+		if (($visitInfo != NULL) AND ($visitInfo->num_rows > 0)) {
+			echo "<table><tr><th>Time Slot</th><th>Client Name</th>
+					<th>Family Size</th><th>Visit Status</th></tr>";
+			
+			// To generate a unique ID for each invoice in the list, use a counter
+			$setID = 0;
+			
+			// Loop through all of the invoices for this date
+			while($invoice = $visitInfo->fetch_assoc()) {
+				$IIDTag = "InvoiceID" . $setID;
+				echo "<input hidden id=" . $IIDTag . " value=" . $invoice['invoiceID'] . ">";
+				
+				// Set up the row and drop in appropriate information
+				echo "<tr><td>" . $invoice['visitTime'] . "</td><td>";
+				
+				// List appointments as Last Name, First Name if they are set
+				$clientName = ($invoice['lName']=="Available" ? $invoice['lName'] 
+							 : ($invoice['lName'] . ", " . $invoice['fName']) );
+
+				$clientIDTag = "Clients" . $setID;
+				if ($clientName == "Available") {
+					echo "<input type='text' list='Clients' id=" . $clientIDTag;
+				}
+				else {
+					echo "<input type='text' list='Clients'  id=" . $clientIDTag . "
+							value='" . $clientName . "'";
+				}
+				// AJAX Call
+				echo " onchange='AJAX_SetAppointment(this)' >";
+				
+				echo $clientDataList;
+				echo "</td>";
+			
+				// These details change with the AJAX call so we need custom tags to locate them
+				$familySizeIDTag = "famSize" . $setID;
+				echo "<td id='" . $familySizeIDTag . "'>" . $invoice['familySize'] . "</td>";
+				
+				$statusIDTag = "status" . $setID;
+				$status = visitStatusDecoder($invoice['status']);
+				echo "<td id='" . $statusIDTag . "'>" . $status . "</td>";
+
+				echo "</tr>";
+				$setID++;
+			}
+			
+			// TODO: Button for a new appointment time
+			//echo "<br><form action='ap_ao4.html'>";
+			//echo "<input type='hidden' name='date' value=" . $_GET['id'] . ">";	// Send client ID so we know which family this belongs to
+			//echo "<input type='hidden' name='lnamedefault' value='" . $clientName . "'>";	// Send along the client last name so we can autofill the last name
+			//echo "<input id='newMember' type='submit' name='newMember' value='New Family Member'>";	
+			//echo "</form>";
+		}
+		else {
+			echo "Invoice date not found.";
+		}
+	?>
+	
+
+</body>
+
+</html>

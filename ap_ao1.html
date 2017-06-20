@@ -6,13 +6,8 @@
 	<script src="js/clientOps.js"></script>
 	<?php include 'php/utilities.php'; ?>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	
-</head>
 
-<body>
-
-
-    <title>ap_co1</title>
+	<title>ap_co1</title>
 </head>
 
 <body>
@@ -35,21 +30,21 @@
 				FROM Invoice
 				GROUP BY visitDate
 				ORDER BY visitDate DESC";
-		$result = $conn->query($sql);
+		$result = queryDB($conn, $sql);
 		
 		// loop through the query results
 		if ($result!=null && $result->num_rows > 0) {
 		
 			// Create the table and add in the headers
-			echo "<table><tr><th>Date</th><th>Number of Appointments</th></tr>";
+			echo "<table><tr><th>Date</th><th># of Appointments</th></tr>";
 			
-			while($row = $result->fetch_assoc()) {
+			while($row = sqlFetch($result) ) {
 				// Start Table row
 				echo "<tr>";
 				
 				// Dates as links to detail pages
 				$date = $row["visitDate"];
-				$invoiceLink = "/RUMCPantry/ap_ao2.html?date=" . $date;
+				$invoiceLink = "/RUMCPantry/ap_ao3.html?date=" . $date;
 				echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 				
 				// Appointment Count

@@ -27,7 +27,7 @@
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
 				FROM FamilyMember
 				WHERE FamilyMemberID=" . $_GET['memberID'];
-		$familyInfo = $conn->query($sql);
+		$familyInfo = queryDB($conn, $sql);
 	
 		// Close the connection
 		closeDB($conn);
@@ -60,8 +60,8 @@
 				echo "<div id='head'>Member is Head of Household</div><br>";
 			}
 			else {
-				echo "<div id='head'>Head of Household: <input type='checkbox' name='head' value='head' " . 
-				($familyRow['isHeadOfHousehold'] == 1 ? 'checked' : '') . "></div><br>";
+				echo "<div id='head'>Head of Household: ";
+				echo "<input type='checkbox' name='head' value='head'></div><br>";
 			}
 
 			echo "<div id='birthDate'>Birthday: <input type='date' name='birthDate' min='1900-01-01'></div><br>";

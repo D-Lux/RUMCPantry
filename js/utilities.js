@@ -26,120 +26,35 @@ function getQueryVariable(variable)
        return(false);
 }
 
-// **********************
-// Attempt at part of AJAX functionality (calling php functions)
-// handles the click event for link 1, sends the query
-/*
-function getClientList(phpFileName) {
-  getRequest(
-		phpFileName, // URL for the PHP file
-		drawOutput,  // handle successful request
-		drawError    // handle error
-  );
-  return false;
-}  
-// handles drawing an error message
-function drawError() {
-    var container = document.getElementById('timeTable');
-    container.innerHTML = 'Error';
-}
-// handles the response, adds the html
-function drawOutput(responseText) {
-    var container = document.getElementById('timeTable');
-    container.innerHTML = responseText;
-}
-// helper function for cross-browser request object
-function getRequest(url, success, error) {
-    var req = false;
-    try{
-        // most browsers
-        req = new XMLHttpRequest();
-    } catch (e){
-        // IE
-        try{
-            req = new ActiveXObject("Msxml2.XMLHTTP");
-        } catch(e) {
-            // try an older version
-            try{
-                req = new ActiveXObject("Microsoft.XMLHTTP");
-            } catch(e) {
-                return false;
-            }
-        }
-    }
-	if (!req) return false;
-    if (typeof success != 'function') success = function () {};
-    if (typeof error!= 'function') error = function () {};
-    req.onreadystatechange = function(){
-        if(req.readyState == 4) {
-            return req.status === 200 ? 
-                success(req.responseText) : error(req.status);
-        }
-    }
-    req.open("GET", url, true);
-    req.send(null);
-    return req;
-}
-*/
-// handles the click event for link 1, sends the query
-function getSuccessOutput(phpAddress) {
-  getRequest(
-		phpAddress, // demo-only URL
-       drawOutput,
-       drawError
-  );
-  return false;
+// Function to set a cookie
+function setCookie(cname, cvalue, exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
 }
 
-// handles the click event for link 2, sends the query
-function getFailOutput() {
-  getRequest(
-      'invalid url will fail', // demo-only URL
-       drawOutput,
-       drawError
-  );
-  return false;
+// Function to remove a cookie
+function removeCookie(cname) {
+    var d = new Date();
+    d.setTime(d.getTime() - 1);
+    var expires = "expires="+ d.toUTCString();
+    document.cookie = cname + "=0;" + expires + ";path=/";
 }
 
-// handles drawing an error message
-function drawError () {
-    var container = document.getElementById('TestCell');
-    container.innerHTML = 'Bummer: there was an error!';
-}
-// handles the response, adds the html
-function drawOutput(responseText) {
-    var container = document.getElementById('TestCell');
-    container.innerHTML = responseText;
-}
-// helper function for cross-browser request object
-function getRequest(url, success, error) {
-    var req = false;
-    try{
-        // most browsers
-        req = new XMLHttpRequest();
-    } catch (e){
-        // IE
-        try{
-            req = new ActiveXObject("Msxml2.XMLHTTP");
-        } catch (e) {
-            // try an older version
-            try{
-                req = new ActiveXObject("Microsoft.XMLHTTP");
-            } catch (e){
-                return false;
-            }
+// Function to get a cookie
+function getCookie(cname) {
+    var name = cname + "=";
+    var decodedCookie = decodeURIComponent(document.cookie);
+    var ca = decodedCookie.split(';');
+    for(var i = 0; i <ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+        }
+		if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
         }
     }
-    if (!req) return false;
-    if (typeof success != 'function') success = function () {};
-    if (typeof error!= 'function') error = function () {};
-    req.onreadystatechange = function(){
-        if(req .readyState == 4){
-            return req.status === 200 ? 
-                success(req.responseText) : error(req.status);
-        }
-    }
-    req.open("GET", url, true);
-    req.send(null);
-    return req;
+	return "";
 }
