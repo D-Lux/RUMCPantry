@@ -18,10 +18,6 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
 
     $factor = $_POST['factor'];
 
-    $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
 
     $categoryID = null;
 
@@ -31,7 +27,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     /* previous lines set up the strings for connextion*/
 
     /* Create connection*/
-    $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
