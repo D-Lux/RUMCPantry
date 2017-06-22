@@ -1,0 +1,10 @@
+We have several clients that don't speak English well, if at all.
+
+We need to investigate what options we have to assist these clients with using the program.
+
+
+Suggestions: 
+
+Option 1: String Library with translations for all normal strings (requires a language field for all item names for each language we will want, or a string lookup, which will be a fun excursion)
+
+Option 2: See if there's some package out there that can do translations (like google translate) that we can use relatively easily.

@@ -35,10 +35,12 @@ function closeDB($conn){
 // This is just for uniformity, as there is an OO way to query a database and a function call way
 function queryDB($conn, $query) {
 	return mysqli_query($conn, $query);
+	// return $conn->$query;
 }
 // Again for uniformity
 function sqlFetch($queryResult) {
 	return (mysqli_fetch_assoc($queryResult));
+	// return ($queryResult->fetch_assoc());
 }
 
 
@@ -216,8 +218,8 @@ function createAvailableClient(){
 
 function visitStatusDecoder($visitStatus){
 	switch($visitStatus) {
-		case 0: return 'Appointment created, Unassigned';
-		case 1: return 'Assigned, date in the future';
+		case 0: return 'Available';
+		case 1: return 'Assigned, future event';
 		case 2: return 'Day of, not arrived';
 		case 3: return 'Day of, arrived';
 		case 4: return 'Day of, order form completed';

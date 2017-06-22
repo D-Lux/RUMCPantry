@@ -25,6 +25,7 @@
 			die("Connection failed: " . $conn->connect_error);
 		}
 		
+		// TODO: show available appointments and total appointments
 		// Create and execute our query string
 		$sql = "SELECT visitDate, COUNT(*) as aCount 
 				FROM Invoice

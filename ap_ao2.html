@@ -14,6 +14,7 @@
 	</style>
 </head>
 <body>
+	<button onclick="goBack()">Go Back</button>
 	<script>
 		// Bad date validation (after returning from apptOps.php)
 		if (getCookie("badAppDate") != "") {
@@ -71,7 +72,7 @@
 				for ($i = 0; $i < 4; $i++) {
 					echo "<tr><td><input type='time' name='time[]' value='"
 							. $timeSlot . "' step='900'></td>";
-					echo "<td><input type='number' name='qty[]' value='6' min='1' max='10'></td>";
+					echo "<td><input type='number' name='qty[]' value='6' min='1'></td>";
 					echo "<td><input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'></td>";
 					echo "</tr>";
 				

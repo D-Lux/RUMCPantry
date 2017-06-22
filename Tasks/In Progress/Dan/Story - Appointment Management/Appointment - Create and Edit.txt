@@ -10,3 +10,12 @@ Clients can only have 1 appointment per month
 Admins can override all above rules
 
 Admins need to be able to dynamically add a walk-in appointment
+
+
+
+
+
+----------------------------------
+Only admins can create appointments, an appointment is created by the admin
+in advance using the create appointments link in the admin section.
+These can be added to or removed as needed.

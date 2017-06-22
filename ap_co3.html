@@ -48,20 +48,20 @@
 		$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, notes
 				FROM Client
 				WHERE clientID=" . $_GET['id'];
-		$clientInfo = queryDB($conn, $sql);;
+		$clientInfo = queryDB($conn, $sql);
 		
 		// Grab family member information
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
 				FROM FamilyMember
 				WHERE clientID=" . $_GET['id'] . "
 				AND isDeleted!=1";
-		$familyInfo = queryDB($conn, $sql);;
+		$familyInfo = queryDB($conn, $sql);
 		
 		// Grab invoice information
 		$sql = "SELECT invoiceID, visitDate, status, clientID
 				FROM Invoice
 				WHERE clientID=" . $_GET['id'];
-		$invoiceInfo = queryDB($conn, $sql);;
+		$invoiceInfo = queryDB($conn, $sql);
 		
 		// Grab the client family name
 		$sql = "SELECT lastName FROM FamilyMember
@@ -231,9 +231,10 @@
 					echo "</tr></form>";
 				}
 				echo "</table>";
-				} else {
-					echo "No Visits in Database.";
-				}
+			} 
+			else {
+				echo "No Visits in Database.";
+			}
 		} 
 		else {
 			echo "Client was not found.";

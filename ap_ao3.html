@@ -67,7 +67,7 @@
 		}
 		
 		$clientDataList = "<datalist id='Clients'>";
-		while($client = $clientInfo->fetch_assoc()) {
+		while($client = sqlFetch($clientInfo)) {
 			$clientDataList .= "<option value='" . $client['lName'] .
 								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'><option/>";
 		}

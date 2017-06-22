@@ -38,14 +38,16 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		// There is only one database call
 		$sql = "INSERT INTO Invoice (visitDate, visitTime, clientID, Status) VALUES ";
 		$firstInsert = TRUE;
+		$qtySlot = 0;
 		foreach ($_POST["time"] as $timeSlot) {
-			foreach ($_POST["qty"] as $i) {
+			for ($i = 0; $i <  $_POST["qty"][$qtySlot]; $i++) {
 				$sql .= (!$firstInsert ? "," : "");
 				$firstInsert = FALSE;
-
 				$sql .= "( " . $validateDate . ", '" . $timeSlot . "', $availID, 0)";
 			}
+			$qtySlot++;
 		}
+		
 		// perform insertion
 		$conn = createPantryDatabaseConnection();
 		
@@ -131,6 +133,63 @@ elseif (isset($_POST['DeleteInvoice'])) {
 		closeDB($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error, failed to update.", "red" );	
+	}
+}
+
+elseif (isset($_POST['clientApptSelect'])) {
+	
+	echo "Attempting to select an appointment on date: " . $_POST['visitDate'];
+	echo " at time: " . $_POST['visitTime'] . "<br><br>";
+	
+	// POST VARS: visitDate visitTime clientID
+	// Find all appointments at the time selected, we will look through them to find an open one
+	$sql = "SELECT status, invoiceID
+			FROM Invoice
+			WHERE visitDate='" . $_POST['visitDate'] . "'
+			AND visitTime='" . $_POST['visitTime'] . "'";
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$apptQuery = queryDB($conn, $sql);
+	if ($apptQuery == NULL || $apptQuery->num_rows <= 0){
+		// Bad error, invoice date wasn't found, return to previous page
+		echo "sql error: " . mysqli_error($conn);
+		closeDB($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("I'm sorry, that appointment time is no longer available.", "red" );	
+	}
+	else {
+		// Loop through the options until we find one
+		while ($appt = sqlFetch($apptQuery)) {
+			if ($appt['status'] == 0) {
+				// Open appointment time, give it to this client
+				$sql = "UPDATE Invoice
+						SET status = 2, clientID = " . $_POST['clientID'] . "
+						WHERE invoiceID=" . $appt['invoiceID'];
+				if ( queryDB($conn, $sql) === TRUE ){
+					// Assignment was successful, victory!
+					closeDB($conn);
+					createCookie("clientApptSet", 1, 30);
+					// TODO: Maybe go back somewhere else in the future?
+					header("location: /RUMCPantry/cp1.html");
+				}
+				else {
+					// Assignment failed, error back
+					closeDB($conn);
+					echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+					echoDivWithColor("I'm sorry, that appointment time is no longer available.", "red" );
+				}
+			}
+		}
+		
+		// If we get this far, we didn't find an available appointment at this time slot
+		// Close the db connection and give them a back button
+		closeDB($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("I'm sorry, that appointment time is no longer available.", "red" );	
+		
 	}
 }
 else {
