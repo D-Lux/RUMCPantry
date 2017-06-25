@@ -109,3 +109,53 @@ function validateDonationAdd() {
         return true;
     }
 }
+
+function validateDonationPartnerAdd() {
+    var response = "";
+    var name = document.forms["addDonationPartner"]["name"].value;
+    var zip = document.forms["addDonationPartner"]["zip"].value;
+    var address = document.forms["addDonationPartner"]["address"].value;
+    var city = document.forms["addDonationPartner"]["city"].value;
+    var phoneNumber = document.forms["addDonationPartner"]["phoneNumber"].value;
+
+
+    var errors = 0;
+
+
+    if (name == "" || name.length == 0 || name == null) {
+        getElementAndColorIt("name", "red");
+        errors++;
+        response += "name field is empty. \n"
+    }
+    if (zip == "" || zip.length == 0 || zip == null) {
+        getElementAndColorIt("zip", "red");
+        errors++;
+        response += "zip field is empty. \n"
+    }
+    if (address == "" || address.length == 0 || address == null) {
+        getElementAndColorIt("address", "red");
+        errors++;
+        response += "address field is empty. \n"
+    }
+    if (city == "" || city.length == 0 || city == null) {
+        getElementAndColorIt("city", "red");
+        errors++;
+        response += "city field is empty. \n"
+    }
+    if (phoneNumber == "" || phoneNumber.length == 0 || phoneNumber == null) {
+        getElementAndColorIt("phoneNumber", "red");
+        errors++;
+        response += "phoneNumber field is empty. \n"
+    }
+
+
+
+
+
+    if (errors > 0) {
+        alert("There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response);
+        return false;
+    } else {
+        return true;
+    }
+}

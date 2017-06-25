@@ -116,6 +116,59 @@ if(isset($_POST['createDonation'])) /*when the button is pressed on post request
 
     $conn->close();
 }
+elseif(isset($_POST['createDonationPartner'])) /*when the button is pressed on post request*/
+{
+    
+
+    $name = $_POST['name'];
+    $state = $_POST['state']; 
+    $zip = $_POST['zip'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $phoneNumber = $_POST['phoneNumber'];
+
+
+
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+  
+
+
+    $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+       VALUES ('$name', '$city', '$state', '$zip', '$address', '$phoneNumber')"; /*standard insert statement using the variables pulled*/
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Donation partner created successfully", "green" );
+        echoDivWithColor("Partner name: $name", "green" );
+        echoDivWithColor("City: $city", "green" );
+        echoDivWithColor("State: $state", "green" );
+        echoDivWithColor("Zip: $zip", "green" );
+        echoDivWithColor("Address: $address", "green" );
+        echoDivWithColor("Phone number: $phoneNumber", "green" );
+      
+
+        
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation partner insert $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
+}
 elseif (isset($_GET['UpdateItem'])) {
 	header ("location: /RUMCPantry/ap_io3.html?itemID=" . $_GET['itemID']);
 }
