@@ -48,9 +48,9 @@ if ($result->num_rows > 0) {
         echo "<form action=''>";
         $donationID=$row["donationID"];
         echo "<input type='hidden' name='donationID' value='$donationID'>";
-        echo "<td><input type='submit' name='UpdateDonation' value='Update'></td>";
+        echo "<td><input type='submit' name='updateDonation' value='Update'></td>";
         echo "<td>". $row["donationID"]. "</td><td>$donationParnterName</td><td>". $row["dateOfPickup"]. "</td><td>" . $row["networkPartner"] . "</td><td>" . $row["agency"] . "</td><td>" . $row["frozenNonMeat"] . "</td><td>" . $row["frozenMeat"] . "</td><td>" . $row["frozenPrepared"] . "</td><td>" . $row["refBakery"] . "</td><td>" . $row["refProduce"] . "</td><td>" . $row["refDairyAndDeli"] . "</td><td>". $row["dryShelfStable"]. "</td><td>". $row["dryNonFood"]. "</td><td>". $row["dryFoodDrive"]. "</td>";
-        echo "<td><input type='submit' name='DeleteDonation' value='Delete'></td>";
+        echo "<td><input type='submit' name='deleteDonation' value='Delete'></td>";
         echo "</form>";
         echo "</tr>";
         $hasReal++;

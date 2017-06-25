@@ -173,13 +173,9 @@ elseif (isset($_GET['UpdateItem'])) {
 	header ("location: /RUMCPantry/ap_io3.html?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
-    $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $itemID = $_GET['itemID'];
 
-     $conn = new mysqli($servername, $username, $password, $dbname);
+    $conn = createPantryDatabaseConnection();
+    $itemID = $_GET['itemID'];
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -197,13 +193,64 @@ elseif (isset($_GET['DeleteItem'])) {
                 echoDivWithColor( "<h3>Item with item id $itemID deleted</h3>", "green");
           }
           else{
-            echoDivWithColor("Error, failed to connect to database at delete.", "red" );
+            echoDivWithColor("Error, failed to connect to database at delete." . $conn->connect_error, "red" );
           }
     }
    
 }
-elseif (isset($_GET['updateItem'])) {
-	
+elseif (isset($_GET['updateDonation'])) {
+	header ("location: /RUMCPantry/ap_do4.html?donationID=" . $_GET['donationID']);
+}
+elseif (isset($_GET['deleteDonation'])) {
+	$conn = createPantryDatabaseConnection();
+    $donationID = $_GET['donationID'];
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+    $result = $conn->query("SELECT DISTINCT donationID FROM Donation WHERE donationID = '$donationID'");
+    if($result->num_rows > 0) {
+
+        $sql = "delete from Donation where donationID=$donationID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Donation with Donation id $donationID deleted</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Error, failed to connect to database at delete." . $conn->connect_error, "red" );
+          }
+    }
+}
+elseif (isset($_GET['updateDonationPartner'])) {
+	header ("location: /RUMCPantry/ap_io5.html?donationPartnerID=" . $_GET['donationPartnerID']);
+}
+elseif (isset($_GET['deleteDonationPartner'])) {
+	$conn = createPantryDatabaseConnection();
+    $donationPartnerID = $_GET['donationPartnerID'];
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+    $result = $conn->query("SELECT DISTINCT donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'");
+    if($result->num_rows > 0) {
+
+        $sql = "delete from DonationPartner where donationPartnerID=$donationPartnerID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Donation Partner with donationPartnerID id $donationPartnerID deleted</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Error, this donation partner is in use" . $conn->connect_error, "red" );
+          }
+    }
 }
 
 ?>

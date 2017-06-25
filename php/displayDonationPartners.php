@@ -40,9 +40,9 @@ if ($result->num_rows > 0) {
         echo "<form action=''>";
         $donationPartnerID=$row["donationPartnerID"];
         echo "<input type='hidden' name='donationPartnerID' value='$donationPartnerID'>";
-        echo "<td><input type='submit' name='UpdateDonationPartner' value='Update'></td>";
+        echo "<td><input type='submit' name='updateDonationPartner' value='Update'></td>";
         echo "<td>". $row["donationPartnerID"]. "</td><td>". $row["name"]. "</td><td>" . $row["city"] . "</td><td>" . $row["state"] . "</td><td>" . $row["zip"] . "</td><td>" . $row["address"] . "</td><td>" . $row["phoneNumber"] . "</td>";
-        echo "<td><input type='submit' name='DeleteDonationPartner' value='Delete'></td>";
+        echo "<td><input type='submit' name='deleteDonationPartner' value='Delete'></td>";
         echo "</form>";
         echo "</tr>";
         $hasReal++;
