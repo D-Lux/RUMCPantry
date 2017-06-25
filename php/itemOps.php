@@ -234,6 +234,89 @@ elseif (isset($_POST['updateItemIndividual'])) {
 
     $conn->close();
 }
+elseif (isset($_GET['UpdateCategory'])) {
+}
+elseif (isset($_GET['DeleteCategory'])) {
+       $servername = "127.0.0.1";
+    $username = "root";
+    $password = "";
+    $dbname = "foodpantry";
+    $categoryID = $_GET['categoryID'];
+
+     $conn = new mysqli($servername, $username, $password, $dbname);
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+    $result = $conn->query("SELECT DISTINCT categoryID FROM Category WHERE categoryID = '$categoryID'");
+    if($result->num_rows > 0) {
+
+        $sql = "delete from Category where categoryID=$categoryID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Category with category id $categoryID deleted</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Error, failed to connect to database at delete.", "red" );
+          }
+    }
+}
+elseif (isset($_POST['UpdateCategoryIndividual'])) {
+}
+elseif (isset($_POST['createCategory'])) {
+    $name = $_POST['name'];
+    $small = $_POST['small']; 
+    $medium = $_POST['medium'];
+    $large = $_POST['large'];
+    $walkIn = $_POST['walkIn'];
+
+
+
+
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+  
+
+
+    $sql = "INSERT INTO Category (name, small, medium, large, walkIn)
+       VALUES ('$name', $small, $medium, $large, $walkIn)"; /*standard insert statement using the variables pulled*/
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Category created successfully", "green" );
+        echoDivWithColor("Category name: $name", "green" );
+        echoDivWithColor("City: $small", "green" );
+        echoDivWithColor("State: $medium", "green" );
+        echoDivWithColor("Zip: $large", "green" );
+        echoDivWithColor("Address: $walkIn", "green" );
+       
+      
+
+        
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at category insert $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
+}
 
 ?>
 <script type="text/javascript">

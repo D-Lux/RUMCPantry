@@ -47,3 +47,25 @@ function validateItemAdd() {
         return true;
     }
 }
+
+function validateCategoryAdd() {
+
+    var response = "";
+    var name = document.forms["addCategory"]["name"].value;
+    var errors = 0;
+
+
+    if (name == "" || name.length == 0 || name == null) {
+        getElementAndColorIt("name", "red");
+        errors++;
+        response += "name field is empty. \n"
+    }
+
+
+    if (errors > 0) {
+        alert("There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response);
+        return false;
+    } else {
+        return true;
+    }
+}

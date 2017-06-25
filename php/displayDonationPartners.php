@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Donation Partner ID</th><th>Name</th><th>City</th><th>State</th><th>Zip</th><th>Address</th><th>phoneNumber</th>";
+    echo "<tr><th>Update</th><th>Donation Partner ID</th><th>Name</th><th>City</th><th>State</th><th>Zip</th><th>Address</th><th>phoneNumber</th><th>Delete</th>";
     while($row = $result->fetch_assoc()) {
         
         echo "<tr>";
