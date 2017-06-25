@@ -136,7 +136,7 @@ elseif (isset($_GET['DeleteItem'])) {
     }
    
 }
-elseif (isset($_GET['updateItem'])) {
+elseif (isset($_GET['updateItemIndividual'])) {
 	
 }
 

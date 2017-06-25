@@ -252,6 +252,10 @@ elseif (isset($_GET['deleteDonationPartner'])) {
           }
     }
 }
+elseif (isset($_GET['updateDonationIndividual'])) {
+}
+elseif (isset($_GET['updateDonationPartnerIndividual'])) {
+}
 
 ?>
 <script type="text/javascript">
