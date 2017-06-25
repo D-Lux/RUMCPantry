@@ -226,7 +226,7 @@ elseif (isset($_GET['deleteDonation'])) {
     }
 }
 elseif (isset($_GET['updateDonationPartner'])) {
-	header ("location: /RUMCPantry/ap_io5.html?donationPartnerID=" . $_GET['donationPartnerID']);
+	header ("location: /RUMCPantry/ap_do5.html?donationPartnerID=" . $_GET['donationPartnerID']);
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
 	$conn = createPantryDatabaseConnection();
