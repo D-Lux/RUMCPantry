@@ -136,8 +136,103 @@ elseif (isset($_GET['DeleteItem'])) {
     }
    
 }
-elseif (isset($_GET['updateItemIndividual'])) {
-	
+elseif (isset($_POST['updateItemIndividual'])) {
+    $itemID = $_POST['itemID'];
+	$category = $_POST['category'];
+    $itemName = $_POST['itemName']; /*grab the name textbox*/
+    $displayName = $_POST['displayName'];
+    $price = $_POST['price'];
+
+    $small = $_POST['small'];
+    $medium = $_POST['medium'];
+    $large = $_POST['large'];
+    $walkIn = $_POST['walkIn'];
+
+    $factor = $_POST['factor'];
+
+
+    $categoryID = null;
+
+
+
+
+    /* previous lines set up the strings for connextion*/
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+    //check to see if category ecists, if not create it.
+        $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
+        if($result->num_rows == 0) {
+        
+         $sql = "INSERT INTO category (name, small, medium, large, walkIn)
+         VALUES ('$category', 0, 0, 0, 0)";
+            if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "New category created: $category", "green");
+                
+                
+                $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $categoryID = $row["categoryID"];
+                        }
+                    echoDivWithColor("Category ID: $categoryID", "green" );
+                } 
+          }
+          else{
+            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+            echoDivWithColor("Error, failed to connect to database at category update.", "red" );
+          }
+
+                  
+          
+
+    } else {
+        $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $categoryID = $row["categoryID"];
+                }
+                
+            }
+       echoDivWithColor( "$category category already in database", "green");
+       echoDivWithColor("Category ID: $categoryID", "green" );
+    }
+
+        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large, walkIn = $walkIn, factor = $factor Where itemID = $itemID";
+
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Item updated successfully", "green" );
+        echoDivWithColor("Display Name: $displayName", "green" );
+        echoDivWithColor("Item name: $itemName", "green" );
+        echoDivWithColor("Price: $price", "green" );
+        echoDivWithColor("Family allotment for size 1-2: $small", "green" );
+        echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
+        echoDivWithColor("Family allotment for size 5-6: $large", "green" );
+        echoDivWithColor("Family allotment for walk ins: $walkIn", "green" );       
+        echoDivWithColor("Factor: $factor", "green" );
+        
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at item insert $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
 }
 
 ?>

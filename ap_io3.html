@@ -53,6 +53,8 @@
             while($row = $result->fetch_assoc()) {
             if($row["isDeleted"] == false)
                 {
+                    
+                    $itemID = $row["itemID"];
                     $itemName = $row["itemName"];
                     $displayName = $row["displayName"];
                     $price = $row["price"];
@@ -85,6 +87,7 @@
 
     echo'<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">';
     echo "<div id='category'>Category";
+    echo'<input type="hidden" name="itemID" value=' . $itemID . '>';
     createDatalist($categoryName, "categories", "category", "name", "category" ,false);
     echo "</div>";
 
