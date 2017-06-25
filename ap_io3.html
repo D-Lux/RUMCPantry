@@ -83,7 +83,7 @@
         echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
     }
 
-    echo'<form name="updateItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">';
+    echo'<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">';
     echo "<div id='category'>Category";
     createDatalist($categoryName, "categories", "category", "name", "category" ,false);
     echo "</div>";
@@ -138,7 +138,7 @@
         echo'</select> </br>';
 
         echo'</br>';
-        echo'<input type="submit" value="Update" name="updateItemSubmit">';
+        echo'<input type="submit" value="Update" name="updateItemIndividual">';
         echo'</form>';
          ?>
 

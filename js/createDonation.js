@@ -26,7 +26,6 @@ function validateDonationAdd() {
     var errors = 0;
 
 
-
     if (pickupDate == "" || pickupDate.length == 0 || pickupDate == null) {
         getElementAndColorIt("pickupDate", "red");
         errors++;

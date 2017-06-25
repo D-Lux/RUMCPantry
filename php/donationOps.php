@@ -252,9 +252,169 @@ elseif (isset($_GET['deleteDonationPartner'])) {
           }
     }
 }
-elseif (isset($_GET['updateDonationIndividual'])) {
+elseif (isset($_POST['updateDonationIndividual'])) {
+    $donationID = $_POST['donationID'];
+    $pickupDate = $_POST['pickupDate'];
+    $networkPartner = $_POST['networkPartner']; 
+    $agency = $_POST['agency'];
+    $donorName = $_POST['donorName'];
+    $city = $_POST['city'];
+
+    $frozenNonMeat = $_POST['frozenNonMeat'];
+    $frozenMeat = $_POST['frozenMeat'];
+    $frozenPrepared = $_POST['frozenPrepared'];
+    $refBakery = $_POST['refBakery'];
+    $refProduce = $_POST['refProduce'];
+    $refDairyAndDeli = $_POST['refDairyAndDeli'];
+    $dryShelfStable = $_POST['dryShelfStable'];
+    $dryNonFood = $_POST['dryNonFood'];
+    $dryFoodDrive = $_POST['dryFoodDrive'];
+
+
+
+    
+
+    $donorID = null;
+
+
+
+
+    /* previous lines set up the strings for connextion*/
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+    //check to see if category exists, if not create it.
+        $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
+        if($result->num_rows == 0) {
+        
+         $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+         VALUES ('$donorName', '$city', '', '', '', '')";
+            if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "New donation partner created: $donorName in $city", "green");
+                
+                
+                $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
+                $result = $conn->query($sql);
+                if ($result->num_rows > 0) {
+                        while($row = $result->fetch_assoc()) {
+                            $donorID = $row["donationPartnerID"];
+                        }
+                    echoDivWithColor("Donor ID: $donorID", "green" );
+                } 
+                
+          }
+          else{
+            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+            echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
+          }
+
+                  
+          
+
+    } else {
+        $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                while($row = $result->fetch_assoc()) {
+                    $donorID = $row["donationPartnerID"];
+                }
+                
+            }
+            
+       echoDivWithColor( "$donorName in $city already in database", "green");
+       echoDivWithColor("donor ID: $donorID", "green" );
+    }
+
+
+
+    $sql = "UPDATE Donation SET donationPartnerID = $donorID, dateOfPickup = '$pickupDate', networkPartner = '$networkPartner', agency = '$agency', frozenNonMeat = $frozenNonMeat, frozenMeat = $frozenMeat, frozenPrepared = $frozenPrepared, refBakery = $refBakery, refProduce = $refProduce, refDairyAndDeli = $refDairyAndDeli, dryShelfStable = $dryShelfStable, dryNonFood = $dryNonFood, dryFoodDrive = $dryFoodDrive Where donationID = $donationID";
+
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Donation updated successfully", "green" );
+        echoDivWithColor("Date of pickup: $pickupDate", "green" );
+        echoDivWithColor("Network partner: $networkPartner", "green" );
+        echoDivWithColor("Agency: $agency", "green" );
+        echoDivWithColor("Box quantites of the following:", "black" );
+        echoDivWithColor("Frozen assorted food (Non meat): $frozenNonMeat", "green" );
+        echoDivWithColor("Frozen assorted meat and seafood: $frozenMeat", "green" );
+        echoDivWithColor("Frozen assorted prepared foods: $frozenPrepared", "green" );
+        echoDivWithColor("Refridgerated assorted bakery and pastries: $refBakery", "green" );
+        echoDivWithColor("Refridgerated assorted produce: $refProduce", "green" );
+        echoDivWithColor("Refridgerated assorted dairy and deli foods: $refDairyAndDeli", "green" );
+        echoDivWithColor("Assorted foods (Shelf-stable): $dryShelfStable", "green" );
+        echoDivWithColor("Assorted non-food products: $dryNonFood", "green" );
+        echoDivWithColor("Assorted food drive foods: $dryFoodDrive", "green" );
+
+        
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation update: $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
 }
-elseif (isset($_GET['updateDonationPartnerIndividual'])) {
+elseif (isset($_POST['updateDonationPartnerIndividual'])) {
+    $donationPartnerID = $_POST['donationPartnerID'];
+    $name = $_POST['name'];
+    $state = $_POST['state']; 
+    $zip = $_POST['zip'];
+    $address = $_POST['address'];
+    $city = $_POST['city'];
+    $phoneNumber = $_POST['phoneNumber'];
+
+
+
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+  
+    $sql = "UPDATE DonationPartner SET name = '$name', state = '$state', zip = '$zip', address = '$address', city = '$city', phoneNumber = '$phoneNumber' Where donationPartnerID = $donationPartnerID";
+
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Donation partner updated successfully", "green" );
+        echoDivWithColor("Partner name: $name", "green" );
+        echoDivWithColor("City: $city", "green" );
+        echoDivWithColor("State: $state", "green" );
+        echoDivWithColor("Zip: $zip", "green" );
+        echoDivWithColor("Address: $address", "green" );
+        echoDivWithColor("Phone number: $phoneNumber", "green" );
+      
+
+        
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation partner update $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
 }
 
 ?>

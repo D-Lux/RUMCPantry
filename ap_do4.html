@@ -5,6 +5,7 @@
 <head>
     <title>Roselle United Methodist Church Food Pantry</title>
     <script src="js/utilities.js"></script>
+    <script src="js/createDonation.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <!--<link href='style.css' rel='stylesheet'>-->
 
@@ -56,7 +57,7 @@
             while($row = $result->fetch_assoc()) {
 
                 $donationPartnerID = $row["donationPartnerID"];
-                
+                $donationID = $row["donationID"];
                 $dateOfPickup= $row["dateOfPickup"];
                 $networkPartner= $row["networkPartner"];
                 $agency= $row["agency"];
@@ -88,14 +89,17 @@
         echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
     }
 
-    echo'<form name="updateDonationIndividual" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">';
+    echo'<form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">';
 
-    
+   
 
 
 
     echo'<div id="pickupDate">Pickup date:
-    <input type="date" name="pickupDate" value=' . $dateOfPickup . '>
+    <input type="date" name="pickupDate" value=' . $donationID . '>
+    </div>
+    <div id ="donationID">
+        <input type="hidden" name="donationID" value=' . $donationID . '>
     </div>
     <div id="networkPartner">
         Network partner:';
@@ -138,7 +142,7 @@
         <div id="dryFoodDrive">Assorted food drive foods: <input type="number" min="0" max="100000" value=' . $dryFoodDrive . ' step="1" name="dryFoodDrive" /></div>
         </br>
 
-        <input type="submit" value="Update" name="updateDonationSubmit"> 
+        <input type="submit" value="Update" name="updateDonationIndividual"> 
         </form>'; ?>
 
 </body>
