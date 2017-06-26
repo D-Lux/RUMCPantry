@@ -189,7 +189,7 @@ function createAvailableClient(){
 		// Create the insert string and perform the insertion
 		$sql = "INSERT INTO FamilyMember 
 				(firstName, lastName, isHeadOfHousehold, clientID, timestamp, isDeleted)
-				VALUES (" . $clientName . ", " . $clientName . ", TRUE, $clientID, now(), FALSE)";
+				VALUES ('Available', 'Available', TRUE, $clientID, now(), FALSE)";
 		if (queryDB($conn, $sql) === TRUE) {
 			// We've successfully made the 'Available' client
 			closeDB($conn);

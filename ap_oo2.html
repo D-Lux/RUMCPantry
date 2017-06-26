@@ -4,21 +4,10 @@
 <head>
     <script src="js/utilities.js"></script>
 	<script src="js/apptOps.js"></script>
+	<script src="js/orderFormOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
     <title>Order Form Configuration</title>
-
-	<script>
-	function AJAX_UpdateQty(callingSlot) {
-		window.alert("Quantity changed");
-	}
-	function AJAX_UpdateFX(callingSlot) {
-		window.alert("Factor changed");
-	}
-	function AJAX_UpdateCQty(callingSlot) {
-		window.alert("Category Quantity changed");
-	}
-	</script>
 	
 </head>
 
@@ -37,14 +26,9 @@
 		// Walk-In Clients
 		if (isset($_GET["Walkin"])) { echo "Walk-Ins"; $familyType = "walkIn"; }
 		
-		echo "</h1>";			
-
-		// Display a chart
-		// Get all of the categories and items (joined)
-		// We need the $familyType field for each item and category and the factor for each item
-		// CATEGORY NAME
-		// CATEGORY QTY ($familyType)
-		// Item List QTY, Factor
+		$familyToken = substr($familyType,0,1);
+		
+		echo "</h1>";
 		
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
@@ -57,7 +41,7 @@
 		// Create our query from the Item and Category tables
 		// Item Name, factor, $familyType, category name, category family type, itemid
 		$sql = "SELECT itemID, itemName, Item." . $familyType . " as IQty, factor as fx, 
-					Category.name as CName, Category." . $familyType . " as CQty
+					Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID 
 				FROM Item
 				JOIN Category
 				ON Item.categoryID=Category.categoryID
@@ -65,6 +49,14 @@
 				ORDER BY Category.name";
 
 		$itemList = queryDB($conn, $sql);
+		
+		if ($itemList === FALSE) {
+			// Assignment failed, error back
+			echo "sql error: " . mysqli_error($conn);
+			closeDB($conn);
+			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+			echoDivWithColor("Bad SQL query.", "red" );
+		}
 		
 		// ******************************************************
 		// ** Create our table of information
@@ -80,20 +72,46 @@
 				// Print out the category name, followed by the selection qty and start a new table
 				echo $item['CName'] . "<br>";
 				echo "Selection Quantity: ";
-				echo "<input type='number' min=0 value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)'><br>";
+				/*	// Text field version
+				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='number' min=0 
+						value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)'><br>";
+				*/
+				echo "<select id='cid" . $familyToken . $item['categoryID'] . "' onchange='AJAX_UpdateCQty(this)'>";
+				for ($i = 0; $i < 9; $i++) {
+					echo "<option value=$i " . ($i == $item['CQty'] ? "Selected" : "") . ">$i</option>";
+				}
+				echo "</select>";
+				
 				$currCategory = $item['CName'];
 				echo "<table><tr><th>Item Name</th><th>Qty</th><th>Fx</th></tr>";
 			}
-			// Print this item's name and have two number fields
+			// Print this item's name and have two number fields/dropdowns
 			echo "<tr><td>" . $item['itemName'] . "</td>";
-			echo "<td><input type='number' min=0 value=" . $item['IQty'] . " onchange='AJAX_UpdateQty(this)'></td>";
-			echo "<td><input type='number' min=0 value=" . $item['fx'] . " onchange='AJAX_UpdateFX(this)'></td></tr>";
-				 
-			// AJAX Call
-			//	echo " onchange='AJAX_SetAppointment(this)' >";
+			
+			// *****************************************
+			// This is the dropdown selection list
+			echo "<td><select id='iqty" . $familyToken . $item['itemID'] . "' onchange='AJAX_UpdateQty(this)'>";
+			
+			for ($i = 0; $i < 11; $i++) {
+				echo "<option value=$i " . ($i == $item['IQty'] ? "Selected" : "") . ">$i</option>";
+			}
+			echo "</select></td>";
+			
+			echo "<td><select id='ifx" . $item['itemID'] . "' onchange='AJAX_UpdateFX(this)'>";
+			for ($i = 1; $i < 7; $i++) {
+				echo "<option value=$i " . ($i == $item['fx'] ? "Selected" : "") . ">$i</option>";
+			}
+			echo "</select></td>";
+						
+			/*	// Text field version
+			echo "<td><input id='iqty" . $familyToken . $item['itemID'] . "' type='number' min=0 
+						value=" . $item['IQty'] . " onchange='AJAX_UpdateQty(this)'></td>";
+			echo "<td><input id='ifx" . $item['itemID'] . "'type='number' min=0 
+						value=" . $item['fx'] . " onchange='AJAX_UpdateFX(this)'></td></tr>";
+			*/
 		}
 		
-	
+		echo "<br><div id='ErrorLog'></div>"
 	?>
 	
 

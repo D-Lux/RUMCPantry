@@ -64,6 +64,7 @@ function AJAX_SetAppointment(callingSlot) {
 	var invoiceIDNum = document.getElementById("InvoiceID" + IDNum).value;
 	var clientName = document.getElementById("Clients" + IDNum).value;
 	
+	// Break apart the client name into first and last names
 	var lastNameStartChar = clientName.search(",");
 	var clientLastName = "Available";
 	var clientFirstName = "Available";
@@ -82,23 +83,33 @@ function AJAX_SetAppointment(callingSlot) {
 		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
 	}
 	
+	// Generate the IDs for the fields we will be changing
 	var famSizeIDTag = "famSize" + IDNum;
+	var phoneNoIDTag = "phoneNo" + IDNum;
 	var statusIDTag = "status" + IDNum;
+	
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			
 			var responseData = this.responseText;
-			var findBreak = responseData.search("!BREAK!");	// TODO: Make this cleaner somehow?
+			var findPhoneBreak = responseData.search("!PHONENO!");
+			var findStatusBreak = responseData.search("!STATUS!");	// TODO: Make this cleaner somehow?		
 			
 			// Defaults
 			var familyData ="<td>0</td>";
-			var statusData = "<td>Appointment created, Unassigned</td>";
+			var statusData = "<td>Unassigned</td>";
+			var phoneData = "<td>-</td>";
 			
-			if (findBreak > 0) {
-				familyData = responseData.substring(0, findBreak);
-				statusData = responseData.substring(findBreak + 7);
+			if (findPhoneBreak > 0) {
+				familyData = responseData.substring(0, findPhoneBreak);
+				if (findStatusBreak > 0) {
+					phoneData = responseData.substring(findPhoneBreak + 9, findStatusBreak);
+					statusData = responseData.substring(findStatusBreak + 8);
+				}
 			}
+			
 			document.getElementById(famSizeIDTag).innerHTML = familyData;
+			document.getElementById(phoneNoIDTag).innerHTML = phoneData;
 			document.getElementById(statusIDTag).innerHTML = statusData;
 		}
 	};

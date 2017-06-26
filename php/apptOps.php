@@ -166,7 +166,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 			if ($appt['status'] == 0) {
 				// Open appointment time, give it to this client
 				$sql = "UPDATE Invoice
-						SET status = 2, clientID = " . $_POST['clientID'] . "
+						SET status = 1, clientID = " . $_POST['clientID'] . "
 						WHERE invoiceID=" . $appt['invoiceID'];
 				if ( queryDB($conn, $sql) === TRUE ){
 					// Assignment was successful, victory!
