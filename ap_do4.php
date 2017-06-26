@@ -104,14 +104,14 @@
     <div id="networkPartner">
         Network partner:';
         
-        createDatalist($networkPartner,"networkPartners","Donation","networkPartner","networkPartner", false);
+        createDatalist("'$networkPartner'","networkPartners","Donation","networkPartner","networkPartner", false);
         
     echo'</div>
     <div id="agency">
         Agency:';
             
         
-        createDatalist($agency,"agencies","Donation","agency","agency", false);
+        createDatalist("'$agency'","agencies","Donation","agency","agency", false);
     
     echo'</div>
     <div id="donorName">
