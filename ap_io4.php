@@ -7,7 +7,7 @@
     <script src="js/createItem.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <?php include 'php/utilities.php'; ?>
-
+    <?php include 'php/checkLogin.php';?>
 
     <title>ap_io4</title>
 </head>
