@@ -69,7 +69,7 @@
 		?>
 		<!-- Button to return 'home' -->
 		<br><br><br><br>
-		<form action='cp1.html'>
+		<form action='cp1.php'>
 		<input type='submit' name='Return' value='Return'>
 		</form>
 		

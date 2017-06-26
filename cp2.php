@@ -21,15 +21,15 @@
 		<h3>Client Main Page</h3>
 		<?php echo "<h4>Client: " . $_POST['clientName'] . "</h4>";	?>
 		
-		<form method="post" action="cof.html">
+		<form method="post" action="cof.php">
 			<button type="submit">Create an Order</button>
 			<?php echo $hiddenFields; ?>
 		</form>
-		<form method="post" action="ciup.html">
+		<form method="post" action="ciup.php">
 			<button type="submit">Update Information</button>
 			<?php echo $hiddenFields; ?>
 		</form>
-		<form method="post" action="cap.html">
+		<form method="post" action="cap.php">
 			<button type="submit">Make an Appointment</button>
 			<?php echo $hiddenFields; ?>
 		</form>
@@ -60,7 +60,7 @@
 					echo "<tr>";
 
 					// Date, as a link to a view invoice page
-					$invoiceLink = "/RUMCPantry/ap_ao4.html?id=" . $row["invoiceID"];;
+					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
 					$date = $row["visitDate"];
 					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 					

@@ -45,7 +45,7 @@
 				
 				// Dates as links to detail pages
 				$date = $row["visitDate"];
-				$invoiceLink = "/RUMCPantry/ap_ao3.html?date=" . $date;
+				$invoiceLink = "/RUMCPantry/ap_ao3.php?date=" . $date;
 				echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 				
 				// Appointment Count
@@ -64,7 +64,7 @@
 	<br><br><br>
 	
 	<!-- NEW Date -->
-	<form action="ap_ao2.html">
+	<form action="ap_ao2.php">
 		<input id="NewDate" type="submit" name="NewDate" value="New Appointment Date">
     </form>
 	

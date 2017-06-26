@@ -37,6 +37,9 @@
 	<!-- or this: https://www.w3schools.com/php/php_mysql_select_limit.asp (using parameters) -->
 	
 	<?php
+		// Get the available client ID so we can hide it on the update list
+		$availID = getAvailableClient();
+		
 		// Set up server connection
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
@@ -51,6 +54,7 @@
 				JOIN Client 
 				WHERE Client.clientID=FamilyMember.clientID AND
 				Client.isDeleted=0 AND
+				Client.clientID<>" . $availID . " AND
 				FamilyMember.isHeadOfHousehold=true";
 		$result = queryDB($conn, $sql);
 		// loop through the query results
@@ -122,7 +126,7 @@
 	<br><br><br>
 	
 	<!-- NEW Client -->
-	<form action="ap_co2.html">
+	<form action="ap_co2.php">
 		<input id="CreateNew" type="submit" name="GoNewClient" value="New Client">
     </form>
 	

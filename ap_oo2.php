@@ -46,6 +46,7 @@
 				JOIN Category
 				ON Item.categoryID=Category.categoryID
 				WHERE isDeleted=0
+				AND Category.name<>'Specials'
 				ORDER BY Category.name";
 
 		$itemList = queryDB($conn, $sql);
