@@ -2,6 +2,8 @@
 <head>
 	 <script src="js/utilities.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
+	<?php include 'php/checkLogin.php';?>
+
 
 </head>
 <body>

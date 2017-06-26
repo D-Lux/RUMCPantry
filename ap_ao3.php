@@ -6,7 +6,10 @@
 	<script src="js/apptOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
+	<?php include 'php/checkLogin.php';?>
+
     <title>View Appointment Date</title>
+	
 
 </head>
 

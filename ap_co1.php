@@ -6,6 +6,8 @@
 	<script src="js/clientOps.js"></script>
 	<?php include 'php/utilities.php'; ?>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
+	<?php include 'php/checkLogin.php';?>
+
 	
 </head>
 
