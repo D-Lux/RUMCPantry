@@ -9,38 +9,39 @@
 
 	</head>
 	<body>
+		<button onclick="goBack()">Back</button>
+		
 		<h1>Roselle United Methodist Church</h1>
 		<h2>Food Pantry</h2>
 		<h3>Client Order Form</h3>
+<?php
 
-<table>
-  <tr>
-    <th>Category</th>
-    <th>Item</th>
-    <th>QTY</th>
-  </tr>
-  <tr>
-    <td>Beans</td>
-    <td>Pinto (Bag)</td>
-    <td>1</td>
-  </tr>
-  <tr>
-    <td>Beans</td>
-    <td>Black</td>
-    <td>2</td>
-  </tr>
-  <tr>
-    <td>Beans</td>
-    <td>Pinto (Can)</td>
-    <td>2</td>
-  </tr>
-</table>
+	// Family size query
+	$famSql = "SELECT (numKids + numAdults) as familySize
+			   FROM client
+			   WHERE clientID=" . $_POST['clientID'];
 	
+	//Run this query so we know what to grab from the item database
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
+	
+	$famQuery = queryDB($conn, $famSql);
+	
+	// Item databse query
+	$itemSql = "SELECT "
+	
+	
+// get family size (numkids+numadults)
+// Pull all item data for my family size
+// Check boxes limited by category quantity for family size
+
+// Submit order should go to create appt
+?>
 
 		<form method="get" action="mainpage.php">
 			<button type="submit">Submit Order</button>
 		</form>
 
-		<button onclick="goBack()">Back</button>
+		
 	</body>
 </html>

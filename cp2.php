@@ -21,62 +21,65 @@
 		<h3>Client Main Page</h3>
 		<?php echo "<h4>Client: " . $_POST['clientName'] . "</h4>";	?>
 		
-		<form method="post" action="cof.php">
-			<button type="submit">Create an Order</button>
-			<?php echo $hiddenFields; ?>
-		</form>
-		<form method="post" action="ciup.php">
-			<button type="submit">Update Information</button>
-			<?php echo $hiddenFields; ?>
-		</form>
-		<form method="post" action="cap.php">
-			<button type="submit">Make an Appointment</button>
-			<?php echo $hiddenFields; ?>
-		</form>
-		
-		<?php 
-	/*
-	// Grab invoice information
-		$sql = "SELECT invoiceID, visitDate, status, clientID
-				FROM Invoice
-				WHERE clientID=" . $_POST['clientID'];
-		$invoiceInfo = queryDB($conn, $sql);
-		
-		
-		// ***********************************************************************
-			// SHOW VISITS
-			// Show all of the visits (actionable to view further information)
-			// Add a button to add an appointment
+		<?php
+			// show invoices
+			// If a visit is status 1 then make selectable (to cof.php)
+			$sql = "SELECT status, invoiceID, visitDate, visitTime
+					FROM Invoice
+					WHERE clientID=" . $_POST['clientID'];
+	
+			//Run this query so we know what to grab from the item database
+			$conn = createPantryDatabaseConnection();
+			if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
 			
-			echo "<br><br><br><h3>Visits</h3>";
-			if ($invoiceInfo!=null && $invoiceInfo->num_rows > 0) {
+			$invoiceQuery = queryDB($conn, $sql);
+			if ($invoiceQuery!=null && $invoiceQuery->num_rows > 0) {
 		
 				// Create the invoice table and add in the headers
-				echo "<table> <tr> <th>Invoice Date</th><th>Status</th></tr>";
+				echo "<table> <tr> <th>Date</th><th>Time</th><th></th></tr>";
 				
-				while($row = sqlFetch($invoiceInfo)) {						
-					
+				while($row = sqlFetch($invoiceQuery)) {
 					// Start Table row
-					echo "<tr>";
-
-					// Date, as a link to a view invoice page
-					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
-					$date = $row["visitDate"];
-					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
+					if ($row['status'] == 1) {
+						echo "<form method='post' action='cof.php'>";
+						echo "<input type='hidden' name='clientID' value=" . $_POST['clientID'] . ">";
+						echo "<input type='hidden' name='invoiceID' value=" . $row['invoiceID'] . ">";
+					}
 					
-					$status = visitStatusDecoder($row['status']);
-					echo "<td>" . $status . "</td>";
+					echo "<tr>";
+					echo "<td>" . $row['visitDate'] . "</td><td>" . $row['visitTime'] . "</td>";
 					
 					// Close off the row and form
-					echo "</tr></form>";
+					echo "</tr>";
+					
+					if ($row['status'] == 1) {
+						echo "<input type='submit' name='selectApptDate' value='Select Appointment'>";
+						echo "</form>";
+					}
+					
+					
 				}
 				echo "</table>";
 			} 
 			else {
-				echo "No Visits in Database.";
+				//echo "No Visits in Database.";
 			}
-		*/
 		?>
+		
+		<form method="post" action="cof.php">
+			<button type="submit">Create an Order</button>
+			<?php echo $hiddenFields; ?>
+		</form>
+		<!--
+		<form method="post" action="ciup.php">
+			<button type="submit">Update Information</button>
+			<?php //echo $hiddenFields; ?>
+		</form>
+		-->
+		<form method="post" action="cap.php">
+			<button type="submit">Make an Appointment</button>
+			<?php echo $hiddenFields; ?>
+		</form>
 		
 	</body>
 </html>

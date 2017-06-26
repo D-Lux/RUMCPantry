@@ -1,11 +1,14 @@
-0 - Created with no client assigned
-1 - Created with a client assigned
-2 - Day of, client has not yet arrived
-3 - Day of, client has arrived
-4 - Day of, client has arrived and filled out order form
-5 - Day of, client has arrived, filled out form and order form is being processed
-6 - Day of, client has arrived, filled out form and order has been processed
-7 - Post visit, Success
+0 Unassigned
+
+100 created, assigned
+101 created, locked
+200 day of client has not arrived (give admin a way to set this manually)
+
+301-3XX client has arrived
+401-4XX Client sent back
 
 Special Notes:
-99 - Client did not show
+999 - Client did not show
+
+
+

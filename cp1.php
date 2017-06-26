@@ -49,6 +49,7 @@
 			
 			// *******************************************
 			// ** Generate the datalist for client drop down
+			// ** Restrict dropdown to people with appointments today
 			
 			$sql = "SELECT firstName AS fName, lastName AS lName, clientID
 					FROM FamilyMember
