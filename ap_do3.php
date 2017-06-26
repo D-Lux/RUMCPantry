@@ -8,6 +8,7 @@
     <script src="js/createDonation.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <?php include 'php/utilities.php'; ?>
+    <?php include 'php/checkLogin.php';?>
 
 
 

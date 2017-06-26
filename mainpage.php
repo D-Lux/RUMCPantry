@@ -6,7 +6,7 @@
 		<script src="js/utilities.js"></script>
 		<!--<link href='style.css' rel='stylesheet'>-->
 		<?php include 'php/utilities.php';?>
-		<?php include 'php/checkLogin.php';?>
+		
 
 	</head>
 	<body>

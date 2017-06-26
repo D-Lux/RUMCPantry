@@ -35,6 +35,11 @@
 		  ?>
 		  <input type="submit" value="Submit">
 		</form>
+
+		or continue as client
+		<form method="get" action="mainpage.php">
+        <input type="submit" value="continue">
+    	</form>
 	
 		
 
