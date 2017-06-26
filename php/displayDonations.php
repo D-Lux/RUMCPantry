@@ -23,12 +23,12 @@ if ($conn->connect_error) {
  //TODO currently I have it pulling the donationpartner ID, need to pull the donation partner name
 $sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM Donation";
 $result = $conn->query($sql);
-
+$hasReal =0;
 if ($result->num_rows > 0) {
     
     // output data of each row
   
-    $hasReal =0;
+   
 
     
     echo "<table>";
@@ -62,7 +62,7 @@ if ($result->num_rows > 0) {
 
    if($hasReal == 0)
    {
-        echo "There is currently nothing in the donations table";
+        echo "<div>There is currently nothing in the donations table</div>";
    }
    
    

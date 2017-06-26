@@ -96,7 +96,7 @@
 
 
     echo'<div id="pickupDate">Pickup date:
-    <input type="date" name="pickupDate" value=' . $donationID . '>
+    <input type="date" name="pickupDate" value=' . $dateOfPickup . '>
     </div>
     <div id ="donationID">
         <input type="hidden" name="donationID" value=' . $donationID . '>

@@ -23,12 +23,12 @@ if ($conn->connect_error) {
  //TODO currently I have it pulling the category ID, need to pull the category name
 $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, walkIn, factor, categoryID FROM item";
 $result = $conn->query($sql);
-
+$hasDeleted =0;
+    $hasReal =0;
 if ($result->num_rows > 0) {
     
     // output data of each row
-    $hasDeleted =0;
-    $hasReal =0;
+    
 
     
     echo "<table>";
@@ -66,11 +66,11 @@ if ($result->num_rows > 0) {
 
    if($hasDeleted > 0 && $hasReal == 0)
    {
-        echo "There is currently nothing in the items table";
+        echo "<div>There is currently nothing in the items table</div>";
    }
    
    } else {
-    echo "There is currently nothing in the items table";
+    echo "<div>There is currently nothing in the items table</div>";
 }
 
 $conn->close();

@@ -22,12 +22,12 @@ if ($conn->connect_error) {
 
 $sql = "SELECT categoryID, name, small, medium, large, walkIn FROM Category";
 $result = $conn->query($sql);
-
+ $hasReal =0;
 if ($result->num_rows > 0) {
     
     // output data of each row
   
-    $hasReal =0;
+   
 
     
     echo "<table>";
@@ -53,7 +53,7 @@ if ($result->num_rows > 0) {
 
    if($hasReal == 0)
    {
-        echo "There is currently nothing in the categories table";
+        echo "<div>There is currently nothing in the categories table</div>";
    }
    
    
