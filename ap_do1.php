@@ -19,11 +19,11 @@
 
     <button onclick="goBack()">Back</button>
 
-    <form method="get" action="ap_do2.html">
+    <form method="get" action="ap_do2.php">
         <input type="submit" value="Add a donation">
     </form>
 
-    <form method="get" action="ap_do3.html">
+    <form method="get" action="ap_do3.php">
         <input type="submit" value="Add a donation partner">
     </form>
 

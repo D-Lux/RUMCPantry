@@ -28,7 +28,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		// Set a cookie to tell the user the date exists
 		// Done this way instead of with url params so reloading the page doesn't cause the warning
 		createCookie("badAppDate", 1, 30);
-		header("location: /RUMCPantry/ap_ao2.html");
+		header("location: /RUMCPantry/ap_ao2.php");
 	}
 	else {
 		// Find the available client ID
@@ -57,7 +57,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 			echo "<h3>" . $_POST['appDate'] . "</h3>";
 			// go to view page with date parameter
 			createCookie("newAppt", 1, 30);
-			header("location: /RUMCPantry/ap_ao3.html?date=" . $_POST['appDate']);
+			header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
 			
 		} 
 		else {
@@ -99,7 +99,7 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		echo "<h3>" . $_POST['appDate'] . "</h3>";
 		// go to view page with date parameter
 		createCookie("newTimeSlots", 1, 30);
-		header("location: /RUMCPantry/ap_ao3.html?date=" . $_POST['appDate']);
+		header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
 		
 	} 
 	else {
@@ -126,7 +126,7 @@ elseif (isset($_POST['DeleteInvoice'])) {
 		closeDB($conn);
 		
 		// Go back to the previous page main admin client ops page
-		header ("location: /RUMCPantry/ap_ao3.html?date=" . $_POST['returnDate']);
+		header ("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['returnDate']);
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
@@ -173,7 +173,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 					closeDB($conn);
 					createCookie("clientApptSet", 1, 30);
 					// TODO: Maybe go back somewhere else in the future?
-					header("location: /RUMCPantry/cp1.html");
+					header("location: /RUMCPantry/cp1.php");
 				}
 				else {
 					// Assignment failed, error back
@@ -195,7 +195,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	//header("location: /RUMCPantry/mainpage.html");
+	//header("location: /RUMCPantry/mainpage.php");
 }
 
 ?>

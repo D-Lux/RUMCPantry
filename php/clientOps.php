@@ -4,14 +4,14 @@ include 'utilities.php';
 debugEchoPOST();debugEchoGET();
 // Go to specific client/member pages based on buttons pressed
 if (isset($_POST['GoNewClient'])) {
-	header ("location: /RUMCPantry/ap_co2.html");
+	header ("location: /RUMCPantry/ap_co2.php");
 }
 elseif (isset($_GET['GoUpdateClient'])) {
-	header ("location: /RUMCPantry/ap_co3.html?id=" . $_GET['id']);
+	header ("location: /RUMCPantry/ap_co3.php?id=" . $_GET['id']);
 }
 // Go to various family member functions
 elseif (isset($_GET['GoUpdateMember'])) {
-	header ("location: /RUMCPantry/ap_co5.html?memberID=" . $_GET['memberID'] . "&clientID=" . $_GET['clientID']);
+	header ("location: /RUMCPantry/ap_co5.php?memberID=" . $_GET['memberID'] . "&clientID=" . $_GET['clientID']);
 }
 
 // *******************************************************
@@ -68,7 +68,7 @@ elseif(isset($_POST['submitClient']))
 			createCookie("newClient", 1, 30);
 			
 			// Pass along the clientID so we know which client to pull up on the update page
-			header("location: /RUMCPantry/ap_co3.html?id=$clientID");
+			header("location: /RUMCPantry/ap_co3.php?id=$clientID");
 		}
 		else {
 			// delete the blank client we just made
@@ -139,7 +139,7 @@ elseif(isset($_POST['UpdateClient']))
 		closeDB($conn);
 		
 		// Go back to main admin client ops page
-		header ("location: /RUMCPantry/ap_co1.html");
+		header ("location: /RUMCPantry/ap_co1.php");
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
@@ -171,7 +171,7 @@ elseif(isset($_GET['InactiveClient']))
 		// Perform and test update
 		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
-			header ("location: /RUMCPantry/ap_co1.html");
+			header ("location: /RUMCPantry/ap_co1.php");
 		}
 		else {
 			echo "sql error: " . mysqli_error($conn);
@@ -234,7 +234,7 @@ elseif(isset($_POST['submitMember']))
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
-		header("location: /RUMCPantry/ap_co3.html?id=$clientID");
+		header("location: /RUMCPantry/ap_co3.php?id=$clientID");
 	} 
 	else {
 		echo mysqli_errno($conn) . ": " . mysqli_error($conn). "\n";
@@ -312,7 +312,7 @@ elseif(isset($_POST['UpdateMember']))
 		closeDB($conn);
 		
 		// Go back to the client update page
-		header ("location: /RUMCPantry/ap_co3.html?id=$clientID");
+		header ("location: /RUMCPantry/ap_co3.php?id=$clientID");
 	}
 	else {
 			echo "sql error: " . mysqli_error($conn);
@@ -341,7 +341,7 @@ elseif(isset($_GET['DeleteMember']))
 	if ($conn->query($sql) === TRUE) {
 		closeDB($conn);
 		createCookie("DelFam", 1, 30);
-		header ("location: /RUMCPantry/ap_co3.html?id=" . $_GET['clientID'] );
+		header ("location: /RUMCPantry/ap_co3.php?id=" . $_GET['clientID'] );
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
@@ -354,7 +354,7 @@ elseif(isset($_GET['DeleteMember']))
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	header("location: /RUMCPantry/mainpage.html");
+	header("location: /RUMCPantry/mainpage.php");
 }
 
 ?>

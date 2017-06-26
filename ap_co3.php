@@ -192,7 +192,7 @@
 			}
 			echo "</table>";
 			
-			echo "<br><form action='ap_co4.html'>";
+			echo "<br><form action='ap_co4.php'>";
 			
 			// Send client ID so we know which family this belongs to
 			echo "<input type='hidden' name='id' value=" . $_GET['id'] . ">";
@@ -219,8 +219,8 @@
 					// Start Table row
 					echo "<tr>";
 
-					// Date, as a link to a view invoice page
-					$invoiceLink = "/RUMCPantry/ap_ao4.html?id=" . $row["invoiceID"];;
+					// TODO: Fix link to invoice view page // Date, as a link to a view invoice page
+					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
 					$date = $row["visitDate"];
 					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 					

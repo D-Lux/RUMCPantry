@@ -14,10 +14,10 @@
 		<h2>Food Pantry</h2>
 		<h3>Main Page</h3>
 	
-		<form method="get" action="cp1.html">
+		<form method="get" action="cp1.php">
 			<button type="submit">Client</button>
 		</form>
-		<form method="get" action="ap1.html">
+		<form method="get" action="ap1.php">
 			<button type="submit">Admin</button>
 		</form>
 		<form method="post" action="<?=($_SERVER['PHP_SELF'])?>">
@@ -30,7 +30,7 @@
 	<?php
 		if ($_SERVER["REQUEST_METHOD"] == "POST") {
 			createCookie("loggedin", 0, -1);
-			header ("location: /RUMCPantry/login.html");
+			header ("location: /RUMCPantry/login.php");
 		}
 	?>
 </html>
