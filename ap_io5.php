@@ -67,7 +67,7 @@
         <div id="name">
             Name:';
            
-            createDatalist($name,"names","category","name","name", false);
+            createDatalist("'$name'","names","category","name","name", false);
             
         echo'</div>
         <div id="small"> 1 to 2:';

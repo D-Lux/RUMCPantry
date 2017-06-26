@@ -44,22 +44,27 @@ if ($result->num_rows > 0) {
                     $categoryName = $row1["name"];
                 }
             }
-            echo "<tr>";
-            //grab item id
-            echo "<form action=''>";
-            $itemID=$row["itemID"];
-            echo "<input type='hidden' name='itemID' value='$itemID'>";
-            echo "<td><input type='submit' name='UpdateItem' value='Update'></td>";
-            echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["walkIn"] . "</td><td>" . $row["factor"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
-            echo "<td><input type='submit' name='DeleteItem' value='Delete'></td>";
-            echo "</form>";
-            echo "</tr>";
-            $hasReal++;
-            }
-            else
+
+            if($categoryName != "redistribution")
             {
-                $hasDeleted++;
+                
+                echo "<tr>";
+                //grab item id
+                echo "<form action=''>";
+                $itemID=$row["itemID"];
+                echo "<input type='hidden' name='itemID' value='$itemID'>";
+                echo "<td><input type='submit' name='UpdateItem' value='Update'></td>";
+                echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["walkIn"] . "</td><td>" . $row["factor"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
+                echo "<td><input type='submit' name='DeleteItem' value='Delete'></td>";
+                echo "</form>";
+                echo "</tr>";
+                $hasReal++;
             }
+            }
+        else
+        {
+            $hasDeleted++;
+        }
             
     }
    echo "</table>";

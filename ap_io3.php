@@ -51,7 +51,7 @@
 
     if ($result->num_rows > 0) {
             while($row = $result->fetch_assoc()) {
-            if($row["isDeleted"] == false)
+            if($row["isDeleted"] == false  )
                 {
                     
                     $itemID = $row["itemID"];
@@ -88,15 +88,15 @@
     echo'<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">';
     echo "<div id='category'>Category";
     echo'<input type="hidden" name="itemID" value=' . $itemID . '>';
-    createDatalist($categoryName, "categories", "category", "name", "category" ,false);
+    createDatalist("'$categoryName'", "categories", "category", "name", "category" ,false);
     echo "</div>";
 
 
     echo '<div id="itemName">Item name (used for the database):';
-    createDatalist($itemName, "itemNames", "item", "itemName", "itemName", true);
+    createDatalist("'$itemName'", "itemNames", "item", "itemName", "itemName", true);
         echo'</div>'; 
         echo'<div id="displayName">Display name (what you want the item to be called):';
-        createDatalist($displayName, "displayNames", "item", "displayName", "displayName", true);
+        createDatalist("'$displayName'", "displayNames", "item", "displayName", "displayName", true);
         echo'</div>';
         
     
