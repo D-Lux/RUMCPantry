@@ -11,7 +11,7 @@
 
 <body>
     <button onclick="goBack()">Go Back</button>
-	<?php echo "<br>";debugEchoPOST(); ?>
+
     <h1>Client appointment page</h1>
 	<?php 
 	
@@ -35,6 +35,11 @@
 				AND clientID=" . $availID . "
 				GROUP BY visitTime";
 		$conn = createPantryDatabaseConnection();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+			echo "ERROR";
+		}
+		
 		$result = queryDB($conn, $sql);
 		
 		// Warning if there are no available appointments

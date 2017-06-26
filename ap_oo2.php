@@ -47,6 +47,7 @@
 				ON Item.categoryID=Category.categoryID
 				WHERE isDeleted=0
 				AND Category.name<>'Specials'
+				AND Category.name<>'redistribution'
 				ORDER BY Category.name";
 
 		$itemList = queryDB($conn, $sql);
