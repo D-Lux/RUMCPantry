@@ -104,7 +104,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     $conn->close();
 }
 elseif (isset($_GET['UpdateItem'])) {
-	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
+	header ("location: /RUMCPantry/ap_io3.html?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
     $servername = "127.0.0.1";
@@ -235,7 +235,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $conn->close();
 }
 elseif (isset($_GET['UpdateCategory'])) {
-    header ("location: /RUMCPantry/ap_io5.php?categoryID=" . $_GET['categoryID']);
+    header ("location: /RUMCPantry/ap_io5.html?categoryID=" . $_GET['categoryID']);
 }
 elseif (isset($_GET['DeleteCategory'])) {
        $servername = "127.0.0.1";

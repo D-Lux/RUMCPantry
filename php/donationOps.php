@@ -170,7 +170,7 @@ elseif(isset($_POST['createDonationPartner'])) /*when the button is pressed on p
     $conn->close();
 }
 elseif (isset($_GET['UpdateItem'])) {
-	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
+	header ("location: /RUMCPantry/ap_io3.html?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
 
@@ -199,7 +199,7 @@ elseif (isset($_GET['DeleteItem'])) {
    
 }
 elseif (isset($_GET['updateDonation'])) {
-	header ("location: /RUMCPantry/ap_do4.php?donationID=" . $_GET['donationID']);
+	header ("location: /RUMCPantry/ap_do4.html?donationID=" . $_GET['donationID']);
 }
 elseif (isset($_GET['deleteDonation'])) {
 	$conn = createPantryDatabaseConnection();
@@ -226,7 +226,7 @@ elseif (isset($_GET['deleteDonation'])) {
     }
 }
 elseif (isset($_GET['updateDonationPartner'])) {
-	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
+	header ("location: /RUMCPantry/ap_do5.html?donationPartnerID=" . $_GET['donationPartnerID']);
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
 	$conn = createPantryDatabaseConnection();

@@ -1,7 +1,7 @@
 <?php
 
 if (($_COOKIE["loggedin"]) != 1) {
-	header ("location: /RUMCPantry/login.php?err=2");
+	header ("location: /RUMCPantry/login.html?err=2");
 }
 
 ?>

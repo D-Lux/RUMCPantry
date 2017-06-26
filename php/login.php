@@ -8,10 +8,10 @@
 		if ($name == "admin" and $pw == "rumc") {
 			createCookie("loggedin", 1, (86400 * 30)); // 30 days for now
 			//createCookie("loggedin", 1, 14400); // 4 hours (change later)
-			header ("location: /RUMCPantry/mainpage.php");
+			header ("location: /RUMCPantry/mainpage.html");
 		}
 		else {
-			header ("location: /RUMCPantry/login.php?err=1");
+			header ("location: /RUMCPantry/login.html?err=1");
 		}
 	}
 ?>
