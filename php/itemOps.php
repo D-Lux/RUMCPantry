@@ -235,6 +235,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $conn->close();
 }
 elseif (isset($_GET['UpdateCategory'])) {
+    header ("location: /RUMCPantry/ap_io5.html?categoryID=" . $_GET['categoryID']);
 }
 elseif (isset($_GET['DeleteCategory'])) {
        $servername = "127.0.0.1";
@@ -266,6 +267,57 @@ elseif (isset($_GET['DeleteCategory'])) {
     }
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
+    $categoryID = $_POST['categoryID'];
+    $name = $_POST['name'];
+    $small = $_POST['small']; 
+    $medium = $_POST['medium'];
+    $large = $_POST['large'];
+    $walkIn = $_POST['walkIn'];
+
+   
+
+
+
+
+
+    /* previous lines set up the strings for connextion*/
+
+    /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+    //check to see if category exists, if not create it.
+        
+
+
+    $sql = "UPDATE Category SET categoryID = $categoryID, name = '$name', small = $small, medium = $medium, large = $large, walkIn = $walkIn Where categoryID = $categoryID";
+
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Category updated successfully", "green" );
+        echoDivWithColor("Name: $name", "green" );
+        echoDivWithColor("Small: $small", "green" );
+        echoDivWithColor("Medium: $medium", "green" );
+        echoDivWithColor("Large: $large", "green" );
+        echoDivWithColor("Walk in: $walkIn", "green" );
+ 
+
+       
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at category update: $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
 }
 elseif (isset($_POST['createCategory'])) {
     $name = $_POST['name'];
