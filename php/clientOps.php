@@ -49,10 +49,10 @@ elseif(isset($_POST['submitClient']))
 	// Create insertion string
 	$sql = "INSERT INTO Client 
 			(numOfAdults, NumOfKids, timestamp, email, phoneNumber, 
-				address, city, state, zip, foodStamps, isDeleted)
+				address, city, state, zip, foodStamps, isDeleted, redistribution)
 			VALUES 
 			($numAdults,$numKids,now(),$email,$phoneNo,
-				$address,$city,$state,$zip,$foodStamps, FALSE)";
+				$address,$city,$state,$zip,$foodStamps, FALSE, FALSE)";
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {

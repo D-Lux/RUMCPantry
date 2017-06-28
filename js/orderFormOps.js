@@ -15,7 +15,7 @@ function familyTypeExtractor(famType) {
 	}
 }
 
-
+// Ajax commands for the admin's order form creation command
 function AJAX_UpdateQty(callingSlot) {
 	// Get the item ID and the new quantity from the page
 	// ID = 'iqty' + familyKey + itemID

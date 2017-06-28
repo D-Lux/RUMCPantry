@@ -60,7 +60,7 @@
 			$clientInfo = queryDB($conn, $sql);
 
 			if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
-				echo "Error, bad SQL Query";
+				echo "No clients in the database.";
 			}
 			
 			// Generate the string we'll need to display the client datalist

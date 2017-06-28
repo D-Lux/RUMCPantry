@@ -23,7 +23,7 @@
 		
 		<?php
 			// show invoices
-			// If a visit is status 1 then make selectable (to cof.php)
+			// If a visit is status 200 then make selectable (to cof.php)
 			$sql = "SELECT status, invoiceID, visitDate, visitTime
 					FROM Invoice
 					WHERE clientID=" . $_POST['clientID'];
@@ -40,7 +40,7 @@
 				
 				while($row = sqlFetch($invoiceQuery)) {
 					// Start Table row
-					if ($row['status'] == 1) {
+					if ($row['status'] == 200) {
 						echo "<form method='post' action='cof.php'>";
 						echo "<input type='hidden' name='clientID' value=" . $_POST['clientID'] . ">";
 						echo "<input type='hidden' name='invoiceID' value=" . $row['invoiceID'] . ">";
@@ -52,7 +52,7 @@
 					// Close off the row and form
 					echo "</tr>";
 					
-					if ($row['status'] == 1) {
+					if ($row['status'] == 200) {
 						echo "<input type='submit' name='selectApptDate' value='Select Appointment'>";
 						echo "</form>";
 					}

@@ -89,7 +89,7 @@
 			
 			echo "<form name='updateClient' action='php/clientOps.php' method='post' onSubmit='return validateUpdatedClient()' >";
 			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
-			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
+			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
 			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
 			
 			$foodStampStatus = $clientRow['foodStamps'];

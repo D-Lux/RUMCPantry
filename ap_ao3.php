@@ -135,7 +135,6 @@
 
 				// --==[*DELETE*]==-- Button start
 				echo "<form action='php/apptOps.php' method='post'>";
-				
 				// Add the hidden invoice ID for easy deletion
 				echo "<input type='hidden' name='invoiceID' value=" . $invoice['invoiceID'] . ">";
 				// Add the date to return properly
@@ -146,6 +145,9 @@
 				
 				echo "</form>";
 				// --==[*DELETE*]==-- Button end
+				
+				// 'Lock' Button
+				echo "<td><input id='lock" . $setID . "' type='button' class='btn_lock'  onclick='AJAX_ActivateAppointment(this)'></td>";
 				
 				// close off the row
 				echo "</tr>";
@@ -161,6 +163,7 @@
 			echo "Invoice date not found.<br><br>";
 		}
 		
+		echo "<div id='ErrorLog'></div>";
 		// --==[*NEW TIME SLOT*]==--
 		echo "<br><form action='ap_ao4.php' method='post'>";
 		echo "<input type='hidden' name='date' value=" . $_GET['date'] . ">";	// Send the date we're adding to

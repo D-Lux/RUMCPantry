@@ -119,3 +119,35 @@ function AJAX_SetAppointment(callingSlot) {
 				 "invoiceID=" + invoiceIDNum ,true);
 	xmlhttp.send();
 }
+
+function AJAX_ActivateAppointment(callingSlot) {
+	// Gets the setID number so we can pull information needed from the page
+
+	var IDNum = callingSlot.id.substring(4);
+	var statusIDTag = document.getElementById("status" + IDNum);
+	var invoiceIDNum = document.getElementById("InvoiceID" + IDNum).value;
+	// Run the AJAX stuff
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		xmlhttp = new XMLHttpRequest();
+	} 
+	else {
+		// code for IE6, IE5
+		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+	}
+	
+	// Generate the IDs for the fields we will be changing
+	var statusIDTag = "status" + IDNum;
+	
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			var responseData = this.responseText;
+			document.getElementById(statusIDTag).innerHTML = responseData;
+			
+		}
+	};
+	xmlhttp.open("GET","/RUMCPantry/php/ajax/setAppointmentClient.php?" +
+				 "activate=1&" +
+				 "invoiceID=" + invoiceIDNum ,true);
+	xmlhttp.send();
+}

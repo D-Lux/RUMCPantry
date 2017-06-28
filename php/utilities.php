@@ -217,20 +217,31 @@ function createAvailableClient(){
 // * Status decoder for invoices
 
 function visitStatusDecoder($visitStatus){
-	switch($visitStatus) {
-		case 0: return 'Available';
-		case 1: return 'Assigned, future event';
-		case 2: return 'Day of, not arrived';
-		case 3: return 'Day of, arrived';
-		case 4: return 'Day of, order form completed';
-		case 5: return 'Day of, order form being processed';
-		case 6: return 'Day of, order form processed';
-		case 7: return 'Post visit, success';
+	switch(true) {
+		case ($visitStatus == 0): return 'Available';
+		case ($visitStatus == 100): return 'Assigned';
+		case ($visitStatus == 101): return 'Assigned, Locked';
+		case ($visitStatus == 200): return 'Active';
+		case ($visitStatus >= 300 && $visitStatus < 400): return 'Arrived';
+		case ($visitStatus >= 400 && $visitStatus < 500): return 'Processed';
 		
 		// special cases
-		case 99: return 'Client did not show';
+		case ($visitStatus == 999): return 'Client did not show';
 		
 		default: return 'Status not recognized';
+	}		
+}
+
+// **********************************************************
+// * Status decoder for invoices
+
+function familySizeDecoder($famSize){
+	switch(true) {
+		case ($famSize >= 0 && $famSize <= 2): return 'Small';
+		case ($famSize >= 3 && $famSize <= 4): return 'Medium';
+		case ($famSize >= 5): return 'Large';
+		
+		default: return 'WalkIn';
 	}		
 }
 
