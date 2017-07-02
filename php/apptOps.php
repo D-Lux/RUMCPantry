@@ -1,7 +1,6 @@
 <?php
 
 include 'utilities.php';
-debugEchoPOST();debugEchoGET();
 // Perform specified function as needed
 
 // **************************************************
@@ -195,7 +194,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	//header("location: /RUMCPantry/mainpage.php");
+	header("location: /RUMCPantry/mainpage.php");
 }
 
 ?>

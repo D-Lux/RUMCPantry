@@ -21,13 +21,13 @@
 		
 		<!-- Required fields -->
 		<div id="memberFirstName" class="required"><label>First Name:</label>
-			<input type="text" name="memberFirstName" maxlength="45">
+			<input type="text" id='memberFirstNameField' name="memberFirstName" maxlength="45">
 		</div>
 		
 		<?php
 		// Autofill the last name field with the client's last name, leave editable, of course
 		echo "<div id='memberLastName' class='required'><label>Last Name:</label>";
-		echo "<input type='text' name='memberLastName' maxlength='45' value='" . $_GET['lnamedefault'] . "'";
+		echo "<input type='text' id='memberLastNameField' name='memberLastName' maxlength='45' value='" . $_GET['lnamedefault'] . "'";
 		?>
 		</div><br>
 

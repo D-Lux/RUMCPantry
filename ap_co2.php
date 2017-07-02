@@ -21,12 +21,12 @@
 		<div id="clientFirstName" class="required"><div class="tooltip"><label>First Name:</label>
 			<div class="tooltiptext">This name should be for the head of the household</div>
 			</div>
-			<input type="text" name="clientFirstName" maxlength="45">
+			<input type="text" id="clientFNameField" name="clientFirstName" maxlength="45">
 		</div>
 			
 		</div><br>
-        <div id="clientLastName" class="required"><label>Last Name:</label> <input type="text" name="clientLastName" maxlength="45"></div><br>
-        <div id="numAdults" class="required"><label>Number of Adults:</label> <input type="number" name="numAdults" value="0"></div>
+        <div id="clientLastName" class="required"><label>Last Name:</label> <input type="text" id="clientLNameField" name="clientLastName" maxlength="45"></div><br>
+        <div id="numAdults" class="required"><label>Number of Adults:</label> <input type="number" name="numAdults" min=1 value=1></div>
 		
 		<!-- Optional fields -->
 		<div id="numKids">Number of Children: <input type="number" name="numKids" value="0"></div><br>

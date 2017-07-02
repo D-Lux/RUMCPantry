@@ -54,7 +54,7 @@ function addTimeSlot() {
 
 	// Add default information to these cells:
 	cell1.innerHTML = "<input type='time' name='time[]' value='10:00' step='900'>";
-	cell2.innerHTML = "<input type='number' name='qty[]' value='6' min='1' max='10'>";
+	cell2.innerHTML = "<input type='number' name='qty[]' value='6' min='1' >";
 	cell3.innerHTML = "<input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'>";
 }
 
@@ -97,7 +97,7 @@ function AJAX_SetAppointment(callingSlot) {
 			
 			// Defaults
 			var familyData ="<td>0</td>";
-			var statusData = "<td>Unassigned</td>";
+			var statusData = "<td>Available</td>";
 			var phoneData = "<td>-</td>";
 			
 			if (findPhoneBreak > 0) {

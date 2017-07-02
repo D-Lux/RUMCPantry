@@ -71,9 +71,17 @@
 		}
 		
 		$clientDataList = "<datalist id='Clients'>";
+		/*
 		while($client = sqlFetch($clientInfo)) {
 			$clientDataList .= "<option value='" . $client['lName'] .
 								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'><option/>";
+		}
+		*/
+		while($client = sqlFetch($clientInfo)) {
+			$clientLName = displaySingleQuote($client['lName']);
+			$clientFName = displaySingleQuote($client['fName']);
+			$clientDataList .= "<option value='" . $clientLName .
+								($clientLName=="Available" ? "" : ", " . $clientFName) . "'><option/>";
 		}
 		$clientDataList .= "</datalist>";
 		
@@ -104,8 +112,8 @@
 				echo "<tr><td>";
 				
 				// List appointments as Last Name, First Name if they are set
-				$clientName = ($invoice['lName']=="Available" ? $invoice['lName'] 
-							 : ($invoice['lName'] . ", " . $invoice['fName']) );
+				$clientName = displaySingleQuote(($invoice['lName']=="Available" ? $invoice['lName'] 
+							 : ($invoice['lName'] . ", " . $invoice['fName']) ));
 
 				$clientIDTag = "Clients" . $setID;
 				if ($clientName == "Available") {
@@ -147,6 +155,7 @@
 				// --==[*DELETE*]==-- Button end
 				
 				// 'Lock' Button
+				// TODO: Add hover help text
 				echo "<td><input id='lock" . $setID . "' type='button' class='btn_lock'  onclick='AJAX_ActivateAppointment(this)'></td>";
 				
 				// close off the row

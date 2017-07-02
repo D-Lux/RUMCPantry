@@ -61,7 +61,17 @@ function fixInput($data) {
 	$data = trim($data);
 	$data = stripslashes($data);
 	$data = htmlspecialchars($data);
+	// Escape any single-quotes we find for sql queries
+	$data = str_replace ( "'", "''", $data);	
 	return $data;
+}
+
+// This is for data lists to display names of objects with a single quote in the name
+function displaySingleQuote($data) {
+	return str_replace("'", "&#39", $data);
+}
+function revertSingleQuote($data) {
+	return str_replace("'", "''", $data);	
 }
 
 // Made this function to turn data into a single-quote string for storing and viewing

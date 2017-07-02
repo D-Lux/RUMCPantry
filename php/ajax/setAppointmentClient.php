@@ -41,8 +41,8 @@
 	}
 	else {
 		// Grab our GET Data
-		$clientFirstName = $_GET['fName'];
-		$clientLastName = $_GET['lName'];
+		$clientFirstName = revertSingleQuote($_GET['fName']);
+		$clientLastName = revertSingleQuote($_GET['lName']);
 		$invoiceID = intval($_GET['invoiceID']);
 
 		if ( ($clientFirstName == "Available") && ($clientLastName == "Available") ) {
@@ -74,9 +74,9 @@
 							  status=" . $newStatus . "
 							  WHERE invoiceID=" . $invoiceID;
 			if (queryDB($conn, $updateInvoice) === FALSE) {
-				echo "sql error: " . mysqli_error($conn);
+				//echo "sql error: " . mysqli_error($conn);
 				echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-				echoDivWithColor("Error, failed to set client inactive.", "red" );	
+				echoDivWithColor("Error, failed to set appointment client.", "red" );	
 			}
 			
 			// Get the appropriate family size
