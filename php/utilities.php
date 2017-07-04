@@ -1,11 +1,28 @@
 <?php
 
-function echoDivWithColor($message, $color)
-{
+// **********************************************
+// * Debug functions
+
+function echoDivWithColor($message, $color){
     echo  '<div style="color: '.$color.';">'; /*must do color like this, can't do these three lines on the same line*/
     echo $message;
     echo  '</div>';
 }
+
+function debugEchoPOST() {
+	echo '<b>POST:</b><pre>';
+	var_dump($_POST);
+	echo '</pre>';
+}
+
+function debugEchoGET() {
+	echo '<b>GET:</b><pre>';
+	var_dump($_GET);
+	echo '</pre>';
+}
+
+// ***********************************************************
+// * Database Access Functions
 
 // Creating a global connection function so that if we ever need to change the database information
 // it's all in one place
@@ -43,20 +60,10 @@ function sqlFetch($queryResult) {
 	// return ($queryResult->fetch_assoc());
 }
 
+// *****************************************************************
+// * Display and Query functions
 
-function debugEchoPOST() {
-	echo '<b>POST:</b><pre>';
-	var_dump($_POST);
-	echo '</pre>';
-}
-
-function debugEchoGET() {
-	echo '<b>GET:</b><pre>';
-	var_dump($_GET);
-	echo '</pre>';
-}
-
-
+// Fix input to prevent injection errors
 function fixInput($data) {
 	$data = trim($data);
 	$data = stripslashes($data);
@@ -79,14 +86,6 @@ function makeString($data) {
 	return "'" . $data . "'";
 }
 
-function createCookie($cookieName, $cookieValue, $duration) {
-	setcookie($cookieName, $cookieValue, time() + $duration, "/");
-}
-
-function removeCookie($cookieName) {
-	setcookie($cookieName, 0, time() -1, "/");
-}
-
 // Displays a phone number as expected (###)-###-####
 // If it is not 10 digits long, just return as is
 function displayPhoneNo($data) {
@@ -99,7 +98,6 @@ function displayPhoneNo($data) {
 	} else {
 		return $data;
 	}
-	
 }
 
 // Takes in a string and strips all spaces, dashes and non-integers and return the first 10 digits
@@ -108,8 +106,7 @@ function storePhoneNo($data) {
 	return "'" . substr((preg_replace('/[^0-9]/','',$data)), 0, 10) . "'";
 }
 
-function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName ,$hasDeletedAttribute)
-{
+function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
 	/*
 	argument explanations:
 	$defaultVal - default value you would like to appear in the datalist 
@@ -121,7 +118,7 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 		out all that has been deleted.
 	*/
 	
-            $servername = "127.0.0.1";
+    $servername = "127.0.0.1";
 	$username = "root";
 	$password = "";
 	$dbname = "foodpantry";
@@ -130,15 +127,10 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 	mysql_connect($servername, $username, $password);
 	mysql_select_db($dbname);
 	//standard DB stuff up to here
-	if($hasDeletedAttribute == true) {
-		$sql = "SELECT DISTINCT " . $attributeName .
-				" FROM " .  $tableName . 
-				" WHERE isDeleted=0" ;//select distinct values from the collumn in this table
-	}
-	else {
-		$sql = "SELECT DISTINCT " . $attributeName .
-				" FROM " .  $tableName ;//select distinct values from the collumn in this table
-	
+	$sql = "SELECT DISTINCT " . $attributeName .
+			" FROM " .  $tableName ;//select distinct values from the collumn in this table
+	if($hasDeletedAttribute) {
+		$sql .= " WHERE isDeleted=0" ;//select distinct values from the collumn in this table
 	}
 
 	$result = mysql_query($sql);
@@ -152,6 +144,19 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 	}
 	echo "</datalist>";
 }
+
+// **********************************************
+// * Cookie functions
+function createCookie($cookieName, $cookieValue, $duration) {
+	setcookie($cookieName, $cookieValue, time() + $duration, "/");
+}
+
+function removeCookie($cookieName) {
+	setcookie($cookieName, 0, time() -1, "/");
+}
+
+// ***********************************************************************
+// * "Available" Client functions
 
 // We need a custom client named 'available' to put into invoices that don't have real clients yet
 // This function will check the database for this client, and create it if it doesn't exist yet
@@ -242,8 +247,25 @@ function visitStatusDecoder($visitStatus){
 	}		
 }
 
+// Return the status # for a newly assigned appointment
+function GetAssignedStatus() {
+	return 100;
+}
+// Return the status # for an active appointment
+function GetActiveStatus() {
+	return 200;
+}
+
+function IsActiveAppointment($status) {
+	return ( ($status >= 200) && ($status <= 400) );
+}
+
+function HighestActiveStatus() {
+	return 400;
+}
+
 // **********************************************************
-// * Status decoder for invoices
+// * Decoder for family sizes
 
 function familySizeDecoder($famSize){
 	switch(true) {
@@ -253,6 +275,14 @@ function familySizeDecoder($famSize){
 		
 		default: return 'WalkIn';
 	}		
+}
+
+// ***********************************************************
+// * Simple function to return the number of occurrences of a value in an array
+
+function returnCountOfItem($item, $data) {
+    $counts = array_count_values($data);
+    return $counts[$item];
 }
 
 

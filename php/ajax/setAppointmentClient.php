@@ -14,11 +14,11 @@
 			
 		// Swap enabling the invoice, only if it is appropriate to do either
 		$newStatus = -1;
-		if ($invoiceStatus['status'] == 100) {
-			$newStatus = 200;
+		if ($invoiceStatus['status'] == GetAssignedStatus()) {
+			$newStatus = GetActiveStatus();
 		}
-		elseif ($invoiceStatus['status'] == 200) {
-			$newStatus = 100;
+		elseif ($invoiceStatus['status'] == GetActiveStatus()) {
+			$newStatus = GetAssignedStatus();
 		}
 			
 		// Do the update if appropriate
@@ -48,7 +48,6 @@
 		if ( ($clientFirstName == "Available") && ($clientLastName == "Available") ) {
 			$clientID = getAvailableClient();
 			// Assign invoice to this client id
-			// update status to 0
 		}
 		else {
 			// open a connection to the database
@@ -68,7 +67,7 @@
 			// Update the invoice with the new client ID
 			// TODO: A warning if the client already has an appointment in this month
 			// Assigned Status
-			$newStatus = 100;
+			$newStatus = GetAssignedStatus();
 			$updateInvoice = "UPDATE Invoice
 							  SET clientID=" . $fetchData['clientID'] . ",
 							  status=" . $newStatus . "

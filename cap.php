@@ -14,9 +14,7 @@
 
     <h1>Client appointment page</h1>
 	<?php 
-	
-		echo "<h4>Client: " . $_POST['clientName'] . "</h4>";	
-		
+
 		// NOTE To Developer:
 		// The client should only get to this page right after they've completed an order form
 
@@ -61,7 +59,7 @@
 				echo "<form action='php/apptOps.php' method='post'>";
 				echo "<input type='hidden' name='visitDate' value=" . $timeslots['visitDate'] . ">";
 				echo "<input type='hidden' name='visitTime' value=" . $timeslots['visitTime'] . ">";
-				echo "<input type='hidden' name='clientID' value=" . $_POST['clientID'] . ">";
+				echo "<input type='hidden' name='clientID' value=" . $_GET['clientID'] . ">";
 				echo "<td><input type='submit' name='clientApptSelect' value='Select'></td></form>";
 				
 				// Close off the row
