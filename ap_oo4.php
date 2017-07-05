@@ -10,40 +10,55 @@
 </head>
 
 <body>
+
     <button onclick="goBack()">Go Back</button>
 	<br><br>
 	
 	<?php 
-	// TODO: Finish this page
-	$sql = "SELECT visitDate, visitTime, I.name as iName, I.quantity as iQty
-			FROM Invoice
-			JOIN (SELECT Item.itemName as name, quantity, invoiceID
-				  FROM InvoiceDescription
-				  JOIN Item
-				  WHERE Item.itemID=InvoiceDescription.itemID) as I
-			WHERE I.invoiceID=Invoice.invoiceID";
-	
-	$conn = createPantryDatabaseConnection();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	
-	$invoiceData = queryDB($conn, $sql);
-	
-	if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
-		echo "error: " . mysqli_error($conn);
-		echo "Failed to find invoice.";	
-	}
-	else {
-		// Loop through our data and create a list of selectable active appointments
-		while( $invoice = sqlFetch($invoiceData) ) {
-			echo "<a href=ap_oo4.php?invoiceID=" . $invoice['invoiceID'] . ">";
-			echo $invoice['ln'] . "</a> " . $invoice['visitTime'] . " " . visitStatusDecoder($invoice['status']);
-			echo "<br>";
+	//debugEchoPOST();
+	if (isset($_POST['viewInvoice']) ) {
+		// Post Vars: invoiceID | name | visitTime
+
+		// TODO: Finish this page
+		$sql = "SELECT I.name as iName, I.quantity as iQty
+				FROM Invoice
+				JOIN (SELECT Item.itemName as name, quantity, InvoiceDescription.invoiceID as IinvoiceID
+					  FROM InvoiceDescription
+					  JOIN Item
+					  ON Item.itemID=InvoiceDescription.itemID
+					  WHERE InvoiceDescription.invoiceID=" . $_POST['invoiceID'] . ") as I
+				ON I.IinvoiceID=Invoice.invoiceID
+				WHERE invoiceID=" . $_POST['invoiceID'];
+		
+		$conn = createPantryDatabaseConnection();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		$invoiceData = queryDB($conn, $sql);
+		
+		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
+			echo "error: " . mysqli_error($conn);
+			echo "<br>Invoice is currently empty.";	
+		}
+		else {			
+			// Loop through our data and spit out the data simply
+			echo "<h4>Client: " . $_POST['name'] . " | Appointment Time: " . returnTime($_POST['visitTime']);
+			echo " | Family Size: " . familySizeDecoder($_POST['familySize']) . "</h4>";
+			while( $invoice = sqlFetch($invoiceData) ) {
+				echo "(" . $invoice['iQty'] . ") " . $invoice['iName'] . "<br>";
+			}
+			
+			echo "<br><br>";
+			echo "<form method='post' action='php/orderOps.php'>";
+			echo "<input type='hidden' name='invoiceID' value=" . $_POST['invoiceID'] . ">";
+			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";
+			echo "<input type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
+			echo "</form>";
 		}
 	}
+			
 
-	
 	?>
 	
 

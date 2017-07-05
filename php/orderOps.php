@@ -28,7 +28,7 @@ echo "<br>";
 // * Creating invoice descriptions and tying them together into one invoice
 if (isset($_POST['CreateInvoiceDescriptions'])) {
 
-	// Store off invoiceID and clientID then remove them from POST, we should be left with just our items
+	// Store off invoiceID and clientID
 	$invoiceID = $_POST['invoiceID'];
 	$clientID = $_POST['clientID'];
 
@@ -102,6 +102,41 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
 	}
 }
+
+// **************************************************
+// * Setting an invoice to processed
+
+if (isset($_POST['SetInvoiceProcessed'])) {
+	
+	// *********************************************
+	// * --== Create our update query ==--
+	
+	// Connect to the database and grab Item ID and Price information
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$sql = "UPDATE Invoice
+			SET status=" . (ReturnProcessedStatus($_POST['status'])) . "
+			WHERE invoiceID=" . $_POST['invoiceID'];
+	if (queryDB($conn, $sql) === TRUE) {
+		// Success, return to ap_oo3 with no issues
+		header("location: /RUMCPantry/ap_oo3.php");
+	}
+	else {
+		// There was an error, create a cookie to give a popup when we hit ap_oo3
+		createCookie("processError", 1, 30);
+		header("location: /RUMCPantry/ap_oo3.php");
+	}
+	
+	$PriceID_Array = array();
+	while( $itemRow = sqlFetch($itemPriceQuery) ) {
+		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
+	}
+	
+}
+
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	//header("location: /RUMCPantry/mainpage.php");

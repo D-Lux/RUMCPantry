@@ -230,17 +230,28 @@ function createAvailableClient(){
 
 // **********************************************************
 // * Status decoder for invoices
+// SV = Status Value
+define("SV_AVAILABLE", 0);
+define("SV_ASSIGNED", 100);
+define("SV_LOCKED", 101);
+define("SV_ACTIVE", 200);
+define("SV_ARRIVED_LOW", 300);
+define("SV_ARRIVED_HIGH", 399);
+define("SV_ARRIVED_TO_PROCESSED", 100);
+define("SV_PROCESSED_LOW", 400);
+define("SV_PROCESSED_HIGH", 499);
 
 function visitStatusDecoder($visitStatus){
 	switch(true) {
-		case ($visitStatus == 0): return 'Available';
-		case ($visitStatus == 100): return 'Assigned';
-		case ($visitStatus == 101): return 'Assigned, Locked';
-		case ($visitStatus == 200): return 'Active';
-		case ($visitStatus >= 300 && $visitStatus < 400): return 'Arrived';
-		case ($visitStatus >= 400 && $visitStatus < 500): return 'Processed';
+		case ($visitStatus == SV_AVAILABLE): return 'Available';
+		case ($visitStatus == SV_ASSIGNED): return 'Assigned';
+		case ($visitStatus == SV_LOCKED): return 'Assigned, Locked';
+		case ($visitStatus == SV_ACTIVE): return 'Active';
+		case ($visitStatus >= SV_ARRIVED_LOW && $visitStatus < SV_ARRIVED_HIGH): return 'Arrived';
+		case ($visitStatus >= SV_PROCESSED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Processed';
 		
 		// special cases
+		case ($visitStatus == 888): return 'Client canceled';
 		case ($visitStatus == 999): return 'Client did not show';
 		
 		default: return 'Status not recognized';
@@ -249,29 +260,45 @@ function visitStatusDecoder($visitStatus){
 
 // Return the status # for a newly assigned appointment
 function GetAssignedStatus() {
-	return 100;
+	return SV_ASSIGNED;
 }
 // Return the status # for an active appointment
 function GetActiveStatus() {
-	return 200;
+	return SV_ACTIVE;
 }
-
+// Returns a bool indicating whether the appointment is active or not
 function IsActiveAppointment($status) {
-	return ( ($status >= 200) && ($status <= 400) );
+	return ( ($status >= SV_ACTIVE) && ($status <= SV_ARRIVED_HIGH) );
+}
+// Returns the highest active status value
+function HighestActiveStatus() {
+	return SV_ARRIVED_HIGH;
 }
 
-function HighestActiveStatus() {
-	return 400;
+// Return an appropriate status value to mark the status completed
+function ReturnProcessedStatus($status) {
+	if ($status >= SV_ARRIVED_LOW && $status <= SV_ARRIVED_HIGH) {
+		return ($status + SV_ARRIVED_TO_PROCESSED);
+	}
+	else {
+		return SV_PROCESSED_LOW;
+	}
 }
 
 // **********************************************************
 // * Decoder for family sizes
+define("FAMILY_SIZE_SM_LOW", 1);
+define("FAMILY_SIZE_SM_HIGH", 2);
+define("FAMILY_SIZE_MED_LOW", 3);
+define("FAMILY_SIZE_MED_HIGH", 4);
+define("FAMILY_SIZE_HIGH_THRESHOLD", 5);
+
 
 function familySizeDecoder($famSize){
 	switch(true) {
-		case ($famSize >= 0 && $famSize <= 2): return 'Small';
-		case ($famSize >= 3 && $famSize <= 4): return 'Medium';
-		case ($famSize >= 5): return 'Large';
+		case ($famSize >= FAMILY_SIZE_SM_LOW && $famSize <= FAMILY_SIZE_SM_HIGH): return 'Small';
+		case ($famSize >= FAMILY_SIZE_MED_LOW && $famSize <= FAMILY_SIZE_MED_HIGH): return 'Medium';
+		case ($famSize >= FAMILY_SIZE_HIGH_THRESHOLD): return 'Large';
 		
 		default: return 'WalkIn';
 	}		
@@ -285,5 +312,11 @@ function returnCountOfItem($item, $data) {
     return $counts[$item];
 }
 
+// ***********************************************************
+// * Returns a string of a time value of the form hh:mm:ss to hh:mm
+
+function returnTime($time) {
+	return DateTime::createFromFormat('g:i:s',$time)->format('g:i a');
+}
 
 ?>

@@ -18,6 +18,8 @@
 		// NOTE To Developer:
 		// The client should only get to this page right after they've completed an order form
 
+		// TODO: Don't offer an appointment if they already have one next month
+		
 		// Find our trusty 'available' client ID
 		$availID = getAvailableClient();
 		
