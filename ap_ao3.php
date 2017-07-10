@@ -74,14 +74,14 @@
 		/*
 		while($client = sqlFetch($clientInfo)) {
 			$clientDataList .= "<option value='" . $client['lName'] .
-								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'><option/>";
+								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'></option>";
 		}
 		*/
 		while($client = sqlFetch($clientInfo)) {
 			$clientLName = displaySingleQuote($client['lName']);
 			$clientFName = displaySingleQuote($client['fName']);
 			$clientDataList .= "<option value='" . $clientLName .
-								($clientLName=="Available" ? "" : ", " . $clientFName) . "'><option/>";
+								($clientLName=="Available" ? "" : ", " . $clientFName) . "'></option>";
 		}
 		$clientDataList .= "</datalist>";
 		

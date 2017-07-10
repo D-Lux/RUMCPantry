@@ -45,3 +45,8 @@ table, th, td {
 	rows="10";
 	cols="80";
 }
+
+.newBtn {
+	float: left;
+	padding: 1em;
+}

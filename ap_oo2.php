@@ -26,6 +26,10 @@
 		// Walk-In Clients
 		if (isset($_GET["Walkin"])) { echo "Walk-Ins"; $familyType = "walkIn"; }
 		
+		if ($familyType === ""){
+			header("location: /RUMCPantry/ap_oo1.php");
+		}
+		
 		$familyToken = substr($familyType,0,1);
 		
 		echo "</h1>";

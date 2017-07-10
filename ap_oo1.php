@@ -16,8 +16,8 @@
 		<input type="submit" name="3to4" value="Order Form: 3-4"><br>
 		<input type="submit" name="5Plus" value="Order Form: 5+"><br>
 		<input type="submit" name="Walkin" value="Order Form: Walk-In"><br><br>
-		
-		<!-- This will have to go somewhere else, tbd -->
+	</form>
+	<form method="post" action="ap_oo5.php">
 		<input type="submit" name="Specials" value="Order Form: Specials">
     </form>
 	

@@ -15,7 +15,72 @@ function familyTypeExtractor(famType) {
 	}
 }
 
-// Ajax commands for the admin's order form creation command
+// ****************************************************************
+// ** SPECIALS
+
+var specialSlot = 0;
+function addSpecialItem() {
+	specialSlot++;
+	
+	// Get a reference to the item template and copy it
+	var itm = document.getElementById("specialTemplate");
+	var cln = itm.cloneNode(true);
+	document.getElementById("newItems").appendChild(cln);
+	
+	// Go through the div and set appropriate information
+	cln.style.display = "block";
+	cln.id = "specialSlot" + specialSlot;
+	
+	var children = document.getElementById('specialSlot' + specialSlot).childNodes;
+		
+	// Set all IDs and Names to the appropriate values
+	for (i = 0; i < children.length; i++) {
+		if ( children[i].hasAttribute("id") ) {
+			children[i].id = children[i].id.replace("_", specialSlot);
+		}
+		if ( children[i].hasAttribute("name") ) {
+			children[i].name = children[i].name.replace("_", specialSlot);
+		}
+	}
+}
+
+var OrSlot = 0;
+function addSpecialOrItem(ele) {
+	OrSlot++;
+	// Copy the datalist box only this time
+	var itm = document.getElementById("specialOrTemplate");
+	var cln = itm.cloneNode(true);
+	var idNum = ele.id.substring(5);
+	
+	// Append to the appropriate selection
+	document.getElementById("OrSlot" + idNum).appendChild(cln);
+
+	// Set the new box to be visible
+	cln.style.display = 'block';
+	cln.id = cln.id = cln.id + idNum + "SLOT" + OrSlot;
+	
+	var children = document.getElementById(cln.id).childNodes;
+		
+	// Set all IDs  and names to the appropriate values
+	for (i = 0; i < children.length; i++) {
+		if ( children[i].hasAttribute("name") ) {
+			children[i].name = children[i].name.replace("_", specialSlot);
+		}
+	}
+}
+
+function deleteSpecials(ele)	{
+	if (confirm("Are you sure you want to remove these Specials options?")) {
+		var idNum = ele.id.substring(6);
+		document.getElementById("specialSlot" + idNum).remove();
+	}
+}
+
+
+// *****************************************************************
+// ** AJAX FUNCTIONS
+
+// **
 // Updates item quantities
 function AJAX_UpdateQty(callingSlot) {
 	// Get the item ID and the new quantity from the page
@@ -46,6 +111,7 @@ function AJAX_UpdateQty(callingSlot) {
 	xmlhttp.send();
 }
 
+// **
 // Updates item factors
 function AJAX_UpdateFX(callingSlot) {
 	// Get the item ID and the new factor from the page
@@ -74,6 +140,7 @@ function AJAX_UpdateFX(callingSlot) {
 	xmlhttp.send();
 }
 
+// **
 // Updates category quantity values
 function AJAX_UpdateCQty(callingSlot) {
 	// Get the category ID and the new quantity from the page
