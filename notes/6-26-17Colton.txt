@@ -1,0 +1,52 @@
+registration page for who's coming, who's here, and who's done.
+
+invoice status description for stuff: status on invoice. tens spot on status will be the order of people to get stuff
+
+find timeslots and set up tables	
+
+x
+
+open page and set all 100 status on todays date 200 
+
+set to 301 or 302 or 303 when they show up 
+
+set to 401 or 402 or 403 when the go back
+
+
+
+
+
+ SELECT FamilyMember.firstName, FamilyMember.LastName, Invoice.visitTime, Invoice.status
+ FROM Invoice
+ INNER JOIN Client ON Invoice.clientID=Client.clientID
+ INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID
+ WHERE Invoice.visitDate = "2017-07-11" && FamilyMember.isHeadOfHousehold =true
+ ORDER BY Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC;
+
+
+
+
+
+
+SELECT FamilyMember.firstName, FamilyMember.LastName, Invoice.visitTime, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = "2017-07-10" && FamilyMember.isHeadOfHousehold = true ORDER BY Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC
+
+UPDATE Invoice
+SET status = 200
+WHERE visitDate = $date AND status = 100;
+
+
+update invoice
+set status = 402
+where invoiceID= 31;
+
+UPDATE Invoice
+SET status = 100
+WHERE visitDate = "2017-07-11" AND status = 200;
+
+UPDATE Invoice
+SET status = 200
+WHERE visitDate = "2017-07-11" AND status = 100;
+
+UPDATE Invoice SET status = 200 WHERE visitDate = "2017-07-11" AND status = 100;
+
+
