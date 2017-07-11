@@ -7,6 +7,12 @@
 </head>
 
 <body>
+	<script>
+		if (getCookie("SpecialsSaved") != "") {
+			window.alert("Specials Updated!");
+			removeCookie("SpecialsSaved");
+		}		
+	</script>
     <button onclick="goBack()">Go Back</button>
     <h1>
         Admin Order Form Selection

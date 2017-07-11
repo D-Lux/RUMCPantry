@@ -67,7 +67,31 @@
 		echo "<input type='text' list='Items' name='item_[]' >";
 		echo $itemList;
 		echo "</div>";
-
+		
+		// **************************************************************************
+		// ** Hidden Div that gets copied for Saved Special Options
+		
+		// Create our hidden div that we will clone when the user requests a new option
+		echo "<div id='savedSpecialTemplate' style='display:none;' >";
+		echo "<input type='text' list='Items' value='REPLACE_NAME' name='savedItem_[]' >";
+		// Dump out the list we created on page load
+		echo $itemList;
+		
+		// Saved options can't be edited with 'OR'
+		echo "<div id='SavedOrSlot_'></div><br>";
+		
+		// Delete Button for a section
+		echo "<input id='SavedDelBtn_' type='button' value='Remove Specials' onclick='deleteSavedSpecials(this)' >";
+		echo "<br><hr>";
+		echo "</div>";
+		
+		// *********************************
+		// ** This div is cloned for Saved Special Options
+		echo "<div id='savedSpecialOrTemplate' style='display:none;' >";
+		echo "<input type='text' list='Items' value='REPLACE_NAME' name='savedItem_[]' >";
+		echo $itemList;
+		echo "</div>";
+		
 		// **************************************************************
 		// ** Form Start
 		
@@ -75,59 +99,7 @@
 		echo "<form id='SpecialsForm' name='Specials' action='php/orderOps.php' method='post'>";
 		
 		// Create the div that will hold item options
-		echo "<div id='newItems'>";
-		
-		// *************************************************************
-		// * load the save file here and add appropriate boxes as needed
-		$conn = createPantryDatabaseConnection();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		$specialsFile = fopen("specials.txt","r") or die("Unable to open specials!");
-		
-		$savedItemNum = 1;
-		while(!feof($specialsFile)) {
-			$itemLine = explode(",", fgets($specialsFile));
-			if (sizeof($itemLine) > 1) {
-				echo "<div id='savedSpecialSlot" . $savedItemNum . "'>";
-				for ($i = 0; $i < sizeof($itemLine); $i++) {
-					// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
-					if (is_numeric($itemLine[$i])) {
-						$sql = "SELECT itemName
-								FROM Item
-								WHERE itemID='" . $itemLine[$i] . "'
-								LIMIT 1";
-						$itemQuery = queryDB($conn, $sql);
-						
-						if ($itemQuery == NULL || $itemQuery->num_rows <= 0){
-							echo $itemLine[$i] . "<br>";
-							echo "sql error: " . mysqli_error($conn);	
-						}
-						else {
-							$itemInfo = sqlFetch($itemQuery);
-							echo "<input type='text' list='Items' value='" . $itemInfo['itemName'] . "'
-									name='savedItem" . $savedItemNum . "[]' >";
-							echo $itemList;
-							echo "<br>";
-						}
-					}
-				}
-				// Delete Button
-				echo "<input id='SavedDelBtn" . $savedItemNum . "' type='button' value='Remove Specials' 
-						onclick='deleteSavedSpecials(this)' >";
-				echo "<br><hr>";
-				
-				// Close off the div
-				echo "</div>";
-				
-				$savedItemNum++;
-			}
-		}
-		closeDB($conn);
-		
-		// ************************************************************************************************
-
-		echo "</div>";
+		echo "<div id='newItems'></div>";
 			
 		echo "<br>";
 		// Button to create a new set of special options
@@ -135,6 +107,51 @@
 		
 		// Save button and close the form
 		echo "<input type='submit' name='SaveSpecials' value='Save'></form>";
+		
+		
+		// ******************************************************************
+		// * Read in our specials text file and update the page accordingly
+		// open database connection
+		// read line of file
+		// for each in exploded string, sql query to find correct name
+		// create a new entry or an or on the current one and place the appropriate name in the list
+		
+		$conn = createPantryDatabaseConnection();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$specialsFile = fopen("specials.txt","r") or die("Unable to open specials!");
+		
+		$currItemNum = 1;
+		while(!feof($specialsFile)) {
+			$itemLine = explode(",", fgets($specialsFile));
+			for ($i = 0; $i < sizeof($itemLine); $i++) {
+				if (is_numeric($itemLine[$i])) {
+					$sql = "SELECT itemName
+							FROM Item
+							WHERE itemID='" . $itemLine[$i] . "'
+							LIMIT 1";
+					$itemQuery = queryDB($conn, $sql);
+					
+					if ($itemQuery == NULL || $itemQuery->num_rows <= 0){
+						echo $itemLine[$i] . "<br>";
+						echo "sql error: " . mysqli_error($conn);	
+					}
+					else {
+						$itemInfo = sqlFetch($itemQuery);
+						echo "<script>"; //type='text/javascript'
+						//echo (($i > 0) ? "addSavedSpecialOrItem(" . $currItemNum . ", '" . $itemInfo['itemName'] . "');" : 
+						//				 "addSavedSpecial('" . $itemInfo['itemName'] . "');");
+						echo "addSavedSpecial('" . $itemInfo['itemName'] . "');";
+						echo "</script>";
+						//echo "Should be adding " . $itemInfo['itemName'] . "<br>";
+					}
+				}
+			}
+			$currItemNum++;
+			//echo "<br>";
+		}
+		
 		
 		// Error log for debug
 		echo "<br><br><br>";

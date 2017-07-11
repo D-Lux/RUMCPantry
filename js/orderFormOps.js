@@ -50,21 +50,23 @@ function addSpecialOrItem(ele) {
 	// Copy the datalist box only this time
 	var itm = document.getElementById("specialOrTemplate");
 	var cln = itm.cloneNode(true);
-	var idNum = ele.id.substring(5);
+	idNum = ele.id.substring(5);
 	
 	// Append to the appropriate selection
 	document.getElementById("OrSlot" + idNum).appendChild(cln);
 
 	// Set the new box to be visible
 	cln.style.display = 'block';
+	
+	// Update ID to something unique
 	cln.id = cln.id = cln.id + idNum + "SLOT" + OrSlot;
 	
 	var children = document.getElementById(cln.id).childNodes;
 		
-	// Set all IDs  and names to the appropriate values
+	// Set names to the appropriate values
 	for (i = 0; i < children.length; i++) {
 		if ( children[i].hasAttribute("name") ) {
-			children[i].name = children[i].name.replace("_", specialSlot);
+			children[i].name = children[i].name.replace("_", idNum);
 		}
 	}
 }
@@ -73,6 +75,13 @@ function deleteSpecials(ele)	{
 	if (confirm("Are you sure you want to remove these Specials options?")) {
 		var idNum = ele.id.substring(6);
 		document.getElementById("specialSlot" + idNum).remove();
+	}
+}
+
+function deleteSavedSpecials(ele)	{
+	if (confirm("Are you sure you want to remove these Specials options?")) {
+		var idNum = ele.id.substring(11);
+		document.getElementById("savedSpecialSlot" + idNum).remove();
 	}
 }
 

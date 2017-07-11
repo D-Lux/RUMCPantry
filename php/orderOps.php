@@ -64,19 +64,40 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 	// Loop through our POST information
 	foreach ($_POST as $Category=>$C_Count){
 		if ( isCategory($Category) ) {
-			foreach ($C_Count as $itemID){
-				// Check if we've seen this ID before, if not, run what we need to on it
-				if ( !in_array($itemID, $hitIDs) ) {
+			if (is_array($C_Count)) {
+				foreach ($C_Count as $itemID){
+					echo "checking on adding " . $itemID . "<br>";
+					// Check if we've seen this ID before, if not, run what we need to on it
+					if ( !in_array($itemID, $hitIDs) ) {
+						echo "New item, adding.<br>";
+						// Add the item to our hit IDs so we don't call it again
+						$hitIDs[] = $itemID;
+						
+						// Get our count and price for the insertion string
+						$itemCount = returnCountOfItem($itemID, $C_Count);
+						$totalPrice = $itemCount * $PriceID_Array[$itemID];
+						
+						// Update our insertion string
+						$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+						$insertionSql .= "( $invoiceID, $itemID, $itemCount, $totalPrice)";
+						$firstInsert = FALSE;
+						$runQuery = TRUE;
+					}
+				}
+			}
+			else {
+				// If the item is a special, it will not be an array
+				if ( !in_array($C_Count, $hitIDs) ) {
+					echo "New item, adding.<br>";
 					// Add the item to our hit IDs so we don't call it again
-					$hitIDs[] = $itemID;
+					$hitIDs[] = $C_Count;
 					
-					// Get our count and price for the insertion string
-					$itemCount = returnCountOfItem($itemID, $C_Count);
-					$totalPrice = $itemCount * $PriceID_Array[$itemID];
+					// Get our price for the insertion string
+					$totalPrice = $PriceID_Array[$C_Count];
 					
 					// Update our insertion string
 					$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
-					$insertionSql .= "( $invoiceID, $itemID, $itemCount, $totalPrice)";
+					$insertionSql .= "( $invoiceID, $C_Count, 1, $totalPrice)";
 					$firstInsert = FALSE;
 					$runQuery = TRUE;
 				}
@@ -106,12 +127,12 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 // **************************************************
 // * Setting an invoice to processed
 
-if (isset($_POST['SetInvoiceProcessed'])) {
+elseif (isset($_POST['SetInvoiceProcessed'])) {
 	
 	// *********************************************
 	// * --== Create our update query ==--
 	
-	// Connect to the database and grab Item ID and Price information
+	// Connect to the database
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
@@ -129,12 +150,57 @@ if (isset($_POST['SetInvoiceProcessed'])) {
 		createCookie("processError", 1, 30);
 		header("location: /RUMCPantry/ap_oo3.php");
 	}
+}
+
+// **************************************************
+// * Creating Specials Order form (saved as a .txt file)
+elseif (isset($_POST['SaveSpecials'])) {
+	// go through the post and any time we have a post value that contains 'item' run through it
+	// search each item in the db and get it's ID, append the ID to a line in the text file
+	// itemID1,itemID2,itemID3, - use explode(",",getLine($filename)); to extract arrays of item IDs
 	
-	$PriceID_Array = array();
-	while( $itemRow = sqlFetch($itemPriceQuery) ) {
-		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
+	// Open our database connection
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// Open our specials file
+	$specialsFile = fopen("../specials.txt","w") or die("Unable to open specials!");
+	
+	$firstLine = TRUE;
+	// Go through our post data and pull out the appropriate item strings
+	foreach ($_POST as $varName=>$itemArr){
+		// Skip SaveSpecials Post (it was created on the button press and isn't needed)
+		if ( $varName != "SaveSpecials" ) {
+			if (!$firstLine) {
+				fwrite($specialsFile,  "\r\n");
+			}
+			else {
+				$firstLine = FALSE;
+			}
+			foreach ($itemArr as $itemName){
+				$sql = "SELECT itemID
+						FROM Item
+						WHERE itemName='" . $itemName . "'
+						LIMIT 1";
+						
+				$itemIDGrab = queryDB($conn, $sql);
+				
+				if ($itemIDGrab == NULL || $itemIDGrab->num_rows <= 0){
+					echo "sql error: " . mysqli_error($conn);	
+				}
+				else {
+					$itemID = sqlFetch($itemIDGrab);
+					fwrite($specialsFile,  $itemID['itemID'] . ",");
+				}
+			}
+		}
 	}
 	
+	closeDB($conn);
+	fclose($specialsFile);
+	createCookie("SpecialsSaved", 1, 30);
+	header("location: /RUMCPantry/ap_oo1.php");
 }
 
 else {

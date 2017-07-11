@@ -71,12 +71,6 @@
 		}
 		
 		$clientDataList = "<datalist id='Clients'>";
-		/*
-		while($client = sqlFetch($clientInfo)) {
-			$clientDataList .= "<option value='" . $client['lName'] .
-								($client['lName']=="Available" ? "" : ", " . $client['fName']) . "'></option>";
-		}
-		*/
 		while($client = sqlFetch($clientInfo)) {
 			$clientLName = displaySingleQuote($client['lName']);
 			$clientFName = displaySingleQuote($client['fName']);

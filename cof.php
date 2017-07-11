@@ -26,7 +26,7 @@
 	// * 1.) Family size information
 	// * 2.) Order form database
 	
-	
+	// TODO: This information will be coming from the invoice in the future (to allow for walkins)
 	// -= Family size query =-
 	$famSql = "SELECT (numOfKids + numOfAdults) as familySize
 			   FROM client
@@ -81,6 +81,9 @@
 	// Set defaults
 	$currCategory = "";
 	
+	// *************************************************
+	// * Normal Items
+	
 	// Roll through the items and create the order form
 	while ($item = sqlFetch($itemList)) {
 		if ($currCategory != $item['CName']) {
@@ -108,6 +111,51 @@
 		}
 		echo "<br>";
 		
+	}
+	
+	// *************************************************
+	// * Specials
+	
+	// TODO: If not walkin
+	if ($familyType != "walkIn") {;
+		echo "<h2>Specials</h2>";
+		$conn = createPantryDatabaseConnection();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		$specialsFile = fopen("specials.txt","r") or die("Unable to open specials!");
+		
+		$specialItemNum = 1;
+		while(!feof($specialsFile)) {
+			$itemLine = explode(",", fgets($specialsFile));
+			if (sizeof($itemLine) > 1) {
+				for ($i = 0; $i < sizeof($itemLine); $i++) {
+					// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
+					if (is_numeric($itemLine[$i])) {
+						$sql = "SELECT displayName
+								FROM Item
+								WHERE itemID='" . $itemLine[$i] . "'
+								LIMIT 1";
+						$itemQuery = queryDB($conn, $sql);
+						
+						if ($itemQuery == NULL || $itemQuery->num_rows <= 0){
+							echo "sql error: " . mysqli_error($conn);	
+						}
+						else {
+							$itemInfo = sqlFetch($itemQuery);
+							echo "<input type='radio' value=" . $itemLine[$i] . "
+									name='savedItem" . $specialItemNum . "'>" . $itemInfo['displayName'];
+
+							echo "<br>";
+						}
+					}
+				}
+				$specialItemNum++;
+			}
+			// Put some sort of separator between specials
+			echo "<hr>";
+		}
+		closeDB($conn);
 	}
 ?>
 		<br>
