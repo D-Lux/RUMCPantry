@@ -10,7 +10,8 @@
 </head>
 
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <button onclick="goBack()">Go Back</button> </br>
+    <button onclick="location.href = 'awc.php';">Add walk in client</button>
     <h1>
 		Check in for Clients
     </h1>
