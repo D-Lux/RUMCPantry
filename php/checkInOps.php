@@ -10,7 +10,7 @@
  //WHERE Invoice.visitDate = "2017-07-10" && FamilyMember.isHeadOfHousehold =true
  //ORDER BY Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC;
 
-
+date_default_timezone_set('America/Chicago');
 
     $date = date("Y-m-d");
     echo "Today is  $date <br>";
@@ -43,6 +43,10 @@ echo"<h1>Clients that are here</h1>";
 displayShowedUpTable($date, $conn,$timeDifferenceOnTables, $timeStart, $timeEnd, $timeIter);
 $timeIter = $timeStart;
 echo "</table></br>";
+echo"<h1>Clients ready to be sent back</h1>";
+displayReadyToGoBackTable($date, $conn,$timeDifferenceOnTables, $timeStart, $timeEnd, $timeIter);
+$timeIter = $timeStart;
+echo "</table></br>";
 echo"<h1>Clients sent back</h1>";
 displaySentBackTable($date, $conn,$timeDifferenceOnTables, $timeStart, $timeEnd, $timeIter);
 $timeIter = $timeStart;
@@ -53,7 +57,7 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > 400 AND Invoice.status < 500 ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetProcessedLow() . " AND Invoice.status < " . GetProcessedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -77,7 +81,7 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                         echo $rowTitle;
                         echo "</b>";
                         echo "<table>";
-                        echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Here?</th></tr>";
+                        echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th></tr>";
                     }
                     
                     echo "<tr>";
@@ -108,12 +112,12 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
         
     }   
 
-function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart, $timeEnd,$timeIter)
+    function displayReadyToGoBackTable($date, $conn, $timeDifferenceOnTables, $timeStart, $timeEnd,$timeIter)
     {
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > 300 AND Invoice.status < 400 ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetPrintedLow() . " AND Invoice.status < " . GetPrintedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -137,7 +141,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                         echo $rowTitle;
                         echo "</b>";
                         echo "<table>";
-                        echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Here?</th></tr>";
+                        echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Send Back?</th></tr>";
                     }
                     
                     echo "<tr>";
@@ -146,7 +150,67 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                     $invoiceID=$row["invoiceID"];
                     echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
                     echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-                    echo "<td><input type='submit' name='checkInHere' value='Send back'></td>";
+                    echo "<td><input type='submit' name='SendBack' value='Send Back'></td>";
+                    echo "</form>";
+                    echo "</tr>";                   
+                }
+                
+                (string)$timeIter = addToIntTime($timeIter );
+                
+                
+                
+            }
+            
+            $timeIter = $timeStart;
+        }
+        
+
+    }
+    else{
+        echo"No appointments ready to print";
+        }
+        
+    }   
+
+function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart, $timeEnd,$timeIter)
+    {
+       
+
+        
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetArrivedLow() . " AND Invoice.status < " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+            // output data of each row
+        
+
+            $rowTitle = null;
+        while($row = $result->fetch_assoc()) 
+        {
+
+            
+            while($timeIter <= $timeEnd)
+            {
+                
+               if($row["visitTime"] == convertIntToTime($timeIter) )
+                {   
+                    if($rowTitle != $row["visitTime"])
+                    {
+                        echo "</table>";
+                        $rowTitle = $row["visitTime"];
+                        echo "<b>";            
+                        echo $rowTitle;
+                        echo "</b>";
+                        echo "<table>";
+                        echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Print?</th></tr>";
+                    }
+                    
+                    echo "<tr>";
+                    //grab donation id
+                    echo "<form action=''>";
+                    $invoiceID=$row["invoiceID"];
+                    echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
+                    echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+                    echo "<td><input type='submit' name='checkInHere' value='Print'></td>";
                     echo "</form>";
                     echo "</tr>";                   
                 }
@@ -173,7 +237,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status = 200 ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status = " . GetActiveStatus() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -235,7 +299,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
-            $sql = "UPDATE Invoice SET status = 200 WHERE visitDate = '$date' AND status = " . GetAssignedStatus() . "";
+            $sql = "UPDATE Invoice SET status = " . GetAssignedStatus() . " WHERE visitDate = '$date' AND status = " . GetAssignedStatus() . "";
             
             //update the status numbers on each of the rows
                if ($conn->query($sql) === TRUE) {
