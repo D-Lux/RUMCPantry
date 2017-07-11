@@ -13,8 +13,6 @@
 	<style>
 		div.tab {
 			overflow: hidden;
-			border: 1px solid #ccc;
-			background-color: #f1f1f1;
 		}
 
 		div.tab button {
@@ -23,23 +21,22 @@
 			border: none;
 			outline: none;
 			cursor: pointer;
-			padding: 14px 16px;
+			padding: 3px 6px;
 			transition: 0.3s;
 		}
 
 		div.tab button:hover {
-			background-color: #ddd;
+			background-color: #ccc;
 		}
 
 		div.tab button.active {
-			background-color: #ccc;
+			background-color: #000;
+			color: white;
 		}
 
 		.tabcontent {
 			display: none;
-			padding: 6px 12px;
-			border: 1px solid #ccc;
-			border-top: none;
+			padding-top: 10px;
 		}
 	</style>
 </head>
@@ -47,7 +44,7 @@
 <body>
 	<button onclick="goBack()">Go Back</button>
     <h1>
-        First admin page for client operations
+        Active Clients
     </h1>
 	
 	<!-- Search for a name TODO
@@ -58,12 +55,6 @@
     </form> 
 	// See SQL Wildcards for this query
 	-->
-	
-	<!-- Display all of the clients in a table format -->
-	<!-- This generates a table with all clients in one place -->
-	<!-- TODO: Limit this by pages -->
-	<!-- see this: https://www.w3schools.com/howto/howto_js_tabs.asp -->
-	<!-- or this: https://www.w3schools.com/php/php_mysql_select_limit.asp (using parameters) -->
 	
 	<?php
 		// TODO: Limit rows based off a searched name (will be in the address bar)
@@ -86,12 +77,11 @@
 				WHERE Client.clientID=FamilyMember.clientID AND
 				Client.isDeleted=0 AND
 				Client.clientID<>" . $availID . " AND
-				FamilyMember.isHeadOfHousehold=true";
+				FamilyMember.isHeadOfHousehold=true
+				ORDER BY FamilyMember.lastName";
 		$result = queryDB($conn, $sql);
+		
 		// loop through the query results
-		
-		
-		
 		if ($result!=null && $result->num_rows > 0) {
 			$TabSize = 20;
 			$makeTabs = ( ($result->num_rows) > $TabSize);
@@ -101,7 +91,7 @@
 				echo "<div class='tab'>";
 				for ($i=0; $i< ceil($result->num_rows/$TabSize); $i++) {
 					echo "<button class='tablinks' onclick='viewTab(event, clientList" . $i . ")'";
-					echo ($i > 0 ? "" : "id='defaultOpen' ") . ">View Set " . ($i + 1) . "</button>";
+					echo ($i > 0 ? "" : "id='defaultOpen' ") . ">" . ($i + 1) . "</button>";
 				}
 				echo "</div>";
 			}
@@ -159,26 +149,22 @@
 				
 				<td><input id="InactiveClient" type="submit" class="btn_trash" name="InactiveClient" value=" "
 					onclick="return confirm('Are you sure you want to set this client inactive?')"></td>
-				<!--
-				<td><input id="InactiveClient" type="submit" class="btn_trash" name="InactiveClient" value=" "
-					onclick="return confirm('Are you sure you want to set this client inactive?')"></td>
--->
+					
 				<?php
 				// Close off the row and form
-				//echo "</tr></form>";
 				echo "</form>";
 				
 				// Close off the tab if we've hit our peak
 				if ( ( $makeTabs ) && ( $clientCounter >= $TabSize) ) {
-					//echo "</div>";
 					echo "</table>";
 				}
 			}
-			//echo "</table>";
+			if ( !$makeTabs ) {
+				echo "</table>";
+			}
 		} else {
 			echo "No clients in database.";
 		}
-		
 		
 		$conn->close();
 		

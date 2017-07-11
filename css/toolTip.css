@@ -32,6 +32,10 @@
 	background-image: url(/RUMCPantry/images/TEMP_Trash.png);
 }
 
+.btn_reactivate {
+	background-image: url(/RUMCPantry/images/TEMP_Reactivate.png);
+}
+
 .btn_lock {
 	background-image: url(/RUMCPantry/images/TEMP_Lock.png);
 }

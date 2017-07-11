@@ -188,6 +188,46 @@ elseif(isset($_GET['InactiveClient']))
 	closeDB($conn);
 }
 
+// ***********************************
+// Setting a client to 'active'
+elseif(isset($_GET['ActiveClient']))
+{
+	debugEchoPOST();debugEchoGET();
+	// Set up server connection
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$sql = "UPDATE Client SET isDeleted=0 WHERE clientID=" . $_GET['id'];
+
+	// Perform and test update
+	if (queryDB($conn, $sql) === TRUE) {
+		// Now set all of the family members active as well
+		$sql = "UPDATE FamilyMember 
+				SET isDeleted=0 
+				WHERE clientID=" . $_GET['id'];
+
+		// Perform and test update
+		if (queryDB($conn, $sql) === TRUE) {
+			closeDB($conn);
+			header ("location: /RUMCPantry/ap_co1i.php");
+		}
+		else {
+			echo "sql error: " . mysqli_error($conn);
+			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+			echoDivWithColor("Error, failed to set family members inactive.", "red" );
+		}
+	}
+	else {
+		echo "sql error: " . mysqli_error($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error, failed to set client inactive.", "red" );	
+	}
+	
+	closeDB($conn);
+}
+
 // *******************************************************
 // Start Family Member operations
 // *******************************************************
