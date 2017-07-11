@@ -238,8 +238,10 @@ define("SV_ACTIVE", 200);
 define("SV_ARRIVED_LOW", 300);
 define("SV_ARRIVED_HIGH", 399);
 define("SV_ARRIVED_TO_PROCESSED", 100);
-define("SV_PROCESSED_LOW", 400);
-define("SV_PROCESSED_HIGH", 499);
+define("SV_PRINTED_LOW", 400);
+define("SV_PRINTED_HIGH", 499);
+define("SV_PROCESSED_LOW", 500);
+define("SV_PROCESSED_HIGH", 599);
 
 function visitStatusDecoder($visitStatus){
 	switch(true) {
@@ -248,6 +250,7 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus == SV_LOCKED): return 'Assigned, Locked';
 		case ($visitStatus == SV_ACTIVE): return 'Active';
 		case ($visitStatus >= SV_ARRIVED_LOW && $visitStatus < SV_ARRIVED_HIGH): return 'Arrived';
+		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
 		case ($visitStatus >= SV_PROCESSED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Processed';
 		
 		// special cases
@@ -256,6 +259,31 @@ function visitStatusDecoder($visitStatus){
 		
 		default: return 'Status not recognized';
 	}		
+}
+
+// Return the status # for lowest arrived
+function GetArrivedLow() {
+	return SV_ARRIVED_LOW;
+}
+// Return the status # for highest arrived
+function GetArrivedHigh() {
+	return SV_ARRIVED_HIGH;
+}
+// Return the status # for lowest printed
+function GetPrintedLow() {
+	return SV_PRINTED_LOW;
+}
+// Return the status # for highest printed
+function GetPrintedHigh() {
+	return SV_PRINTED_HIGH;
+}
+// Return the status # for lowest processed
+function GetProcessedLow() {
+	return SV_PROCESSED_LOW;
+}
+// Return the status # for highest processed
+function GetProcessedHigh() {
+	return SV_PROCESSED_HIGH;
 }
 
 // Return the status # for a newly assigned appointment
