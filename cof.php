@@ -116,7 +116,6 @@
 	// *************************************************
 	// * Specials
 	
-	// TODO: If not walkin
 	if ($familyType != "walkIn") {;
 		echo "<h2>Specials</h2>";
 		$conn = createPantryDatabaseConnection();
