@@ -177,7 +177,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetArrivedLow() . " AND Invoice.status < " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetArrivedLow() . " AND Invoice.status < " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -204,13 +204,26 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                         echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Print?</th></tr>";
                     }
                     
+
+
+			
+		
+			
+			
+			
+
+
                     echo "<tr>";
                     //grab donation id
-                    echo "<form action=''>";
+                    echo "<form method='post' action='ap_oo4.php'>";
                     $invoiceID=$row["invoiceID"];
                     echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
+                    echo "<input type='hidden' value='" . $row['lastName'] . "' name='name'>";
+                    echo "<input type='hidden' value='" . $row['visitTime'] . "' name='visitTime'>";
+                    echo "<input type='hidden' value='" . $row['status'] . "' name='status'>";
+                    echo "<input type='hidden' value='" . $row['familySize'] . "' name='familySize'>";
                     echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-                    echo "<td><input type='submit' name='checkInHere' value='Print'></td>";
+                    echo "<td><input type='submit' name='viewInvoice' value='Print'></td>";
                     echo "</form>";
                     echo "</tr>";                   
                 }
