@@ -1,13 +1,7 @@
-function getElementAndColorIt(elementID, color) {
-    var element = document.getElementById(elementID);
-    element.style.color = color;
-}
-
-
 function validateNewClient() {
-    var response = "";
+	var response = "";
 	var clientFirstName = document.getElementById("clientFNameField").value;
-    var clientLastName = 
+    var clientLastName = document.getElementById("clientLNameField").value;
     var errors = 0;
 	
 	if (clientFirstName == "" || clientFirstName.length == 0 || clientFirstName == null) {
@@ -27,7 +21,6 @@ function validateNewClient() {
     } else {
         return true;
     }
-	
 }
 
 function validateNewClientMember() {

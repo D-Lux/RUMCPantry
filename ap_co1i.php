@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
 	<?php include 'php/checkLogin.php';?>
 
-    <title>ap_co1</title>
+    <title>Inactive Client List</title>
 	
 	<style>
 		div.tab {
@@ -36,7 +36,6 @@
 
 		.tabcontent {
 			display: none;
-			padding-top: 10px;
 		}
 	</style>
 </head>
@@ -67,10 +66,11 @@
 		$result = queryDB($conn, $sql);
 		// loop through the query results
 		
-		
+		// tabStarted lets us know we started a tab, but didn't close the /table form
+		$tabStarted = FALSE;
 		
 		if ($result!=null && $result->num_rows > 0) {
-			$TabSize = 20;
+			$TabSize = (isset($_POST['tabSize']) ? $_POST['tabSize'] : 20);
 			$makeTabs = ( ($result->num_rows) > $TabSize);
 			$tabCounter = 0;
 			$clientCounter = $TabSize;
@@ -92,6 +92,7 @@
 				if ($makeTabs) {
 					if ($clientCounter >= $TabSize) {
 						$clientCounter = 0;
+						$tabStarted = TRUE;
 						// Create the client table and add in the headers
 						echo "<table id='clientList" . $tabCounter . "' class='tabcontent'> <tr> <th></th>";
 						echo "<th>Client Name</th><th>Family Size</th>";
@@ -145,16 +146,26 @@
 					echo "</table>";
 				}
 			}
-			if ( !$makeTabs ) {
+			if (( !$makeTabs ) || ( $tabStarted ) ) {
 				echo "</table>";
 			}
-		} else {
+			
+			echo "<br>";
+			// Allow the user to adjust the tab size
+			echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
+			echo "<input type='submit' name='submit' value='Tab Size'>";
+			echo "<select name='tabSize'>";
+			for ($i=1; $i <= 100; $i+=($i<5 ? 1 : ($i<50 ? 5 : 10))) {
+				echo "<option " . ($_POST['tabSize']!==NULL ? ($_POST['tabSize']==$i ? "selected" : "") : ($i == 20) ? "selected" : "") . " value='" . $i . "'>" . $i . "</option>";
+			}
+			echo "</select>";
+			echo "</form>";
+		} 
+		else {
 			echo "No clients in database.";
 		}
 		
 		$conn->close();
-		
-		
 	?>
 	<br><br>
 	

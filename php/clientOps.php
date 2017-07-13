@@ -67,8 +67,14 @@ elseif(isset($_POST['submitClient']))
 			// Set a cookie so we can display a 'new' message
 			createCookie("newClient", 1, 30);
 			
-			// Pass along the clientID so we know which client to pull up on the update page
-			header("location: /RUMCPantry/ap_co3.php?id=$clientID");
+			// If we came here from adding a walk-in, go back to the apptOps.php to make the invoice
+			if (isset($_POST['newWalkIn'])) {
+				header("location: /RUMCPantry/php/apptOps.php?clientID=$clientID&newWalkIn=1");
+			}
+			// Otherwise go to update page with the client ID
+			else {
+				header("location: /RUMCPantry/ap_co3.php?id=$clientID");
+			}
 		}
 		else {
 			// delete the blank client we just made

@@ -10,6 +10,13 @@
 </head>
 
 <body>
+	<script>
+		if (getCookie("newWalkIn") != "") {
+			window.alert("Walk-In Client added!");
+			removeCookie("newWalkIn");
+		}		
+	</script>
+	
     <button onclick="goBack()">Go Back</button> </br>
     <button onclick="location.href = 'awc.php';">Add walk in client</button>
     <h1>

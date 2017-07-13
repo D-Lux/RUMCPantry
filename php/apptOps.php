@@ -1,6 +1,31 @@
 <?php
 
 include 'utilities.php';
+
+
+function addWalkIn($clientID) {
+	// Walk ins are always day-of (so grab today's date)
+	$walkInDate = makeString(date('Y-m-d', time()) . " 00:00:00");
+	// This is an arbitrary time, noon
+	$walkInTime = makeString("12:00");
+	$sql = "INSERT INTO Invoice (visitDate, visitTime, clientID, Status, walkIn) VALUES ";
+	$sql .= "( " . $walkInDate . ", " . $walkInTime . ", " . $clientID . ", " . SV_ASSIGNED . ", 1)";
+	
+	// Open database connection and perform insertion
+	$conn = createPantryDatabaseConnection();
+	
+	if (queryDB($conn, $sql) === TRUE) {
+		closeDB($conn);
+		createCookie("newWalkIn", 1, 30);
+		header("location: /RUMCPantry/checkIn.php");
+	} 
+	else {
+		closeDB($conn);
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, failed to insert invoice.", "red" );	
+	}
+}
+
 // Perform specified function as needed
 
 // **************************************************
@@ -52,21 +77,14 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		
 		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
-			echo "<h2>Insertion Successful</h2>";
-			echo "<h3>" . $_POST['appDate'] . "</h3>";
 			// go to view page with date parameter
 			createCookie("newAppt", 1, 30);
 			header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
-			
 		} 
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 			echoDivWithColor("Error, failed to insert invoices.", "red" );	
 		}
-		
-		
-		// **********************************
-		echo ("<br><h1>New appointment date</h1><br><br>");
 		closeDB($conn);
 	}
 }
@@ -80,22 +98,20 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		
 	// Generate the SQL statement to insert all of the invoices
 	// There is only one database call
-	$sql = "INSERT INTO Invoice (visitDate, visitTime, clientID, Status) VALUES ";
+	$sql = "INSERT INTO Invoice (visitDate, visitTime, clientID, Status, walkIn) VALUES ";
 	$firstInsert = TRUE;
 	
 	for ($i = 0; $i < $_POST['qty'] ; $i++) {
 		$sql .= (!$firstInsert ? "," : "");
 		$firstInsert = FALSE;
 		
-		$sql .= "( " . $validateDate . ", '" . $timeSlot . "', $availID, 0)";
+		$sql .= "( " . $validateDate . ", '" . $timeSlot . "', $availID, 0, 0)";
 	}
-	// perform insertion
+	// open the database connection and perform insertion
 	$conn = createPantryDatabaseConnection();
 	
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
-		echo "<h2>Insertion Successful</h2>";
-		echo "<h3>" . $_POST['appDate'] . "</h3>";
 		// go to view page with date parameter
 		createCookie("newTimeSlots", 1, 30);
 		header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
@@ -105,10 +121,6 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		echoDivWithColor("Error, failed to insert invoices.", "red" );	
 	}
-	
-	
-	// **********************************
-	echo ("<br><h1>New appointment date</h1><br><br>");
 	closeDB($conn);
 }
 elseif (isset($_POST['DeleteInvoice'])) {
@@ -136,10 +148,6 @@ elseif (isset($_POST['DeleteInvoice'])) {
 }
 
 elseif (isset($_POST['clientApptSelect'])) {
-	
-	echo "Attempting to select an appointment on date: " . $_POST['visitDate'];
-	echo " at time: " . $_POST['visitTime'] . "<br><br>";
-	
 	// POST VARS: visitDate visitTime clientID
 	// Find all appointments at the time selected, we will look through them to find an open one
 	$sql = "SELECT status, invoiceID
@@ -188,8 +196,16 @@ elseif (isset($_POST['clientApptSelect'])) {
 		closeDB($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("I'm sorry, that appointment time is no longer available.", "red" );	
-		
 	}
+}
+
+// Walk-in appointment creation
+elseif (isset($_GET['newWalkIn'])) {
+	debugEchoPOST();debugEchoGET();
+	addWalkIn($_GET['clientID']);
+}
+elseif (isset($_POST['existingWalkIn'])) {
+	addWalkIn($_POST['clientID']);
 }
 else {
 	echo "<h1>Nothing was set</h1><br>";

@@ -1,10 +1,3 @@
-function getElementAndColorIt(elementID, color) {
-    var element = document.getElementById(elementID);
-    element.style.color = color;
-}
-
-
-
 function validateDonationAdd() {
 
     var response = "";

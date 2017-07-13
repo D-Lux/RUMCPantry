@@ -58,3 +58,9 @@ function getCookie(cname) {
     }
 	return "";
 }
+
+// To color an element by ID
+function getElementAndColorIt(elementID, color) {
+    var element = document.getElementById(elementID);
+    element.style.color = color;
+}

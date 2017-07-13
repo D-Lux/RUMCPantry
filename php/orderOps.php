@@ -143,12 +143,14 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 			WHERE invoiceID=" . $_POST['invoiceID'];
 	if (queryDB($conn, $sql) === TRUE) {
 		// Success, return to ap_oo3 with no issues
-		header("location: /RUMCPantry/ap_oo3.php");
+		//header("location: /RUMCPantry/ap_oo3.php");
+		header("location: /RUMCPantry/checkIn.php");
 	}
 	else {
 		// There was an error, create a cookie to give a popup when we hit ap_oo3
 		createCookie("processError", 1, 30);
-		header("location: /RUMCPantry/ap_oo3.php");
+		//header("location: /RUMCPantry/ap_oo3.php");
+		header("location: /RUMCPantry/checkIn.php");
 	}
 }
 

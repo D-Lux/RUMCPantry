@@ -8,7 +8,7 @@
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
 	<?php include 'php/checkLogin.php';?>
 
-    <title>ap_co1</title>
+    <title>Client List</title>
 	
 	<style>
 		div.tab {
@@ -36,7 +36,6 @@
 
 		.tabcontent {
 			display: none;
-			padding-top: 10px;
 		}
 	</style>
 </head>
@@ -81,9 +80,13 @@
 				ORDER BY FamilyMember.lastName";
 		$result = queryDB($conn, $sql);
 		
+		// tabStarted lets us know we started a tab, but didn't close the /table form
+		$tabStarted = FALSE;
+		
 		// loop through the query results
 		if ($result!=null && $result->num_rows > 0) {
-			$TabSize = 20;
+			// If tabsize has been updated from post, grab that, otherwise default to 20
+			$TabSize = (isset($_POST['tabSize']) ? $_POST['tabSize'] : 20);
 			$makeTabs = ( ($result->num_rows) > $TabSize);
 			$tabCounter = 0;
 			$clientCounter = $TabSize;
@@ -105,6 +108,7 @@
 				if ($makeTabs) {
 					if ($clientCounter >= $TabSize) {
 						$clientCounter = 0;
+						$tabStarted = TRUE;
 						// Create the client table and add in the headers
 						echo "<table id='clientList" . $tabCounter . "' class='tabcontent'> <tr> <th></th>";
 						echo "<th>Client Name</th><th>Family Size</th>";
@@ -156,21 +160,34 @@
 				
 				// Close off the tab if we've hit our peak
 				if ( ( $makeTabs ) && ( $clientCounter >= $TabSize) ) {
+					$tabStarted = FALSE;
 					echo "</table>";
 				}
 			}
-			if ( !$makeTabs ) {
+			// Close off the table if we've finished and didn't make tabs, or didn't finish the table in the last tab
+			if (( !$makeTabs ) || ( $tabStarted ) ) {
 				echo "</table>";
 			}
-		} else {
+			
+			echo "<br>";
+			
+			// Allow the user to adjust the tab size
+			echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
+			echo "<input type='submit' name='submit' value='Tab Size'>";
+			echo "<select name='tabSize'>";
+			for ($i=1; $i <= 100; $i+=($i<5 ? 1 : ($i<50 ? 5 : 10))) {
+				echo "<option " . ($_POST['tabSize']!==NULL ? ($_POST['tabSize']==$i ? "selected" : "") : ($i == $TabSize) ? "selected" : "") . " value='" . $i . "'>" . $i . "</option>";
+			}
+			echo "</select>";
+			echo "</form>";
+		} 
+		else {
 			echo "No clients in database.";
 		}
 		
 		$conn->close();
-		
-		
 	?>
-	<br><br><br>
+	<br><br>
 	
 	<!-- NEW Client -->
 	<form action="ap_co2.php">
@@ -178,7 +195,7 @@
     </form>
 	
 	<br>
-	<!-- View Inactive Clients Client -->
+	<!-- View Inactive Clients -->
 	<form action="ap_co1i.php">
 		<input type="submit" name="ShowInactive" value="View Inactive Clients">
     </form>

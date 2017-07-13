@@ -68,7 +68,7 @@
 			$clientDataList .= " onchange='updateHiddenClientID()'><datalist id='Clients' >";
 			while($client = sqlFetch($clientInfo) ) {
 				$clientDataList .= "<option data-value=" . $client['clientID'] . ">";
-				$clientDataList .= $client['lName'] . ", " . $client['fName'] . "<option/>";
+				$clientDataList .= $client['lName'] . ", " . $client['fName'] . "</option>";
 
 			}
 			$clientDataList .= "</datalist>";
