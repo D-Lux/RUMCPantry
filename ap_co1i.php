@@ -59,8 +59,8 @@
 				Client.zip, Client.foodStamps, Client.notes, FamilyMember.lastName
 				FROM FamilyMember
 				JOIN Client 
-				WHERE Client.clientID=FamilyMember.clientID AND
-				Client.isDeleted=1 AND
+				ON Client.clientID=FamilyMember.clientID
+				WHERE Client.isDeleted=1 AND
 				FamilyMember.isHeadOfHousehold=true
 				ORDER BY FamilyMember.lastName";
 		$result = queryDB($conn, $sql);

@@ -3,7 +3,8 @@
 
 <head>
     <script src="js/utilities.js"></script>
-    <title>ap1</title>
+	<?php include 'php/checkLogin.php';?>
+    <title>Admin - Main</title>
 </head>
 
 <body>
@@ -28,6 +29,9 @@
     </form><br>
     <form method="post" action="ap_do1.php">
         <input type="submit" value="Donation operations">
+    </form><br>
+	<form method="post" action="ap_ro1.php">
+        <input type="submit" value="Redistribution operations">
     </form><br>
 
     <form method="post" action="reporting.php">

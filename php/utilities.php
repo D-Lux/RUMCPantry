@@ -194,8 +194,8 @@ function createAvailableClient(){
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Create insertion string
-	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, isDeleted)
-			VALUES ('0','0',now(), FALSE)";
+	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, isDeleted, redistribution)
+			VALUES ('0','0',now(), FALSE, FALSE)";
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {

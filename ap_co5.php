@@ -50,11 +50,11 @@
 		
 			// First Name Field - auto filled in with database data
 			echo "<div id='memberFirstName' class='required'><label>First Name:</label>
-				<input type='text' name='memberFirstName' maxlength='45' value='" . $familyRow['firstName'] . "'> </div>";
+				<input type='text' name='memberFirstName' maxlength='45' value='" . displaySingleQuote($familyRow['firstName']) . "'> </div>";
 				
 			// Last Name
 			echo "<div id='memberLastName' class='required'><label>Last Name:</label>
-				<input type='text' name='memberLastName' maxlength='45' value='" . $familyRow['lastName'] . "'> </div>";
+				<input type='text' name='memberLastName' maxlength='45' value='" . displaySingleQuote($familyRow['lastName']) . "'> </div>";
 		
 			// If the person is already the head of the household, we just say that.
 			// Otherwise, place a checkbox to change head of household
