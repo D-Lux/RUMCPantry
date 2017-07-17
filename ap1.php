@@ -33,6 +33,9 @@
 	<form method="post" action="ap_ro1.php">
         <input type="submit" value="Redistribution operations">
     </form><br>
+    <form method="post" action="checkIn.php">
+        <input type="submit" value="Check in page">
+    </form><br>
 
     <form method="post" action="reporting.php">
         <input type="submit" value="Reporting">
