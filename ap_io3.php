@@ -17,8 +17,7 @@
     <h3>Admin Page Inventory Ops 3</h3>
 
 
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap_io3Back()">
+<button onclick="goBack()">Back</button>
 
     <?php
     include 'php/utilities.php';

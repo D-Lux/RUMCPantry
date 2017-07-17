@@ -11,8 +11,7 @@
 
 <body>
 
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap_io1Back()">
+    <button onclick="goBack()">Back</button>
     <h1>
         Admin page inventory ops 1
     </h1>

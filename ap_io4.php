@@ -13,8 +13,7 @@
 </head>
 
 <body>
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap_io4Back()">
+<button onclick="goBack()">Back</button>
     <h1>
         Add a category
     </h1>

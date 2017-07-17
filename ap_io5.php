@@ -13,8 +13,7 @@
 </head>
 
 <body>
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap_io5Back()">
+<button onclick="goBack()">Back</button>
 
     <?php
     include 'php/utilities.php';
