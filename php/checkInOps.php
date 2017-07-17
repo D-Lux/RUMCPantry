@@ -57,7 +57,7 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetProcessedLow() . " AND Invoice.status < " . GetProcessedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetProcessedLow() . " AND Invoice.status <= " . GetProcessedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -86,7 +86,7 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                     
                     echo "<tr>";
                     //grab donation id
-                    echo "<form action=''>";
+                    echo "<form action='checkIn.php' method='post'>";
                     $invoiceID=$row["invoiceID"];
                     echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
                     echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
@@ -117,7 +117,7 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetPrintedLow() . " AND Invoice.status < " . GetPrintedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetPrintedLow() . " AND Invoice.status <= " . GetPrintedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -146,11 +146,11 @@ function displaySentBackTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                     
                     echo "<tr>";
                     //grab donation id
-                    echo "<form action=''>";
+                    echo "<form action='checkIn.php' method='post'>";
                     $invoiceID=$row["invoiceID"];
                     echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
                     echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-                    echo "<td><input type='submit' name='SendBack' value='Send Back'></td>";
+                    echo "<td><input type='submit' name='sendBack' value='Send Back'></td>";
                     echo "</form>";
                     echo "</tr>";                   
                 }
@@ -177,7 +177,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
        
 
         
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status > " . GetArrivedLow() . " AND Invoice.status < " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetArrivedLow() . " AND Invoice.status <= " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
             // output data of each row
@@ -279,7 +279,7 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
                     
                     echo "<tr>";
                     //grab donation id
-                    echo "<form action=''>";
+                    echo "<form action='checkIn.php' method='post'>";
                     $invoiceID=$row["invoiceID"];
                     echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
                     echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
@@ -421,5 +421,64 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
     }
   
     
+
+
+if(isset($_POST['checkInHere'])) /*when the button is pressed on post request*/
+{
+    
+
+
+   
+   
+
+
+    $invoiceID = $_POST['invoiceID'];
+
+
+
+        $sqlToSeeHowManyAreHere = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetArrivedLow() . " AND Invoice.status <= " . GetArrivedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $resultToSeeHowManyAreHere = $conn->query($sqlToSeeHowManyAreHere);
+        if ($resultToSeeHowManyAreHere->num_rows == 0) {
+               
+        $sqlToUpdateFirstPersonHere = "UPDATE Invoice SET status = " . GetArrivedLow() . " WHERE visitDate = '$date' AND invoiceID = $invoiceID";
+        
+        $resultOfFirstPersonHere = $conn->query($sqlToUpdateFirstPersonHere);
+  
+        echo "<meta http-equiv='refresh' content='0'>";
+           
+        }
+        else{
+        
+            $currentStatus = $resultToSeeHowManyAreHere->num_rows + GetArrivedLow(); 
+            $sqlToUpdateRemainingPersonsHere = "UPDATE Invoice SET status = $currentStatus WHERE visitDate = '$date' AND invoiceID = $invoiceID";
+            $resultOfRemainingPersonsHere = $conn->query($sqlToUpdateRemainingPersonsHere);
+            echo "<meta http-equiv='refresh' content='0'>";
+
+        }
+}
+elseif(isset($_POST['sendBack'])) /*when the button is pressed on post request*/
+{
+    echo "Got eem";
+
+    $invoiceID = $_POST['invoiceID'];
+
+
+        
+        $sqlToGetStatus = "SELECT status FROM Invoice WHERE visitDate = '$date' AND invoiceID = $invoiceID";
+        $resultStatus = $conn->query($sqlToGetStatus);
+             
+             while($row = $resultStatus->fetch_assoc()) {
+                            $status = $row["status"];
+                        }
+        
+                        echo $status;
+            $currentStatus = $status + 100; 
+            echo $currentStatus;
+            $sqlToUpdateRemainingPersonsToGoBack = "UPDATE Invoice SET status = $currentStatus WHERE visitDate = '$date' AND invoiceID = $invoiceID";
+            $resultOfRemainingPersonsToGoBack = $conn->query($sqlToUpdateRemainingPersonsToGoBack);
+            echo "<meta http-equiv='refresh' content='0'>";
+
+        
+}
 ?>
 

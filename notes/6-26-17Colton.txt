@@ -47,6 +47,50 @@ UPDATE Invoice
 SET status = 200
 WHERE visitDate = "2017-07-11" AND status = 100;
 
-UPDATE Invoice SET status = 200 WHERE visitDate = "2017-07-11" AND status = 100;
+UPDATE Invoice SET status = 200 WHERE visitDate = "2017-07-11" AND status= 100;
+
+
+UPDATE Invoice
+SET status = 200
+WHERE visitDate = "2017-07-17"AND invoiceID = 37;
+
+|        36 | 2017-07-17 |        2 |    302 | 10:00:00  |
+|        37 | 2017-07-17 |        3 |    301 | 10:00:00  |
+|        38 | 2017-07-17 |        4 |    300 | 10:00:00  |
+|        39 | 2017-07-17 |        5 |    305 | 10:30:00  |
+|        40 | 2017-07-17 |        6 |    303 | 10:30:00  |
+|        41 | 2017-07-17 |        7 |    306 | 10:30:00  |
+|        42 | 2017-07-17 |        8 |    307 | 11:00:00  |
+|        43 | 2017-07-17 |        9 |    304 | 11:00:00  |
+|        44 | 2017-07-17 |       10 |    308 | 11:00:00  |
++-----------+------------+----------+--------+-----------+
+
+UPDATE Invoice
+SET status = 402
+WHERE visitDate = "2017-07-17"AND invoiceID = 36;
+UPDATE Invoice
+SET status = 401
+WHERE visitDate = "2017-07-17"AND invoiceID = 37;
+UPDATE Invoice
+SET status = 400
+WHERE visitDate = "2017-07-17"AND invoiceID = 38;
+UPDATE Invoice
+SET status = 405
+WHERE visitDate = "2017-07-17"AND invoiceID = 39;
+UPDATE Invoice
+SET status = 403
+WHERE visitDate = "2017-07-17"AND invoiceID = 40;
+UPDATE Invoice
+SET status = 406
+WHERE visitDate = "2017-07-17"AND invoiceID = 41;
+UPDATE Invoice
+SET status = 407
+WHERE visitDate = "2017-07-17"AND invoiceID = 42;
+UPDATE Invoice
+SET status = 404
+WHERE visitDate = "2017-07-17"AND invoiceID = 43;
+UPDATE Invoice
+SET status = 408
+WHERE visitDate = "2017-07-17"AND invoiceID = 44;
 
 
