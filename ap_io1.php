@@ -17,9 +17,7 @@
     <form method="get" action="ap_io2.php">
         <input type="submit" value="Add an item">
     </form>
-    <form method="get" action="ap_io3.php">
-        <input type="submit" value="Edit an item">
-    </form>
+   
     <form method="get" action="ap_oo1.php">
         <input type="submit" value="Edit order form">
     </form>
