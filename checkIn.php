@@ -17,7 +17,8 @@
 		}		
 	</script>
 	
-    <button onclick="goBack()">Go Back</button> </br>
+    <script src="js/destinationFunctions.js"></script>
+    <input type="button" value="Go Back" onclick="checkInBack()">
     <button onclick="location.href = 'awc.php';">Add walk in client</button>
     <h1>
 		Check in for Clients
