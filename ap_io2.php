@@ -5,6 +5,7 @@
 
     <script src="js/utilities.js"></script>
     <script src="js/createItem.js"></script>
+    <script src="js/destinationFunctions.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <?php include 'php/utilities.php'; ?>
     <?php include 'php/checkLogin.php';?>
@@ -13,7 +14,7 @@
 </head>
 
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <input type="button" value="Go Back" onclick="ap_io2Back()">
     <h1>
         Add an item to the database:
     </h1>
