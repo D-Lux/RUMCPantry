@@ -222,13 +222,13 @@ elseif(isset($_GET['ActiveClient']))
 		else {
 			echo "sql error: " . mysqli_error($conn);
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error, failed to set family members inactive.", "red" );
+			echoDivWithColor("Error, failed to set family members active.", "red" );
 		}
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to set client inactive.", "red" );	
+		echoDivWithColor("Error, failed to set client active.", "red" );	
 	}
 	
 	closeDB($conn);

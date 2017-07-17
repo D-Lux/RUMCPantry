@@ -57,7 +57,7 @@
 				echo "<td><input type='submit' name='updateRedist' value='Update'></td>";
 				
 				// Information Fields
-				echo "<td>" . $row['lastName'] . "</td>";
+				echo "<td>" . $row['Name'] . "</td>";
 				
 				// Display the email or '-' if not set
 				echo "<td>" . (($row['email'] == NULL) ? "-" : $row['email']) . "</td>";
@@ -66,10 +66,11 @@
 				echo "<td>" . (($row['phoneNumber'] == NULL) ? "-" : 
 								displayPhoneNo($row['phoneNumber'])) . "</td>";
 
-				// Set inactive button
-				echo "<td><input type='submit' class='btn_trash' name='deleteRedist' value=' ' ";
-				echo "onclick='return confirm(/'Are you sure you want to set this partner to inactive?/')'></td>";
-	
+				// Set Active button
+				?>
+				<td><input type="submit" class="btn_reactivate" name="activateRedist" value=" "
+				onclick="return confirm('Do you want to reactivate this partner?')"></td>
+				<?php
 				// Close off the row and form
 				echo "</form>";
 			}

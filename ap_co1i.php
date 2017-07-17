@@ -61,7 +61,8 @@
 				JOIN Client 
 				ON Client.clientID=FamilyMember.clientID
 				WHERE Client.isDeleted=1 AND
-				FamilyMember.isHeadOfHousehold=true
+				FamilyMember.isHeadOfHousehold=true AND
+				Client.redistribution=0;
 				ORDER BY FamilyMember.lastName";
 		$result = queryDB($conn, $sql);
 		// loop through the query results
@@ -135,7 +136,7 @@
 				?>
 				
 				<td><input id="ActiveClient" type="submit" class="btn_reactivate" name="ActiveClient" value=" "
-					onclick="return confirm('Are you sure you want to set this client active?')"></td>
+					onclick="return confirm('Do you want to reactivate this client?')"></td>
 					
 				<?php
 				// Close off the row and form

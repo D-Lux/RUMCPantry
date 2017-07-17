@@ -21,7 +21,13 @@
 			window.alert("Partner information updated!");
 			removeCookie("updatePartner");
 		}
+		if (getCookie("partnerDeactivated") != "") {
+			window.alert("Partner deactivated!");
+			removeCookie("partnerDeactivated");
+		}
 	</script>
+	
+	
 	
 	<?php
 		// Set up server connection
@@ -72,9 +78,10 @@
 								displayPhoneNo($row['phoneNumber'])) . "</td>";
 
 				// Set inactive button
-				echo "<td><input type='submit' class='btn_trash' name='deleteRedist' value=' ' ";
-				echo "onclick='return confirm(/'Are you sure you want to set this partner to inactive?/')'></td>";
-	
+				?>
+				<td><input type="submit" class="btn_trash" name="deleteRedist" value=" "
+				onclick="return confirm('Are you sure you want to set this partner to inactive?')"></td>
+				<?php
 				// Close off the row and form
 				echo "</form>";
 			}

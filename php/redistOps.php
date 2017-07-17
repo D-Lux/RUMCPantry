@@ -133,7 +133,7 @@ elseif(isset($_POST['submitUpdateRedist'])) {
 
 // ***********************************
 // Setting a partner to 'isDeleted'
-elseif(isset($_GET['deleteRedist'])) {
+elseif(isset($_POST['deleteRedist'])) {
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
@@ -142,19 +142,46 @@ elseif(isset($_GET['deleteRedist'])) {
 	// Create 'delete' string
 	$dataUpdate =  "UPDATE Client 
 					SET	isDeleted=1
-					WHERE clientID=" . $_POST['partnerID'];
+					WHERE clientID=" . $_POST['id'];
 	
 	// Perform and test deactivation
 	if (queryDB($conn, $dataUpdate) === TRUE) {
 		closeDB($conn);
-		createCookie("updatePartner", 1, 30);
+		createCookie("partnerDeactivated", 1, 30);
 		header("location: /RUMCPantry/ap_ro2.php");
-		else {
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to update.", "red" );	
-		}		
 	}
+	else {
+		closeDB($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, failed to update.", "red" );	
+	}
+}
+// ***********************************
+// Setting a partner to 'isDeleted' FALSE (reactivating)
+elseif(isset($_POST['activateRedist']))
+{
+	debugEchoPOST();debugEchoGET();
+	// Set up server connection
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$sql = "UPDATE Client SET isDeleted=0 WHERE clientID=" . $_POST['id'];
+
+	// Perform and test update
+	if (queryDB($conn, $sql) === TRUE) {
+		closeDB($conn);
+		header ("location: /RUMCPantry/ap_ro2i.php");
+	}
+	else {
+		echo "sql error: " . mysqli_error($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error, failed to set partner active.", "red" );	
+	}
+	
+	closeDB($conn);
 }
 else {
 	echo "<h1>Nothing was set</h1><br>";
