@@ -1,7 +1,90 @@
-function goBack() {
-    window.history.back();
-}
+// *************************************
+// ** Back functions
 
+function goBack() {
+	switch (true) {
+		case (location.pathname.includes("ap_ro2.php")) :
+		case (location.pathname.includes("ap_ro2i.php")) :
+		case (location.pathname.includes("ap_ro3.php")) :
+		case (location.pathname.includes("ap_ro4.php")) :
+		case (location.pathname.includes("ap_ro5.php")) :
+			window.location.assign("/RUMCPantry/ap_ro1.php");
+			break;
+		
+		case (location.pathname.includes("ap_ao2.php")) :
+		case (location.pathname.includes("ap_ao3.php")) :
+			window.location.assign("/RUMCPantry/ap_ao1.php");
+			break;
+		
+		case (location.pathname.includes("ap_io1.php")) :
+		case (location.pathname.includes("ap_ao1.php")) :
+		case (location.pathname.includes("ap_co1.php")) :
+		case (location.pathname.includes("ap_co1i.php")) :
+		case (location.pathname.includes("ap_do1.php")) :
+		case (location.pathname.includes("ap_oo3.php")) :
+		case (location.pathname.includes("ap_ro1.php")) :
+		case (location.pathname.includes("checkIn.php")) :
+		case (location.pathname.includes("ap_oo1.php")) :
+			window.location.assign("/RUMCPantry/ap1.php");
+			break;
+
+		case (location.pathname.includes("ap_co2.php")) :
+		case (location.pathname.includes("ap_co3.php")) :
+			window.location.assign("/RUMCPantry/ap_co1.php");
+			break;
+			
+		case (location.pathname.includes("ap_do2.php")) :
+		case (location.pathname.includes("ap_do3.php")) :
+		case (location.pathname.includes("ap_do4.php")) :
+		case (location.pathname.includes("ap_do5.php")) :
+		case (location.pathname.includes("donationOps.php")) :
+			window.location.assign("/RUMCPantry/ap_do1.php");
+			break;
+	
+		case (location.pathname.includes("ap_io2.php")) :
+		case (location.pathname.includes("ap_io3.php")) :
+		case (location.pathname.includes("ap_io4.php")) :
+		case (location.pathname.includes("ap_io5.php")) :
+		case (location.pathname.includes("itemOps.php")) :
+			window.location.assign("/RUMCPantry/ap_io1.php");
+			break;
+			
+		case (location.pathname.includes("ap_oo2.php")) :
+		case (location.pathname.includes("ap_oo5.php")) :
+			window.location.assign("/RUMCPantry/ap_oo1.php");
+			break;
+		
+		case (location.pathname.includes("ap1.php")) :
+		case (location.pathname.includes("cap.php")) :
+		case (location.pathname.includes("ciup.php")) :
+		case (location.pathname.includes("cp1.php")) :
+			window.location.assign("/RUMCPantry/mainpage.php");
+			break;
+		
+		case (location.pathname.includes("login.php")) :
+		case (location.pathname.includes("mainpage.php")) :
+			window.location.assign("/RUMCPantry/login.php");
+			break;
+			
+		case (location.pathname.includes("cp2.php")) :
+		case (location.pathname.includes("cof.php")) :
+			window.location.assign("/RUMCPantry/cp1.php");
+			break;
+			
+		case (location.pathname.includes("ap_oo4.php")) :
+			window.location.assign("/RUMCPantry/ap_oo3.php");
+			break;
+		case (location.pathname.includes("awc.php")) :
+			window.location.assign("/RUMCPantry/checkIn.php");
+			break;
+		
+		//case (location.pathname.includes("ap_ao4.php")) :
+		//case (location.pathname.includes("ap_co4.php")) :
+		//case (location.pathname.includes("ap_co5.php")) :
+		default:
+			window.history.back();	
+	}
+}
 
 // To get url parameters using javascript, use this function
 /*

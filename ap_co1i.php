@@ -62,7 +62,7 @@
 				ON Client.clientID=FamilyMember.clientID
 				WHERE Client.isDeleted=1 AND
 				FamilyMember.isHeadOfHousehold=true AND
-				Client.redistribution=0;
+				Client.redistribution=0
 				ORDER BY FamilyMember.lastName";
 		$result = queryDB($conn, $sql);
 		// loop through the query results

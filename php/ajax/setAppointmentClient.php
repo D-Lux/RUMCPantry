@@ -48,6 +48,19 @@
 		if ( ($clientFirstName == "Available") && ($clientLastName == "Available") ) {
 			$clientID = getAvailableClient();
 			// Assign invoice to this client id
+			$conn = createPantryDatabaseConnection();
+			if ($conn->connect_error) {
+				die("Connection failed: " . $conn->connect_error);
+			}
+			$newStatus =  GetAvailableStatus();
+			$updateInvoice = "UPDATE Invoice
+							  SET clientID=" . $clientID . ",
+							  status=" . $newStatus . "
+							  WHERE invoiceID=" . $invoiceID;
+			if (queryDB($conn, $updateInvoice) === FALSE) {
+				echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+				echoDivWithColor("Error, failed to set appointment client.", "red" );	
+			}
 		}
 		else {
 			// open a connection to the database

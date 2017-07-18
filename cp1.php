@@ -51,10 +51,13 @@
 			// ** Generate the datalist for client drop down
 			// ** Restrict dropdown to people with appointments today
 			
-			$sql = "SELECT firstName AS fName, lastName AS lName, clientID
+			$sql = "SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
 					FROM FamilyMember
+					JOIN Client
+					ON FamilyMember.clientID = Client.clientID
 					WHERE isHeadOfHousehold=1
-					AND isDeleted=0
+					AND Client.isDeleted=0
+					AND Client.redistribution=0
 					AND (firstName <> 'Available'
 					AND lastName <> 'Available')";
 			$clientInfo = queryDB($conn, $sql);

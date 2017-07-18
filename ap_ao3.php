@@ -45,7 +45,7 @@
 				FROM Invoice
 				JOIN (
 					SELECT FamilyMember.clientID, FamilyMember.firstName, FamilyMember.lastName,
-							Client.numOfAdults, Client.numOfKids, Client.phoneNumber 
+							Client.numOfAdults, Client.numOfKids, Client.phoneNumber
 					FROM FamilyMember
 					JOIN Client
 					ON FamilyMember.clientID = Client.clientID 
@@ -59,15 +59,19 @@
 		// *******************************************
 		// ** Generate the datalist for client drop down
 		
-		$sql = "SELECT firstName AS fName, lastName AS lName, clientID
+		$sql = "SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID
 				FROM FamilyMember
+				JOIN Client
+				ON Client.clientID=FamilyMember.clientID
 				WHERE FamilyMember.isHeadOfHousehold=1
-				AND isDeleted=0";
+				AND FamilyMember.isDeleted=0
+				AND Client.redistribution=0";
 				
 		$clientInfo = queryDB($conn, $sql);
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
 			echo "Error, bad SQL Query";
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		}
 		
 		$clientDataList = "<datalist id='Clients'>";

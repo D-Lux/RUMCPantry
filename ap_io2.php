@@ -44,55 +44,35 @@
         <div id="household">How many of each can a household take?</div>
         <div id="small"> 1 to 2:
             <select name="small">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
+			<?php
+			for ($i = 0; $i <= 10; $i++) {
+				echo "<option value='" . $i . "'>" . $i . "</option>";
+			}
+			?>
         </select> </div>
         <div id="medium">3 to 4:
             <select name="medium">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
+            <?php
+			for ($i = 0; $i <= 10; $i++) {
+				echo "<option value='" . $i . "'>" . $i . "</option>";
+			}
+			?>
         </select> </div>
         <div id="large">5+:
             <select name="large">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
+            <?php
+			for ($i = 0; $i <= 10; $i++) {
+				echo "<option value='" . $i . "'>" . $i . "</option>";
+			}
+			?>
         </select> </div>
         <div id="walkIn">Walk-in:
             <select name="walkIn">
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
+            <?php
+			for ($i = 0; $i <= 10; $i++) {
+				echo "<option value='" . $i . "'>" . $i . "</option>";
+			}
+			?>
         </select> </div>
 
         <div id="factor" class="tooltip">Factor:

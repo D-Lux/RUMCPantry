@@ -21,6 +21,11 @@ function debugEchoGET() {
 	echo '</pre>';
 }
 
+// ************************************************************
+// ** Setting default timezone
+date_default_timezone_set('America/Chicago');
+
+
 // ***********************************************************
 // * Database Access Functions
 
@@ -136,13 +141,49 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 	$result = mysql_query($sql);
 
 	echo "<input list=$listName name=$inputName value='$defaultVal' autocomplete='off'>";
-	
+
 	echo "<datalist id=$listName>"; //this id must be the same as the list = above
 	
 	while ($row = mysql_fetch_array($result)) {
-		echo "<option value='" . $row[$attributeName] . "'>" . $row[$attributeName] . "</option>";
+		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
 	}
 	echo "</datalist>";
+}
+
+function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
+	/*
+	argument explanations:
+	$defaultVal - default value you would like to appear in the datalist 
+	$listName - Name of the list make plural (ex categories or itemNames)
+	$tableName - table you wish to pull the attribute from (ex item)
+	$attributeName - name of the attribute (ex displayName)
+	$inputName - the name of the actual input, this is what a post request can grab
+	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
+		out all that has been deleted.
+	*/
+	
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	$sql = "SELECT DISTINCT " . $attributeName . "
+			FROM " . $tableName;
+	
+	if ($hasDeletedAttribute) {
+		$sql .= " WHERE isDeleted=0";
+	}
+	
+	$sqlQuery = queryDB($conn, $sql);
+
+	echo "<input type='text' list='" . $listName . "' value='" . $defaultVal . "' >";
+	
+	echo "<datalist id='" . $listName . "'>";
+	while($row = sqlFetch($sqlQuery)) {
+		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
+	}
+	echo "</datalist>";
+	closeDB($conn);
+	
 }
 
 // **********************************************
@@ -261,6 +302,10 @@ function visitStatusDecoder($visitStatus){
 	}		
 }
 
+// Return the status # for available
+function GetAvailableStatus() {
+	return SV_AVAILABLE;
+}
 // Return the status # for lowest arrived
 function GetArrivedLow() {
 	return SV_ARRIVED_LOW;

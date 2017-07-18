@@ -50,6 +50,9 @@
 			}
 			
 			echo "<br><br>";
+			
+			echo "<button onClick='window.print()'>Print</button>";
+			echo "<br><br>";
 			echo "<form method='post' action='php/orderOps.php'>";
 			echo "<input type='hidden' name='invoiceID' value=" . $_POST['invoiceID'] . ">";
 			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";

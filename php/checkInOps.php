@@ -308,11 +308,18 @@ function displayShowedUpTable($date, $conn, $timeDifferenceOnTables, $timeStart,
  
     function updateStatusInitial($date, $conn)
     {
-        $sql = "SELECT FamilyMember.firstName, FamilyMember.LastName, Invoice.visitTime, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' && FamilyMember.isHeadOfHousehold = true ORDER BY Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+        $sql = "SELECT FamilyMember.firstName, FamilyMember.LastName, Invoice.visitTime, Invoice.status 
+				FROM Invoice 
+				INNER JOIN Client 
+				ON Invoice.clientID=Client.clientID 
+				INNER JOIN FamilyMember 
+				On Client.clientID=FamilyMember.clientID 
+				WHERE Invoice.visitDate = '$date' && FamilyMember.isHeadOfHousehold = true 
+				ORDER BY Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
         $result = $conn->query($sql);
 
         if ($result->num_rows > 0) {
-            $sql = "UPDATE Invoice SET status = " . GetAssignedStatus() . " WHERE visitDate = '$date' AND status = " . GetAssignedStatus() . "";
+            $sql = "UPDATE Invoice SET status = " . GetActiveStatus() . " WHERE visitDate = '$date' AND status = " . GetAssignedStatus() . "";
             
             //update the status numbers on each of the rows
                if ($conn->query($sql) === TRUE) {

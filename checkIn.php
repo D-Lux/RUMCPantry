@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-
+	<meta http-equiv="refresh" content="15" >
 
 
 	<title>Check In</title>

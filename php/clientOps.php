@@ -1,3 +1,5 @@
+<script src="/RUMCPantry/js/utilities.js"></script>
+
 <?php
 
 include 'utilities.php';
@@ -404,8 +406,3 @@ else {
 }
 
 ?>
-<script type="text/javascript">
-function goBack() {
-    window.history.back();
-}
-</script>

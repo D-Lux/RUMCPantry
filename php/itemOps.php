@@ -1,3 +1,4 @@
+<script src="/RUMCPantry/js/utilities.js"></script>
 <?php
 
 include 'utilities.php';
@@ -371,8 +372,3 @@ elseif (isset($_POST['createCategory'])) {
 }
 
 ?>
-<script type="text/javascript">
-function goBack() {
-    window.history.back();
-}
-</script>

@@ -35,16 +35,20 @@
 		// ** Generate the datalist for client drop down
 		
 		$conn = createPantryDatabaseConnection();
-		$sql = "SELECT firstName AS fName, lastName AS lName, clientID
+		$sql = "SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
 				FROM FamilyMember
+				JOIN Client
+				ON Client.clientID=FamilyMember.clientID
 				WHERE isHeadOfHousehold=1
-				AND isDeleted=0
+				AND Client.redistribution=0
+				AND Client.isDeleted=0
 				AND (firstName <> 'Available'
 				AND lastName <> 'Available')";
 		$clientInfo = queryDB($conn, $sql);
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
 			echo "No clients in the database.";
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		}
 		
 		// Generate the string we'll need to display the client datalist
