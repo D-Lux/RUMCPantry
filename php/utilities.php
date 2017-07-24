@@ -373,7 +373,7 @@ function familySizeDecoder($famSize){
 		case ($famSize >= FAMILY_SIZE_MED_LOW && $famSize <= FAMILY_SIZE_MED_HIGH): return 'Medium';
 		case ($famSize >= FAMILY_SIZE_HIGH_THRESHOLD): return 'Large';
 		
-		default: return 'WalkIn';
+		default: return 'Small';
 	}		
 }
 
@@ -391,5 +391,61 @@ function returnCountOfItem($item, $data) {
 function returnTime($time) {
 	return DateTime::createFromFormat('g:i:s',$time)->format('g:i a');
 }
+
+// ************************************************************
+// ** Decoder for client type
+
+define("CLIENT_TYPE_UNKNOWN", 0);
+define("CLIENT_TYPE_CONSTIT", 1);
+define("CLIENT_TYPE_MEMBER", 2);
+define("CLIENT_TYPE_RESIDENT", 3);
+
+function clientTypeDecoder($clientType){
+	switch(true) {
+		case ($clientType == CLIENT_TYPE_UNKNOWN): return 'Unknown';
+		case ($clientType == CLIENT_TYPE_CONSTIT): return 'Constituent';
+		case ($clientType == CLIENT_TYPE_MEMBER): return 'Member';
+		case ($clientType == CLIENT_TYPE_RESIDENT): return 'Resident';
+		
+		default: return 'Unknown';
+	}		
+}
+
+// ************************************************************
+// ** Decoder for gender type
+
+define("GENDER_UNKNOWN", 0);
+define("GENDER_MALE", -1);
+define("GENDER_FEMALE", 1);
+
+function genderDecoder($gender){
+	switch(true) {
+		case ($gender == GENDER_UNKNOWN): return '-';
+		case ($gender == GENDER_MALE): return 'Male';
+		case ($gender == GENDER_FEMALE): return 'Female';
+		
+		default: return '-';
+	}		
+}
+function genderDecoderShort($gender){
+	switch(true) {
+		case ($gender == GENDER_UNKNOWN): return '-';
+		case ($gender == GENDER_MALE): return 'M';
+		case ($gender == GENDER_FEMALE): return 'F';
+		
+		default: return '-';
+	}		
+}
+
+// ************************************************************
+// ** Decoder for aisle
+
+function aisleDecoder($aisle){
+	if ($aisle >= 65) {
+		return chr($aisle);
+	}
+	return chr($aisle + 65);
+}
+
 
 ?>

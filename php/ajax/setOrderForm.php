@@ -19,6 +19,7 @@
 		if (queryDB($conn, $updateItem) === FALSE) {
 			echo "sql error: " . mysqli_error($conn);
 		}
+		//debugEchoGET();
 		echo "Query: " . $updateItem;
 	}
 	

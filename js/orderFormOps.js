@@ -96,7 +96,7 @@ function AJAX_UpdateQty(callingSlot) {
 	// ID = 'iqty' + familyKey + itemID
 	var newQty = callingSlot.value;
 	var familyType = familyTypeExtractor(callingSlot.id.substring(4,5));
-	var itemID = callingSlot.id.substring(5,6);
+	var itemID = callingSlot.id.substring(5);
 
 	// Run the AJAX stuff
 	if (window.XMLHttpRequest) {
@@ -154,7 +154,7 @@ function AJAX_UpdateFX(callingSlot) {
 function AJAX_UpdateCQty(callingSlot) {
 	// Get the category ID and the new quantity from the page
 	var newQty = callingSlot.value;
-	var categoryID = callingSlot.id.substring(4,5);
+	var categoryID = callingSlot.id.substring(4);
 	var familyType = familyTypeExtractor(callingSlot.id.substring(3,4));
 
 	// Run the AJAX stuff
@@ -198,7 +198,7 @@ function countOrder(callingSlot)	{
 	var runningTotal = 0;
 	for (var i=0; i < name.length; i++) {
 		if (name[i].checked) {
-			var numToAdd = Number(name[i].id);
+			//var numToAdd = Number(name[i].id);
 			// If we exceed our max count, don't let the box be checked and display a warning
 			if ( (runningTotal + numToAdd) > MaxCount) {
 				callingSlot.checked = false;
@@ -206,7 +206,7 @@ function countOrder(callingSlot)	{
 				// Break out, since we know we're done here
 				return;
 			}
-			runningTotal += numToAdd;
+			runningTotal++;
 		}
 	}
 	
@@ -220,4 +220,25 @@ function countOrder(callingSlot)	{
 		document.getElementById("Count" + nameField).style.color = "Black";
 	}
 	
+}
+
+function viewTab(evt, tabID) {
+    // Declare all variables
+    var i, tabcontent, tablinks;
+
+    // Get all elements with class="tabcontent" and hide them
+    tabcontent = document.getElementsByClassName("tabcontent");
+    for (i = 0; i < tabcontent.length; i++) {
+        tabcontent[i].style.display = "none";
+    }
+
+    // Get all elements with class="tablinks" and remove the class "active"
+    tablinks = document.getElementsByClassName("tablinks");
+    for (i = 0; i < tablinks.length; i++) {
+        tablinks[i].className = tablinks[i].className.replace(" active", "");
+    }
+
+    // Show the current tab, and add an "active" class to the button that opened the tab
+    document.getElementById(tabID.id).style.display = "block";
+    evt.currentTarget.className += " active";
 }

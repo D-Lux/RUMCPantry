@@ -36,11 +36,13 @@ elseif(isset($_POST['submitClient']))
 	$email = makeString($_POST['email']);
 	$phoneNo = storePhoneNo($_POST['phoneNo']);
 	$foodStamps = $_POST['foodStamps'];
+	$clientType = $_POST['clientType'];
 	
 	// Family Member Fields
 	$clientFirstName = makeString(fixInput($_POST['clientFirstName']));
 	$clientLastName = makeString(fixInput($_POST['clientLastName']));
 	$birthDate = makeString($_POST['birthDate']);
+	$gender = $_POST['gender'];
 
 	// Set up server connection
 	$conn = createPantryDatabaseConnection();
@@ -51,18 +53,21 @@ elseif(isset($_POST['submitClient']))
 	// Create insertion string
 	$sql = "INSERT INTO Client 
 			(numOfAdults, NumOfKids, timestamp, email, phoneNumber, 
-				address, city, state, zip, foodStamps, isDeleted, redistribution)
+				address, city, state, zip, foodStamps, clientType,
+				isDeleted, redistribution)
 			VALUES 
 			($numAdults,$numKids,now(),$email,$phoneNo,
-				$address,$city,$state,$zip,$foodStamps, FALSE, FALSE)";
+				$address,$city,$state,$zip,$foodStamps,$clientType,
+				FALSE, FALSE)";
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
 		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, birthDate, clientID, timestamp, isDeleted)
-				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, now(), FALSE)";
+		$sql = "INSERT INTO FamilyMember 
+				(firstName, lastName, isHeadOfHousehold, birthDate, clientID, gender, timestamp, isDeleted)
+				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, $gender, now(), FALSE)";
 		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
 			// Successfully added client and family member (head of household) - go to update page
@@ -117,6 +122,7 @@ elseif(isset($_POST['UpdateClient']))
 	$numKids = $_POST['numKids'];
 	$phoneNo = storePhoneNo($_POST['phoneNo']);
 	$foodStamps = $_POST['foodStamps'];
+	$clientType = $_POST['clientType'];
 	
 	// Problem children
 	// A few issues to note, Updating to a Null value breaks SQL
@@ -135,13 +141,13 @@ elseif(isset($_POST['UpdateClient']))
 	$sql = "UPDATE Client SET
 			numOfAdults = $numAdults, numOfKids = $numKids, phoneNumber = $phoneNo,
 			foodStamps = $foodStamps, email = $email, notes = $notes, timestamp = now(),
-			zip = $zip, state = $state, address = $address, city = $city
+			zip = $zip, state = $state, address = $address, city = $city, clientType = $clientType
 			WHERE clientID = $clientID";
 	
 	// Perform and test update
 	if (queryDB($conn, $sql) === TRUE) {
-		// Update successful, Alert! - TODO: This doesn't fire
-		echo "<script type='text/javascript'> alert('Update successful!'); </script>";
+		// Update successful, create a cookie to track this fact
+		createCookie("clientUpdated", 1, 30);
 		
 		// Close the Database
 		closeDB($conn);
@@ -249,6 +255,7 @@ elseif(isset($_POST['submitMember']))
 		
 	// Optional fields
 	$birthDate = makeString($_POST['birthDate']);
+	$gender = $_POST['gender'];
 	$notes = makeString(fixInput($_POST['notes']));
 	
 	// if this is true, we need to go through all other family members and set theirs to false
@@ -276,8 +283,12 @@ elseif(isset($_POST['submitMember']))
 	}
 	$head = makeString($head);
 	// Create insertion string
-	$sql = "INSERT INTO familyMember (firstName, lastName, isHeadOfHousehold, notes, birthDate, timestamp, clientID, isDeleted)
-	VALUES ($memberFirstName,$memberLastName,$head,$notes,$birthDate, now(), $clientID, FALSE)";
+	$sql = "INSERT INTO familyMember 
+			(firstName, lastName, isHeadOfHousehold, notes, birthDate, gender,
+			 timestamp, clientID, isDeleted)
+			VALUES 
+			($memberFirstName,$memberLastName,$head,$notes,$birthDate, $gender,
+			 now(), $clientID, FALSE)";
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
@@ -310,11 +321,12 @@ elseif(isset($_POST['UpdateMember']))
 	$lastName = makeString(fixInput($_POST['memberLastName']));
 	$notes = makeString(fixInput($_POST['notes']));
 	$birthDate = makeString($_POST['birthDate']);
+	$gender = $_POST['gender'];
 	
 	// Head of household is the most tricky one here
-	$head = false;
+	$head = 0;
 	if (isset($_POST['head'])) {
-		$head = true;
+		$head = 1;
 	}
 	
 	// If this is the new head of household, set all others to false
@@ -351,7 +363,7 @@ elseif(isset($_POST['UpdateMember']))
 	// Generate the update statement
 	$sql = "UPDATE FamilyMember SET
 			firstName = $firstName, lastName = $lastName, isHeadOfHousehold = $head, 
-			notes = $notes, birthDate = $birthDate, timestamp = now()
+			notes = $notes, birthDate = $birthDate, gender = $gender, timestamp = now()
 			WHERE FamilyMemberID = $memberID";
 	
 	// Perform and test update
@@ -363,7 +375,7 @@ elseif(isset($_POST['UpdateMember']))
 		header ("location: /RUMCPantry/ap_co3.php?id=$clientID");
 	}
 	else {
-			echo "sql error: " . mysqli_error($conn);
+			echo "sql error (update): " . mysqli_error($conn);
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error, failed to update.", "red" );	
 	}

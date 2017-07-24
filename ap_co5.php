@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
+	<script src="js/clientOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	<?php include 'php/utilities.php'; ?>
 	<?php include 'php/checkLogin.php';?>
@@ -26,7 +26,7 @@
 		
 		// *************************************************
 		// Query the database
-		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
+		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, gender, isDeleted, FamilyMemberID
 				FROM FamilyMember
 				WHERE FamilyMemberID=" . $_GET['memberID'];
 		$familyInfo = queryDB($conn, $sql);
@@ -50,11 +50,11 @@
 		
 			// First Name Field - auto filled in with database data
 			echo "<div id='memberFirstName' class='required'><label>First Name:</label>
-				<input type='text' name='memberFirstName' maxlength='45' value='" . displaySingleQuote($familyRow['firstName']) . "'> </div>";
+				<input type='text' id='memberFirstNameField' name='memberFirstName' maxlength='45' value='" . displaySingleQuote($familyRow['firstName']) . "'> </div>";
 				
 			// Last Name
 			echo "<div id='memberLastName' class='required'><label>Last Name:</label>
-				<input type='text' name='memberLastName' maxlength='45' value='" . displaySingleQuote($familyRow['lastName']) . "'> </div>";
+				<input type='text' id='memberLastNameField' id='validateNewClientMember' name='memberLastName' maxlength='45' value='" . displaySingleQuote($familyRow['lastName']) . "'> </div>";
 		
 			// If the person is already the head of the household, we just say that.
 			// Otherwise, place a checkbox to change head of household
@@ -66,7 +66,16 @@
 				echo "<input type='checkbox' name='head' value='head'></div><br>";
 			}
 
-			echo "<div id='birthDate'>Birthday: <input type='date' name='birthDate' min='1900-01-01'></div><br>";
+			echo "<div id='birthDate'>Birthday: 
+				<input type='date' name='birthDate' min='1900-01-01' value='" . $familyRow['birthDate'] . "'></div><br>";
+			
+			$gender = $familyRow['gender'];
+			echo "<div id='gender'>Gender: <select name='gender'> 
+				<option value=0 " . ($gender == 0 ? "selected" : "") . ">-</option>
+				<option value=-1 " . ($gender == -1 ? "selected" : "") . ">Male</option>
+				<option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
+				</select> </div>";
+			
 			echo "<div id='notes'>Notes: <input type='text' name='notes'></div><br>";
 			
 			echo "<input type='submit' name='UpdateMember' value='Update'>";

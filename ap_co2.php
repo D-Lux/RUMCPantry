@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
+	<script src="js/clientOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	<?php include 'php/checkLogin.php';?>
 
@@ -26,11 +26,22 @@
 			
 		</div><br>
         <div id="clientLastName" class="required"><label>Last Name:</label> <input type="text" id="clientLNameField" name="clientLastName" maxlength="45"></div><br>
-        <div id="numAdults" class="required"><label>Number of Adults:</label> <input type="number" name="numAdults" min=1 value=1></div>
-		
-		<!-- Optional fields -->
+        <div id="numAdults" class="required"><label>Number of Adults:</label> <input type="number" name="numAdults" id="numAdultsField" min=1 value=1></div>
 		<div id="numKids">Number of Children: <input type="number" name="numKids" value="0"></div><br>
-		<div id="birthDate">Birthday: <input type="date" name="birthDate" min="1900-01-01"></div><br>
+		<div id="birthDate" class="required"><label>Date of Birth:</label> <input type="date" id="birthDateField" name="birthDate" min="1900-01-01"></div><br>
+		
+		<!-- Gender Selection -->
+		<div id="gender">Gender:
+            <select name="gender"> <option value=0>-</option>
+			<option value=-1>Male</option> <option value=1>Female</option> 
+		</select> </div>
+		
+		<!-- Dropdown for client type -->
+		<div id="clientType">Client Type:
+            <select name="clientType"> <option value=0>Unknown</option>
+			<option value=1>Constituent</option> <option value=2>Member</option> <option value=3>Resident</option> 
+		</select> </div>
+		
 		<!-- Dropdown for food stamps -->
 		<div id="foodStamps">Food Stamp Status:
             <select name="foodStamps"> <option value=-1>Unknown</option>

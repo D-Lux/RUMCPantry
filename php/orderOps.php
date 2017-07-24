@@ -15,7 +15,8 @@ function isCategory($data) {
 	switch($data) {
 		case ("invoiceID"):
 		case ("clientID"):
-		case ("CreateInvoiceDescriptions"): 
+		case ("CreateInvoiceDescriptions"):
+		case ("walkInStatus"):
 			return FALSE;
 		
 		default: 

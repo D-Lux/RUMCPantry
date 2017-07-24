@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
+	<script src="js/clientOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
 	<?php include 'php/utilities.php'; ?>
 	<?php include 'php/checkLogin.php';?>
@@ -34,6 +34,11 @@
 		<div id="head">Head of Household: <input type="checkbox" name="head" value="head"></div><br>
 
 		<div id="birthDate">Birthday: <input type="date" name="birthDate" min="1900-01-01"></div><br>
+		<!-- Gender Selection -->
+		<div id="gender">Gender:
+            <select name="gender"> <option value=0>-</option>
+			<option value=-1>Male</option> <option value=1>Female</option> 
+		</select> </div>
 		<div id="notes">Notes: <input type="text" name="notes"></div><br>
 		
 		<!-- Submit button -->

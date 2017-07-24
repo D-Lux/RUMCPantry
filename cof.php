@@ -8,12 +8,8 @@
 		<link href='css/toolTip.css' rel='stylesheet'>
 		<?php include 'php/utilities.php'; ?>
 
-	<script>
-		
-	</script>
 	</head>
 	<body>
-	
 	
 		<button onclick="goBack()">Back</button>
 		
@@ -26,18 +22,20 @@
 	// * 1.) Family size information
 	// * 2.) Order form database
 	
-	// TODO: This information will be coming from the invoice in the future (to allow for walkins)
 	// -= Family size query =-
-	$famSql = "SELECT (numOfKids + numOfAdults) as familySize
+	$famSql = "SELECT (numOfKids + numOfAdults) as familySize, 
 			   FROM client
 			   WHERE clientID=" . $_POST['clientID'];
+	$walkinSql = "SELECT walkIn
+			   FROM Invoice
+			   WHERE invoiceID=" . $_POST['invoiceID'];
 	
 	//Run this query so we know what to grab from the item database
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
 	
 	// Default to walkIn
-	$familyType = "walkIn";
+	$familyType = "Small";
 	
 	$famQuery = queryDB($conn, $famSql);
 	if ($famQuery === FALSE) {
@@ -49,18 +47,34 @@
 		$familyType = familySizeDecoder($famData['familySize']);
 	}
 	
+	// Force family type to small if this is a walkin client
+	$WIQuery = queryDB($conn, $walkinSql);
+	$walkIn = 0;
+	if ($WIQuery === FALSE) {
+		echo "sql error: " . mysqli_error($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+	}
+	else {
+		$walkInData = sqlFetch($WIQuery);
+		$walkIn = $walkInData['walkIn'];
+	}
+	if (walkIn == 1) {
+		$familyType = "Small";
+	}
+	
 	// --== Item databse query ==--
 	$sql = "SELECT itemID, displayName, Item." . $familyType . " as IQty, factor as fx, 
 					Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID as CID
 			FROM Item
 			JOIN Category
 			ON Item.categoryID=Category.categoryID
-			WHERE isDeleted=0
+			WHERE Item.isDeleted=0
+			AND Category.isDeleted=0
 			AND Category.name<>'Specials'
 			AND Category.name<>'redistribution'
 			AND Item." . $familyType . ">0
 			AND Category." . $familyType . ">0 
-			ORDER BY Category.name";
+			ORDER BY Category.name, Item.displayName";
 
 	$itemList = queryDB($conn, $sql);
 	
@@ -77,6 +91,7 @@
 	echo "<form method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
 	echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
 	echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
+	echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
 	
 	// Set defaults
 	$currCategory = "";
@@ -96,16 +111,18 @@
 			$slotID = 0;
 		}
 
+		// TODO: Deal with special case beans
 		// Display the Item name
 		echo $item['displayName'];
 		// If the factor is above 1, indicate that here
-		echo ($item['fx']>1 ? " (Counts as " . $item['fx'] . ")" : "");
+		// echo ($item['fx']>1 ? " (Counts as " . $item['fx'] . ")" : "");
 		for ($i = 0; $i < $item['IQty']; $i++) {
 			$slotID++;
 			// ID is the Factor (only way to do it so post data works correctly)
 			// Value is the item's ID
 			// Name is the item's category[] (in array)
-			echo "<input type='checkbox' id=" . $item['fx'] . "
+			// removed factor id=" . $item['fx'] . "
+			echo "<input type='checkbox' id=1
 					value=" . $item['itemID'] . " onclick='countOrder(this)' 
 					name='" . $item['CName'] . "[]'>";
 		}

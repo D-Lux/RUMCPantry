@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
+	<script src="js/clientOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
 	<?php include 'php/checkLogin.php';?>
@@ -47,16 +47,16 @@
 		// It'll be easy to just grab the queries here for all the data we will display layer
 		
 		// Grab client information
-		$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, notes
+		$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, notes, clientType
 				FROM Client
 				WHERE clientID=" . $_GET['id'];
 		$clientInfo = queryDB($conn, $sql);
 		
 		// Grab family member information
-		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, isDeleted, FamilyMemberID
+		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, gender, FamilyMemberID
 				FROM FamilyMember
 				WHERE clientID=" . $_GET['id'] . "
-				AND isDeleted!=1";
+				AND isDeleted<>1";
 		$familyInfo = queryDB($conn, $sql);
 		
 		// Grab invoice information
@@ -66,11 +66,12 @@
 		$invoiceInfo = queryDB($conn, $sql);
 		
 		// Grab the client family name
-		$sql = "SELECT lastName FROM FamilyMember
+		$sql = "SELECT lastName 
+				FROM FamilyMember
 				JOIN Client
 				ON FamilyMember.ClientID = Client.ClientID
-				AND FamilyMember.ClientID = " . $_GET['id'] . "
-				WHERE isHeadOfHousehold = TRUE";
+				WHERE isHeadOfHousehold = TRUE
+				AND FamilyMember.ClientID = " . $_GET['id'];
 		$clientNameInfo = sqlFetch(queryDB($conn, $sql));
 		$clientName = $clientNameInfo['lastName'];
 		
@@ -88,6 +89,17 @@
 			echo "Client Family Name: $clientName <br><br><br>";
 			
 			echo "<form name='updateClient' action='php/clientOps.php' method='post' >";
+			
+			
+			$clientType = $clientRow['clientType'];
+			echo "<div id='clientType'>Foodstamp Status: <select name='clientType'> 
+				<option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
+				<option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
+				<option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
+				<option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
+				</select> </div>";
+			
+			
 			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
 			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
 			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
@@ -140,7 +152,8 @@
 			// Create the family table and add in the headers
 			echo "<table> <tr> <th></th>";
 			echo "<th>First Name</th><th>Last Name</th>";
-			echo "<th>Birth Date</th><th>Head of Household</th><th>Notes</th>";
+			echo "<th>Birth Date</th><th>Gender</th>";
+			echo "<th>Head of Household</th><th>Notes</th>";
 			
 			$showDeleteColumn = ($familyInfo->num_rows > 1);
 			if ($showDeleteColumn) {
@@ -169,6 +182,7 @@
 				echo "<td>" . $row['firstName'] . "</td>";
 				echo "<td>" . $row['lastName'] . "</td>";
 				echo "<td>" . $row['birthDate'] . "</td>";
+				echo "<td>" . genderDecoderShort($row['gender']) . "</td>";
 				
 				// Display 'isHeadOfHousehold' as yes or no
 				$head = ($row['isHeadOfHousehold'] ? "Yes" : "No"); 

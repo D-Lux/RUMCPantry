@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/createClient.js"></script>
+	<script src="js/clientOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
 	<?php include 'php/checkLogin.php';?>

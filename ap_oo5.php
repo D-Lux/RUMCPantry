@@ -12,8 +12,6 @@
 	<button onclick="goBack()">Go Back</button>
 	<h1>Order Form: Specials</h1>
 	<?php
-	
-	// TODO: build old order form from text file
 
 		// *****************************************************
 		// * Do our SQL query and store off a datalist of items

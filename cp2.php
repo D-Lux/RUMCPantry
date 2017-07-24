@@ -10,7 +10,7 @@
 	</head>
 	<body>
 		<button onclick="goBack()">Back</button>
-		
+		<header></header>
 		<h1>Roselle United Methodist Church</h1>
 		<h2>Food Pantry</h2>
 		<h3>Client Main Page</h3>
@@ -18,7 +18,7 @@
 		
 		<?php
 			// show invoices
-			// If a visit is status 200 then make selectable (to cof.php)
+			// If a visit is status active (pulled from utilities) then make selectable (to cof.php)
 			$sql = "SELECT status, invoiceID, visitDate, visitTime
 					FROM Invoice
 					WHERE clientID=" . $_POST['clientID'];
@@ -58,13 +58,6 @@
 				echo "No Appointments in Database.";
 			}
 		?>
-		
-		<!--
-		<form method="post" action="ciup.php">
-			<button type="submit">Update Information</button>
-			<?php //echo $hiddenFields; ?>
-		</form>
-		-->
 
 		
 	</body>

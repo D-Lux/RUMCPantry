@@ -6,38 +6,10 @@
 	<script src="js/clientOps.js"></script>
 	<?php include 'php/utilities.php'; ?>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
+	<link rel="stylesheet" type="text/css" href="css/tabs.css" />
 	<?php include 'php/checkLogin.php';?>
 
     <title>Client List</title>
-	
-	<style>
-		div.tab {
-			overflow: hidden;
-		}
-
-		div.tab button {
-			background-color: inherit;
-			float: left;
-			border: none;
-			outline: none;
-			cursor: pointer;
-			padding: 3px 6px;
-			transition: 0.3s;
-		}
-
-		div.tab button:hover {
-			background-color: #ccc;
-		}
-
-		div.tab button.active {
-			background-color: #000;
-			color: white;
-		}
-
-		.tabcontent {
-			display: none;
-		}
-	</style>
 </head>
 
 <body>
@@ -46,18 +18,14 @@
         Active Clients
     </h1>
 	
-	<!-- Search for a name TODO
-	<form method="get" action="<?php //echo "$_SERVER['PHP_SELF']";?>">
-        Last name: <input type="search" name="lname">
-        </br>
-		<input id="Search" type="submit" name="submit" value="Search">
-    </form> 
-	// See SQL Wildcards for this query
-	-->
+	<script>
+		if (getCookie("clientUpdated") != "") {
+			window.alert("Client data updated!");
+			removeCookie("clientUpdated");
+		}		
+	</script>
 	
 	<?php
-		// TODO: Limit rows based off a searched name (will be in the address bar)
-		
 		// Get the available client ID so we can hide it on the update list
 		$availID = getAvailableClient();
 		
@@ -70,7 +38,8 @@
 		// Create our query string
 		$sql = "SELECT Client.clientID, Client.numOfAdults, Client.numOfKids, Client.isDeleted,
 				Client.email, Client.phoneNumber, Client.address, Client.city, Client.state, 
-				Client.zip, Client.foodStamps, Client.notes, FamilyMember.lastName
+				Client.zip, Client.foodStamps, Client.clientType, Client.notes, 
+				FamilyMember.firstName as fName, FamilyMember.lastName as lName
 				FROM FamilyMember
 				JOIN Client 
 				ON Client.clientID=FamilyMember.clientID
@@ -102,7 +71,7 @@
 			else {
 				echo "<table> <tr> <th></th>";
 				echo "<th>Client Name</th><th>Family Size</th>";
-				echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+				echo "<th>email</th><th>phone number</th><th>Client Type</th><th>food stamps</th>";
 				echo "<th></th></tr>";
 			}
 			while($row = sqlFetch($result)) {
@@ -133,7 +102,7 @@
 				echo "<td><input type='submit' name='GoUpdateClient' value='Update'></td>";
 				
 				// Various basic information fields
-				echo "<td>" . $row['lastName'] . "</td>";
+				echo "<td>" . $row['lName'] . ", " . $row['fName'] . "</td>";
 				$familySize = $row["numOfAdults"] + $row["numOfKids"];
 				echo "<td>$familySize</td>";
 				
@@ -144,6 +113,10 @@
 				echo "<td>" . (($row['phoneNumber'] == NULL) ? "-" : 
 								displayPhoneNo($row['phoneNumber'])) . "</td>";
 
+				// Display client type based off decoder
+				$clientType = clientTypeDecoder($row['clientType']);
+				echo "<td>" . $clientType . "</td>";
+				
 				// Display Yes/No/Unknown for foodstamps based on 1/0/-1
 				$foodStampStatus = ($row['foodStamps'] == 0 ? "No" : $row['foodStamps'] == 1 ? "Yes" : "Unknown");
 				echo "<td>" . $foodStampStatus . "</td>";

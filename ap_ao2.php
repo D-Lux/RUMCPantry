@@ -71,7 +71,7 @@
 			<!-- Create time slots with 6 clients each, 30 minutes apart -->
 			<?php
 				$timeSlot = '10:00';
-				for ($i = 0; $i < 4; $i++) {
+				for ($i = 0; $i < 3; $i++) {
 					echo "<tr><td><input type='time' name='time[]' value='"
 							. $timeSlot . "' step='900'></td>";
 					echo "<td><input type='number' name='qty[]' value='6' min='1'></td>";

@@ -6,38 +6,11 @@
 	<script src="js/clientOps.js"></script>
 	<?php include 'php/utilities.php'; ?>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
+	<link rel="stylesheet" type="text/css" href="css/tabs.css" />
 	<?php include 'php/checkLogin.php';?>
 
     <title>Inactive Client List</title>
-	
-	<style>
-		div.tab {
-			overflow: hidden;
-		}
 
-		div.tab button {
-			background-color: inherit;
-			float: left;
-			border: none;
-			outline: none;
-			cursor: pointer;
-			padding: 3px 6px;
-			transition: 0.3s;
-		}
-
-		div.tab button:hover {
-			background-color: #ccc;
-		}
-
-		div.tab button.active {
-			background-color: #000;
-			color: white;
-		}
-
-		.tabcontent {
-			display: none;
-		}
-	</style>
 </head>
 
 <body>
