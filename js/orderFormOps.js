@@ -190,9 +190,7 @@ function countOrder(callingSlot)	{
 	var Category = document.getElementById(nameField);
 	var MaxCount = Category.value;
 	
-	// Find all other elements in the page that have the same name and tally up the check boxes
-	//var name = document.getElementsByName(callingSlot.name);
-	
+	// Find all other elements in the page that have the same name and tally up the check boxes	
 	var name = document.getElementsByName(boxName);
 	
 	var runningTotal = 0;
@@ -200,7 +198,7 @@ function countOrder(callingSlot)	{
 		if (name[i].checked) {
 			//var numToAdd = Number(name[i].id);
 			// If we exceed our max count, don't let the box be checked and display a warning
-			if ( (runningTotal + numToAdd) > MaxCount) {
+			if (runningTotal >= MaxCount) {
 				callingSlot.checked = false;
 				window.alert("Cannot select more in this category");
 				// Break out, since we know we're done here
@@ -212,7 +210,7 @@ function countOrder(callingSlot)	{
 	
 	// Update the selected quantity and color it if we're at maximum
 	document.getElementById("Count" + nameField).innerHTML = 
-		"Selected: " + runningTotal + " / " + MaxCount;
+		"You may select up to " + MaxCount + " (" + runningTotal + "/" + MaxCount +  ")";
 	if (runningTotal == MaxCount) {
 		document.getElementById("Count" + nameField).style.color = "LawnGreen";
 	}

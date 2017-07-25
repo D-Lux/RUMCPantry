@@ -1,22 +1,4 @@
-Fixes
-Add client type to client – constituents, members, or residents (integer) – Colton
-Gender for family member – int – Colton
-Deactivate categories  (isDeleted in sql add) - colton
-Add Rack and shelf for item – colton
-Get rid of walkin fields in DB – colton
-Get rid of factor out of DB on categories and items – colton
-
-Update client add and edit to include client type - Dan
-Update family member add and edit to include gender - dan
-Add first name on active client page – Dan
-Add date as mandatory for head of house hold – Dan
-Asterix on required fields on anything – colton and dan
-
 Login page change title to RUM Community food pantry – Dan
-Tab order form when creating – Dan
-Walk in is 1-2 minus meds and specials – dan
-Remove 11:30 on create appointment date page – Dan
-Change order form verbiage to “You may select up to 2.  1 out of 2 items remaining” – dan
 Specials – select one item from each section
 Show print button once it has been reviewed – 600 - 699 is reviewed – so once here is hit set to 60x then allow to print - Colton
 View by Rack and Shelf in clients order form – Dan

@@ -23,7 +23,7 @@
 	// * 2.) Order form database
 	
 	// -= Family size query =-
-	$famSql = "SELECT (numOfKids + numOfAdults) as familySize, 
+	$famSql = "SELECT (numOfKids + numOfAdults) as familySize 
 			   FROM client
 			   WHERE clientID=" . $_POST['clientID'];
 	$walkinSql = "SELECT walkIn
@@ -58,13 +58,13 @@
 		$walkInData = sqlFetch($WIQuery);
 		$walkIn = $walkInData['walkIn'];
 	}
-	if (walkIn == 1) {
+	if ($walkIn == 1) {
 		$familyType = "Small";
 	}
 	
 	// --== Item databse query ==--
-	$sql = "SELECT itemID, displayName, Item." . $familyType . " as IQty, factor as fx, 
-					Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID as CID
+	$sql = "SELECT itemID, displayName, Item." . $familyType . " as IQty, Category.name as CName, 
+			Category." . $familyType . " as CQty, Item.categoryID as CID
 			FROM Item
 			JOIN Category
 			ON Item.categoryID=Category.categoryID
@@ -101,39 +101,38 @@
 	
 	// Roll through the items and create the order form
 	while ($item = sqlFetch($itemList)) {
-		if ($currCategory != $item['CName']) {
-			echo "<h3>" . $item['CName'] . "</h3>";
-			// Create a special div so the client can see an updated count of selected items
-			echo "<h4><div id='Count" . $item['CName'] . "'>Selected: 0 / " . $item['CQty'] . "</div></h4>";
-			// Include hidden values so we can track the category
-			echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
-			$currCategory = $item['CName'];
-			$slotID = 0;
-		}
+		// Skip medicine if we're 
+		if ( showCategory($walkIn, $item['CName']) ){
+			if ($currCategory != $item['CName']) {
+				echo "<h3>" . $item['CName'] . "</h3>";
+				// Create a special div so the client can see an updated count of selected items
+				echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . " (0/" . $item['CQty'] . ")</div></h4>";
+				// Include hidden values so we can track the category
+				echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
+				$currCategory = $item['CName'];
+				$slotID = 0;
+			}
 
-		// TODO: Deal with special case beans
-		// Display the Item name
-		echo $item['displayName'];
-		// If the factor is above 1, indicate that here
-		// echo ($item['fx']>1 ? " (Counts as " . $item['fx'] . ")" : "");
-		for ($i = 0; $i < $item['IQty']; $i++) {
-			$slotID++;
-			// ID is the Factor (only way to do it so post data works correctly)
-			// Value is the item's ID
-			// Name is the item's category[] (in array)
-			// removed factor id=" . $item['fx'] . "
-			echo "<input type='checkbox' id=1
-					value=" . $item['itemID'] . " onclick='countOrder(this)' 
-					name='" . $item['CName'] . "[]'>";
+			// TODO: Deal with special case beans
+			// Display the Item name
+			echo $item['displayName'];
+			for ($i = 0; $i < $item['IQty']; $i++) {
+				$slotID++;
+				// Value is the item's ID
+				// Name is the item's category[] (in array)
+				echo "<input type='checkbox' id=1
+						value=" . $item['itemID'] . " onclick='countOrder(this)' 
+						name='" . $item['CName'] . "[]'>";
+			}
+			echo "<br>";
 		}
-		echo "<br>";
 		
 	}
 	
 	// *************************************************
 	// * Specials
 	
-	if ($familyType != "walkIn") {;
+	if (!$walkIn) {;
 		echo "<h2>Specials</h2>";
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {

@@ -47,8 +47,8 @@
 		$clientInfo = queryDB($conn, $sql);
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
-			echo "No clients in the database.";
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			//echo "No clients in the database.";
+			//echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		}
 		
 		// Generate the string we'll need to display the client datalist
@@ -87,11 +87,22 @@
 			<!-- Required fields -->
 			<div id="clientFNameField">First Name:<input type="text" id="newWalkinFName" name="clientFirstName" maxlength="45"></div>
 			<div id="clientLNameField">Last Name:<input type="text" id="newWalkinLName" name="clientLastName" maxlength="45"></div><br>
+			Date of Birth: <input type="date" name="birthDate" min="1900-01-01"><br>
 			
+			<div id="gender">Gender:
+				<select name="gender"> <option value=0>-</option>
+				<option value=-1>Male</option> <option value=1>Female</option> 
+			</select> </div><br>
+		
 			Number of Adults:<input type="number" name="numAdults" min=1 value=1><br>
 			Number of Children: <input type="number" name="numKids" value="0"><br><br>
 			
-			Birthday: <input type="date" name="birthDate" min="1900-01-01"><br>
+			<!-- Dropdown for client type -->
+			<div id="clientType">Client Type:
+				<select name="clientType"> <option value=0>Unknown</option>
+				<option value=1>Constituent</option> <option value=2>Member</option> <option value=3>Resident</option> 
+			</select> </div>
+		
 			<!-- Dropdown for food stamps -->
 			Food Stamp Status:
 			<select name="foodStamps"> <option value=-1>Unknown</option>
@@ -121,7 +132,7 @@
 			Zip Code: <input type="number" name="addressZip">
 			
 			<input type="hidden" name="newWalkIn" value=1>
-			<br>
+			<br><br>
 			<input type="submit" name="submitClient" value="Add Walk-In" >
 			</form>
 		</div>

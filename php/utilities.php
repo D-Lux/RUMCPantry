@@ -447,5 +447,18 @@ function aisleDecoder($aisle){
 	return chr($aisle + 65);
 }
 
+// ************************************************************
+// ** Disabled categories for walkIns
+
+function showCategory($walkIn, $category){
+	if (!$walkIn) {
+		return true;
+	}
+	if ($category == "Medicine") {
+		return false;
+	}
+	return true;
+}
+
 
 ?>
