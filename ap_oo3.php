@@ -24,9 +24,10 @@
 	// Query the database for all active orders
 	// Create list of all orders, selectable to view that order
 	
-	$sql = "SELECT FMC_Join.lName as ln, invoiceID, visitTime, status, FMC_Join.FSize as FamilySize
+	$sql = "SELECT invoiceID, visitTime, status, Invoice.clientID as CID,
+					FMC_Join.lName as ln, FMC_Join.fName as fn, FMC_Join.FSize as FamilySize
 			FROM Invoice
-			JOIN (SELECT FamilyMember.lastName as lName, FamilyMember.clientID as JoinID, 
+			JOIN (SELECT FamilyMember.lastName as lName, FamilyMember.firstName as fName, FamilyMember.clientID as JoinID, 
 							(Client.numOfKids + Client.numOfAdults) as FSize
 				  FROM FamilyMember
 				  JOIN Client
@@ -34,7 +35,7 @@
 				  AND isHeadOfHousehold=TRUE) as FMC_Join
 			ON FMC_Join.JoinID=Invoice.clientID
 			AND status>=" . GetActiveStatus() . "
-			AND status<=" . HighestActiveStatus() . "
+			AND status<=" . GetHighestActiveStatus() . "
 			ORDER BY visitTime, status ASC";
 	
 	$conn = createPantryDatabaseConnection();
@@ -55,11 +56,27 @@
 			//echo "Visit Time: " .  $invoice['visitTime'] . "<br>";
 			echo "<form method='post' action='ap_oo4.php'>";
 			echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
+			echo "<input type='hidden' value='" . $invoice['CID'] . "' name='CID'>";
 			echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='name'>";
 			echo "<input type='hidden' value='" . $invoice['visitTime'] . "' name='visitTime'>";
 			echo "<input type='hidden' value='" . $invoice['status'] . "' name='status'>";
 			echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
 			echo "<input type='submit' value='";
+			echo displaySingleQuote($invoice['fn']) . " ";
+			echo displaySingleQuote($invoice['ln']) . " ";
+			echo returnTime($invoice['visitTime']) . " ";
+			echo visitStatusDecoder($invoice['status']);
+			echo "' name='viewInvoice'>";
+			echo "</form><br>";
+			
+			echo "<form method='post' action='rof.php'>";
+			echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
+			echo "<input type='hidden' value='" . $invoice['CID'] . "' name='clientID'>";
+			echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='lname'>";
+			echo "<input type='hidden' value='" . displaySingleQuote($invoice['fn']) . "' name='fname'>";
+			echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
+			echo "<input type='submit' value='Review: ";
+			echo displaySingleQuote($invoice['fn']) . " ";
 			echo displaySingleQuote($invoice['ln']) . " ";
 			echo returnTime($invoice['visitTime']) . " ";
 			echo visitStatusDecoder($invoice['status']);

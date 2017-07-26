@@ -344,7 +344,7 @@ function IsActiveAppointment($status) {
 	return ( ($status >= SV_ACTIVE) && ($status <= SV_ARRIVED_HIGH) );
 }
 // Returns the highest active status value
-function HighestActiveStatus() {
+function GetHighestActiveStatus() {
 	return SV_ARRIVED_HIGH;
 }
 

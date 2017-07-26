@@ -196,7 +196,6 @@ function countOrder(callingSlot)	{
 	var runningTotal = 0;
 	for (var i=0; i < name.length; i++) {
 		if (name[i].checked) {
-			//var numToAdd = Number(name[i].id);
 			// If we exceed our max count, don't let the box be checked and display a warning
 			if (runningTotal >= MaxCount) {
 				callingSlot.checked = false;
@@ -209,17 +208,31 @@ function countOrder(callingSlot)	{
 	}
 	
 	// Update the selected quantity and color it if we're at maximum
-	document.getElementById("Count" + nameField).innerHTML = 
-		"You may select up to " + MaxCount + " (" + runningTotal + "/" + MaxCount +  ")";
+	var e = document.getElementById("Count" + nameField);
 	if (runningTotal == MaxCount) {
-		document.getElementById("Count" + nameField).style.color = "LawnGreen";
+		e.innerHTML = "Selections complete";
+		e.style.color = "DodgerBlue";
 	}
 	else {
-		document.getElementById("Count" + nameField).style.color = "Black";
+		e.innerHTML = "You may select up to " + MaxCount + " (" + (MaxCount - runningTotal) + " remaining)";
+		e.style.color = "Black";
 	}
-	
 }
 
+// **************************************
+// * Runs at the end of rof to update selection quantities
+function updateCheckedQuantities()	{
+	var inputs = document.getElementsByTagName('input');
+
+	for(var i = 0; i < inputs.length; i++) {
+		if(inputs[i].type.toLowerCase() == 'checkbox') {
+			countOrder(inputs[i]);
+		}
+	}
+}
+
+// ********************************************
+// * For creating tabs in the order form creation
 function viewTab(evt, tabID) {
     // Declare all variables
     var i, tabcontent, tablinks;

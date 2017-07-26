@@ -57,13 +57,67 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 	// * --== Create our Insertion Query ==--
 	
 	// Create the array to track item IDs
-	$hitIDs = array();
-	
-	// Start our insertion string
-	$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice) VALUES ";
-	$firstInsert = TRUE;
+	$orderIDs = array();
+	$specialIDs = array();
 	$runQuery = FALSE;
 	
+	// ************************************
+	// * New hotness
+	
+	// Loop through our POST information to generate an array of itemIDs and quantities
+	foreach ($_POST as $Category=>$C_Count){
+		if ( isCategory($Category) ) {
+			if (is_array($C_Count)) {
+				foreach ($C_Count as $itemID){
+					echo "checking on adding " . $itemID . "<br>";
+					// count all items with a particular ID
+					$orderIDs[$itemID]++;
+					$runQuery = TRUE;
+				}
+			}
+			else {
+				// If the item is a special, it will not be an array
+				echo "New item, adding.<br>";
+				$specialIDs[$C_Count]++;
+				$runQuery = TRUE;
+			}
+		}
+	}
+	
+	// Generate our insertion string
+	$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
+	$firstInsert = TRUE;
+	
+	foreach ($orderIDs as $itemID=>$qty) {
+		$totalPrice = $qty * $PriceID_Array[$itemID];
+		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+		$insertionSql .= "( $invoiceID, $itemID, $qty, $totalPrice, 0 )";
+		$firstInsert = FALSE;				
+	}
+	foreach ($specialIDs as $itemID=>$qty) {
+		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+		$insertionSql .= "( $invoiceID, $itemID, $qty, $PriceID_Array[$itemID], 1 )";
+		$firstInsert = FALSE;				
+	}
+
+	// Run our query
+	if ($runQuery) {
+		if (queryDB($conn, $insertionSql) === TRUE) {
+			closeDB($conn);
+			echo "Insertion successful";
+			header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+		}
+		else {
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			echoDivWithColor("Error, failed to insert invoices.", "red" );	
+			closeDB($conn);
+		}
+	}
+	else {
+		closeDB($conn);
+		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+	}
+	/*
 	// Loop through our POST information
 	foreach ($_POST as $Category=>$C_Count){
 		if ( isCategory($Category) ) {
@@ -71,7 +125,7 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 				foreach ($C_Count as $itemID){
 					echo "checking on adding " . $itemID . "<br>";
 					// Check if we've seen this ID before, if not, run what we need to on it
-					if ( !in_array($itemID, $hitIDs) ) {
+					if ( !array_key_exists($itemID, $hitIDs) ) {
 						echo "New item, adding.<br>";
 						// Add the item to our hit IDs so we don't call it again
 						$hitIDs[] = $itemID;
@@ -104,6 +158,8 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 					$firstInsert = FALSE;
 					$runQuery = TRUE;
 				}
+				else {
+				}
 			}
 		}
 	}
@@ -125,6 +181,7 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 		closeDB($conn);
 		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
 	}
+	*/
 }
 
 // **************************************************
