@@ -26,19 +26,19 @@
         <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
 
         <div id="name">
-            Donation partner name:
+            Donation partner name:<span style="color:red;">*</span>
             <?php 
             createDatalist("","names","DonationPartner","name","name", false);
             ?>
         </div>
         <div id="city">
-            City:
+            City:<span style="color:red;">*</span>
             <?php 
             createDatalist("","cities","DonationPartner","city","city", false);
             ?>
         </div>
         <div id="state">
-            State:
+            State:<span style="color:red;">*</span>
             <select name="state">
                 <option value="AL">AL</option>
                 <option value="AK">AK</option>
@@ -94,21 +94,21 @@
                 </select>
         </div>
         <div id="zip">
-            Zip:
+            Zip:<span style="color:red;">*</span>
             <?php 
             
             createDatalist("","zips","DonationPartner","zip","zip", false);
             ?>
         </div>
         <div id="address">
-            Address:
+            Address:<span style="color:red;">*</span>
             <?php 
             
             createDatalist("","addresses","DonationPartner","address","address", false);
             ?>
         </div>
         <div id="phoneNumber">
-            Phone number:
+            Phone number:<span style="color:red;">*</span>
             <?php 
             
             createDatalist("","phoneNumbers","DonationPartner","phoneNumber","phoneNumber", false);

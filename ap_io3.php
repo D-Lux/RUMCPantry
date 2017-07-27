@@ -34,7 +34,7 @@
     $small=0;
     $medium=0;
     $large=0;
-    $walkIn=0;
+   
     $factor=0;
     $categoryID=0;
     $categoryName="";
@@ -46,7 +46,7 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, walkIn, factor, categoryID FROM item WHERE itemID =". $_GET['itemID'] ;
+    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, factor, categoryID FROM item WHERE itemID =". $_GET['itemID'] ;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -61,9 +61,10 @@
                     $small = $row["small"];
                     $medium = $row["medium"];
                     $large = $row["large"];
-                    $walkIn = $row["walkIn"];
+                   
                     $factor = $row["factor"];
-                    $categoryID = $row["categoryID"];                       
+                    $categoryID = $row["categoryID"];      
+                                    
                             
                     $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE categoryID = '$categoryID'";
                     $result = $conn->query($sql);
@@ -86,17 +87,17 @@
     }
 
     echo'<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">';
-    echo "<div id='category'>Category";
+    echo '<div id="category">Category<span style="color:red;">*</span> ';
     echo'<input type="hidden" name="itemID" value=' . $itemID . '>';
-    createDatalist("'$categoryName'", "categories", "category", "name", "category" ,false);
+    createDatalist("$categoryName", "categories", "category", "name", "category" ,false);
     echo "</div>";
 
 
-    echo '<div id="itemName">Item name (used for the database):';
-    createDatalist("'$itemName'", "itemNames", "item", "itemName", "itemName", true);
+    echo '<div id="itemName">Item name (used for the database):<span style="color:red;">*</span>';
+    createDatalist("$itemName", "itemNames", "item", "itemName", "itemName", true);
         echo'</div>'; 
-        echo'<div id="displayName">Display name (what you want the item to be called):';
-        createDatalist("'$displayName'", "displayNames", "item", "displayName", "displayName", true);
+        echo'<div id="displayName">Display name (what you want the item to be called):<span style="color:red;">*</span>';
+        createDatalist("$displayName", "displayNames", "item", "displayName", "displayName", true);
         echo'</div>';
         
     
@@ -105,37 +106,31 @@
         echo'<div id="household">How many of each can a household take?</div>';
         echo'<div id="small"> 1 to 2:';
         echo'<select name="small">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $small ? "selected" : "") . ">" . $i . "</option>";            
         }
         echo'</select> </div>';
         
         echo'<div id="medium">3 to 4:';
         echo'<select name="medium">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $medium ? "selected" : "") . ">" . $i . "</option>";            
         }
         echo'</select> </div>';
         
         echo'<div id="large">5+:';
         echo'<select name="large">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $large ? "selected" : "") . ">" . $i . "</option>";            
         }    
         echo'</select> </div>';
 
-        echo'<div id="walkIn">Walk-in:';
-        echo'<select name="walkIn">';
-        for ($i = 1; $i <= 10; $i++) {
-            echo"<option value=$i " . ($i == $walkIn ? "selected" : "") . ">" . $i . "</option>";            
-        }   
-        echo'</select> </div>';
-
+      
         echo'<div id="factor" class="tooltip">Factor:';
         echo'<div class="tooltiptext">Example: if factor is 1 and a household can have 2, they can take 2 of the item. If factor is 2 and a household can have 2, they can take one of the item.</div>';
         echo'</div>';
         echo'<select name="factor">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $factor ? "selected" : "") . ">" . $i . "</option>";            
         }
         echo'</select> </br>';

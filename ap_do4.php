@@ -96,37 +96,37 @@
 
 
 
-    echo'<div id="pickupDate">Pickup date:
+    echo'<div id="pickupDate">Pickup date:<span style="color:red;">*</span>
     <input type="date" name="pickupDate" value=' . $dateOfPickup . '>
     </div>
     <div id ="donationID">
         <input type="hidden" name="donationID" value=' . $donationID . '>
     </div>
     <div id="networkPartner">
-        Network partner:';
+        Network partner:<span style="color:red;">*</span>';
         
-        createDatalist("'$networkPartner'","networkPartners","Donation","networkPartner","networkPartner", false);
+        createDatalist("$networkPartner","networkPartners","Donation","networkPartner","networkPartner", false);
         
     echo'</div>
     <div id="agency">
-        Agency:';
+        Agency:<span style="color:red;">*</span>';
             
         
-        createDatalist("'$agency'","agencies","Donation","agency","agency", false);
+        createDatalist("$agency","agencies","Donation","agency","agency", false);
     
     echo'</div>
     <div id="donorName">
-        Donor name:';
+        Donor name:<span style="color:red;">*</span>';
         
     
-        createDatalist("'$donationPartnerName'","donorNames","DonationPartner","name","donorName", false);
+        createDatalist("$donationPartnerName","donorNames","DonationPartner","name","donorName", false);
 
         echo'</div>
         <div id="city">
-            City:';
+            City:<span style="color:red;">*</span>';
             
     
-        createDatalist("'$city'","cities","DonationPartner","city","city", false);
+        createDatalist("$city","cities","DonationPartner","city","city", false);
 
         echo'</div>
         <h3>

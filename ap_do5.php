@@ -69,15 +69,15 @@
     echo'<form name="addDonationPartner" action="php/donationOps.php" onSubmit="return validateDonationPartnerAdd()" method="post">
         <input type="hidden" name="donationPartnerID" value=' . $donationPartnerID . '>
         <div id="name">
-            Donation partner name:';
+            Donation partner name:<span style="color:red;">*</span>';
      
-            createDatalist("'$name'","names","DonationPartner","name","name", false);
+            createDatalist("$name","names","DonationPartner","name","name", false);
         
         echo'</div>
         <div id="city">
-            City:';
+            City:<span style="color:red;">*</span>';
             
-            createDatalist("'$city'","cities","DonationPartner","city","city", false);
+            createDatalist("$city","cities","DonationPartner","city","city", false);
         
         echo'</div>
         <div id="state">
@@ -139,24 +139,24 @@
                 echo'</select>
         </div>
         <div id="zip">
-            Zip:';
+            Zip:<span style="color:red;">*</span>';
             
             
-            createDatalist("'$zip'","zips","DonationPartner","zip","zip", false);
+            createDatalist("$zip","zips","DonationPartner","zip","zip", false);
             
         echo'</div>
         <div id="address">
-            Address:';
+            Address:<span style="color:red;">*</span>';
             
             
-            createDatalist("'$address'","addresses","DonationPartner","address","address", false);
+            createDatalist("$address","addresses","DonationPartner","address","address", false);
         
         echo'</div>
         <div id="phoneNumber">
-            Phone number:';
+            Phone number:<span style="color:red;">*</span>';
             
             
-            createDatalist("'$phoneNumber'","phoneNumbers","DonationPartner","phoneNumber","phoneNumber", false);
+            createDatalist("$phoneNumber","phoneNumbers","DonationPartner","phoneNumber","phoneNumber", false);
         
         echo'</div>
 

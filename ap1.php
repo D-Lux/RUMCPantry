@@ -8,7 +8,8 @@
 </head>
 
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <script src="js/destinationFunctions.js"></script>
+    <input type="button" value="Go Back" onclick="ap1Back()">
     <h1>
         Main Admin Page
     </h1>

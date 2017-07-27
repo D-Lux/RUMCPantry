@@ -171,6 +171,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
         $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
         if($result->num_rows == 0) {
         
+
          $sql = "INSERT INTO category (name, small, medium, large, walkIn)
          VALUES ('$category', 0, 0, 0, 0)";
             if ($conn->query($sql) === TRUE) {
@@ -254,18 +255,17 @@ elseif (isset($_GET['DeleteCategory'])) {
 
 
     
-    $result = $conn->query("SELECT DISTINCT categoryID FROM Category WHERE categoryID = '$categoryID'");
-    if($result->num_rows > 0) {
+   
 
-        $sql = "delete from Category where categoryID=$categoryID";
+        $sql = "update Category set isDeleted = 'true' where categoryID=$categoryID";
 
          if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "<h3>Category with category id $categoryID deleted</h3>", "green");
           }
           else{
-            echoDivWithColor("Error, failed to connect to database at delete.", "red" );
+            echoDivWithColor("Failed to delete category", "red" );
           }
-    }
+    
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];

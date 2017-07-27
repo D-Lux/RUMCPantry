@@ -50,6 +50,7 @@ function validateCategoryAdd() {
     var errors = 0;
 
 
+
     if (name == "" || name.length == 0 || name == null) {
         getElementAndColorIt("name", "red");
         errors++;

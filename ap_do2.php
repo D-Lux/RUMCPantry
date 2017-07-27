@@ -24,18 +24,18 @@
         <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
         
 		<div id="pickupDate">
-            Pickup date
+            Pickup date<span style="color:red;">*</span>
             <input type="date" name="pickupDate" <?php echo "value='" . (date('Y-m-d')) . "'" ?> >
         </div>
 		
 		<div id="networkPartner">
-            Network partner:
+            Network partner:<span style="color:red;">*</span>
             <?php 
             createDatalist("RUMC","networkPartners","Donation","networkPartner","networkPartner", false);
             ?>
         </div>
 		<div id="agency">
-            Agency:
+            Agency:<span style="color:red;">*</span>
             <?php 
             
             createDatalist("1039a","agencies","Donation","agency","agency", false);
@@ -43,13 +43,13 @@
         </div>
 	
 		<div id="City">
-            City:
+            City:<span style="color:red;">*</span>
             <?php
-            createDatalist_i("","Cities","donationpartner","city","City", false);
+            createDatalist_i("","cities","donationpartner","city","city", false);
             ?>
         </div>
 		<div id="donorName">
-            Donor name:
+            Donor name:<span style="color:red;">*</span>
             <?php 
             
             createDatalist_i("","donorNames","DonationPartner","name","donorName", false);

@@ -25,6 +25,9 @@
     <form method="get" action="ap_io4.php">
         <input type="submit" value="Add a category">
     </form>
+     <form method="get" action="ap_io6.php">
+        <input type="submit" value="Deleted items and categories">
+    </form>
 
     <?php include 'php/displayItems.php';?>
     <?php include 'php/displayCategories.php';?>

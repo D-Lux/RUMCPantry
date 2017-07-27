@@ -25,7 +25,7 @@
     $small =0;
     $medium=0;
     $large=0;
-    $walkIn=0;
+   
     
 
     
@@ -37,7 +37,7 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT categoryID, name, small, medium, large, walkIn FROM Category WHERE categoryID =". $_GET['categoryID'] ;
+    $sql = "SELECT categoryID, name, small, medium, large FROM Category WHERE categoryID =". $_GET['categoryID'] ;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -49,7 +49,7 @@
                 $small= $row["small"];
                 $medium= $row["medium"];
                 $large= $row["large"];
-                $walkIn= $row["walkIn"];
+               
              
               
 
@@ -65,38 +65,32 @@
         <input type="hidden" name="categoryID" value=' . $categoryID . '>
 
         <div id="name">
-            Name:';
+            Name:<span style="color:red;">*</span>';
            
-            createDatalist("'$name'","names","category","name","name", false);
+            createDatalist("$name","names","category","name","name", false);
             
         echo'</div>
         <div id="small"> 1 to 2:';
         echo'<select name="small">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $small ? "selected" : "") . ">" . $i . "</option>";            
         }
         echo'</select> </div>
         <div id="medium">3 to 4:';
             echo'<select name="medium">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $medium ? "selected" : "") . ">" . $i . "</option>";            
         }
             
         echo'</select> </div>
         <div id="large">5+:';
             echo'<select name="large">';
-        for ($i = 1; $i <= 10; $i++) {
+        for ($i = 0; $i <= 10; $i++) {
             echo"<option value=$i " . ($i == $large ? "selected" : "") . ">" . $i . "</option>";            
         }    
             
         echo'</select> </div>
-        <div id="walkIn">Walk-in:';
-           echo'<select name="walkIn">';
-        for ($i = 1; $i <= 10; $i++) {
-            echo"<option value=$i " . ($i == $walkIn ? "selected" : "") . ">" . $i . "</option>";            
-        }   
 
-        echo'</select> </div>
 
 
 
