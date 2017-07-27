@@ -20,7 +20,7 @@ if ($conn->connect_error) {
 
 
 
-$sql = "SELECT isDeleted, categoryID, name, small, medium, large, walkIn FROM Category";
+$sql = "SELECT isDeleted, categoryID, name, small, medium, large FROM Category";
 $result = $conn->query($sql);
  $hasReal =0;
 if ($result->num_rows > 0) {
@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
         $categoryID=$row["categoryID"];
         echo "<input type='hidden' name='categoryID' value='$categoryID'>";
         echo "<td><input type='submit' name='UpdateCategory' value='Update'></td>";
-        echo "<td>". $row["categoryID"]. "</td><td>". $row["name"]. "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["walkIn"] . "</td>";
+        echo "<td>". $row["categoryID"]. "</td><td>". $row["name"]. "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td>";
         echo "<td><input type='submit' name='DeleteCategory' value='Delete'></td>";
         echo "</form>";
         echo "</tr>";

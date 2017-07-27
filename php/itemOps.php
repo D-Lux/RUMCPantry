@@ -15,7 +15,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     $small = $_POST['small'];
     $medium = $_POST['medium'];
     $large = $_POST['large'];
-    $walkIn = $_POST['walkIn'];
+   
 
     $factor = $_POST['factor'];
 
@@ -39,7 +39,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
         if($result->num_rows == 0) {
         
-         $sql = "INSERT INTO category (name, small, medium, large, walkIn)
+         $sql = "INSERT INTO category (name, small, medium, large)
          VALUES ('$category', 0, 0, 0, 0)";
             if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "New category created: $category", "green");
@@ -76,8 +76,8 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     }
 
 
-    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, walkIn, factor, categoryID)
-    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$walkIn', '$factor', '$categoryID')"; /*standard insert statement using the variables pulled*/
+    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, factor, categoryID)
+    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$factor', '$categoryID')"; /*standard insert statement using the variables pulled*/
 
     if ($conn->query($sql) === TRUE) {
 
@@ -90,7 +90,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         echoDivWithColor("Family allotment for size 1-2: $small", "green" );
         echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
         echoDivWithColor("Family allotment for size 5-6: $large", "green" );
-        echoDivWithColor("Family allotment for walk ins: $walkIn", "green" );       
+          
         echoDivWithColor("Factor: $factor", "green" );
         
 
@@ -147,7 +147,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $small = $_POST['small'];
     $medium = $_POST['medium'];
     $large = $_POST['large'];
-    $walkIn = $_POST['walkIn'];
+   
 
     $factor = $_POST['factor'];
 
@@ -172,7 +172,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
         if($result->num_rows == 0) {
         
 
-         $sql = "INSERT INTO category (name, small, medium, large, walkIn)
+         $sql = "INSERT INTO category (name, small, medium, large)
          VALUES ('$category', 0, 0, 0, 0)";
             if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "New category created: $category", "green");
@@ -208,7 +208,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
        echoDivWithColor("Category ID: $categoryID", "green" );
     }
 
-        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large, walkIn = $walkIn, factor = $factor Where itemID = $itemID";
+        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large Where itemID = $itemID";
 
 
     if ($conn->query($sql) === TRUE) {
@@ -222,8 +222,6 @@ elseif (isset($_POST['updateItemIndividual'])) {
         echoDivWithColor("Family allotment for size 1-2: $small", "green" );
         echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
         echoDivWithColor("Family allotment for size 5-6: $large", "green" );
-        echoDivWithColor("Family allotment for walk ins: $walkIn", "green" );       
-        echoDivWithColor("Factor: $factor", "green" );
         
 
        
@@ -273,7 +271,6 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $small = $_POST['small']; 
     $medium = $_POST['medium'];
     $large = $_POST['large'];
-    $walkIn = $_POST['walkIn'];
 
    
 
