@@ -17,7 +17,6 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     $large = $_POST['large'];
    
 
-    $factor = $_POST['factor'];
 
 
     $categoryID = null;
@@ -76,8 +75,8 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     }
 
 
-    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, factor, categoryID)
-    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$factor', '$categoryID')"; /*standard insert statement using the variables pulled*/
+    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, categoryID)
+    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$categoryID')"; /*standard insert statement using the variables pulled*/
 
     if ($conn->query($sql) === TRUE) {
 
@@ -91,7 +90,6 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
         echoDivWithColor("Family allotment for size 5-6: $large", "green" );
           
-        echoDivWithColor("Factor: $factor", "green" );
         
 
        
@@ -149,7 +147,6 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $large = $_POST['large'];
    
 
-    $factor = $_POST['factor'];
 
 
     $categoryID = null;
@@ -255,13 +252,22 @@ elseif (isset($_GET['DeleteCategory'])) {
     
    
 
-        $sql = "update Category set isDeleted = 'true' where categoryID=$categoryID";
+        $sql = "update Category set isDeleted = true where categoryID=$categoryID";
 
          if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "<h3>Category with category id $categoryID deleted</h3>", "green");
           }
           else{
             echoDivWithColor("Failed to delete category", "red" );
+          }
+
+          $sql = "update item set isDeleted = true where categoryID=$categoryID";
+        
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>items with category id $categoryID deleted</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Failed to delete items", "red" );
           }
     
 }
@@ -292,7 +298,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
         
 
 
-    $sql = "UPDATE Category SET categoryID = $categoryID, name = '$name', small = $small, medium = $medium, large = $large, walkIn = $walkIn Where categoryID = $categoryID";
+    $sql = "UPDATE Category SET categoryID = $categoryID, name = '$name', small = $small, medium = $medium, large = $large Where categoryID = $categoryID";
 
 
     if ($conn->query($sql) === TRUE) {
@@ -304,7 +310,6 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
         echoDivWithColor("Small: $small", "green" );
         echoDivWithColor("Medium: $medium", "green" );
         echoDivWithColor("Large: $large", "green" );
-        echoDivWithColor("Walk in: $walkIn", "green" );
  
 
        
@@ -322,7 +327,6 @@ elseif (isset($_POST['createCategory'])) {
     $small = $_POST['small']; 
     $medium = $_POST['medium'];
     $large = $_POST['large'];
-    $walkIn = $_POST['walkIn'];
 
 
 
@@ -339,8 +343,8 @@ elseif (isset($_POST['createCategory'])) {
   
 
 
-    $sql = "INSERT INTO Category (name, small, medium, large, walkIn)
-       VALUES ('$name', $small, $medium, $large, $walkIn)"; /*standard insert statement using the variables pulled*/
+    $sql = "INSERT INTO Category (name, small, medium, large)
+       VALUES ('$name', $small, $medium, $large)"; /*standard insert statement using the variables pulled*/
 
     if ($conn->query($sql) === TRUE) {
 
@@ -348,10 +352,9 @@ elseif (isset($_POST['createCategory'])) {
 
         echoDivWithColor("Category created successfully", "green" );
         echoDivWithColor("Category name: $name", "green" );
-        echoDivWithColor("City: $small", "green" );
-        echoDivWithColor("State: $medium", "green" );
-        echoDivWithColor("Zip: $large", "green" );
-        echoDivWithColor("Address: $walkIn", "green" );
+        echoDivWithColor("Small: $small", "green" );
+        echoDivWithColor("Medium: $medium", "green" );
+        echoDivWithColor("Large: $large", "green" );
        
       
 

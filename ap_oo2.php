@@ -41,7 +41,7 @@
 		// * Query the database
 		
 		// Create our query from the Item and Category tables
-		// Item Name, factor, $familyType, category name, category family type, itemid
+		// Item Name, $familyType, category name, category family type, itemid
 		$sql = "SELECT itemID, rack, shelf, aisle, itemName, Item." . $familyType . " as IQty, 
 					Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID,
 					Count(Category.name) as CCount					

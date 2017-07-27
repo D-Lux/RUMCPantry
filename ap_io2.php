@@ -87,23 +87,8 @@
         </select> </div>
         
 
-        <div id="factor" class="tooltip">Factor:
-            <div class="tooltiptext">Example: if factor is 1 and a household can have 2, they can take 2 of the item. If factor is 2 and a household can have 2, they can take one of the item.</div>
-        </div>
-        <select name="factor">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select> </br>
-
+ 
+     
         </br>
         <input type="submit" value="Create" name="createItem">
     </form>

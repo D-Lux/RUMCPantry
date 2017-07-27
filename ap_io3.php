@@ -35,7 +35,7 @@
     $medium=0;
     $large=0;
    
-    $factor=0;
+
     $categoryID=0;
     $categoryName="";
 
@@ -46,7 +46,7 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, factor, categoryID FROM item WHERE itemID =". $_GET['itemID'] ;
+    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID FROM item WHERE itemID =". $_GET['itemID'] ;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -62,7 +62,6 @@
                     $medium = $row["medium"];
                     $large = $row["large"];
                    
-                    $factor = $row["factor"];
                     $categoryID = $row["categoryID"];      
                                     
                             
@@ -126,14 +125,7 @@
         echo'</select> </div>';
 
       
-        echo'<div id="factor" class="tooltip">Factor:';
-        echo'<div class="tooltiptext">Example: if factor is 1 and a household can have 2, they can take 2 of the item. If factor is 2 and a household can have 2, they can take one of the item.</div>';
-        echo'</div>';
-        echo'<select name="factor">';
-        for ($i = 0; $i <= 10; $i++) {
-            echo"<option value=$i " . ($i == $factor ? "selected" : "") . ">" . $i . "</option>";            
-        }
-        echo'</select> </br>';
+        
 
         echo'</br>';
         echo'<input type="submit" value="Update" name="updateItemIndividual">';
