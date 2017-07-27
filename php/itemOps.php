@@ -271,6 +271,101 @@ elseif (isset($_GET['DeleteCategory'])) {
           }
     
 }
+elseif (isset($_GET['ReactivateCategoryAndItems'])) {
+       $servername = "127.0.0.1";
+    $username = "root";
+    $password = "";
+    $dbname = "foodpantry";
+    $categoryID = $_GET['categoryID'];
+
+     $conn = new mysqli($servername, $username, $password, $dbname);
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+   
+
+        $sql = "update Category set isDeleted = false where categoryID=$categoryID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Category with category id $categoryID reactivated</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Failed to reactivate category", "red" );
+          }
+
+          $sql = "update item set isDeleted = false where categoryID=$categoryID";
+        
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>items with category id $categoryID reactivated</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Failed to Reactivate items", "red" );
+          }
+    
+}
+elseif (isset($_GET['ReactivateCategory'])) {
+       $servername = "127.0.0.1";
+    $username = "root";
+    $password = "";
+    $dbname = "foodpantry";
+    $categoryID = $_GET['categoryID'];
+
+     $conn = new mysqli($servername, $username, $password, $dbname);
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+   
+
+        $sql = "update Category set isDeleted = false where categoryID=$categoryID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Category with category id $categoryID reactivated</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Failed to reactivate category", "red" );
+          }
+
+    
+}
+elseif (isset($_GET['ReactivateItem'])) {
+       $servername = "127.0.0.1";
+    $username = "root";
+    $password = "";
+    $dbname = "foodpantry";
+    $itemID = $_GET['itemID'];
+
+     $conn = new mysqli($servername, $username, $password, $dbname);
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
+
+
+
+    
+   
+
+        $sql = "update Item set isDeleted = false where itemID=$itemID";
+
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Item with item id $itemID reactivated</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Failed to reactivate item", "red" );
+          }
+
+    
+}
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];
     $name = $_POST['name'];
