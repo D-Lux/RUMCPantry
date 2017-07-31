@@ -7,6 +7,7 @@
 		<script src="js/orderFormOps.js"></script>
 		<link href='css/toolTip.css' rel='stylesheet'>
 		<?php include 'php/utilities.php'; ?>
+		<?php include 'php/beanOps.php'; ?>
 
 	</head>
 	<body>
@@ -78,13 +79,10 @@
 	}
 
 	if (!$clientOrder) { die("Order could not be found or has not yet been completed"); }
-	//foreach ($clientOrder as $itemID=>$i_count){
-	//	echo "Item ID: " . $itemID . " Count: " . $i_count . "<br>";
-	//}
 	
 	// *****************************
 	// --== Item database query ==--
-	$sql = "SELECT itemID, displayName, Item." . $familyType . " as IQty, Category.name as CName, 
+	$sql = "SELECT itemID, itemName, displayName, Item." . $familyType . " as IQty, Category.name as CName, 
 			Category." . $familyType . " as CQty, Item.categoryID as CID
 			FROM Item
 			JOIN Category
@@ -120,43 +118,79 @@
 	// *************************************************
 	// * Normal Items
 	
+	// Special case ID holders for beans (bagged and canned)
+	// We have to pull them apart, because they may not be in order
+	$CanBeans = array();
+	$BagBeans = array();
+	
+	$BeanQty = 0;
+	
 	// Roll through the items and create the order form
 	while ($item = sqlFetch($itemList)) {
-		// Skip medicine if we're 
+		// Check skipped categories for walkIn
 		if ( showCategory($walkIn, $item['CName']) ){
-			if ($currCategory != $item['CName']) {
-				echo "<h3>" . $item['CName'] . "</h3>";
-				// Create a special div so the client can see an updated count of selected items
-				echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
-					" (" . ($item['CQty']) . " remaining)</div></h4>";
-				// Include hidden values so we can track the category
-				echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
+			// Special case for beans (store off so we can order them)
+			if ($item['CName'] == "Beans") {
+				if ( $BeanQty == 0 ) { 
+					$BeanQty = $item['CQty'];
+				}
 				$currCategory = $item['CName'];
-				$slotID = 0;
-			}
-
-			// TODO: Deal with special case beans
-			// Display the Item name
-			echo $item['displayName'];
-			for ($i = 0; $i < $item['IQty']; $i++) {
-				$slotID++;
-				// Value is the item's ID
-				// Name is the item's category[] (in array)
-				echo "<input type='checkbox' value=" . $item['itemID'];
-				echo " onclick='countOrder(this)' name='" . $item['CName'] . "[]' ";
-						
-				// If this item was selected, check it and reduce our count
-				if ( ISSET($clientOrder[$item['itemID']]) ) {
-					if ($clientOrder[$item['itemID']] > 0) {
-						$clientOrder[$item['itemID']]--;
-						echo " checked ";
+				
+				// Canned
+				if ( strpos($item['itemName'], "Bag") === FALSE ) {
+					if (!ISSET($CanBeans[$item['itemID']])) {
+						$CanBeans[$item['itemID']] = new CLASS_BeanInfo($item['displayName'], $item['IQty']);
 					}
 				}
-				// Close off the html input tag
-				echo ">";
+				// Bagged
+				else {
+					if (!ISSET($BagBeans[$item['itemID']])) {
+						$BagBeans[$item['itemID']] = new CLASS_BeanInfo($item['displayName'], $item['IQty']);
+					}
+				}
 			}
-			echo "<br>";
+			else {
+				// If we've just looked at the beans, we should spit them all out before continuing
+				if ($currCategory == "Beans") {
+					showBeanCategory($CanBeans, $BagBeans, $BeanQty, $clientOrder);
+				}
+				if ($currCategory != $item['CName']) {
+					echo "<h3>" . $item['CName'] . "</h3>";
+					// Create a special div so the client can see an updated count of selected items
+					echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
+						" (" . ($item['CQty']) . " remaining)</div></h4>";
+					// Include hidden values so we can track the category
+					echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
+					$currCategory = $item['CName'];
+				}
+		
+
+				// Display the Item name
+				echo $item['displayName'];
+				for ($i = 0; $i < $item['IQty']; $i++) {
+					// Value is the item's ID
+					// Name is the item's category[] (in array)
+					echo "<input type='checkbox' value=" . $item['itemID'];
+					echo " onclick='countOrder(this)' name='" . $item['CName'] . "[]' ";
+							
+					// If this item was selected, check it and reduce our count
+					if ( ISSET($clientOrder[$item['itemID']]) ) {
+						if ($clientOrder[$item['itemID']] > 0) {
+							$clientOrder[$item['itemID']]--;
+							echo " checked ";
+						}
+					}
+					// Close off the html input tag
+					echo ">";
+				}
+				echo "<br>";
+			}
 		}
+	}
+	
+	// If our last category was beans, we gotta spit it out here
+	if ($currCategory == "Beans") {
+		showBeanCategory($CanBeans, $BagBeans, $BeanQty, $clientOrder);
 	}
 	
 	// *************************************************

@@ -219,14 +219,124 @@ function countOrder(callingSlot)	{
 	}
 }
 
+// * For the client order specifically to track beans (bagged vs canned)
+function countCanBeans(callingSlot)	{
+	// Go through all bagged beans, unselect them and grey them out
+	var name = document.getElementsByName('BagBeans[]');
+	for (var i=0; i < name.length; i++) {
+		name[i].checked = false;
+	}
+	var cannedBeanSection = document.getElementById('CannedBeansSection');
+	cannedBeanSection.style.opacity = 1;
+	var baggedBeanSection = document.getElementById('BaggedBeansSection');
+	baggedBeanSection.style.opacity = 0.3;
+
+	// Get the total number of items selectable in this item's category
+	var Category = document.getElementById("CanBeans");
+	var MaxCount = Category.value;
+	
+	// Find all other elements in the page that have the same name and tally up the check boxes	
+	var beanCounter = document.getElementsByName('CanBeans[]');
+	
+	var runningTotal = 0;
+	for (var i=0; i < beanCounter.length; i++) {
+		if (beanCounter[i].checked) {
+			// If we exceed our max count, don't let the box be checked and display a warning
+			if (runningTotal >= MaxCount) {
+				callingSlot.checked = false;
+				window.alert("Cannot select more in this category");
+				// Break out, since we know we're done here
+				return;
+			}
+			runningTotal++;
+		}
+	}
+	
+	// Update the selected quantity and color it if we're at maximum
+	var e = document.getElementById("CountBeans");
+	if (runningTotal == MaxCount) {
+		e.innerHTML = "Selections complete (Cans)";
+		e.style.color = "DodgerBlue";
+	}
+	else {
+		e.innerHTML = "You may select up to " + MaxCount + " cans, or 1 bag (" + (MaxCount - runningTotal) + " remaining)";
+		if (runningTotal == 0) {
+			baggedBeanSection.style.opacity = 1;
+		}
+		e.style.color = "Black";
+	}
+}
+
+function countBagBeans(callingSlot)	{
+	// Go through all bagged beans, unselect them and grey them out
+	var name = document.getElementsByName('CanBeans[]');
+	for (var i=0; i < name.length; i++) {
+		name[i].checked = false;
+	}
+	var cannedBeanSection = document.getElementById('CannedBeansSection');
+	cannedBeanSection.style.opacity = 0.3;
+	var baggedBeanSection = document.getElementById('BaggedBeansSection');
+	baggedBeanSection.style.opacity = 1;
+	
+	// Get the total number of items selectable in this item's category (1 for bagged beans)
+	var MaxCount = 1;
+	
+	// Find all other elements in the page that have the same name and tally up the check boxes	
+	var beanCounter = document.getElementsByName('BagBeans[]');
+	
+	var runningTotal = 0;
+	for (var i=0; i < beanCounter.length; i++) {
+		if (beanCounter[i].checked) {
+			// If we exceed our max count, don't let the box be checked and display a warning
+			if (runningTotal >= MaxCount) {
+				callingSlot.checked = false;
+				window.alert("Cannot select more in this category");
+				// Break out, since we know we're done here
+				return;
+			}
+			runningTotal++;
+		}
+	}
+	
+	// Update the selected quantity and color it if we're at maximum
+	var e = document.getElementById("CountBeans");
+	if (runningTotal == MaxCount) {
+		e.innerHTML = "Selections complete (Bag)";
+		e.style.color = "DodgerBlue";
+	}
+	else {
+		
+		if (runningTotal == 0) {
+			var resetCount = document.getElementById("CanBeans").value;
+			e.innerHTML = "You may select up to " + resetCount + " cans, or 1 bag (" + (resetCount - runningTotal) + " remaining)";
+			cannedBeanSection.style.opacity = 1;
+		}
+		else {
+			e.innerHTML = "You may select up to " + MaxCount + " cans, or 1 bag (" + (MaxCount - runningTotal) + " remaining)";
+		}
+		e.style.color = "Black";
+	}
+	
+}
+
 // **************************************
 // * Runs at the end of rof to update selection quantities
 function updateCheckedQuantities()	{
 	var inputs = document.getElementsByTagName('input');
 
 	for(var i = 0; i < inputs.length; i++) {
-		if(inputs[i].type.toLowerCase() == 'checkbox') {
-			countOrder(inputs[i]);
+		if (( inputs[i].type.toLowerCase() == 'checkbox') &&  ( inputs[i].checked == true ) ){
+			var eName = inputs[i].getAttribute('name');
+			if (eName.toLowerCase().includes('canbeans')) {
+				countCanBeans(inputs[i]);
+			}
+			else if (eName.toLowerCase().includes('bagbeans')){
+				countBagBeans(inputs[i]);
+			}
+			else {
+				countOrder(inputs[i]);
+			}
+			
 		}
 	}
 }

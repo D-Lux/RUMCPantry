@@ -24,13 +24,33 @@ function isCategory($data) {
 	}
 }
 
-debugEchoPOST();
-echo "<br>";
+// *****************************************************
+// * Function to delete invoice descriptions so we can remake them with reviewed data
+function deleteInvoiceDesc() {
+	$invoiceID = $_POST['invoiceID'];
 
-// **************************************************
-// * Creating invoice descriptions and tying them together into one invoice
-if (isset($_POST['CreateInvoiceDescriptions'])) {
+	// Open up the database and delete all invoice descriptions that match the invoice ID
+	
+	// Connect to the database
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$sql = "DELETE FROM InvoiceDescription
+			WHERE invoiceID=" . $invoiceID;
+			
+	if (queryDB($conn, $sql) === TRUE) {
+		closeDB($conn);
+		return true;
+	}
+	closeDB($conn);
+	return false;
+}
 
+// *******************************************************************************************
+// * Function to create invoice descriptions (since both the client and reviewer create them)
+function createInvoiceDesc() {
 	// Store off invoiceID and clientID
 	$invoiceID = $_POST['invoiceID'];
 	$clientID = $_POST['clientID'];
@@ -61,25 +81,31 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 	$specialIDs = array();
 	$runQuery = FALSE;
 	
-	// ************************************
-	// * New hotness
-	
 	// Loop through our POST information to generate an array of itemIDs and quantities
 	foreach ($_POST as $Category=>$C_Count){
 		if ( isCategory($Category) ) {
 			if (is_array($C_Count)) {
 				foreach ($C_Count as $itemID){
-					echo "checking on adding " . $itemID . "<br>";
+					echo "Adding: " . $itemID . "<br>";
 					// count all items with a particular ID
+					if (!isset($orderIDs[$itemID])) {
+						$orderIDs[$itemID] = null;
+					}
 					$orderIDs[$itemID]++;
 					$runQuery = TRUE;
 				}
 			}
 			else {
 				// If the item is a special, it will not be an array
-				echo "New item, adding.<br>";
-				$specialIDs[$C_Count]++;
-				$runQuery = TRUE;
+				// Make sure we're looking at a number and not a space
+				if (is_numeric($C_Count)) {
+					echo "Special, adding: " . $C_Count . "<br>";
+					if (!isset($specialIDs[$C_Count])) {
+						$specialIDs[$C_Count] = null;
+					}
+					$specialIDs[$C_Count]++;
+					$runQuery = TRUE;
+				}
 			}
 		}
 	}
@@ -89,23 +115,25 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 	$firstInsert = TRUE;
 	
 	foreach ($orderIDs as $itemID=>$qty) {
-		$totalPrice = $qty * $PriceID_Array[$itemID];
+		$totalPrice = $qty * (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0);
 		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
 		$insertionSql .= "( $invoiceID, $itemID, $qty, $totalPrice, 0 )";
 		$firstInsert = FALSE;				
 	}
 	foreach ($specialIDs as $itemID=>$qty) {
 		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
-		$insertionSql .= "( $invoiceID, $itemID, $qty, $PriceID_Array[$itemID], 1 )";
+		$insertionSql .= "( $invoiceID, $itemID, $qty, ";
+		$insertionSql .= (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0) . ", 1 )";
 		$firstInsert = FALSE;				
 	}
 
+	echo "Insertion query: ";
+	echo $insertionSql . "<br>";
 	// Run our query
 	if ($runQuery) {
 		if (queryDB($conn, $insertionSql) === TRUE) {
 			closeDB($conn);
-			echo "Insertion successful";
-			header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+			return true;
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -117,72 +145,34 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 		closeDB($conn);
 		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
 	}
-	/*
-	// Loop through our POST information
-	foreach ($_POST as $Category=>$C_Count){
-		if ( isCategory($Category) ) {
-			if (is_array($C_Count)) {
-				foreach ($C_Count as $itemID){
-					echo "checking on adding " . $itemID . "<br>";
-					// Check if we've seen this ID before, if not, run what we need to on it
-					if ( !array_key_exists($itemID, $hitIDs) ) {
-						echo "New item, adding.<br>";
-						// Add the item to our hit IDs so we don't call it again
-						$hitIDs[] = $itemID;
-						
-						// Get our count and price for the insertion string
-						$itemCount = returnCountOfItem($itemID, $C_Count);
-						$totalPrice = $itemCount * $PriceID_Array[$itemID];
-						
-						// Update our insertion string
-						$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
-						$insertionSql .= "( $invoiceID, $itemID, $itemCount, $totalPrice)";
-						$firstInsert = FALSE;
-						$runQuery = TRUE;
-					}
-				}
-			}
-			else {
-				// If the item is a special, it will not be an array
-				if ( !in_array($C_Count, $hitIDs) ) {
-					echo "New item, adding.<br>";
-					// Add the item to our hit IDs so we don't call it again
-					$hitIDs[] = $C_Count;
-					
-					// Get our price for the insertion string
-					$totalPrice = $PriceID_Array[$C_Count];
-					
-					// Update our insertion string
-					$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
-					$insertionSql .= "( $invoiceID, $C_Count, 1, $totalPrice)";
-					$firstInsert = FALSE;
-					$runQuery = TRUE;
-				}
-				else {
-				}
-			}
-		}
-	}
-	
-	// Run our query
-	if ($runQuery) {
-		if (queryDB($conn, $insertionSql) === TRUE) {
-			closeDB($conn);
-			echo "Insertion successful";
-			header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
-		}
-		else {
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to insert invoices.", "red" );	
-			closeDB($conn);
-		}
-	}
-	else {
-		closeDB($conn);
-		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
-	}
-	*/
 }
+debugEchoPOST();
+
+
+
+// **************************************************
+// * Creating invoice descriptions and tying them together into one invoice
+if (isset($_POST['CreateInvoiceDescriptions'])) {
+	if (createInvoiceDesc()) {
+		echo "Insertion successful";
+		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+	}
+}
+
+// *****************************************
+// * Reviewing invoices
+elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
+	if (deleteInvoiceDesc()) {
+		if (createInvoiceDesc()) {
+			// TODO: Add cookie for feedback and update order status to appropriate value
+			echo "Review Successful!";
+			header("location: /RUMCPantry/RUMCPantry/ap1.php");
+		}
+	}
+	echo "There was an error";
+}
+
+
 
 // **************************************************
 // * Setting an invoice to processed
