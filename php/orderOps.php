@@ -176,7 +176,6 @@ elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 
 // **************************************************
 // * Setting an invoice to processed
-
 elseif (isset($_POST['SetInvoiceProcessed'])) {
 	
 	// *********************************************
@@ -192,12 +191,11 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 			SET status=" . (ReturnProcessedStatus($_POST['status'])) . "
 			WHERE invoiceID=" . $_POST['invoiceID'];
 	if (queryDB($conn, $sql) === TRUE) {
-		// Success, return to ap_oo3 with no issues
-		//header("location: /RUMCPantry/ap_oo3.php");
+		// Success, return to checkin with no issues
 		header("location: /RUMCPantry/checkIn.php");
 	}
 	else {
-		// There was an error, create a cookie to give a popup when we hit ap_oo3
+		// There was an error, create a cookie to give a popup when we hit checkIn
 		createCookie("processError", 1, 30);
 		//header("location: /RUMCPantry/ap_oo3.php");
 		header("location: /RUMCPantry/checkIn.php");
@@ -253,6 +251,98 @@ elseif (isset($_POST['SaveSpecials'])) {
 	fclose($specialsFile);
 	createCookie("SpecialsSaved", 1, 30);
 	header("location: /RUMCPantry/ap_oo1.php");
+}
+
+// ***************************************
+// * Adding a single item to a client's order
+elseif (isset($_POST['addItemToOrder'])) {
+	// POST Data to use: invoiceID, addItem, qty
+	// POST Data to pass back using cookies: name, visitTime, familySize,
+	session_start();
+	// Save post data off into the session global
+	$_SESSION['viewInvoice_invoiceID'] = $_POST['invoiceID'];
+	$_SESSION['viewInvoice_name'] = $_POST['name'];
+	$_SESSION['viewInvoice_visitTime'] = $_POST['visitTime'];
+	$_SESSION['viewInvoice_familySize'] = $_POST['familySize'];
+	
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// If they already have the item in their invoice, just update the quantity
+	// If they don't, add a new invoice description
+	
+	$sql = "SELECT quantity, invoiceDescID as ID, price, totalItemsPrice
+			FROM InvoiceDescription
+			JOIN Item
+			ON Item.itemID = InvoiceDescription.itemID
+			WHERE invoiceID=" . $_POST['invoiceID'] . "
+			AND Item.itemName=" . makeString($_POST['addItem']);
+	
+	$descQuery = queryDB($conn, $sql);
+
+	if ($descQuery!=null && $descQuery->num_rows > 0) {
+		$oldData = sqlFetch($descQuery);
+		
+		$newQty = $oldData['quantity'] + $_POST['qty'];
+		$newPrice = $oldData['totalItemsPrice'] + ($_POST['qty'] * $oldData['price']);
+		
+		$sql = "UPDATE InvoiceDescription
+				SET quantity=" . $newQty . ", totalItemsPrice=" . $newPrice . "
+				WHERE invoiceDescID=" . $oldData['ID'];
+		if (queryDB($conn, $sql) === TRUE) {
+			// Successfully updated item quantity, return to the order form!
+			closeDB($conn);
+			header("location: /RUMCPantry/ap_oo4.php");
+		}
+		else {
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			echoDivWithColor("Error, failed to update existing item count.", "red" );	
+			closeDB($conn);
+		}
+	}
+	else {
+		// The item wasn't already in the invoice, that's okay, we can add it now
+		// First, we find the item's ID
+		$sql = "SELECT itemID, price
+				FROM Item
+				WHERE itemName=" . makeString($_POST['addItem']) . "
+				LIMIT 1";
+		$idQuery = queryDB($conn, $sql);
+		
+		// Check our query to see if we got the item
+		if ($idQuery != null) {
+			// We've got our ID now, just insert it with it's quantity
+			$itemIdFetch = sqlFetch($idQuery);
+			$itemPrice = $itemIdFetch['price'] * $_POST['qty'];
+			$sql = "INSERT INTO InvoiceDescription 
+					(invoiceID, itemID, quantity, totalItemsPrice, special)
+					VALUES 
+					(" . $_POST['invoiceID'] . ", " . $itemIdFetch['itemID'] . ", " .
+					 $_POST['qty'] . ", " . $itemPrice . ", 0)";
+			if (queryDB($conn, $sql) === TRUE) {
+				// Success! We've added the new item description values
+				closeDB($conn);
+				header("location: /RUMCPantry/ap_oo4.php");
+			}
+			else {
+				echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+				echoDivWithColor("Error, failed to add new item.", "red" );	
+				closeDB($conn);
+			}
+		}
+		else {
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			echoDivWithColor("Error, failed to find item ID to add.", "red" );	
+			closeDB($conn);
+		}
+		
+		
+				
+	
+	$descQuery = queryDB($conn, $sql);
+	}
+
 }
 
 else {

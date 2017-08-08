@@ -11,9 +11,8 @@
 	<body>
 		<button onclick="goBack()">Back</button>
 		<header></header>
-		<h1>Roselle United Methodist Church</h1>
-		<h2>Food Pantry</h2>
-		<h3>Client Main Page</h3>
+		<h1>Roselle United Methodist</h1>
+		<h2>Community Food Pantry</h2>
 		<?php echo "<h4>Client: " . $_POST['clientName'] . "</h4>";	?>
 		
 		<?php

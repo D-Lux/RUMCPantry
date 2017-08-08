@@ -169,7 +169,7 @@
 	
 	if (!$walkIn) {;
 		$specialsFile = fopen("specials.txt","r") or die();
-		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3><hr>";
+		echo "<hr><h2>Specials</h2><h3>Please select one item from each section</h3><hr>";
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);

@@ -16,9 +16,7 @@
 <body>
     <button onclick="goBack()">Go Back</button>
 	<h1>Update Client Information</h1>
-	
-	<?php echo "<h3>This will update the client: ". $_GET['id'] . "</h3>"; ?>
-	
+
 	<script>
 		if (getCookie("newClient") != "") {
 			window.alert("New Client Added!");
@@ -51,6 +49,7 @@
 				FROM Client
 				WHERE clientID=" . $_GET['id'];
 		$clientInfo = queryDB($conn, $sql);
+		$familySize = 1;
 		
 		// Grab family member information
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, gender, FamilyMemberID
@@ -60,7 +59,7 @@
 		$familyInfo = queryDB($conn, $sql);
 		
 		// Grab invoice information
-		$sql = "SELECT invoiceID, visitDate, status, clientID
+		$sql = "SELECT invoiceID, visitDate, status, visitTime
 				FROM Invoice
 				WHERE clientID=" . $_GET['id'];
 		$invoiceInfo = queryDB($conn, $sql);
@@ -103,6 +102,7 @@
 			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
 			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
 			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
+			$familySize =  $clientRow['numOfKids'] + $clientRow['numOfAdults'];
 			
 			$foodStampStatus = $clientRow['foodStamps'];
 			// Auto select the correct food stamp selection based on database value
@@ -234,12 +234,13 @@
 					
 					// Start Table row
 					echo "<tr>";
-
-					// TODO: Fix link to invoice view page // Date, as a link to a view invoice page
-					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
-					$date = $row["visitDate"];
-					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
-					
+					echo "<form method='post' action='ap_oo4.php'>";
+					echo "<input type='hidden' name='invoiceID' value=" . $row['invoiceID'] . ">";
+					echo "<input type='hidden' name='name' value='" . $clientName . "'>";
+					echo "<input type='hidden' name='visitTime' value='" . $row['visitTime'] . "'>";
+					echo "<input type='hidden' name='familySize' value='" . $familySize . "'>";
+					echo "<td><input type='submit' name='fromUpdate' value=" . $row['visitDate'] . "></td>";
+					echo "</form>";
 					$status = visitStatusDecoder($row['status']);
 					echo "<td>" . $status . "</td>";
 					

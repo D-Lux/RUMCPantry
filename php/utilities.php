@@ -175,7 +175,8 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	
 	$sqlQuery = queryDB($conn, $sql);
 
-	echo "<input type='text' list='" . $listName . "' value='" . $defaultVal . "' name='" .$inputName. "'>";
+	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "' 
+			value='" . $defaultVal . "' name='" . $inputName . "'>";
 	
 	echo "<datalist id='" . $listName . "'>";
 	while($row = sqlFetch($sqlQuery)) {

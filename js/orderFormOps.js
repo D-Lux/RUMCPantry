@@ -220,23 +220,27 @@ function countOrder(callingSlot)	{
 }
 
 // * For the client order specifically to track beans (bagged vs canned)
-function countCanBeans(callingSlot)	{
+function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counterName, Selection) {
 	// Go through all bagged beans, unselect them and grey them out
-	var name = document.getElementsByName('BagBeans[]');
+	var name = document.getElementsByName(uncheckName);
 	for (var i=0; i < name.length; i++) {
 		name[i].checked = false;
 	}
-	var cannedBeanSection = document.getElementById('CannedBeansSection');
+	var cannedBeanSection = document.getElementById(showID);
 	cannedBeanSection.style.opacity = 1;
-	var baggedBeanSection = document.getElementById('BaggedBeansSection');
+	var baggedBeanSection = document.getElementById(hideID);
 	baggedBeanSection.style.opacity = 0.3;
 
 	// Get the total number of items selectable in this item's category
-	var Category = document.getElementById("CanBeans");
-	var MaxCount = Category.value;
+	if (categoryID == 'BagBeans') {
+		var MaxCount = 1;
+	}
+	else {
+		var MaxCount = document.getElementById(categoryID).value;
+	}
 	
 	// Find all other elements in the page that have the same name and tally up the check boxes	
-	var beanCounter = document.getElementsByName('CanBeans[]');
+	var beanCounter = document.getElementsByName(counterName);
 	
 	var runningTotal = 0;
 	for (var i=0; i < beanCounter.length; i++) {
@@ -255,7 +259,7 @@ function countCanBeans(callingSlot)	{
 	// Update the selected quantity and color it if we're at maximum
 	var e = document.getElementById("CountBeans");
 	if (runningTotal == MaxCount) {
-		e.innerHTML = "Selections complete (Cans)";
+		e.innerHTML = "Selections complete " + Selection;
 		e.style.color = "DodgerBlue";
 	}
 	else {
@@ -266,61 +270,18 @@ function countCanBeans(callingSlot)	{
 		e.style.color = "Black";
 	}
 }
+function countCanBeans(callingSlot)	{
+	countBeans(callingSlot, 'BagBeans[]', 'CannedBeansSection', 'BaggedBeansSection', 
+				'CanBeans', 'CanBeans[]', '(Cans)');
+}
 
 function countBagBeans(callingSlot)	{
-	// Go through all bagged beans, unselect them and grey them out
-	var name = document.getElementsByName('CanBeans[]');
-	for (var i=0; i < name.length; i++) {
-		name[i].checked = false;
-	}
-	var cannedBeanSection = document.getElementById('CannedBeansSection');
-	cannedBeanSection.style.opacity = 0.3;
-	var baggedBeanSection = document.getElementById('BaggedBeansSection');
-	baggedBeanSection.style.opacity = 1;
-	
-	// Get the total number of items selectable in this item's category (1 for bagged beans)
-	var MaxCount = 1;
-	
-	// Find all other elements in the page that have the same name and tally up the check boxes	
-	var beanCounter = document.getElementsByName('BagBeans[]');
-	
-	var runningTotal = 0;
-	for (var i=0; i < beanCounter.length; i++) {
-		if (beanCounter[i].checked) {
-			// If we exceed our max count, don't let the box be checked and display a warning
-			if (runningTotal >= MaxCount) {
-				callingSlot.checked = false;
-				window.alert("Cannot select more in this category");
-				// Break out, since we know we're done here
-				return;
-			}
-			runningTotal++;
-		}
-	}
-	
-	// Update the selected quantity and color it if we're at maximum
-	var e = document.getElementById("CountBeans");
-	if (runningTotal == MaxCount) {
-		e.innerHTML = "Selections complete (Bag)";
-		e.style.color = "DodgerBlue";
-	}
-	else {
-		
-		if (runningTotal == 0) {
-			var resetCount = document.getElementById("CanBeans").value;
-			e.innerHTML = "You may select up to " + resetCount + " cans, or 1 bag (" + (resetCount - runningTotal) + " remaining)";
-			cannedBeanSection.style.opacity = 1;
-		}
-		else {
-			e.innerHTML = "You may select up to " + MaxCount + " cans, or 1 bag (" + (MaxCount - runningTotal) + " remaining)";
-		}
-		e.style.color = "Black";
-	}
-	
+	countBeans(callingSlot, 'CanBeans[]', 'BaggedBeansSection', 'CannedBeansSection',
+				'BagBeans', 'BagBeans[]', '(Bag)');
 }
 
 // **************************************
-// * Runs at the end of rof to update selection quantities
+// * Runs at the end of rof.php to update selection quantities
 function updateCheckedQuantities()	{
 	var inputs = document.getElementsByTagName('input');
 
@@ -362,4 +323,43 @@ function viewTab(evt, tabID) {
     // Show the current tab, and add an "active" class to the button that opened the tab
     document.getElementById(tabID.id).style.display = "block";
     evt.currentTarget.className += " active";
+}
+
+// ***************************************************
+// * Validation of adding an item to a client's order form
+function validateAddItemToInvoice() {
+	var itemToAdd = document.getElementById("addItem");
+	if (itemToAdd.value == "" || itemToAdd.value == null) {
+		window.alert("Please select an item to be added");
+		return false
+	}
+	return true
+}
+
+// **
+// Delete an item from an invoice
+function AJAX_RemoveFromInvoice(callingSlot) {
+	// Calling slot is named to match the invoiceDescID that we want to remove
+	var invoiceDescID = callingSlot.name;
+
+	if (confirm("Do you want to remove this item?")) {
+		// Run the AJAX stuff
+		if (window.XMLHttpRequest) {
+			// code for IE7+, Firefox, Chrome, Opera, Safari
+			xmlhttp = new XMLHttpRequest();
+		} 
+		else {
+			// code for IE6, IE5
+			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
+		}
+		xmlhttp.onreadystatechange = function() {
+			if (this.readyState == 4 && this.status == 200) {
+				document.getElementById('orderTable').deleteRow(callingSlot.parentNode.parentNode.rowIndex);
+				document.getElementById("ErrorLog").innerHTML = this.responseText;
+			}
+		}
+		xmlhttp.open("GET","/RUMCPantry/php/ajax/removeItemFromOrder.php?" +
+					 "invoiceDescID=" + invoiceDescID, true);
+		xmlhttp.send();
+	}
 }
