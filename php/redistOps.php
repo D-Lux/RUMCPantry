@@ -11,15 +11,20 @@ if (isset($_POST['newRedist'])) {
 elseif (isset($_POST['updateRedist'])) {
 	header ("location: /RUMCPantry/ap_ro4.php?id=" . $_POST['id']);
 }
+elseif (isset($_POST['newRedistItem'])) {
+	header ("location: /RUMCPantry/ap_ro6.php");
+}
+elseif (isset($_POST['updateRedistItem'])) {
+	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_POST['id']);
+}
 
 
 // *******************************************************
-// Start Redistribution operations
+// Start Redistribution Client operations
 // *******************************************************
 // ************************************
 // Submitting a new partner
-elseif(isset($_POST['submitNewRedist']))
-{
+elseif(isset($_POST['submitNewRedist'])) {
 	echo "<h1>Attempting to create a new partner</h1>";
 
 	$address = makeString(fixInput($_POST['addressStreet']));
@@ -133,62 +138,201 @@ elseif(isset($_POST['submitUpdateRedist'])) {
 	closeDB($conn);
 }
 
-// ***********************************
-// Setting a partner to 'isDeleted'
-elseif(isset($_POST['deleteRedist'])) {
+// *******************************************************
+// Start Redistribution Item operations
+// *******************************************************
+
+// ************************************
+// Submitting a new redistribution item
+elseif(isset($_POST['submitNewRedistItem'])) {
+	echo "<h1>Attempting to create a new redistribution item</h1>";
+
+	$iName = makeString(fixInput($_POST['itemName']));
+	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
+	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
+	
+	$category = getRedistributionCategory();
+	echo "RedistID = " . $category . "<br>";
+	// Set up server connection
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
 	
-	// Create 'delete' string
-	$dataUpdate =  "UPDATE Client 
-					SET	isDeleted=1
-					WHERE clientID=" . $_POST['id'];
-	
-	// Perform and test deactivation
-	if (queryDB($conn, $dataUpdate) === TRUE) {
+	// Create insertion string
+	$sql = "INSERT INTO Item 
+			(itemName, price, small, categoryID, timestamp, isDeleted)
+			VALUES 
+			($iName, $price, $weight, $category, now(), 0)";
+	echo "query: " . $sql . "<br>";
+	// Perform and test insertion
+	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
-		createCookie("partnerDeactivated", 1, 30);
-		header("location: /RUMCPantry/ap_ro2.php");
-	}
+		createCookie("newRedistItem", 1, 30);
+		header("location: /RUMCPantry/ap_ro5.php");
+	} 
 	else {
 		closeDB($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to update.", "red" );	
+		echoDivWithColor("Error, failed to add new item.", "red" );	
 	}
 }
+
+
 // ***********************************
-// Setting a partner to 'isDeleted' FALSE (reactivating)
-elseif(isset($_POST['activateRedist']))
-{
-	debugEchoPOST();debugEchoGET();
+// Updating a redistribution item
+elseif(isset($_POST['submitUpdateRedistItem'])) {
+	$iName = makeString(fixInput($_POST['itemName']));
+	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
+	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
+	$itemID =$_POST['id'];
+		
 	// Set up server connection
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
-	}
-	
-	$sql = "UPDATE Client SET isDeleted=0 WHERE clientID=" . $_POST['id'];
+	} 
 
-	// Perform and test update
-	if (queryDB($conn, $sql) === TRUE) {
+	// Create update string for basic data
+	$dataUpdate =  "UPDATE Item 
+					SET	itemName=$iName, price=$price, timestamp=now(), small=$weight
+					WHERE itemID = $itemID";
+	
+	// Perform and test updates
+	if (queryDB($conn, $dataUpdate) === TRUE) {
 		closeDB($conn);
-		header ("location: /RUMCPantry/ap_ro2i.php");
+		createCookie("redistItemUpdated", 1, 30);
+		header("location: /RUMCPantry/ap_ro5.php");		
 	}
 	else {
+		closeDB($conn);
 		echo "sql error: " . mysqli_error($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to set partner active.", "red" );	
+		echoDivWithColor("Error, failed to update.", "red" );	
 	}
-	
-	closeDB($conn);
 }
+
+// ************************************************************************
+// ** START TOGGLE OPTIONS ************************************************
+// ***********************************
+// Setting a partner to 'isDeleted'
+elseif(isset($_POST['deleteRedist'])) {
+	toggleRedistributionClient(1);
+}
+// ***********************************
+// Setting a partner to 'isDeleted' FALSE (reactivating)
+elseif(isset($_POST['activateRedist'])) {
+	toggleRedistributionClient(0);
+}
+// ***********************************
+// Setting a redistribution item to 'isDeleted'
+elseif(isset($_POST['deleteRedistItem'])) {
+	toggleRedistributionItem(1);
+}
+// ***********************************
+// Setting a redistribution item to 'isDeleted' FALSE (reactivating)
+elseif(isset($_POST['activateRedistItem'])) {
+	toggleRedistributionItem(0);
+}
+
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
 	//header("location: /RUMCPantry/mainpage.php");
 }
 
+// **************************************
+// * Function for toggling redistribution isDeleted flags
+
+function toggleRedistributionItem($isDeleted) { toggleRedistribution("Item", "itemID", $isDeleted); }
+function toggleRedistributionClient($isDeleted) { toggleRedistribution("Client", "clientID", $isDeleted); }
+
+function toggleRedistribution($db, $field, $isDeleted) {
+	debugEchoPOST();
+	// Set up server connection
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	$sql =  "UPDATE " . $db . "
+			SET	isDeleted=" . $isDeleted . "
+			WHERE " . $field . "="	. $_POST['id'];
+
+	// Perform and isDeleted setting
+	if (queryDB($conn, $sql) === TRUE) {
+		closeDB($conn);
+		// Set the cookie appropriate for this function
+		createCookie("redistToggled", 1, 30);
+		
+		// Create the return page string
+		$loc = "location: /RUMCPantry/ap_ro";
+		$loc .= ($db=="Client" ? "2" : "5");
+		$loc .= ($isDeleted==1 ? ".php" : "i.php");
+		
+		// Return to the correct page
+		header ($loc);
+	}
+	else {
+		echo "sql error: " . mysqli_error($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error, failed to set redistribution state.", "red" );
+		closeDB($conn);
+	}
+}
+
+
+// ***********************************************************************
+// * "Redistribution" Category
+
+// We need a custom category called REDISTRIBUTION
+// This function finds the Category ID
+function getRedistributionCategory() {
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	
+	// Find the 'redistribution' category
+	$sql = "SELECT categoryID
+			FROM Category
+			WHERE name ='Redistribution'";
+	
+	$redistCategory = queryDB($conn, $sql);
+	closeDB($conn);
+	
+	// If we didn't get a match, we need to create the 'Available' client
+	if ( $redistCategory==null || $redistCategory->num_rows <= 0 ) {
+		return createRedistributionCategory();
+	}
+	// If we found a match, close the database and return the client ID
+	else {
+		$getID = sqlFetch($redistCategory);
+		return $getID['categoryID'];
+	}
+}
+
+function createRedistributionCategory(){
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// Create insertion string
+	$sql = "INSERT INTO Category (name, small, medium, large, isDeleted)
+			VALUES ('Redistribution',0,0,0,0)";
+	
+	// Perform and test insertion
+	if (queryDB($conn, $sql) === TRUE) {
+		closeDB($conn);
+		// Return Get the ID Key of the category we just created
+		return $conn->insert_id;
+	} 
+	else {
+		closeDB($conn);
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, failed to create Redistribution category.", "red" );	
+	}
+}
 ?>

@@ -8,7 +8,12 @@ function goBack() {
         case (location.pathname.includes("ap_ro3.php")):
         case (location.pathname.includes("ap_ro4.php")):
         case (location.pathname.includes("ap_ro5.php")):
+		case (location.pathname.includes("ap_ro5i.php")):
             window.location.assign("/RUMCPantry/ap_ro1.php");
+            break;
+		case (location.pathname.includes("ap_ro6.php")):
+        case (location.pathname.includes("ap_ro7.php")):
+            window.location.assign("/RUMCPantry/ap_ro5.php");
             break;
 
         case (location.pathname.includes("ap_ao2.php")):

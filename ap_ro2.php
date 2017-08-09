@@ -21,9 +21,9 @@
 			window.alert("Partner information updated!");
 			removeCookie("updatePartner");
 		}
-		if (getCookie("partnerDeactivated") != "") {
+		if (getCookie("redistToggled") != "") {
 			window.alert("Partner deactivated!");
-			removeCookie("partnerDeactivated");
+			removeCookie("redistToggled");
 		}
 	</script>
 	

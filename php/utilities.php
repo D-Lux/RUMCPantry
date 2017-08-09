@@ -439,7 +439,7 @@ function genderDecoderShort($gender){
 }
 
 // ************************************************************
-// ** Decoder for aisle
+// ** Decoder for aisle (Takes in a number and returns a letter (ascii code)
 
 function aisleDecoder($aisle){
 	if ($aisle >= 65) {
@@ -452,10 +452,13 @@ function aisleDecoder($aisle){
 // ** Disabled categories for walkIns
 
 function showCategory($walkIn, $category){
+	// If we need to make more in the future, just add them here
+	$DisabledCategories = array("medicine","specials","redistribution");
+
 	if (!$walkIn) {
 		return true;
-	}
-	if ($category == "Medicine") {
+	}	
+	if (in_array(strtolower($category), $DisabledCategories)) {
 		return false;
 	}
 	return true;
