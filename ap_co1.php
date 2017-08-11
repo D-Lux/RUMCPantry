@@ -159,7 +159,7 @@
 			echo "No clients in database.";
 		}
 		
-		$conn->close();
+		closeDB($conn);
 	?>
 	<br><br>
 	

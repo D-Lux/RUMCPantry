@@ -43,7 +43,7 @@
 		<div id="addressZip">Zip Code: <input type="number" name="addressZip"></div>
 		
 		<br>
-        <input type="submit" name="submitNewRedist" value="Create" >
+        <input type="submit" name="submitNewRedistPartner" value="Create" >
     </form>
 
 </body>

@@ -62,6 +62,7 @@
 			echo "<input type='hidden' value='" . $invoice['status'] . "' name='status'>";
 			echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
 			echo "<input type='submit' value='";
+			// Display order information (firstname lastname visittime decodedstats)
 			echo displaySingleQuote($invoice['fn']) . " ";
 			echo displaySingleQuote($invoice['ln']) . " ";
 			echo returnTime($invoice['visitTime']) . " ";
@@ -69,6 +70,7 @@
 			echo "' name='viewInvoice'>";
 			echo "</form><br>";
 			
+			// Display order information for review ("Review: " firstname lastname visittime decodedstats)
 			echo "<form method='post' action='rof.php'>";
 			echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
 			echo "<input type='hidden' value='" . $invoice['CID'] . "' name='clientID'>";

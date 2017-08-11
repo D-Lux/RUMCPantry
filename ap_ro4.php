@@ -3,7 +3,7 @@
 
 <head>
     <script src="js/utilities.js"></script>
-	<script src="js/clientOps.js"></script>
+	<script src="js/redistOps.js"></script>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
 	<?php include 'php/utilities.php'; ?>
 	<?php include 'php/checkLogin.php';?>
@@ -58,8 +58,8 @@
 		if ($partnerInfo->num_rows > 0) {
 			$partnerRow = sqlFetch($partnerInfo);
 			
-			echo "<form name='updateClient' action='php/redistOps.php' method='post' >";
-			echo "Partner Name: <input type='text' name='partnerName' value='" . displaySingleQuote($partnerRow['name']) . "'><br>";
+			echo "<form name='updateClient' action='php/redistOps.php' onSubmit='return validateNewPartner()' method='post' >";
+			echo "<div id='partnerName' class='required'><label>Partner Name:</label>  <input type='text' name='partnerName' value='" . displaySingleQuote($partnerRow['name']) . "'><br>";
 			echo "<input type='hidden' name='partnerID' value='" . $_GET['id'] . "'>";
 
 			echo "Email: <input type='email' name='email' value='" . $partnerRow['email'] . "'><br>";

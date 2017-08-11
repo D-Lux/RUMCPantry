@@ -16,7 +16,10 @@
 	<br><br>
 	
 	
-	<?php 
+	<?php
+	
+	// Post Vars: invoiceID | name | visitTime | familySize
+	// Using sessions in case we came back to this page from adding to the order
 	session_start();
 	$invoiceID = 0;
 	$name = null;
@@ -42,8 +45,9 @@
 	}
 	
 	
-	//debugEchoPOST();
-	// Post Vars: invoiceID | name | visitTime | familySize
+	
+	
+	// Create our query to get the invoice data
 	if ( $name != null ) {
 		$sql = "SELECT I.name as iName, I.quantity as iQty, I.invoiceDescID as invoiceDescID,
 					I.rack as rack, I.shelf as shelf, I.aisle as aisle
@@ -73,7 +77,7 @@
 		}
 		closeDB($conn);
 		
-		// Loop through our data and spit out the data
+		// Loop through our data and spit out the data into our table
 		echo "<h4>Client: " . $name . " | Appointment Time: " . returnTime($visitTime);
 		echo " | Family Size: " . familySizeDecoder($familySize) . "</h4>";
 		

@@ -9,13 +9,13 @@
 	<?php include 'php/checkLogin.php';?>
 
 
-	<title>ap_co1</title>
+	<title>Appointment Operations</title>
 </head>
 
 <body>
     <button onclick="goBack()">Go Back</button>
     <h1>
-        First admin page for Appointment Operations
+        Appointment Operations
     </h1>
 
 	<!-- TODO: Limit this by pages -->

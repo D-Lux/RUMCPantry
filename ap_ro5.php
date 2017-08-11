@@ -88,7 +88,7 @@
 			echo "No items in the redistribution category.";
 		}
 		
-		$conn->close();
+		closeDB($conn);
 	?>
 	<br><br>
 	

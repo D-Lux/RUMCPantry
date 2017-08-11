@@ -17,14 +17,34 @@ elseif (isset($_POST['newRedistItem'])) {
 elseif (isset($_POST['updateRedistItem'])) {
 	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_POST['id']);
 }
+elseif (isset($_POST['newRedistInvoice'])) {
+	header ("location: /RUMCPantry/ap_ro9.php");
+}
 
+// *******************************************************
+// Start Redistribution Invoice operations
+// *******************************************************
+//todo
+elseif(isset($_POST['submitRedistribution'])) {
+	echo "<h1>Attempting to create a new redistribution invoice</h1>";
+
+	// POST: date | partnerID (clientID) | itemID[] | qty[]
+	
+	// Create an invoice on the given date for the clientID
+	
+	// Create invoiceDescription for each itemID[] and qty[] combination
+	//		Must get itemID price prior to running
+	foreach ( $_POST["itemID"] as $i=>$itemID ) { 
+		echo "ITEM ID: " . $itemID . " Count: " . $_POST["qty"][$i] . "<br>";
+	}
+}
 
 // *******************************************************
 // Start Redistribution Client operations
 // *******************************************************
 // ************************************
 // Submitting a new partner
-elseif(isset($_POST['submitNewRedist'])) {
+elseif(isset($_POST['submitNewRedistPartner'])) {
 	echo "<h1>Attempting to create a new partner</h1>";
 
 	$address = makeString(fixInput($_POST['addressStreet']));
@@ -153,17 +173,18 @@ elseif(isset($_POST['submitNewRedistItem'])) {
 	
 	$category = getRedistributionCategory();
 	echo "RedistID = " . $category . "<br>";
+	
 	// Set up server connection
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
 	
-	// Create insertion string
+	// Create insertion string (set the weight to aisle and -1 to the rack to distinguish from normal items)
 	$sql = "INSERT INTO Item 
-			(itemName, price, small, categoryID, timestamp, isDeleted)
+			(itemName, price, aisle, categoryID, timestamp, rack, isDeleted, small, medium, large, shelf )
 			VALUES 
-			($iName, $price, $weight, $category, now(), 0)";
+			($iName, $price, $weight, $category, now(), -1, 0, 0, 0, 0, 0)";
 	echo "query: " . $sql . "<br>";
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {

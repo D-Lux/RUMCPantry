@@ -77,7 +77,7 @@
 			echo "No redistribution items in database.";
 		}
 		
-		$conn->close();
+		closeDB($conn);
 	?>
 	<br><br>
 

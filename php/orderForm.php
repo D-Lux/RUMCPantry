@@ -25,7 +25,6 @@ while ($item = sqlFetch($itemList)) {
 			$slotID = 0;
 		}
 
-		// TODO: Deal with special case beans
 		// Display the Item name
 		echo $item['displayName'];
 		for ($i = 0; $i < $item['IQty']; $i++) {

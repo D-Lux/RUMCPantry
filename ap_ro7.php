@@ -27,7 +27,7 @@
 		// *************************************************
 		// Query the database
 
-		$sql = "SELECT itemName, price, small as weight
+		$sql = "SELECT itemName, price, aisle as weight
 				FROM Item
 				WHERE itemID=" . $_GET['id'];
 		$itemInfo = queryDB($conn, $sql);

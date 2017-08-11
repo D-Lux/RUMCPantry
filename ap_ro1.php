@@ -18,8 +18,13 @@
     <form method="post" action="ap_ro2.php">
         <input type="submit" value="View Redistribution Clients">
     </form><br>
-    <form method="post" action="ap_ro5.php">
+    
+	<form method="post" action="ap_ro5.php">
         <input type="submit" value="View Redistribution Items">
+    </form><br> 
+	
+	<form method="post" action="ap_ro8.php">
+        <input type="submit" value="View Redistributions">
     </form><br>
 
 </body>

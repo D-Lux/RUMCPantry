@@ -284,6 +284,9 @@ define("SV_PRINTED_LOW", 400);
 define("SV_PRINTED_HIGH", 499);
 define("SV_PROCESSED_LOW", 500);
 define("SV_PROCESSED_HIGH", 599);
+define("SV_CANCELED", 888);
+define("SV_NO_SHOW", 999);
+define("SV_REDISTRIBUTION", 9999);
 
 function visitStatusDecoder($visitStatus){
 	switch(true) {
@@ -296,8 +299,10 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus >= SV_PROCESSED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Processed';
 		
 		// special cases
-		case ($visitStatus == 888): return 'Client canceled';
-		case ($visitStatus == 999): return 'Client did not show';
+		case ($visitStatus == SV_CANCELED): return 'Client canceled';
+		case ($visitStatus == SV_NO_SHOW): return 'Client did not show';
+		
+		case ($visitStatus == SV_REDISTRIBUTION): return 'Redistribution Order';
 		
 		default: return 'Status not recognized';
 	}		
@@ -357,6 +362,11 @@ function ReturnProcessedStatus($status) {
 	else {
 		return SV_PROCESSED_LOW;
 	}
+}
+
+// Returns the Redistribution stats number
+function GetRedistributionStatus() {
+	return SV_REDISTRIBUTION;
 }
 
 // **********************************************************

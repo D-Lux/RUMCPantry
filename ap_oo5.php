@@ -133,7 +133,7 @@
 		
 		// Save button and close the form
 		echo "<input type='submit' name='SaveSpecials' value='Save'></form>";
-		
+
 		// Error log for debug
 		echo "<br><br><br>";
 		echo "<div id='errorLog'> </div>";
