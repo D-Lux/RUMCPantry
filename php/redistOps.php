@@ -20,25 +20,115 @@ elseif (isset($_POST['updateRedistItem'])) {
 elseif (isset($_POST['newRedistInvoice'])) {
 	header ("location: /RUMCPantry/ap_ro9.php");
 }
+elseif (isset($_POST['viewRedistribution'])) {
+	header ("location: /RUMCPantry/ap_ro10.php?id=" . $_POST['id']);
+}
 
 // *******************************************************
 // Start Redistribution Invoice operations
 // *******************************************************
-//todo
-elseif(isset($_POST['submitRedistribution'])) {
-	echo "<h1>Attempting to create a new redistribution invoice</h1>";
 
-	// POST: date | partnerID (clientID) | itemID[] | qty[]
-	
-	// Create an invoice on the given date for the clientID
-	
-	// Create invoiceDescription for each itemID[] and qty[] combination
-	//		Must get itemID price prior to running
+// --== Add new redistribution ==--
+elseif(isset($_POST['submitRedistribution'])) {
+	// POST: date | partnerID | itemID[] | qty[]
+	// Debug text
+	echo "<h1>Attempting to create a new redistribution invoice</h1>";
 	foreach ( $_POST["itemID"] as $i=>$itemID ) { 
 		echo "ITEM ID: " . $itemID . " Count: " . $_POST["qty"][$i] . "<br>";
 	}
+	
+	// *********************************************
+	// * --== Create our item ID / Price array ==--
+	
+	// Connect to the database and grab Item ID and Price information
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// Query String
+	$sql = "SELECT itemID, price
+			FROM Item
+			WHERE Item.isDeleted=0";
+	$itemPriceQuery = queryDB($conn, $sql);
+	
+	$PriceID_Array = array();
+	while( $itemRow = sqlFetch($itemPriceQuery) ) {
+		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
+	}
+	
+	// ******************************
+	// * --== Create our Invoice ==--
+	
+	$redistDate = makeString($_POST['date']);
+	$sql = "INSERT INTO Invoice (clientID, visitDate, status)
+			VALUES (" . $_POST['partnerID'] . ", " . $redistDate . ", " . GetRedistributionStatus() . ")";
+	
+	
+	if (queryDB($conn, $sql) === TRUE) {
+		// Get our Invoice ID Key to use for the invoice descriptions
+		$invoiceID = $conn->insert_id;
+		
+		// ***************************************
+		// * --== Create invoice descriptions ==--
+		
+		// Start our query string
+		$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
+		$firstInsert = TRUE;
+		
+		$itemIDs = $_POST['itemID'];
+		$itemQtys = $_POST['qty'];
+		
+		for ($i=0; $i < count($itemIDs); $i++) {
+			// Get my values (makes the insertion query string cleaner)
+			$currItem = $itemIDs[$i];
+			$currQty = $itemQtys[$i];
+			$totalPrice = $currQty * (isset($PriceID_Array[$currItem]) ? $PriceID_Array[$currItem] : 0);
+			
+			// Append to the insertion query string
+			$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+			$insertionSql .= "( $invoiceID, $currItem, $currQty, $totalPrice, 0 )";
+			$firstInsert = FALSE;				
+		}
+		
+		// Perform insertion
+		if (queryDB($conn, $insertionSql) === TRUE) {
+			createCookie("newRedistribution", 1, 30);
+			header("location: /RUMCPantry/ap_ro8.php");
+		}
+		else {
+			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			echoDivWithColor("Error, failed to create Invoice Descriptions.", "red" );	
+		}
+	}
+	else {
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, failed to create Invoice.", "red" );	
+	}
 }
 
+// --== Delete invoice ==--
+elseif(isset($_POST['deleteRedistInvoice'])) {
+	// Connect to the database and grab Item ID and Price information
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+	// Query String
+	$sql = "DELETE FROM Invoice
+			WHERE invoiceID=" . $_POST['id'];
+
+	if (queryDB($conn, $sql) === TRUE) {
+		createCookie("redistributionDeleted", 1, 30);
+		header("location: /RUMCPantry/ap_ro8.php");
+	}
+	else {
+		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, unable to delete invoice.", "red" );	
+	}
+}
 // *******************************************************
 // Start Redistribution Client operations
 // *******************************************************

@@ -94,7 +94,7 @@
 		// Hidden item ID
 		echo "<input type='hidden' ID='itemID_-hidden' name='itemID[]' value=-1>";
 		// Quantity of this item
-		echo " quantity: <input type='number' name='qty[]' min=1 value=1>";
+		echo " Quantity: <input type='number' name='qty[]' value=1>"; // min=1 
 		
 		// Delete Button for a section
 		echo "<input id='DelBtn_' type='button' value=' ' class='btn_trash' onclick='deleteRedistItem(this)' >";
@@ -106,13 +106,13 @@
 		// * FORM Start
 		if (($partnerDataList != null) && ($itemDataList != null)){
 			// Start the form
-			echo "<form method='post' action='php/redistOps.php'>";
+			echo "<form method='post' onSubmit='return validateRedistribution()' action='php/redistOps.php'>";
 			
 			// Get a date
 			echo "Date: <input type='date' value='" . date('Y-m-d') . "' name='date' ><br>";
 			
 			// Fill in the partner
-			echo "Partner: " . $partnerDataList; // partnerID
+			echo "<div id='PartnerField'>Partner: " . $partnerDataList . "</div>"; // partnerID
 			// Hidden input for the partner ID (javascript should update the value)
 			echo "<input type='hidden' ID='partnerID-hidden' name='partnerID' value=-1>";
 			echo "<br><br>";
@@ -121,14 +121,12 @@
 			// Button to create a drop down for an item and quantity to add
 			echo "<input type='button' value='Add Item' onclick='addRedistItem()'><br>";
 			
-			// Create the div that will hold items
+			// Create the div that will hold items (from the hidden div above)
 			echo "<div id='newItems'></div>";
 			
 			// Save button and close the form
 			echo "<input type='submit' name='submitRedistribution' value='Save'></form>";
-		} 
-		
-		// TODO: Data validation (make sure partner is correct, make sure items aren't empty, etc.
+		}
 	?>
 
 

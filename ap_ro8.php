@@ -21,6 +21,10 @@
 			window.alert("New Redistribution added!");
 			removeCookie("newRedistribution");
 		}
+		if (getCookie("redistributionDeleted") != "") {
+			window.alert("Redistribution removed!");
+			removeCookie("redistributionDeleted");
+		}
 	</script>
 	
 	<?php
@@ -57,11 +61,11 @@
 				// Start the form for this row (so buttons act correctly based on client)
 				echo "<form action='php/redistOps.php' method='post'>";
 				
-				// add the InvoiceID hidden so we can look it up when viewed
+				// pass along hidden data
 				echo "<input type='hidden' name='id' value=" . $row["ID"] . ">";
 
-				// Update button				
-				echo "<td><input type='submit' name='updateRedistInvoice' value='View'></td>";
+				// View button				
+				echo "<td><input type='submit' name='viewRedistribution' value='View'></td>";
 				
 				// Information Fields
 				echo "<td>" . $row['name'] . "</td>";
@@ -74,7 +78,7 @@
 				onclick="return confirm('Are you sure you want to delete this Invoice?')"></td>
 				<?php
 				// Close off the row and form
-				echo "</form>";
+				echo "</form></tr>";
 			}
 			// Close off the table
 			echo "</table><br>";
