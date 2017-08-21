@@ -68,10 +68,12 @@
 		<table id="timeTable" name="timeTable" >
 			<!-- Set up headers -->
 			<tr><th>Time</th><th>Count</th><th></th></tr>
-			<!-- Create time slots with 6 clients each, 30 minutes apart -->
+			<!-- Create time slots with 6 clients each, 30 minutes apart, starting at 9:30 -->
 			<?php
-				$timeSlot = '10:00';
-				for ($i = 0; $i < 3; $i++) {
+				$timeSlot = date('H:i', strtotime('9:30'));	// Start time
+				$endTime = date('H:i', strtotime('11:00'));	// End time
+
+				while ( $timeSlot <= $endTime ) {
 					echo "<tr><td><input type='time' name='time[]' value='"
 							. $timeSlot . "' step='900'></td>";
 					echo "<td><input type='number' name='qty[]' value='6' min='1'></td>";
