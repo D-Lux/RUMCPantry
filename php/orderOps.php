@@ -65,7 +65,8 @@ function createInvoiceDesc() {
 	}
 	// Our Query String
 	$sql = "SELECT itemID, price
-			FROM Item";
+			FROM Item
+			WHERE Item.isDeleted=0";
 	$itemPriceQuery = queryDB($conn, $sql);
 	
 	$PriceID_Array = array();
@@ -257,7 +258,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 // * Adding a single item to a client's order
 elseif (isset($_POST['addItemToOrder'])) {
 	// POST Data to use: invoiceID, addItem, qty
-	// POST Data to pass back using cookies: name, visitTime, familySize,
+	// POST Data to pass back using session data: name, visitTime, familySize,
 	session_start();
 	// Save post data off into the session global
 	$_SESSION['viewInvoice_invoiceID'] = $_POST['invoiceID'];
