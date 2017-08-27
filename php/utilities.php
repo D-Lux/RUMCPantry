@@ -4,7 +4,8 @@
 // * Debug functions
 
 function echoDivWithColor($message, $color){
-    echo  '<div style="color: '.$color.';">'; /*must do color like this, can't do these three lines on the same line*/
+   // echo  '<div style="color: '.$color.';">'; /*must do color like this, can't do these three lines on the same line*/
+	echo  '<div>';
     echo $message;
     echo  '</div>';
 }
