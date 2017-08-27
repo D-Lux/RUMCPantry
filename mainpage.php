@@ -1,6 +1,7 @@
 <?php include 'php/utilities.php';?>
 		<h3>Main Page</h3>
-	
+		
+		
 		<form method="get" action="cp1.php">
 			<button type="submit">Client</button>
 		</form>
@@ -11,7 +12,7 @@
 			<button type="submit">Log Out</button>
 		</form>
  
-
+	</div><!-- closing .content -->
 	</body>
 	
 	<?php
