@@ -1,17 +1,4 @@
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<title>Roselle United Methodist Church Food Pantry</title>
-		<script src="js/utilities.js"></script>
-		<!--<link href='style.css' rel='stylesheet'>-->
-		<?php include 'php/utilities.php';?>
-		
-
-	</head>
-	<body>
-		<h1>Roselle United Methodist Church</h1>
-		<h2>Food Pantry</h2>
+<?php include 'php/utilities.php';?>
 		<h3>Main Page</h3>
 	
 		<form method="get" action="cp1.php">

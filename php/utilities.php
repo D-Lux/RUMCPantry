@@ -1,6 +1,21 @@
 <?php
 
 // **********************************************
+// * CSS
+
+echo "<!DOCTYPE html>
+
+<html>
+	<head>
+		<title>Roselle United Methodist Community Food Pantry</title>
+		<script src='js/utilities.js'></script>
+		<link rel='stylesheet' href='css/style.css'>
+	</head>
+	<body>
+		<h1>Roselle United Methodist Community Food Pantry</h1>";
+
+
+// **********************************************
 // * Debug functions
 
 function echoDivWithColor($message, $color){
