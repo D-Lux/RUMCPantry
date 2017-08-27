@@ -65,14 +65,14 @@ button[type='submit'], input[type='submit'] {
 	margin-top: 20px;
 	font-size: 1.15rem;
 	border-radius: 50px;
-	background-color: #27B867;
-	border: solid 2px #099C4A;
+	background-color: #57B9FF; //#27B867;
+	border: solid 2px #499BD6; //#099C4A;
 	color: #000;
 }
 
 button[type='submit']:active, input[type='submit']:active {
-	background-color: #1C854A;
-	border: solid 2px #066630;
+	background-color: #499BD6; //#1C854A;
+	border: solid 2px #3D83B5; //#066630;
 }
 
 table>button {
@@ -103,6 +103,12 @@ table>button {
 .body_content {
 	margin-top: 30px;
 }
+
+input[type='text'] {
+	height: 35px;
+	font-size: 1.1rem;
+}
+
 
 
 
