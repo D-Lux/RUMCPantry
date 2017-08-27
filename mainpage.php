@@ -1,16 +1,18 @@
 <?php include 'php/utilities.php';?>
-		<h3>Main Page</h3>
-		
-		
-		<form method="get" action="cp1.php">
-			<button type="submit">Client</button>
-		</form>
-		<form method="get" action="ap1.php">
-			<button type="submit">Admin</button>
-		</form>
-		<form method="post" action="<?=($_SERVER['PHP_SELF'])?>">
-			<button type="submit">Log Out</button>
-		</form>
+		<div id='main-page'>
+			<h3>Main Page</h3>
+			
+			
+			<form method="get" action="cp1.php">
+				<button type="submit">Client</button>
+			</form>
+			<form method="get" action="ap1.php">
+				<button type="submit">Admin</button>
+			</form>
+			<form method="post" action="<?=($_SERVER['PHP_SELF'])?>">
+				<button type="submit">Log Out</button>
+			</form>
+		</div>
  
 	</div><!-- closing .content -->
 	</body>

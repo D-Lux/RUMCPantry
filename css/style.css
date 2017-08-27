@@ -21,7 +21,7 @@ HTML {
 body {
 	background-color: #ccc;
 	font-family: Arial, sans-serif;
-	width: 760px;
+	width: 800px;
 	margin: 0px auto;
 }
 
@@ -63,18 +63,22 @@ Body Elements
 	padding: 20px 40px;
 }
 
-button[type='submit'] {
+button[type='submit'], input[type='submit'] {
 	width: 300px;
 	height: 50px;
 	margin-top: 20px;
 	font-size: 20px;
 }
 
-table>button{
+table>button {
 	width: 60px;
 	height: 22px;
 	margin: 0px;
 	font-size:13px;
+}
+
+#main-page {
+	text-align: center;
 }
 	
 .btn_trash {
