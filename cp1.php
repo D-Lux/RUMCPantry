@@ -77,7 +77,7 @@
 				
 
 			?>
-		</div><!-- closing .body_content -->
-
+		</div><!-- /body_content -->
+	</div><!-- /content -->
 	</body>
 </html>

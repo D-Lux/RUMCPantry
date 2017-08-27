@@ -107,15 +107,25 @@ table>button {
 input[type='text'] {
 	height: 35px;
 	font-size: 1.1rem;
+	margin-left: 10px;
 }
 
+table, th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	text-align: center;
+}
 
+td {
+	padding: 5px;
+}
 
-
-
-
-
-
+td>button, td>input[type='submit'] {
+	margin: 0px;
+	height: 33px;
+	width: 175px;
+	vertical-align: middle;
+}
 
 
 
@@ -143,3 +153,49 @@ input[type='checkbox'], input[type='radio'] {
 	height: 50px;
 }
 
+
+
+
+/******
+Tooltip
+******/
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.required label:after {
+	color: red;
+	content: ' *';
+	display:inline;
+
+}
+
+.notes	{		
+	rows="10";
+	cols="80";
+}
+
+.newBtn {
+	float: left;
+	padding: 1em;
+}

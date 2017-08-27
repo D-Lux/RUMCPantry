@@ -14,7 +14,7 @@
 			</form>
 		</div>
  
-	</div><!-- closing .content -->
+	</div><!-- /content -->
 	</body>
 	
 	<?php

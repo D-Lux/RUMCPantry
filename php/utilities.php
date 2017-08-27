@@ -160,7 +160,7 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 
 	$result = mysql_query($sql);
 
-	echo "<input list=$listName name=$inputName value='$defaultVal' autocomplete='off'>";
+	echo "<input type='text' list=$listName name=$inputName value='$defaultVal' autocomplete='off'>";
 
 	echo "<datalist id=$listName>"; //this id must be the same as the list = above
 	
