@@ -7,13 +7,13 @@
 	</style>
 	<h3>Log In</h3>
 	
-	<div class="body_content"
+	<div class="body_content">
 		
 		<form method = "POST" action="php/login.php">
 		  Log In: <input type="text" name="login" value="">
 		  <br>
 		  Password: <input type="password" name="password" value="" autocomplete="off">
-		  <br><br>
+		  <br>
 		  <?php
 			if (isset($_GET['err'])) {
 				if ($_GET['err'] == 1) {
@@ -27,7 +27,7 @@
 		  <input type="submit" value="Submit">
 		</form>
 
-		<br>
+		<br><br><br>
 		or continue as client
 		<form method="get" action="mainpage.php">
 			<input type="submit" value="continue">
