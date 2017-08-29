@@ -166,8 +166,9 @@ elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 	if (deleteInvoiceDesc()) {
 		if (createInvoiceDesc()) {
 			// TODO: Add cookie for feedback and update order status to appropriate value
+			// Might want to return to check in page instead of ap1
 			echo "Review Successful!";
-			header("location: /RUMCPantry/RUMCPantry/ap1.php");
+			header("location: /RUMCPantry/ap1.php");
 		}
 	}
 	echo "There was an error";

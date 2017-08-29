@@ -83,6 +83,7 @@
 				
 				// Set defaults
 				$currCategory = "";
+				$divOpen = false;
 				
 				// *************************************************
 				// * Normal Items
@@ -101,6 +102,10 @@
 						
 						// Special case for beans (store off so we can order them)
 						if ($item['CName'] == "Beans") {
+							if ($divOpen) {
+								echo "</div>"; // closing orderSection div from previous loop
+								$divOpen = false;
+							}
 							if ( $BeanQty == 0 ) { 
 								$BeanQty = $item['CQty'];
 							}
@@ -125,6 +130,12 @@
 								showBeanCategory($CanBeans, $BagBeans, $BeanQty);
 							}
 							if ($currCategory != $item['CName']) {
+								if ($divOpen) {
+									echo "</div>"; // closing orderSection div from previous loop
+								}
+								echo "<div class='orderSection'>";
+								$divOpen = true;
+								
 								echo "<h4>" . $item['CName'] . "</h4>";
 								// Create a special div so the client can see an updated count of selected items
 								echo "<h5><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
@@ -146,12 +157,17 @@
 										" onclick='countOrder(this)' name='" . $item['CName'] . "[]'>";
 								echo "<label for=$customID ></label>";
 							}
-							echo "</div>";
+							echo "</div>"; // selectionBoxes
 							echo "<br>";
 						}
 					}
 					
 				}
+				if ($divOpen) {
+					echo "</div>"; // closing final orderSection div
+					$divOpen = false;
+				}
+				
 				// If our last category was beans, we gotta spit it out here
 				if ($currCategory == "Beans") {
 					showBeanCategory($CanBeans, $BagBeans, $BeanQTY);
@@ -162,7 +178,7 @@
 				
 				if (!$walkIn) {;
 					$specialsFile = fopen("specials.txt","r") or die();
-					echo "<hr><h2>Specials</h2><h3>Please select one item from each section</h3><hr>";
+					echo "<hr><h3>Specials</h3><h4>Please select one item from each section</h4>";
 					$conn = createPantryDatabaseConnection();
 					if ($conn->connect_error) {
 						die("Connection failed: " . $conn->connect_error);
@@ -172,6 +188,11 @@
 					while(!feof($specialsFile)) {
 						$itemLine = explode(",", fgets($specialsFile));
 						if (sizeof($itemLine) > 1) {
+							if ($divOpen) {
+								echo "</div>"; // closing orderSection div from previous loop
+							}
+							echo "<div class='orderSection'>";
+							$divOpen = true;
 							for ($i = 0; $i < sizeof($itemLine); $i++) {
 								// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
 								if (is_numeric($itemLine[$i])) {
@@ -197,10 +218,12 @@
 							}
 							$specialItemNum++;
 						}
-						// Put some sort of separator between specials
-						echo "<hr>";
 					}
 					closeDB($conn);
+					if ($divOpen) {
+						echo "</div>"; // closing orderSection div from previous loop
+						$divOpen = false;
+					}
 				}
 			?>
 			<br>

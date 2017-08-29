@@ -94,13 +94,14 @@
 	// * Create the order form
 	
 	// Start the form and add a hidden field for client info
-	echo "<form method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
+	echo "<form method='post' action='php/orderOps.php' name='CreateReviewedInvoiceDescriptions'>";
 	echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
 	echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
 	echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
 	
 	// Set defaults
 	$currCategory = "";
+	$divOpen = false;
 	
 	// *************************************************
 	// * Normal Items
@@ -118,6 +119,10 @@
 		if ( showCategory($walkIn, $item['CName']) ){
 			// Special case for beans (store off so we can order them)
 			if ($item['CName'] == "Beans") {
+				if ($divOpen) {
+					echo "</div>"; // closing orderSection div from previous loop
+					$divOpen = false;
+				}
 				if ( $BeanQty == 0 ) { 
 					$BeanQty = $item['CQty'];
 				}
@@ -142,6 +147,12 @@
 					showBeanCategory($CanBeans, $BagBeans, $BeanQty, $clientOrder);
 				}
 				if ($currCategory != $item['CName']) {
+					if ($divOpen) {
+						echo "</div>"; // closing orderSection div from previous loop
+					}
+					echo "<div class='orderSection'>";
+					$divOpen = true;
+					
 					echo "<h3>" . $item['CName'] . "</h3>";
 					// Create a special div so the client can see an updated count of selected items
 					echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
@@ -178,7 +189,10 @@
 			}
 		}
 	}
-	
+	if ($divOpen) {
+		echo "</div>"; // closing final orderSection div
+		$divOpen = false;
+	}
 	// If our last category was beans, we gotta spit it out here
 	if ($currCategory == "Beans") {
 		showBeanCategory($CanBeans, $BagBeans, $BeanQty, $clientOrder);
@@ -189,7 +203,7 @@
 	
 	if (!$walkIn) {
 		$specialsFile = fopen("specials.txt","r") or die();
-		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3><hr>";
+		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3>";
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
@@ -199,6 +213,14 @@
 		while(!feof($specialsFile)) {
 			$itemLine = explode(",", fgets($specialsFile));
 			if (sizeof($itemLine) > 1) {
+				
+				// Handle the div for the border box
+				if ($divOpen) {
+					echo "</div>"; // closing orderSection div from previous loop
+				}
+				echo "<div class='orderSection'>";
+				$divOpen = true;
+				
 				for ($i = 0; $i < sizeof($itemLine); $i++) {
 					// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
 					if (is_numeric($itemLine[$i])) {
@@ -226,17 +248,18 @@
 							}
 							echo " >" . $itemInfo['displayName'];
 							echo "<label for=$customID ></label>";
-							
 							echo "<br>";
 						}
 					}
 				}
 				$specialItemNum++;
 			}
-			// Put some sort of separator between specials
-			echo "<hr>";
 		}
 		closeDB($conn);
+		if ($divOpen) {
+			echo "</div>"; // closing orderSection div from previous loop
+			$divOpen = false;
+		}
 	}
 	
 	// ***********************************
@@ -244,7 +267,6 @@
 	echo "<script type='text/javascript'> updateCheckedQuantities(); </script>";
 	
 ?>
-		<br>
 			<button type="submit" name="CreateReviewedInvoiceDescriptions">Submit Order</button>
 		</form>
 

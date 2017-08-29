@@ -86,7 +86,6 @@ table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 
 
 
-
 #main-page {
 	text-align: center;
 }
@@ -183,6 +182,13 @@ Special case buttons
 	height: 55px;
 }
 
+/*********
+Order Form
+*********/
+.orderSection {
+	border: 1px solid black;
+	padding: 10px;
+}
 /*********
 Checkboxes
 *********/

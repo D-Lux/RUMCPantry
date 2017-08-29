@@ -22,7 +22,8 @@
 					while($row = sqlFetch($invoiceQuery)) {
 						// Start Table row
 						echo "<tr>";
-						echo "<td>" . $row['visitDate'] . "</td><td>" . $row['visitTime'] . "</td>";
+						echo "<td>" . date('F n, Y', strtotime($row['visitDate'])) . "</td>";
+						echo "<td>" . date('g:i A' , strtotime($row['visitTime'])) . "</td>";
 						
 						if (IsActiveAppointment($row['status'])) {
 							echo "<form method='post' action='cof.php'>";
