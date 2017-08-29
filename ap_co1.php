@@ -1,29 +1,17 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/clientOps.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<link rel="stylesheet" type="text/css" href="css/tabs.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>Client List</title>
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Active Clients
-    </h1>
-	
+<?php include 'php/utilities.php'; ?>
+<script src="js/clientOps.js"></script>
+<link rel="stylesheet" type="text/css" href="css/tabs.css" />
 	<script>
 		if (getCookie("clientUpdated") != "") {
 			window.alert("Client data updated!");
 			removeCookie("clientUpdated");
 		}		
 	</script>
+	
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Active Clients</h3>
+	
+	<div class="body_content">
 	
 	<?php
 		// Get the available client ID so we can hide it on the update list
@@ -161,14 +149,12 @@
 		
 		closeDB($conn);
 	?>
-	<br><br>
 	
 	<!-- NEW Client -->
 	<form action="ap_co2.php">
 		<input id="CreateNew" type="submit" name="GoNewClient" value="New Client">
     </form>
 	
-	<br>
 	<!-- View Inactive Clients -->
 	<form action="ap_co1i.php">
 		<input type="submit" name="ShowInactive" value="View Inactive Clients">
@@ -179,5 +165,8 @@
 		document.getElementById("defaultOpen").click();
 	</script>
 	<div id="errorLog"></div>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 </html>

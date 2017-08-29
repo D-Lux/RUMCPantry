@@ -1,21 +1,10 @@
-<!doctype html>
-<html>
+<?php include 'php/utilities.php'; ?>
+<script src="js/clientOps.js"></script>
 
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/clientOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
-	<?php include 'php/utilities.php'; ?>
-	<?php include 'php/checkLogin.php';?>
-
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Update Family Member Information</h3>
 	
-    <title>Update Family Member</title>
-
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>Update Family Member Information</h1>
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -62,8 +51,11 @@
 				echo "<div id='head'>Member is Head of Household</div><br>";
 			}
 			else {
+				echo "<div class='selectionBoxes'>";
 				echo "<div id='head'>Head of Household: ";
-				echo "<input type='checkbox' name='head' value='head'></div><br>";
+				echo "<input type='checkbox' id='HoH' name='head' value='head'>";
+				echo "<label for='HoH' ></label>";
+				echo "</div></div><br>";
 			}
 
 			echo "<div id='birthDate'>Birthday: 
@@ -87,6 +79,8 @@
 			echo "Family Member not found.";
 		}
 	?>
+	
+	
 
 </body>
 

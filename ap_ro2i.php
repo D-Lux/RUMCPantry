@@ -1,9 +1,4 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<?php include 'php/utilities.php'; ?>
+<?php include 'php/utilities.php'; ?>
 	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
 	<?php include 'php/checkLogin.php';?>
 
@@ -12,16 +7,16 @@
 </head>
 
 <body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Redistribution Partners (inactive)
-    </h1>
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Redistribution Partners (inactive)</h3>
 	<script>
 		if (getCookie("redistToggled") != "") {
 			window.alert("Partner reactivated!");
 			removeCookie("redistToggled");
 		}
 	</script>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -88,13 +83,13 @@
 		
 		$conn->close();
 	?>
-	<br><br>
-
+	
 	<!-- View Active Clients -->
 	<form action="ap_ro2.php" method="post">
 		<input type="submit" name="ShowInactive" value="View Active Partners">
     </form>
 
-	<div id="errorLog"></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 </html>

@@ -1,16 +1,10 @@
-<html>
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/orderFormOps.js"></script>
-	<?php include 'php/utilities.php';
-		  include 'php/checkLogin.php';?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
+<?php include 'php/utilities.php';?>
+<script src="js/orderFormOps.js"></script>
 
-
-</head>
-<body>
-	<button onclick="goBack()">Go Back</button>
-	<h1>Order Form: Specials</h1>
+	<button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Order Form: Specials</h3>
+	
+	<div class="body_content">
 	<?php
 
 		// *****************************************************
@@ -138,6 +132,9 @@
 		echo "<br><br><br>";
 		echo "<div id='errorLog'> </div>";
 	?>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 	
 	
 </body>

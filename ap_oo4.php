@@ -1,21 +1,9 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/orderFormOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<?php include 'php/utilities.php'; ?>
-    <title>View Order</title>
+<?php include 'php/utilities.php'; ?>
+<script src="js/orderFormOps.js"></script>
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>View Order</h3>
 	
-</head>
-
-<body>
-
-    <button onclick="goBack()">Go Back</button>
-	<br><br>
-	
-	
+	<div class="body_content">
 	<?php
 	
 	// Post Vars: invoiceID | name | visitTime | familySize
@@ -43,9 +31,6 @@
 		$visitTime = $_SESSION['viewInvoice_visitTime'];
 		$familySize = $_SESSION['viewInvoice_familySize'];
 	}
-	
-	
-	
 	
 	// Create our query to get the invoice data
 	if ( $name != null ) {
@@ -94,10 +79,8 @@
 			//echo "| (" . $invoice['iQty'] . ") " . $invoice['iName'] . "<br>";
 		}
 		echo "</table>";
-		echo "<br><br>";
 		
 		echo "<button onClick='window.print()'>Print</button>";
-		echo "<br><br>";
 		
 		// If we came from the checkin page, allow 'mark as processed'
 		if ( (isset($_POST['viewInvoice']) ) && (isset($_POST['status'])) ) {
@@ -109,7 +92,6 @@
 		}
 		
 		// Add an item
-		echo "<br><br>";
 		echo "<form method='post' action='php/orderOps.php' onSubmit='return validateAddItemToInvoice()'>";
 		echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
 		echo "<input type='hidden' name='name' value='" . $name . "'>";
@@ -118,7 +100,7 @@
 		
 		echo "Item to Add: ";
 		createDatalist_i('', 'itemNames', 'item', 'itemName', 'addItem', 1);
-		echo "<br>Quantity: <input type='number' name='qty' min=1 value=1><br>";
+		echo "<br>Quantity: <input type='number' id='addQty' name='qty' value=1><br>";
 		echo "<input type='submit' name='addItemToOrder' value='Add to Invoice'>";
 		echo "</form>";
 		
@@ -127,12 +109,13 @@
 	else {
 		echo "Invoice timed out, please Go Back and reselect the invoice";
 	}
-
-		echo "<br><br><br>";
-		echo "<div id='ErrorLog'></div>";
+	
+	echo "<div id='ErrorLog'></div>";
 	?>
 	
 
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 
 </html>

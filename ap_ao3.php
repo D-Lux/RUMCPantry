@@ -1,22 +1,5 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/apptOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<?php include 'php/utilities.php'; ?>
-	<?php include 'php/checkLogin.php';?>
-
-    <title>View Appointment Date</title>
-	
-
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>View Appointment Date: <?php echo $_GET['date']; ?></h1>
-	
+<?php include 'php/utilities.php'; ?>
+<script src="js/apptOps.js"></script>
 	<script>
 		if (getCookie("newAppt") != "") {
 			window.alert("New Date Added!");
@@ -27,6 +10,11 @@
 			removeCookie("newTimeSlots");
 		}
 	</script>
+	
+    <button id='btn_back' onclick="goBack()">Back</button>
+	
+	<h3>Appointment Date: <?php echo $_GET['date']; ?></h3>
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -105,7 +93,7 @@
 				// Set up the row and drop in appropriate information
 				if ($timeSlot != $invoice['visitTime']) {
 					$timeSlot = $invoice['visitTime'];
-					echo "<tr><th colspan='4'>" . $invoice['visitTime'] . "</th></tr>";
+					echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
 				}
 				echo "<tr><td>";
 				
@@ -178,7 +166,8 @@
 		echo "</form>";
 	?>
 	
-
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 
 </html>

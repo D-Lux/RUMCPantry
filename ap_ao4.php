@@ -1,13 +1,9 @@
-<html>
-<head>
-	 <script src="js/utilities.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
+<?php include 'php/utilities.php'; ?>
 
-
-</head>
-<body>
-	<button onclick="goBack()">Go Back</button>
+	<button id='btn_back' onclick="goBack()">Back</button>
+	
+	<h3>Add Appointment Time Slot</h3>
+	<div class="body_content">
 	<!-- Start the form for creating a new date -->
 	<form id="AppointmentForm" name="AppointmentForm" 
 			action="php/apptOps.php" method="post" >
@@ -15,7 +11,7 @@
 		<?php
 			if ( (isset($_POST['newSlots'])) && (isset($_POST['date'])) ) {
 				// Our header Date box
-				echo "<h2>Date: " . $_POST['date'] . "</h2><br>";
+				echo "<h4>Date: " . $_POST['date'] . "</h4><br>";
 			
 				// Our short table with one time slot and one quantity
 				echo "<table id='timeTable' name='timeTable' >";
@@ -34,6 +30,9 @@
 		<br><br>
 		<input type="submit" name="CreateInvoiceTimeSlot" value="Create Time Slots">
 	</form>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 
 </html>

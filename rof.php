@@ -1,22 +1,9 @@
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<title>Roselle United Methodist Church Food Pantry</title>
-		<script src="js/utilities.js"></script>
-		<script src="js/orderFormOps.js"></script>
-		<link href='css/toolTip.css' rel='stylesheet'>
-		<?php include 'php/utilities.php'; ?>
-		<?php include 'php/beanOps.php'; ?>
-
-	</head>
-	<body>
-	
-		<button onclick="goBack()">Back</button>
-		
-		<h1>Roselle United Methodist Church</h1>
-		<h2>Food Pantry</h2>
+<?php include 'php/utilities.php'; ?>
+<?php include 'php/beanOps.php'; ?>
+<script src='js/orderFormOps.js'></script>
+		<button id='btn_back' onclick="goBack()">Back</button>
 		<h3>Review Order Form</h3>
+		<div class="body_content">
 <?php
 
 	/*
@@ -167,10 +154,12 @@
 
 				// Display the Item name
 				echo $item['displayName'];
+				echo "<div class='selectionBoxes'>";
 				for ($i = 0; $i < $item['IQty']; $i++) {
 					// Value is the item's ID
 					// Name is the item's category[] (in array)
-					echo "<input type='checkbox' value=" . $item['itemID'];
+					$customID = "box" . $item['itemID'] . "n" . $i;
+					echo "<input type='checkbox' id=$customID value=" . $item['itemID'];
 					echo " onclick='countOrder(this)' name='" . $item['CName'] . "[]' ";
 							
 					// If this item was selected, check it and reduce our count
@@ -182,7 +171,9 @@
 					}
 					// Close off the html input tag
 					echo ">";
+					echo "<label for=$customID ></label>";
 				}
+				echo "</div>";
 				echo "<br>";
 			}
 		}
@@ -222,7 +213,8 @@
 						}
 						else {
 							$itemInfo = sqlFetch($itemQuery);
-							echo "<input type='radio' value=" . $itemLine[$i];
+							$customID = "box" . $itemLine[$i] . "s" . $i;
+							echo "<input type='radio' id=$customID value=" . $itemLine[$i];
 							echo " name='savedItem" . $specialItemNum . "' ";
 							
 							// Check if the item was selected
@@ -233,7 +225,8 @@
 								}
 							}
 							echo " >" . $itemInfo['displayName'];
-
+							echo "<label for=$customID ></label>";
+							
 							echo "<br>";
 						}
 					}
@@ -255,6 +248,7 @@
 			<button type="submit" name="CreateReviewedInvoiceDescriptions">Submit Order</button>
 		</form>
 
-		
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 	</body>
 </html>

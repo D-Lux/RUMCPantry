@@ -1,21 +1,10 @@
-<!doctype html>
-<html>
+<?php include 'php/utilities.php'; ?>
+<script src="js/redistOps.js"></script>
 
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/redistOps.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>New Redistribution</title>
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        New Redistribution
-    </h1>
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>New Redistribution</h3>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -130,6 +119,7 @@
 	?>
 
 
-	<div id="errorLog"></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->
 </body>
 </html>

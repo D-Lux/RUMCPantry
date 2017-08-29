@@ -1,22 +1,13 @@
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<title>Roselle United Methodist Church Food Pantry</title>
-		<!--<link href='style.css' rel='stylesheet'>-->
-	</head>
+<?php include 'php/utilities.php'; ?>
 	
 	<style>
 	p {
 		color : red;
 	}
 	</style>
-
+	<h3>Log In</h3>
 	
-	<body>
-		<h1>Roselle United Methodist Church</h1>
-		<h2>Food Pantry</h2>
-		<h3>Log In Page</h3>
+	<div class="body_content"
 		
 		<form method = "POST" action="php/login.php">
 		  Log In: <input type="text" name="login" value="">
@@ -36,12 +27,14 @@
 		  <input type="submit" value="Submit">
 		</form>
 
+		<br>
 		or continue as client
 		<form method="get" action="mainpage.php">
-        <input type="submit" value="continue">
+			<input type="submit" value="continue">
     	</form>
 	
-		
+	</div><!-- /body_content -->
+	</div><!-- /content -->		
 
 	</body>
 </html>

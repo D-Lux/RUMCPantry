@@ -1,20 +1,7 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>Redistributions</title>
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Redistributions
-    </h1>
+<?php include 'php/utilities.php'; ?>
+	<button id='btn_back' onclick="goBack()">Back</button>
+	
+    <h3>Redistributions</h3>
 
 	<script>
 		if (getCookie("newRedistribution") != "") {
@@ -26,6 +13,8 @@
 			removeCookie("redistributionDeleted");
 		}
 	</script>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -89,7 +78,6 @@
 		
 		$conn->close();
 	?>
-	<br><br>
 	
 	<!-- NEW Redistribution Invoice -->
 	<form action="php/redistOps.php" method="post" >
@@ -97,6 +85,7 @@
     </form>
 	
 
-	<div id="errorLog"></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 </html>

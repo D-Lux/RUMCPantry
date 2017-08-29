@@ -1,21 +1,7 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/redistOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<?php include 'php/utilities.php'; ?>
-	<?php include 'php/checkLogin.php';?>
-
-	
-    <title>Update Partner Information</title>
-
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>Update Partner Information</h1>
+<?php include 'php/utilities.php'; ?>
+<script src="js/redistOps.js"></script>
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Update Partner Information</h3>
 	
 	<script>
 		if (getCookie("newPartner") != "") {
@@ -23,6 +9,8 @@
 			removeCookie("newPartner");
 		}
 	</script>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -95,29 +83,19 @@
 			// ***********************************************************************
 			// SHOW Invoices
 			
-			echo "<br><br><h3>Redistributions</h3>";
+			echo "<h4>Redistributions</h4>";
+			$firstDist = true;
 			if ($invoiceInfo!=null && $invoiceInfo->num_rows > 0) {
-		
-				// Create the invoice table and add in the headers
-				echo "<table> <tr> <th>Invoice Date</th><th>Status</th></tr>";
-				
-				while($row = sqlFetch($invoiceInfo)) {						
-					
-					// Start Table row
-					echo "<tr>";
-
-					// TODO: Fix link to invoice view page // Date, as a link to a view invoice page
+				while($row = sqlFetch($invoiceInfo)) {
+					// Add a new line if we are not the first redistribution
+					if (!$firstDist) {
+						echo "<br>";
+					}
+					$firstDist = FALSE;
 					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
 					$date = $row["visitDate"];
-					echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
-					
-					$status = visitStatusDecoder($row['status']);
-					echo "<td>" . $status . "</td>";
-					
-					// Close off the row and form
-					echo "</tr></form>";
+					echo "<a href='" . $invoiceLink . "'>" . $date . "</a>";
 				}
-				echo "</table>";
 			} 
 			else {
 				echo "No Redistributions in Database.";
@@ -128,6 +106,9 @@
 		}	
 	?>
 
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
+	
 </body>
 
 </html>

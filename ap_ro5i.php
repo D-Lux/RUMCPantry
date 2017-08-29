@@ -1,21 +1,6 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>Redistribution Items List</title>
-	
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Redistribution Items (inactive)
-    </h1>
+<?php include 'php/utilities.php'; ?>
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Redistribution Items (inactive)</h3>
 	
 	<script>
 		if (getCookie("redistToggled") != "") {
@@ -23,6 +8,8 @@
 			removeCookie("redistToggled");
 		}
 	</script>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -79,13 +66,13 @@
 		
 		closeDB($conn);
 	?>
-	<br><br>
 
 	<!-- View Active Items -->
 	<form action="ap_ro5.php" method="post">
 		<input type="submit" name="ShowInactive" value="View Active Redistribution Items">
     </form>
 
-	<div id="errorLog"></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 </html>

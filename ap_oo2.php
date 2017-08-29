@@ -1,21 +1,10 @@
-<!doctype html>
-<html>
+<?php include 'php/utilities.php'; ?>
+<script src="js/orderFormOps.js"></script>
+<link rel="stylesheet" type="text/css" href="css/tabs.css" />
+    <button id='btn_back' onclick="goBack()">Back</button>
 
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/orderFormOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<link rel="stylesheet" type="text/css" href="css/tabs.css" />
-	<?php include 'php/utilities.php'; ?>
-    <title>Order Form Configuration</title>
-	
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>
-		Order Form: 
-	<?php 
+	<?php
+		echo "<h3>Order Form: ";
 		$familyType = "";
 		// Family Size 1-2 and Walk-Ins
 		if (isset($_GET["1to2"])) { echo "One to Two / Walk-In"; $familyType = "small"; }
@@ -24,14 +13,19 @@
 		// Family Size 5+
 		if (isset($_GET["5Plus"])) { echo "Five+"; $familyType = "large"; }
 		
+		echo "</h3>";
+		
+		
 		if ($familyType === ""){
 			header("location: /RUMCPantry/ap_oo1.php");
 		}
 		
 		$familyToken = substr($familyType,0,1);
 		
-		echo "</h1>";
-		echo "<br><div id='ErrorLog'></div>";
+		echo "<div id='ErrorLog'></div>";
+		
+		echo "<div class='body_content'>";
+		
 		$conn = createPantryDatabaseConnection();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
@@ -70,6 +64,8 @@
 		
 		$sql = "SELECT DISTINCT name 
 				FROM Category
+				WHERE name<>'redistribution'
+				AND name<>'Specials'
 				ORDER BY name";
 		$numTabs = queryDB($conn, $sql);
 		
@@ -134,8 +130,11 @@
 		}
 		echo "</table>";
 		echo "</div>";
-		//echo "<br><div id='ErrorLog'></div>";
 	?>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
+	
 	
 	<script>
 		// Open the default tab (if tabs exist)

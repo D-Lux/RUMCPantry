@@ -1,22 +1,7 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/clientOps.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-
-	<title>Appointment Operations</title>
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-    <h1>
-        Appointment Operations
-    </h1>
+<?php include 'php/utilities.php'; ?>
+<script src="js/clientOps.js"></script>
+    <button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Appointment Operations</h3>
 
 	<!-- TODO: Limit this by pages -->
 	

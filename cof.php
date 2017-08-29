@@ -2,7 +2,7 @@
 <?php include 'php/beanOps.php'; ?>
 <script src='js/orderFormOps.js'></script>
 		<button id='btn_back' onclick="goBack()">Back</button>
-		<h3>Client Order Form</h3>
+		<h3>Order Form</h3>
 		<div class="body_content">
 			<?php
 				// *******************************************************
@@ -135,12 +135,18 @@
 							}
 							// Display the Item name
 							echo $item['displayName'];
+							
+							// Show the selection boxes
+							echo "<div class='selectionBoxes'>";
 							for ($i = 0; $i < $item['IQty']; $i++) {
 								// Value is the item's ID
 								// Name is the item's category[] (in array)
-								echo "<input type='checkbox' value=" . $item['itemID'] . 
+								$customID = "box" . $item['itemID'] . "n" . $i;
+								echo "<input type='checkbox' id=$customID value=" . $item['itemID'] . 
 										" onclick='countOrder(this)' name='" . $item['CName'] . "[]'>";
+								echo "<label for=$customID ></label>";
 							}
+							echo "</div>";
 							echo "<br>";
 						}
 					}
@@ -180,9 +186,11 @@
 									}
 									else {
 										$itemInfo = sqlFetch($itemQuery);
-										echo "<input type='radio' value=" . $itemLine[$i] . "
+										$customID = "box" . $itemLine[$i] . "s" . $i;
+										echo "<input type='radio' id=$customID value=" . $itemLine[$i] . "
 												name='savedItem" . $specialItemNum . "'>" . $itemInfo['displayName'];
-
+												
+										echo "<label for=$customID ></label>";
 										echo "<br>";
 									}
 								}

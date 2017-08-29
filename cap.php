@@ -1,18 +1,14 @@
-<!doctype html>
-<html>
-
-<head>
-    <title>Roselle United Methodist Church Food Pantry - Client Appointment Page</title>
-	<script src="js/utilities.js"></script>
-	<link href='css/toolTip.css' rel='stylesheet'>
-	<?php include 'php/utilities.php'; ?>
+<?php include 'php/utilities.php'; ?>
 
 </head>
 
 <body>
-    <button onclick="goBack()">Go Back</button>
+    <button id='btn_back' onclick="goBack()">Back</button>
 
-    <h1>Client appointment page</h1>
+    <h3>Client appointment page</h3>
+	
+	<div class="body_content">
+	
 	<?php 
 
 		// NOTE To Developer:
@@ -72,12 +68,12 @@
 		}
 		
 		?>
-		<!-- Button to return 'home' -->
-		<br><br><br><br>
 		<form action='cp1.php'>
-		<input type='submit' name='Return' value='Return'>
+			<input type='submit' name='Return' value='Return'>
 		</form>
-		
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 
 </body>
 

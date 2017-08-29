@@ -1,20 +1,10 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/redistOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css">
-	<?php include 'php/checkLogin.php';?>
-
+<?php include 'php/utilities.php'; ?>
+<script src="js/redistOps.js"></script>
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Add New Redistribution Partner</h3>
 	
-    <title>Add New Redistribution Partner</title>
-
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>Add New Redistribution Partner</h1>
+	<div class="body_content">	
+	
 	<form name="submitNewRedist" action="php/redistOps.php" onSubmit="return validateNewPartner()" method="post">
         <div id="partnerName" class="required"><label>Partner Name:</label> <input type="text" id="partnerNameField" name="partnerName" maxlength="45"></div><br>
 
@@ -45,6 +35,9 @@
 		<br>
         <input type="submit" name="submitNewRedistPartner" value="Create" >
     </form>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 
 </body>
 

@@ -29,9 +29,11 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	echo "<div id='CannedBeansSection'><h6>Cans (Max " . $CQty . ")</h6><br>";
 	foreach ($Cans as $BeanID=>$BeanInfo) {
 		echo $BeanInfo->Name;
+		echo "<div class='selectionBoxes'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)
-			echo "<input type='checkbox' value=" . $BeanID;
+			$customID = "box" . $BeanID . "n" . $i;
+			echo "<input type='checkbox' id=$customID value=" . $BeanID;
 			echo " onclick='countCanBeans(this)' name='CanBeans[]' ";
 					
 			// If this item was selected, check it and reduce our count
@@ -44,9 +46,9 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 			// Close off the html input tag
 			echo ">";
 			
-			//echo "<input type='checkbox' value=" . $BeanID . 
-			//		" onclick='countCanBeans(this)' name='CanBeans[]'>";
+			echo "<label for=$customID ></label>";
 		}
+		echo "</div>";	// closing off selectionBoxes
 		echo "<br>";
 	}
 	echo "</div>";
@@ -55,9 +57,11 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	echo "<div id='BaggedBeansSection'><h6>Bags (Max 1)</h6><br>";
 	foreach ($Bags as $BeanID=>$BeanInfo) {
 		echo $BeanInfo->Name;
+		echo "<div class='selectionBoxes'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)
-			echo "<input type='checkbox' value=" . $BeanID;
+			$customID = "box" . $BeanID . "n" . $i;
+			echo "<input type='checkbox' id=$customID value=" . $BeanID;
 			echo " onclick='countBagBeans(this)' name='BagBeans[]' ";
 					
 			// If this item was selected, check it and reduce our count
@@ -69,9 +73,9 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 			}
 			// Close off the html input tag
 			echo ">";
-			//echo "<input type='checkbox' value=" . $BeanID . 
-			//		" onclick='countBagBeans(this)' name='BagBeans[]'>";
+			echo "<label for=$customID ></label>";
 		}
+		echo "</div>";	// closing off selectionBoxes
 		echo "<br>";
 	}
 	echo "</div>";

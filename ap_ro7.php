@@ -1,21 +1,9 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/redistOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<?php include 'php/utilities.php'; ?>
-	<?php include 'php/checkLogin.php';?>
-
+<?php include 'php/utilities.php'; ?>
+<script src="js/redistOps.js"></script>
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Update Redistribution Item</h3>
 	
-    <title>Update Redistribution Item</title>
-
-</head>
-
-<body>
-    <button onclick="goBack()">Go Back</button>
-	<h1>Update Redistribution Item</h1>
+	<div class="body_content">	
 	
 	<?php
 		// Set up server connection
@@ -61,6 +49,9 @@
 		echo "<input type='submit' name='submitUpdateRedistItem' value='Update'>";
 		echo "</form>";	
 	?>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 
 </body>
 

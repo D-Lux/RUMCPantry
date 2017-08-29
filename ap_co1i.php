@@ -1,23 +1,10 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/clientOps.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<link rel="stylesheet" type="text/css" href="css/tabs.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>Inactive Client List</title>
-
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Inactive Clients
-    </h1>
+<?php include 'php/utilities.php'; ?>
+<script src="js/clientOps.js"></script>
+<link rel="stylesheet" type="text/css" href="css/tabs.css" />
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Inactive Clients</h3>
+	
+	<div class="body_content">
 	
 	<?php		
 		// Set up server connection
@@ -153,5 +140,8 @@
 		document.getElementById("defaultOpen").click();
 	</script>
 	<div id="errorLog"></div>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 </html>

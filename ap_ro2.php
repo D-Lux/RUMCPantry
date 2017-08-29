@@ -1,20 +1,7 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>Redistribution Client List</title>
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        Redistribution Partners
-    </h1>
+<?php include 'php/utilities.php'; ?>
+	<button id='btn_back' onclick="goBack()">Back</button>
+	
+    <h3>Redistribution Partners</h3>
 
 	<script>
 		if (getCookie("updatePartner") != "") {
@@ -27,7 +14,7 @@
 		}
 	</script>
 	
-	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -86,7 +73,7 @@
 				echo "</form>";
 			}
 			// Close off the table
-			echo "</table><br>";
+			echo "</table>";
 		} 
 		else {
 			echo "No clients in database.";
@@ -94,19 +81,21 @@
 		
 		$conn->close();
 	?>
-	<br><br>
 	
 	<!-- NEW Client -->
 	<form action="php/redistOps.php" method="post">
 		<input type="submit" name="newRedist" value="New Partner">
     </form>
-	
-	<br>
+
 	<!-- View Inactive Clients -->
 	<form action="ap_ro2i.php" method="post">
 		<input type="submit" name="ShowInactive" value="View Inactive Partners">
     </form>
 
 	<div id="errorLog"></div>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
+	
 </body>
 </html>

@@ -1,20 +1,9 @@
-<!doctype html>
-<html>
+<?php include 'php/utilities.php'; ?>
 
-<head>
-	<script src="js/utilities.js"></script>
-	<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
-
-    <title>View Redistribution</title>
-</head>
-
-<body>
-	<button onclick="goBack()">Go Back</button>
-    <h1>
-        View Redistribution
-    </h1>
+	<button id='btn_back' onclick="goBack()">Back</button>
+    <h3>View Redistribution</h3>
+	
+	<div class="body_content">
 	
 	<?php
 		// Set up server connection
@@ -58,7 +47,7 @@
 			$partnerData = sqlFetch($partnerQuery);
 			echo "Partner Name: " . $partnerData['Name'] . "<br>";
 			echo "Partner City: " . $partnerData['city'] . "<br>";
-			echo "Invoice Date: " . $partnerData['visitDate'] . "<br>";
+			echo "Date: " . $partnerData['visitDate'] . "<br>";
 		}
 		echo "<br><br>";
 
@@ -88,7 +77,8 @@
 		
 	?>
 	
-
-	<div id="errorLog"></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
+	
 </body>
 </html>

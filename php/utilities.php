@@ -10,6 +10,7 @@ echo "<!DOCTYPE html>
 		<title>Roselle United Methodist Church</title>
 		<script src='js/utilities.js'></script>
 		<link href='css/style.css' rel='stylesheet'>
+		<?php include 'php/checkLogin.php';?>
 	</head>
 	<body>
 		<header>

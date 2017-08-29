@@ -1,16 +1,5 @@
-<!doctype html>
-<html>
-
-<head>
-    <script src="js/utilities.js"></script>
-	<script src="js/walkInOps.js"></script>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css"/>
-	<?php include 'php/utilities.php'; ?>
-    <title>Add Walk-In</title>
-	
-</head>
-
-<body>
+<?php include 'php/utilities.php'; ?>
+<script src="js/walkInOps.js"></script>
 	<style>
 		.awc_hidden {
 			display: none;
@@ -18,10 +7,10 @@
 		}
 	</style>
 	
-    <button onclick="goBack()">Go Back</button>
-	<br>
+    <button id='btn_back' onclick="goBack()">Back</button>
 	<h3>Add Walk-In</h3>
-	<br>
+	
+	<div class="body_content">
 	
 	<?php
 	// Get a datalist for the clients set up
@@ -137,7 +126,8 @@
 			</form>
 		</div>
 		
-		<div id='errorLog'></div>
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 
 </body>
 

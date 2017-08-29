@@ -121,7 +121,8 @@ function AJAX_UpdateQty(callingSlot) {
 }
 
 // **
-// Updates item factors
+// Updates item factors (Deprecated)
+/*
 function AJAX_UpdateFX(callingSlot) {
 	// Get the item ID and the new factor from the page
 	var newFx = callingSlot.value;
@@ -148,6 +149,7 @@ function AJAX_UpdateFX(callingSlot) {
 				 "newFx=" + newFx, true);
 	xmlhttp.send();
 }
+*/
 
 // **
 // Updates category quantity values
@@ -333,6 +335,11 @@ function validateAddItemToInvoice() {
 		window.alert("Please select an item to be added");
 		return false
 	}
+	var qtyToAdd = document.getElementById("addQty");
+	if (qtyToAdd.value <= 0 || qtyToAdd.value == null) {
+		window.alert("Please set a quantity greater than or equal to 1.");
+		return false
+	}
 	return true
 }
 
@@ -355,7 +362,6 @@ function AJAX_RemoveFromInvoice(callingSlot) {
 		xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				document.getElementById('orderTable').deleteRow(callingSlot.parentNode.parentNode.rowIndex);
-				document.getElementById("ErrorLog").innerHTML = this.responseText;
 			}
 		}
 		xmlhttp.open("GET","/RUMCPantry/php/ajax/removeItemFromOrder.php?" +

@@ -1,18 +1,9 @@
-<!doctype html>
-<html>
+<?php include 'php/utilities.php'; ?>
 
-<head>
-    <script src="js/utilities.js"></script>
-	<?php include 'php/checkLogin.php';?>
-    <title>Admin - Main</title>
-</head>
-
-<body>
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap1Back()">
-    <h1>
-        Main Admin Page
-    </h1>
+    <button id='btn_back' onclick="goBack()">Back</button>
+    <h3>Main Administrator Navigation</h3>
+	<div class="body_content">
+	
     <form method="post" action="ap_co1.php">
         <input type="submit" value="Client operations">
     </form><br>
@@ -41,6 +32,9 @@
     <form method="post" action="reporting.php">
         <input type="submit" value="Reporting">
     </form>
+	
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 
 </html>
