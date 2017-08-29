@@ -114,7 +114,7 @@
 			echo "<br>";
 			// Allow the user to adjust the tab size
 			echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
-			echo "<input type='submit' name='submit' value='Tab Size'>";
+			echo "<input type='submit' id='btn_tabSize' name='submit' value='Tab Size'>";
 			echo "<select name='tabSize'>";
 			for ($i=1; $i <= 100; $i+=($i<5 ? 1 : ($i<50 ? 5 : 10))) {
 				echo "<option " . ($_POST['tabSize']!==NULL ? ($_POST['tabSize']==$i ? "selected" : "") : ($i == 20) ? "selected" : "") . " value='" . $i . "'>" . $i . "</option>";

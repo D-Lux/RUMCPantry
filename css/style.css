@@ -59,7 +59,9 @@ Body Elements
 	padding: 30px;
 }
 
-button[type='submit'], input[type='submit'] {
+
+
+button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	width: 300px;
 	height: 75px;
 	margin-top: 20px;
@@ -70,17 +72,20 @@ button[type='submit'], input[type='submit'] {
 	color: #000;
 }
 
-button[type='submit']:active, input[type='submit']:active {
+button[type='submit']:active, input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
 }
 
-table>button {
+table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	width: 60px;
 	height: 22px;
 	margin: 0px;
 	font-size: 1rem;
 }
+
+
+
 
 #main-page {
 	text-align: center;
@@ -104,7 +109,7 @@ table>button {
 	margin-top: 30px;
 }
 
-input[type='text'], input[type='password'] {
+input[type='text'], input[type='password'], form>select {
 	height: 35px;
 	font-size: 1.1rem;
 	margin-left: 10px;
@@ -120,7 +125,9 @@ td {
 	padding: 5px;
 }
 
-td>button, td>input[type='submit'] {
+
+td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock), 
+	td>input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	margin: 0px;
 	height: 33px;
 	width: 175px;
@@ -129,23 +136,52 @@ td>button, td>input[type='submit'] {
 
 
 
-
-
+/*******************
+Special case buttons
+*******************/
 .btn_trash {
-	background-image: url(/RUMCPantry/images/TEMP_Trash.png);
+	background-image: url(/RUMCPantry/images/Icon_Trash.png);
 	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+.btn_trash:active {
+	background-image: url(/RUMCPantry/images/Icon_Trash_Active.png);
 }
 
 .btn_reactivate {
-	background-image: url(/RUMCPantry/images/TEMP_Reactivate.png);
+	background-image: url(/RUMCPantry/images/Icon_Reactivate.png);
 	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+}
+
+.btn_reactivate:active {
+	background-image: url(/RUMCPantry/images/Icon_Reactivate_Active.png);
 }
 
 .btn_lock {
-	background-image: url(/RUMCPantry/images/TEMP_Lock.png);
+	background-image: url(/RUMCPantry/images/Icon_Lock.png);
 	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
 }
 
+.btn_lock:active {
+	background-image: url(/RUMCPantry/images/Icon_Lock_Active.png);
+}
+
+#btn_tabSize {
+	width: 170px;
+	height: 55px;
+}
 
 /*********
 Checkboxes
@@ -176,6 +212,7 @@ input[type='radio'] + label:before {
 
 input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:before {
   background: #00C300;
+  // content: "\00a0"; // In case we want a checkmark or something
 }
 input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:after {
   font-weight: bold;
@@ -227,6 +264,6 @@ Tooltip
 }
 
 .notes	{		
-	rows="10";
-	cols="80";
+	rows: 10;
+	cols: 80;
 }
