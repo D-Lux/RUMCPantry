@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 		<script>
 		// This function updates a hidden input field with the appropriate clientID
 		function updateHiddenClientID() {

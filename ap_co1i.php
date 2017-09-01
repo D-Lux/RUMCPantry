@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 <script src="js/clientOps.js"></script>
 <link rel="stylesheet" type="text/css" href="css/tabs.css" />
 	<button id='btn_back' onclick="goBack()">Back</button>

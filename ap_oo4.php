@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 <script src="js/orderFormOps.js"></script>
     <button id='btn_back' onclick="goBack()">Back</button>
 	<h3>View Order</h3>

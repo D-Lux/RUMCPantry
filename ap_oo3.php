@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
     <meta http-equiv="refresh" content="15" >
 	<script>
 		if (getCookie("processError") != "") {

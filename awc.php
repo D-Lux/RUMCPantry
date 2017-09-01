@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 <script src="js/walkInOps.js"></script>
 	<style>
 		.awc_hidden {

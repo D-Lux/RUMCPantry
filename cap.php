@@ -1,8 +1,5 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 
-</head>
-
-<body>
     <button id='btn_back' onclick="goBack()">Back</button>
 
     <h3>Client appointment page</h3>

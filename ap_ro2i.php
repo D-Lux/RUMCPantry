@@ -1,12 +1,5 @@
-<?php include 'php/utilities.php'; ?>
-	<link rel="stylesheet" type="text/css" href="css/toolTip.css" />
-	<?php include 'php/checkLogin.php';?>
+<?php include 'php/header.php'; ?>
 
-    <title>Redistribution Client List</title>
-	
-</head>
-
-<body>
 	<button id='btn_back' onclick="goBack()">Back</button>
     <h3>Redistribution Partners (inactive)</h3>
 	<script>

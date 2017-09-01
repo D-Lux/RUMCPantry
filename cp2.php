@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 		<button id='btn_back' onclick="goBack()">Back</button>
 		<?php echo "<h3>Client: " . $_POST['clientName'] . "</h3>";	?>
 		<div class="body_content">

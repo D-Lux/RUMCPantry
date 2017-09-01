@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 	<button id='btn_back' onclick="goBack()">Back</button>
 	
     <h3>Redistribution Partners</h3>

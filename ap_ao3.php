@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php'; ?>
+<?php include 'php/header.php'; ?>
 <script src="js/apptOps.js"></script>
 	<script>
 		if (getCookie("newAppt") != "") {
@@ -9,6 +9,7 @@
 			window.alert("Time Slots Added!");
 			removeCookie("newTimeSlots");
 		}
+		
 	</script>
 	
     <button id='btn_back' onclick="goBack()">Back</button>

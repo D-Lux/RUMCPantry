@@ -7,7 +7,7 @@
     <script src="js/createItem.js"></script>
     <script src="js/destinationFunctions.js"></script>
     <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <?php include 'php/utilities.php'; ?>
+    <?php include 'php/header.php'; ?>
     <?php include 'php/checkLogin.php';?>
 
     <title>ap_io2</title>
