@@ -59,7 +59,7 @@
 				<option value="UT">UT</option> <option value="VT">VT</option> <option value="VA">VA</option> <option value="WA">WA</option>
 				<option value="WV">WV</option> <option value="WI">WI</option> <option value="WY">WY</option> 
 			</select> </div>
-			<div id="addressZip">Zip Code: <input type="number" name="addressZip"></div>
+			<div id="addressZip">Zip Code: <input id="addressZipField" type="number" name="addressZip"></div>
 			
 			<br>
 			<input type="submit" name="submitClient" value="Create" >

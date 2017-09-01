@@ -122,10 +122,10 @@
 				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
 				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
 			</select> </div>";
-			echo "<div id='addressZip'>Zip Code: <input type='number' name='addressZip' value=" . $clientRow['zip'] . "></div>";
+			echo "<div id='addressZip'>Zip Code: <input type='number' id='addressZipField' name='addressZip' value=" . $clientRow['zip'] . "></div>";
 			
 			// TODO: Get this looking like a proper 'notes' box
-			echo "<br><div id='notes' >Notes: <input class='notes' type='text' maxlength='256' name='notes' value='" . $clientRow['notes'] . "'></div>";
+			echo "<br><div id='notes' >Notes: <textarea class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea></div>";
 			echo "<br><br>";
 			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";
 			echo "</form>";

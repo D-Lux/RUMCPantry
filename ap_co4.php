@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 <script src="js/clientOps.js"></script>
 
-    <button onclick="goBack()">Go Back</button>
+    <button id='btn_back' onclick="goBack()">Back</button>
 	<h3>New Family Member</h3>
 	
 	<div class="body_content">
@@ -18,22 +18,24 @@
 			<?php
 			// Autofill the last name field with the client's last name, leave editable, of course
 			echo "<div id='memberLastName' class='required'><label>Last Name:</label>";
-			echo "<input type='text' id='memberLastNameField' name='memberLastName' maxlength='45' value='" . $_GET['lnamedefault'] . "'";
+			echo "<input type='text' id='memberLastNameField' name='memberLastName' maxlength='45' value='" . $_GET['lnamedefault'] . "'>";
 			?>
-			</div><br>
+			</div>
 			
 			<div class="selectionBoxes">
-			<div id="head">Head of Household: <input type="checkbox" id="HoH" name="head" value="head">
-			<label for="HoH" ></label><br>
+				<div id="head">Head of Household:
+				<input type="checkbox" id="HoH" name="head" value="head">
+				<label for="HoH" ></label>
 			</div></div>
 			
-			<div id="birthDate">Birthday: <input type="date" name="birthDate" min="1900-01-01"></div><br>
+			
+			<div id="birthDate">Birthday: <input type="date" name="birthDate" min="1900-01-01"></div>
 			<!-- Gender Selection -->
 			<div id="gender">Gender:
 				<select name="gender"> <option value=0>-</option>
 				<option value=-1>Male</option> <option value=1>Female</option> 
 			</select> </div>
-			<div id="notes">Notes: <input type="text" name="notes"></div><br>
+			<div id="notes">Notes: <textarea class="notes" type="text" name="notes"></textarea></div><br>
 			
 			<!-- Submit button -->
 			<input type="submit" value="Create" name="submitMember">

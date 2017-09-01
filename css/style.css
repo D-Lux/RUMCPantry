@@ -85,7 +85,7 @@ table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 }
 
 /* I hate specificity */
-input[type='button'] {
+input[type='button']:not(.btn_lock):not(.btn_trash) {
 	width: 60px;
 	height: 45px;
 	margin: 20px 0px 0px 10px;
@@ -96,11 +96,11 @@ input[type='button'] {
 	color: #000;
 }
 
-input[type='button']:not(.btn_or) {
+input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash) {
 	width: 200px;
 	height: 55px;
 }
-input[type='button']:active {
+input[type='button']:active:not(.btn_lock):not(.btn_trash) {
 	background-color: #499BD6;
 	border: solid 2px #3D83B5;
 }
@@ -128,10 +128,37 @@ input[type='button']:active {
 	margin-top: 30px;
 }
 
-input[type='text'], input[type='password'], form>select {
+input[type='text']:not(.notes), input[type='password'], input[type='email'], form>select, input[type='date'], select {
 	height: 35px;
 	font-size: 1.1rem;
 	margin-left: 10px;
+}
+
+input[type='email'] {
+	width: 300px
+}
+
+input[type='tel'] {
+	height: 35px;
+	width: 150px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+}
+
+input[type='number']:not(#addressZipField) {
+	height: 35px;
+	width: 50px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+	text-align: center;
+}
+
+#addressZipField {
+	height: 35px;
+	width: 200px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+	text-indent: 5px;
 }
 
 table, th, td {
@@ -238,7 +265,7 @@ input[type='radio'] + label:before {
 
 input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:before {
   background: #00C300;
-  // content: "\00a0"; // In case we want a checkmark or something
+  /* content: "\00a0"; In case we want a checkmark or something */
 }
 input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:after {
   font-weight: bold;
@@ -289,7 +316,10 @@ Tooltip
 
 }
 
-.notes	{		
-	rows: 10;
-	cols: 80;
+.notes	{
+	vertical-align: middle;
+	height: 50px;
+	width: 200px;
+	word-wrap: break-word;
+    word-break: normal;
 }

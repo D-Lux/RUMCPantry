@@ -68,7 +68,7 @@
 				<option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
 				</select> </div>";
 			
-			echo "<div id='notes'>Notes: <input type='text' name='notes'></div><br>";
+			echo "<div id='notes'>Notes: <textarea class='notes' type='text' name='notes'>" . $familyRow['notes'] . "</textarea></div><br>";
 			
 			echo "<input type='submit' name='UpdateMember' value='Update'>";
 			echo "</form>";
