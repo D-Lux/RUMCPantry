@@ -84,6 +84,26 @@ table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	font-size: 1rem;
 }
 
+/* I hate specificity */
+input[type='button'] {
+	width: 60px;
+	height: 45px;
+	margin: 20px 0px 0px 10px;
+	font-size: 1.1rem;
+	border-radius: 50px;
+	background-color: #57B9FF;
+	border: solid 2px #499BD6;
+	color: #000;
+}
+
+input[type='button']:not(.btn_or) {
+	width: 200px;
+	height: 55px;
+}
+input[type='button']:active {
+	background-color: #499BD6;
+	border: solid 2px #3D83B5;
+}
 
 
 #main-page {

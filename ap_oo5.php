@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php';?>
+<?php include 'php/header.php';?>
 <script src="js/orderFormOps.js"></script>
 
 	<button id='btn_back' onclick="goBack()">Back</button>
@@ -45,7 +45,7 @@
 		echo $itemList;
 		
 		// "OR" Button and div to add Special Options
-		echo "<input id='OrBtn_' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
+		echo "<input id='OrBtn_' class='btn_or' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
 		echo "<div id='OrSlot_'></div><br>";
 		
 		// Delete Button for a section
