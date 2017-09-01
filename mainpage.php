@@ -1,4 +1,4 @@
-<?php include 'php/utilities.php';?>
+<?php include 'php/header.php';?>
 		<div id='main-page'>
 			<h3>Main Page</h3>
 			
