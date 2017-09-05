@@ -22,7 +22,8 @@
 				JOIN FamilyMember
 				ON Client.clientID=FamilyMember.clientID
 				WHERE Client.redistribution=1 
-				AND FamilyMember.FirstName='REDISTRIBUTION'";
+				AND FamilyMember.FirstName='REDISTRIBUTION'
+				AND Client.isDeleted=0";
 				
 		$partnerData = queryDB($conn, $sql);
 		
@@ -35,7 +36,11 @@
 			// loop through the query results to create a data list
 			while($partner = sqlFetch($partnerData) ) {
 				$partnerDataList .= "<option data-value=" . $partner['ID'] . ">";
-				$partnerDataList .= $partner['name'] . " - " . $partner['city'] . "</option>";
+				$partnerDataList .= $partner['name'];
+				if ($partner['city'] != "") {
+					$partnerDataList .= " - " . $partner['city'];
+				}
+				$partnerDataList .= "</option>";
 			}
 			$partnerDataList .= "</datalist>";
 		}

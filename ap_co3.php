@@ -124,7 +124,6 @@
 			</select> </div>";
 			echo "<div id='addressZip'>Zip Code: <input type='number' id='addressZipField' name='addressZip' value=" . $clientRow['zip'] . "></div>";
 			
-			// TODO: Get this looking like a proper 'notes' box
 			echo "<br><div id='notes' >Notes: <textarea class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea></div>";
 			echo "<br><br>";
 			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";

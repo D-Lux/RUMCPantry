@@ -5,7 +5,7 @@
 	<div class="body_content">
 	
     <form method="post" action="ap_ro2.php">
-        <input type="submit" value="View Redistribution Clients">
+        <input type="submit" value="View Redistribution Partners">
     </form>
     
 	<form method="post" action="ap_ro5.php">

@@ -83,7 +83,6 @@
 		<input type="submit" name="newRedistItem" value="New Redistribution Item">
     </form>
 	
-	<br>
 	<!-- View Deactivated Items -->
 	<form action="ap_ro5i.php" method="post">
 		<input type="submit" name="ShowInactive" value="View Deactivated Items">

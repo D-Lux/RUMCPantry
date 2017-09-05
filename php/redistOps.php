@@ -413,11 +413,11 @@ function getRedistributionCategory() {
 	$redistCategory = queryDB($conn, $sql);
 	closeDB($conn);
 	
-	// If we didn't get a match, we need to create the 'Available' client
+	// If we didn't get a match, we need to create the 'Redistribution' category
 	if ( $redistCategory==null || $redistCategory->num_rows <= 0 ) {
 		return createRedistributionCategory();
 	}
-	// If we found a match, close the database and return the client ID
+	// If we found a match, close the database and return the category ID
 	else {
 		$getID = sqlFetch($redistCategory);
 		return $getID['categoryID'];
@@ -435,9 +435,10 @@ function createRedistributionCategory(){
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
+		$retID = $conn->insert_id;
 		closeDB($conn);
 		// Return Get the ID Key of the category we just created
-		return $conn->insert_id;
+		return $retID;
 	} 
 	else {
 		closeDB($conn);

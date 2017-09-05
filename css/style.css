@@ -73,10 +73,15 @@ button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate)
 	cursor: pointer;
 }
 
-button[type='submit']:active, input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+button[type='submit']:active:not(.btn_reactivate), input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
 }
+
+button[type='submit']:focus, input[type='submit']:focus {
+	outline: 0;
+}
+
 
 table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	width: 60px;
@@ -86,7 +91,7 @@ table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 }
 
 /* I hate specificity */
-input[type='button']:not(.btn_lock):not(.btn_trash) {
+input[type='button']:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
 	width: 60px;
 	height: 45px;
 	margin: 20px 0px 0px 10px;
@@ -98,13 +103,16 @@ input[type='button']:not(.btn_lock):not(.btn_trash) {
 	cursor: pointer;
 }
 
-input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash) {
+input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
 	width: 200px;
 	height: 55px;
 }
-input[type='button']:active:not(.btn_lock):not(.btn_trash) {
+input[type='button']:active:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
 	background-color: #499BD6;
 	border: solid 2px #3D83B5;
+}
+input[type='button']:focus {
+	outline: 0;
 }
 
 
@@ -193,7 +201,8 @@ td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock),
 Special case buttons
 *******************/
 .btn_trash {
-	background-image: url(/RUMCPantry/images/Icon_Trash.png);
+	/* background-image: url(/RUMCPantry/images/Icon_Trash.png); */
+	background: url("/RUMCPantry/images/Icon_Trash.png") no-repeat;
 	width: 32px;
 	height: 32px;
 	padding: 0px;
@@ -207,7 +216,7 @@ Special case buttons
 }
 
 .btn_reactivate {
-	background-image: url(/RUMCPantry/images/Icon_Reactivate.png);
+	background: url("/RUMCPantry/images/Icon_Reactivate.png") no-repeat;
 	width: 32px;
 	height: 32px;
 	padding: 0px;
@@ -221,7 +230,7 @@ Special case buttons
 }
 
 .btn_lock {
-	background-image: url(/RUMCPantry/images/Icon_Lock.png);
+	background: url("/RUMCPantry/images/Icon_Lock.png") no-repeat;
 	width: 32px;
 	height: 32px;
 	padding: 0px;

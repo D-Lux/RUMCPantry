@@ -73,9 +73,10 @@
 			</select><br>";
 			echo "Zip Code: <input type='number' name='addressZip' value=" . $partnerRow['zip'] . ">";
 			
-			// TODO: Get this looking like a proper 'notes' box
-			echo "<br><div id='notes'>Notes: <input class='notes' type='text' maxlength='256' name='notes' value='" . $partnerRow['notes'] . "'></div>";
-			echo "<br><br>";
+			//Notes
+			echo "<br><div id='notes' >Notes: <textarea class='notes' type='text' maxlength='256' name='notes'>" . $partnerRow['notes'] . "</textarea></div>";
+			
+			echo "<br>";
 			echo "<input type='submit' name='submitUpdateRedist' value='Update'>";
 			echo "</form>";
 		
@@ -92,7 +93,7 @@
 						echo "<br>";
 					}
 					$firstDist = FALSE;
-					$invoiceLink = "/RUMCPantry/ap_ao4.php?id=" . $row["invoiceID"];;
+					$invoiceLink = "/RUMCPantry/ap_ro10.php?id=" . $row["invoiceID"];;
 					$date = $row["visitDate"];
 					echo "<a href='" . $invoiceLink . "'>" . $date . "</a>";
 				}
