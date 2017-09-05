@@ -38,7 +38,7 @@
 		<form id="AppointmentForm" name="AppointmentForm" 
 				action="php/apptOps.php" method="post" onSubmit="return validateNewAppts()">
 			<!-- Get the Date for this set of invoices -->
-			<?php 
+			<?php
 				// Set up server connection
 				$conn = createPantryDatabaseConnection();
 				if ($conn->connect_error) {
@@ -53,15 +53,17 @@
 				$result = queryDB($conn, $sql);
 				// Close the database connection
 				closeDB($conn);
-				
-				//$defaultDate = date('Y-m-d',  strtotime('next saturday'));	// Starting at next saturday
-				$defaultDate = date('Y-m-d', time());
+					
+				// Set the date to this coming saturday or the next saturday after the last appointment
+				$defaultDate = date('Y-m-d', strtotime("next Saturday"));
 				
 				//Set the date to a week after the newest appointment time
 				if ($result!=null && $result->num_rows > 0) {
 					$row = $result->fetch_assoc();
-					//echo $row['visitDate'];
-					$defaultDate = date('Y-m-d', strtotime($row['visitDate'] . " + 1 week"));
+					$checkDate = date('Y-m-d', strtotime($row['visitDate'] . " next saturday"));
+					if ($defaultDate <= $checkDate) {
+						$defaultDate = $checkDate;
+					}
 				}
 				
 				// Date box
@@ -76,11 +78,12 @@
 				<?php
 					$timeSlot = date('H:i', strtotime('9:30'));	// Start time
 					$endTime = date('H:i', strtotime('11:00'));	// End time
+					$numSlots = 5;	// Defualt number of slots per time slot
 
 					while ( $timeSlot <= $endTime ) {
 						echo "<tr><td><input type='time' name='time[]' value='"
 								. $timeSlot . "' step='900'></td>";
-						echo "<td><input type='number' name='qty[]' value='6' min='1'></td>";
+						echo "<td><input type='number' name='qty[]' value='" . $numSlots . "' min='1'></td>";
 						echo "<td><input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'></td>";
 						echo "</tr>";
 					

@@ -3,21 +3,24 @@ div.tab {
 }
 
 div.tab button {
-	background-color: inherit;
+	background-color: #CA3628;
+	color: #FFC047;
 	float: left;
-	border: none;
-	outline: none;
+	border: 1px solid black;
 	cursor: pointer;
-	padding: 3px 6px;
+	padding: 5px 8px;
 	transition: 0.3s;
+	font-size: 1.5rem;
 }
 
 div.tab button:hover {
-	background-color: #ccc;
+	background-color: #B1CAD3;
+	color: gray;
 }
 
 div.tab button.active {
-	background-color: #000;
+	background-color: #499BD6;
+	border: 1px solid blue;
 	color: white;
 }
 

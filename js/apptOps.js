@@ -54,7 +54,7 @@ function addTimeSlot() {
 
 	// Add default information to these cells:
 	cell1.innerHTML = "<input type='time' name='time[]' value='10:00' step='900'>";
-	cell2.innerHTML = "<input type='number' name='qty[]' value='6' min='1' >";
+	cell2.innerHTML = "<input type='number' name='qty[]' value='5' min='1' >";
 	cell3.innerHTML = "<input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'>";
 }
 
@@ -74,14 +74,7 @@ function AJAX_SetAppointment(callingSlot) {
 	}
 
 	// Run the AJAX stuff
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} 
-	else {
-		// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	xmlhttp = newAJAXObj();
 	
 	// Generate the IDs for the fields we will be changing
 	var famSizeIDTag = "famSize" + IDNum;
@@ -127,14 +120,7 @@ function AJAX_ActivateAppointment(callingSlot) {
 	var statusIDTag = document.getElementById("status" + IDNum);
 	var invoiceIDNum = document.getElementById("InvoiceID" + IDNum).value;
 	// Run the AJAX stuff
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} 
-	else {
-		// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	xmlhttp = newAJAXObj();
 	
 	// Generate the IDs for the fields we will be changing
 	var statusIDTag = "status" + IDNum;

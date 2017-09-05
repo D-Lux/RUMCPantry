@@ -70,6 +70,7 @@ button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate)
 	background-color: #57B9FF; //#27B867;
 	border: solid 2px #499BD6; //#099C4A;
 	color: #000;
+	cursor: pointer;
 }
 
 button[type='submit']:active, input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
@@ -94,6 +95,7 @@ input[type='button']:not(.btn_lock):not(.btn_trash) {
 	background-color: #57B9FF;
 	border: solid 2px #499BD6;
 	color: #000;
+	cursor: pointer;
 }
 
 input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash) {
@@ -117,6 +119,7 @@ input[type='button']:active:not(.btn_lock):not(.btn_trash) {
 	font-size: 1.1rem;
 	border-radius: 25px;
 	border: solid 2px #AAA;
+	cursor: pointer;
 }
 
 #btn_back:active {
@@ -128,10 +131,13 @@ input[type='button']:active:not(.btn_lock):not(.btn_trash) {
 	margin-top: 30px;
 }
 
-input[type='text']:not(.notes), input[type='password'], input[type='email'], form>select, input[type='date'], select {
+input[type='text']:not(.notes), input[type='password'], input[type='email'], 
+form>select, input[type='date'], select, input[type='time'] {
 	height: 35px;
 	font-size: 1.1rem;
 	margin-left: 10px;
+	border-radius: 8px;
+	padding: 5px;
 }
 
 input[type='email'] {
@@ -151,6 +157,7 @@ input[type='number']:not(#addressZipField) {
 	font-size: 1.1rem;
 	margin-left: 10px;
 	text-align: center;
+	border-radius: 8px;
 }
 
 #addressZipField {
@@ -192,6 +199,7 @@ Special case buttons
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
+	cursor: pointer;
 }
 
 .btn_trash:active {
@@ -205,6 +213,7 @@ Special case buttons
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
+	cursor: pointer;
 }
 
 .btn_reactivate:active {
@@ -218,6 +227,7 @@ Special case buttons
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
+	cursor: pointer;
 }
 
 .btn_lock:active {

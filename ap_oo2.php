@@ -69,13 +69,23 @@
 				ORDER BY name";
 		$numTabs = queryDB($conn, $sql);
 		
+		// If the number of tabs becomes too large, advance to the next line
+		$tabRow = 0;
+		$tabRowCount = 5;
 		echo "<div class='tab'>";
 		for ($i=0; $i< $numTabs->num_rows; $i++) {
 			$tab = sqlFetch($numTabs);
 			echo "<button class='tablinks' onclick='viewTab(event, itemList" . $i . ")'";
 			echo ($i > 0 ? "" : " id='defaultOpen' ") . ">" . $tab['name'] . "</button>";
+			
+			// Check the number of tabs we've shown
+			$tabRow++;
+			if ($tabRow > $tabRowCount) {
+				$tabRow = 0;
+				echo "<br><br>";
+			}
 		}
-		echo "</div>";
+		echo "</div><br>";
 		
 		// ******************************************************
 		// ** Create our table of information
@@ -99,13 +109,15 @@
 				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='number' min=0 
 						value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)'><br>";
 				*/
-				echo "<select id='cid" . $familyToken . $item['categoryID'] . "' onchange='AJAX_UpdateCQty(this)'>";
-				for ($i = 0; $i < 9; $i++) {
+				echo "<select class='CQty' id='cid" . $familyToken . $item['categoryID'] . 
+						"' onchange='AJAX_UpdateCQty(this)'>";
+				for ($i = 0; $i < 11; $i++) {
 					echo "<option value=$i " . ($i == $item['CQty'] ? "Selected" : "") . ">$i</option>";
 				}
-				echo "</select>";
+				echo "</select><br><br>";
 				
 				$currCategory = $item['CName'];
+				// Table headers
 				echo "<table><tr><th>Item Name</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th>Qty</th></tr>";
 			}
 			// Print this item's name and show it's location
@@ -116,7 +128,8 @@
 			
 			// *****************************************
 			// This is the dropdown selection list
-			echo "<td><select id='iqty" . $familyToken . $item['itemID'] . "' onchange='AJAX_UpdateQty(this)'>";
+			echo "<td><select class='IQty' id='iqty" . $familyToken . $item['itemID'] . 
+					"' onchange='AJAX_UpdateQty(this)'>";
 			
 			for ($i = 0; $i < 11; $i++) {
 				echo "<option value=$i " . ($i == $item['IQty'] ? "Selected" : "") . ">$i</option>";

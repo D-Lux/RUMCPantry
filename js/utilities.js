@@ -79,7 +79,13 @@ function goBack() {
 
         case (location.pathname.includes("cp2.php")):
         case (location.pathname.includes("cof.php")):
-            window.location.assign("/RUMCPantry/cp1.php");
+			// If the admin is viewing the order form, we need to go back to a different page
+			if (getQueryVariable("Small") || getQueryVariable("Medium") || getQueryVariable("Large")) {
+				window.location.assign("/RUMCPantry/ap_oo1.php");
+			}
+			else {
+				window.location.assign("/RUMCPantry/cp1.php");
+			}
             break;
 
         case (location.pathname.includes("ap_oo4.php")):
@@ -156,4 +162,22 @@ function getCookie(cname) {
 function getElementAndColorIt(elementID, color) {
     var element = document.getElementById(elementID);
     element.style.color = color;
+}
+
+// For creating an AJAX object
+function newAJAXObj() {
+// Run the AJAX stuff
+	if (window.XMLHttpRequest) {
+		// code for IE7+, Firefox, Chrome, Opera, Safari
+		return (new XMLHttpRequest());
+	} 
+	else {
+		// code for IE6, IE5
+		return (new ActiveXObject("Microsoft.XMLHTTP"));
+	}
+}
+
+// For checking if an object is hidden
+function isHiddenElement(e) {
+	return (e.offsetHeight === 0 && e.offsetWidth === 0);
 }

@@ -88,8 +88,8 @@ function deleteSavedSpecials(ele)	{
 
 // *****************************************************************
 // ** AJAX FUNCTIONS
-
 // **
+
 // Updates item quantities
 function AJAX_UpdateQty(callingSlot) {
 	// Get the item ID and the new quantity from the page
@@ -98,19 +98,12 @@ function AJAX_UpdateQty(callingSlot) {
 	var familyType = familyTypeExtractor(callingSlot.id.substring(4,5));
 	var itemID = callingSlot.id.substring(5);
 
-	// Run the AJAX stuff
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} 
-	else {
-		// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	xmlhttp = newAJAXObj();
 	
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			//document.getElementById("ErrorLog").innerHTML = this.responseText;
+			checkQuantitySelections();			
 		}
 	};
 	xmlhttp.open("GET","/RUMCPantry/php/ajax/setOrderForm.php?" +
@@ -159,19 +152,12 @@ function AJAX_UpdateCQty(callingSlot) {
 	var categoryID = callingSlot.id.substring(4);
 	var familyType = familyTypeExtractor(callingSlot.id.substring(3,4));
 
-	// Run the AJAX stuff
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		xmlhttp = new XMLHttpRequest();
-	} 
-	else {
-		// code for IE6, IE5
-		xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-	}
+	xmlhttp = newAJAXObj();
 	
 	xmlhttp.onreadystatechange = function() {
 		if (this.readyState == 4 && this.status == 200) {
 			//document.getElementById("ErrorLog").innerHTML = this.responseText;
+			checkQuantitySelections();
 		}
 	};
 	xmlhttp.open("GET","/RUMCPantry/php/ajax/setOrderForm.php?" +
@@ -179,6 +165,38 @@ function AJAX_UpdateCQty(callingSlot) {
 				 "cQty=" + newQty + "&" +
 				 "familyType=" + familyType, true);
 	xmlhttp.send();
+}
+
+// *********************************
+// * Checking Order form quantities
+
+function checkQuantitySelections() {
+	// Get the count of the category
+	var categoryOptions = document.querySelectorAll(".CQty");
+	var currCategoryCount = 0;
+	for (i = 0; i < categoryOptions.length; i++) {
+		var elem = categoryOptions[i];
+		if (!isHiddenElement(elem)) {
+			currCategoryCount = parseInt(elem.value);
+		}
+	}
+	
+	var categoryOptions = document.querySelectorAll(".IQty");
+	var totalItemCount = 0;
+	for (i = 0; i < categoryOptions.length; i++) {
+		var elem = categoryOptions[i];
+		if (!isHiddenElement(elem)) {
+			var currItemCount = parseInt(elem.value);
+			if (currItemCount > currCategoryCount) {
+				window.alert("An item's allowed quantity should not be greater than the category quantity.");
+			}
+			totalItemCount += currItemCount;
+		}
+	}
+	
+	if (totalItemCount < currCategoryCount) {
+		window.alert("There are not enough items in this category to match the selection quantity.");
+	}
 }
 
 // *********************************************
@@ -351,14 +369,8 @@ function AJAX_RemoveFromInvoice(callingSlot) {
 
 	if (confirm("Do you want to remove this item?")) {
 		// Run the AJAX stuff
-		if (window.XMLHttpRequest) {
-			// code for IE7+, Firefox, Chrome, Opera, Safari
-			xmlhttp = new XMLHttpRequest();
-		} 
-		else {
-			// code for IE6, IE5
-			xmlhttp = new ActiveXObject("Microsoft.XMLHTTP");
-		}
+		xmlhttp = newAJAXObj();
+
 		xmlhttp.onreadystatechange = function() {
 			if (this.readyState == 4 && this.status == 200) {
 				document.getElementById('orderTable').deleteRow(callingSlot.parentNode.parentNode.rowIndex);

@@ -103,18 +103,25 @@
 							 : ($invoice['lName'] . ", " . $invoice['fName']) ));
 
 				$clientIDTag = "Clients" . $setID;
-				if ($clientName == "Available") {
-					echo "<input type='text' list='Clients' id=" . $clientIDTag;
+				
+				if ($invoice['status'] > GetActiveStatus()) {
+					echo $clientName;
 				}
 				else {
-					echo "<input type='text' list='Clients'  id=" . $clientIDTag . "
-							value='" . $clientName . "'";
+					if ($clientName == "Available") {
+						echo "<input type='text' list='Clients' id=" . $clientIDTag;
+					}
+					else {
+						echo "<input type='text' list='Clients'  id=" . $clientIDTag . "
+								value='" . $clientName . "'";
+					}
+					// AJAX Call
+					echo " onchange='AJAX_SetAppointment(this)' >";
+					
+					// Dump out the client list we created on page load
+					echo $clientDataList;
 				}
-				// AJAX Call
-				echo " onchange='AJAX_SetAppointment(this)' >";
 				
-				// Dump out the client list we created on page load
-				echo $clientDataList;
 				echo "</td>";
 			
 				// These details change with the AJAX call so we need custom tags to locate them
@@ -122,7 +129,7 @@
 				echo "<td id='" . $familySizeIDTag . "'>" . $invoice['familySize'] . "</td>";
 				
 				$phoneNoIDTag = "phoneNo" . $setID;
-				echo "<td id='" . $phoneNoIDTag . "'>" . $invoice['PhoneNo'] . "</td>";
+				echo "<td id='" . $phoneNoIDTag . "'>" . displayPhoneNo($invoice['PhoneNo']) . "</td>";
 				
 				$statusIDTag = "status" . $setID;
 				$status = visitStatusDecoder($invoice['status']);
@@ -135,15 +142,17 @@
 				// Add the date to return properly
 				echo "<input type='hidden' name='returnDate' value=" . $_GET['date'] . ">";
 				
-				echo "<td><input id='deleteInvoice' value=' ' class='btn_trash' name='DeleteInvoice' type='submit' ";
-				echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'></td>";
 				
+				if ($invoice['status'] < GetActiveStatus()) {
+					// --==[*DELETE*]==-- Button
+					echo "<td><input id='deleteInvoice' value=' ' class='btn_trash' name='DeleteInvoice' type='submit' ";
+					echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'></td>";
+				
+					// --==[*Lock*]==-- Button
+					echo "<td><input id='lock" . $setID . "' type='button' class='btn_lock'  onclick='AJAX_ActivateAppointment(this)'></td>";
+				}
 				echo "</form>";
-				// --==[*DELETE*]==-- Button end
 				
-				// 'Lock' Button
-				// TODO: Add hover help text
-				echo "<td><input id='lock" . $setID . "' type='button' class='btn_lock'  onclick='AJAX_ActivateAppointment(this)'></td>";
 				
 				// close off the row
 				echo "</tr>";

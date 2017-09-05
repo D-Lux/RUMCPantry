@@ -2,7 +2,15 @@
 <?php include 'php/beanOps.php'; ?>
 <script src='js/orderFormOps.js'></script>
 		<button id='btn_back' onclick="goBack()">Back</button>
-		<h3>Order Form</h3>
+		<?php
+			echo "<h3>Order Form";
+			$ViewMode = false;
+			if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
+				$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
+				echo ": " . $ViewMode;
+			}
+			echo "</h3>";
+		?>
 		<div class="body_content">
 			<?php
 				// *******************************************************
@@ -10,44 +18,55 @@
 				// * 1.) Family size information
 				// * 2.) Order form database
 				
-				// -= Family size query =-
-				$famSql = "SELECT (numOfKids + numOfAdults) as familySize 
-						   FROM client
-						   WHERE clientID=" . $_POST['clientID'];
-				$walkinSql = "SELECT walkIn
-						   FROM Invoice
-						   WHERE invoiceID=" . $_POST['invoiceID'];
+				// Default to walkIn
+				$familyType = "Small";
+				$walkIn = 0;
 				
-				//Run this query so we know what to grab from the item database
+				// Open the database connection
 				$conn = createPantryDatabaseConnection();
 				if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
 				
-				// Default to walkIn
-				$familyType = "Small";
-				
-				$famQuery = queryDB($conn, $famSql);
-				if ($famQuery === FALSE) {
-					echo "sql error: " . mysqli_error($conn);
-					echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-				}
-				else {
-					$famData = sqlFetch($famQuery);
-					$familyType = familySizeDecoder($famData['familySize']);
+				// Check if we are just viewing (from admin)
+				$ViewMode = false;
+				if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
+					$ViewMode = true;
+					// Set the family type as appropriate
+					$familyType = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
 				}
 				
-				// Force family type to small if this is a walkin client
-				$WIQuery = queryDB($conn, $walkinSql);
-				$walkIn = 0;
-				if ($WIQuery === FALSE) {
-					echo "sql error: " . mysqli_error($conn);
-					echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-				}
-				else {
-					$walkInData = sqlFetch($WIQuery);
-					$walkIn = $walkInData['walkIn'];
-				}
-				if ($walkIn == 1) {
-					$familyType = "Small";
+				if (!$ViewMode) {
+					// -= Family size query =-
+					$famSql = "SELECT (numOfKids + numOfAdults) as familySize 
+							   FROM client
+							   WHERE clientID=" . $_POST['clientID'];
+					$walkinSql = "SELECT walkIn
+							   FROM Invoice
+							   WHERE invoiceID=" . $_POST['invoiceID'];
+					
+					$famQuery = queryDB($conn, $famSql);
+					if ($famQuery === FALSE) {
+						echo "sql error: " . mysqli_error($conn);
+						echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+					}
+					else {
+						$famData = sqlFetch($famQuery);
+						$familyType = familySizeDecoder($famData['familySize']);
+					}
+					
+					// Force family type to small if this is a walkin client
+					$WIQuery = queryDB($conn, $walkinSql);
+					
+					if ($WIQuery === FALSE) {
+						echo "sql error: " . mysqli_error($conn);
+						echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+					}
+					else {
+						$walkInData = sqlFetch($WIQuery);
+						$walkIn = $walkInData['walkIn'];
+					}
+					if ($walkIn == 1) {
+						$familyType = "Small";
+					}
 				}
 				
 				// --== Item databse query ==--
@@ -75,11 +94,13 @@
 				// ************************************************************
 				// * Create the order form
 				
-				// Start the form and add a hidden field for client info
-				echo "<form method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
-				echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
-				echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
-				echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
+				// Start the form and add a hidden field for client info (If we're not in viewmode)
+				if (!$ViewMode) {
+					echo "<form method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
+					echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
+					echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
+					echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
+				}
 				
 				// Set defaults
 				$currCategory = "";
@@ -225,10 +246,13 @@
 						$divOpen = false;
 					}
 				}
+				// Close the form if we're not in the view mode
+				if (!$ViewMode) {
+					echo "<br>";
+					echo "<button type='submit' name='CreateInvoiceDescriptions'>Submit Order</button>";
+					echo "</form>";
+				}
 			?>
-			<br>
-				<button type="submit" name="CreateInvoiceDescriptions">Submit Order</button>
-			</form>
 		</div><!-- /body_content -->
 	</div><!-- /content -->
 	</body>
