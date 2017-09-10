@@ -23,7 +23,7 @@
         <input type="submit" value="Donation operations">
     </form>
 	<form method="post" action="ap_ro1.php">
-        <input type="submit" value="Redistribution operations">
+        <input type="submit" value="Reallocation operations">
     </form>
     <form method="post" action="checkIn.php">
         <input type="submit" value="Check in page">

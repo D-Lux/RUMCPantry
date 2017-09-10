@@ -202,6 +202,7 @@
 	// * Specials
 	
 	if (!$walkIn) {
+		echo "<div id='specialsSection'>";
 		$specialsFile = fopen("specials.txt","r") or die();
 		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3>";
 		$conn = createPantryDatabaseConnection();
@@ -260,6 +261,13 @@
 			echo "</div>"; // closing orderSection div from previous loop
 			$divOpen = false;
 		}
+		echo "</div>"; // Closing specials div
+					
+		// ***********************************
+		// * Run a javascript function to show specials if there are any
+		if ($specialItemNum > 1) {
+			echo "<script type='text/javascript'> showSpecials(); </script>";
+		}
 	}
 	
 	// ***********************************
@@ -267,7 +275,7 @@
 	echo "<script type='text/javascript'> updateCheckedQuantities(); </script>";
 	
 ?>
-			<button type="submit" name="CreateReviewedInvoiceDescriptions">Submit Order</button>
+			<button type="submit" name="CreateReviewedInvoiceDescriptions">Verify Order</button>
 		</form>
 
 	</div><!-- /body_content -->

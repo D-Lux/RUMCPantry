@@ -37,14 +37,29 @@
 			echo "<input type='hidden' name='clientID' value=" . $_GET['clientID'] . ">";
 			echo "<input type='hidden' name='memberID' value=" . $_GET['memberID'] . ">";
 		
+			echo "<div class='inputDiv'>";
 			// First Name Field - auto filled in with database data
-			echo "<div id='memberFirstName' class='required'><label>First Name:</label>
+			echo "<div id='memberFirstName' class='required'><label for='memberFirstNameField'>First Name:</label>
 				<input type='text' id='memberFirstNameField' name='memberFirstName' maxlength='45' value='" . displaySingleQuote($familyRow['firstName']) . "'> </div>";
 				
 			// Last Name
-			echo "<div id='memberLastName' class='required'><label>Last Name:</label>
+			echo "<div id='memberLastName' class='required'><label for='memberLastNameField'>Last Name:</label>
 				<input type='text' id='memberLastNameField' id='validateNewClientMember' name='memberLastName' maxlength='45' value='" . displaySingleQuote($familyRow['lastName']) . "'> </div>";
-		
+
+			echo "<label for='birthDateInput'>Birthday:</label>
+				<input id='birthDateInput' type='date' name='birthDate' min='1900-01-01' value='" . $familyRow['birthDate'] . "'><br>";
+			
+			$gender = $familyRow['gender'];
+			echo "<label for='genderInput'>Gender:</label>
+				<select id='genderInput' name='gender'> 
+				<option value=0 " . ($gender == 0 ? "selected" : "") . ">-</option>
+				<option value=-1 " . ($gender == -1 ? "selected" : "") . ">Male</option>
+				<option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
+				</select> <br>";
+			
+			echo "<label for='notesInput'>Notes:</label>
+				  <textarea class='notes' type='text' name='notes'>" . $familyRow['notes'] . "</textarea><br>";
+			
 			// If the person is already the head of the household, we just say that.
 			// Otherwise, place a checkbox to change head of household
 			if ($familyRow['isHeadOfHousehold']) {
@@ -57,19 +72,11 @@
 				echo "<label for='HoH' ></label>";
 				echo "</div></div><br>";
 			}
-
-			echo "<div id='birthDate'>Birthday: 
-				<input type='date' name='birthDate' min='1900-01-01' value='" . $familyRow['birthDate'] . "'></div><br>";
 			
-			$gender = $familyRow['gender'];
-			echo "<div id='gender'>Gender: <select name='gender'> 
-				<option value=0 " . ($gender == 0 ? "selected" : "") . ">-</option>
-				<option value=-1 " . ($gender == -1 ? "selected" : "") . ">Male</option>
-				<option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
-				</select> </div>";
+			// </inputDiv>
+			echo "</div>";
 			
-			echo "<div id='notes'>Notes: <textarea class='notes' type='text' name='notes'>" . $familyRow['notes'] . "</textarea></div><br>";
-			
+			// submit button
 			echo "<input type='submit' name='UpdateMember' value='Update'>";
 			echo "</form>";
 		}

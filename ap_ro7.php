@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 <script src="js/redistOps.js"></script>
     <button id='btn_back' onclick="goBack()">Back</button>
-	<h3>Update Redistribution Item</h3>
+	<h3>Update Reallocation Item</h3>
 	
 	<div class="body_content">	
 	
@@ -37,15 +37,18 @@
 		
 		echo "<input type='hidden' name='id' value=" . $_GET['id'] . ">";
 		
+		echo "<div class='inputDiv'>";
 		// Item name (required)
-		echo "<div id='itemName' class='required'><label>Item Name: </label>";
+		echo "<div id='itemName' class='required'><label for='itemNameField'>Item Name:</label>";
 		echo "<input type='text' id='itemNameField' name='itemName' maxlength='45' value='" . $item['itemName'] . "' ></div>";
 		
 		// Price and weight
-		echo "<div>Price: <input type='number' name='price' min=0 step='.01' value=" . $item['price'] . "></div>";
-		echo "<div>Weight: <input type='number' name='weight' min=0 step='.01' value=" . $item['weight'] . "></div>";
+		echo "<label for='priceInput'>Price:</label>
+				<input id='priceInput' type='number' name='price' min=0 step='.01' value=" . $item['price'] . "><br>";
+		echo "<label for='weightInput'>Weight:</label>
+				<input input='weightInput' type='number' name='weight' min=0 step='.01' value=" . $item['weight'] . "></div>";
 	
-		echo "<br><br>";
+		echo "</div><br><br>";	// </inputDiv>
 		echo "<input type='submit' name='submitUpdateRedistItem' value='Update'>";
 		echo "</form>";	
 	?>

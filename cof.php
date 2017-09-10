@@ -197,7 +197,8 @@
 				// *************************************************
 				// * Specials
 				
-				if (!$walkIn) {;
+				if (!$walkIn) {
+					echo "<div id='specialsSection'>";
 					$specialsFile = fopen("specials.txt","r") or die();
 					echo "<hr><h3>Specials</h3><h4>Please select one item from each section</h4>";
 					$conn = createPantryDatabaseConnection();
@@ -244,6 +245,13 @@
 					if ($divOpen) {
 						echo "</div>"; // closing orderSection div from previous loop
 						$divOpen = false;
+					}
+					echo "</div>"; // Closing specials div
+					
+					// ***********************************
+					// * Run a javascript function to show specials if there are any
+					if ($specialItemNum > 1) {
+						echo "<script type='text/javascript'> showSpecials(); </script>";
 					}
 				}
 				// Close the form if we're not in the view mode

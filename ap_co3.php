@@ -78,36 +78,48 @@
 			
 			echo "<form name='updateClient' action='php/clientOps.php' method='post' >";
 			
+			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
 			
+			// Open a div to set spacing
+			echo "<div class='inputDiv'>";
+			
+			echo "<div class='required'><label for='numAdultsInput'>Number of Adults:</label>";
+			echo "<input id='numAdultsInput' type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
+			echo "<label for='numKidsInput'>Number of Children: </label>";
+			echo "<input id='numKidsInput' type='number' name='numKids' value=" . $clientRow['numOfKids'] . "><br>";
+			$familySize =  $clientRow['numOfKids'] + $clientRow['numOfAdults'];
+			
+			echo "<br>";
+			
+			$foodStampStatus = $clientRow['foodStamps'];
+			// Auto select the correct food stamp selection based on database value
+			echo "<label for='foodStampsInput'>Foodstamp Status:</label>
+				<select id='foodStampsInput' name='foodStamps'> 
+				<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>
+				<option value=1 " . ($foodStampStatus == 1 ? "selected" : "") . ">Yes</option>
+				<option value=0 " . ($foodStampStatus == 0 ? "selected" : "") . ">No</option>
+				</select><br>";
+				
 			$clientType = $clientRow['clientType'];
-			echo "<div id='clientType'>Foodstamp Status: <select name='clientType'> 
+			echo "<label id='clientTypeInput'>Client Type:</label>
+				<select id='clientTypeInput' name='clientType'> 
 				<option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
 				<option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
 				<option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
 				<option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
-				</select> </div>";
+				</select><br>";
 			
-			
-			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
-			echo "<div id='numAdults' class='required'><label>Number of Adults:</label> <input type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
-			echo "<div id='numKids'>Number of Children: <input type='number' name='numKids' value=" . $clientRow['numOfKids'] . "></div><br>";
-			$familySize =  $clientRow['numOfKids'] + $clientRow['numOfAdults'];
-			
-			$foodStampStatus = $clientRow['foodStamps'];
-			// Auto select the correct food stamp selection based on database value
-			echo "<div id='foodStamps'>Foodstamp Status: <select name='foodStamps'> 
-				<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>
-				<option value=1 " . ($foodStampStatus == 1 ? "selected" : "") . ">Yes</option>
-				<option value=0 " . ($foodStampStatus == 0 ? "selected" : "") . ">No</option>
-				</select> </div>";
-			
-			echo "<div id='email'>Email: <input type='email' name='email' value='" . $clientRow['email'] . "'></div>";
-			echo "<div id='phoneNo'>Phone Number: <input type='tel' name='phoneNo' value=" . displayPhoneNo($clientRow['phoneNumber']) . "></div>";
-			echo "<div id='addressStreet'>Street Address: <input type='text' name='addressStreet' value='" . $clientRow['address'] . "' ></div>";
-			echo "<div id='addressCity'>City: <input type='text' name='addressCity' value='" . $clientRow['city'] . "'></div>";
+			echo "<label for='phoneNoInput'>Phone Number:</label>
+				  <input type='tel' name='phoneNo' value=" . displayPhoneNo($clientRow['phoneNumber']) . "><br>";
+			echo "<label for='emailInput'>Email:</label>
+				  <input id='emailInput' type='email' name='email' value='" . $clientRow['email'] . "'><br>";
+			echo "<label for='addressStreetInput'>Street Address:</label>
+				  <input id='addressStreetInput' type='text' name='addressStreet' value='" . $clientRow['address'] . "' ><br>";
+			echo "<label for='addressCityInput'>City:</label>
+				  <input id='addressCityInput' type='text' name='addressCity' value='" . $clientRow['city'] . "'><br>";
 			// Dropdown for state
-			echo "<div id='addressState'>State:
-				<select name='addressState'> <option value=" . $clientRow['state'] . ">" . $clientRow['state'] . "</option>
+			echo "<label for='addressStateInput'>State:</label>
+				<select id='addressStateInput' name='addressState'> <option value=" . $clientRow['state'] . ">" . $clientRow['state'] . "</option>
 				<option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option>
 				<option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option>
 				<option value='DC'>DC</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option>
@@ -121,12 +133,15 @@
 				<option value='SC'>SC</option> <option value='SD'>SD</option> <option value='TN'>TN</option> <option value='TX'>TX</option>
 				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
 				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
-			</select> </div>";
-			echo "<div id='addressZip'>Zip Code: <input type='number' id='addressZipField' name='addressZip' value=" . $clientRow['zip'] . "></div>";
+			</select> <br>";
+			echo "<label for='addressZipField'>Zip Code:</label>
+				  <input type='number' id='addressZipField' name='addressZip' value=" . $clientRow['zip'] . "><br>";
 			
-			echo "<br><div id='notes' >Notes: <textarea class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea></div>";
+			echo "<br><label for='notesInput'>Notes:</label>
+				  <textarea id='notesInput' class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea><br>";
 			echo "<br><br>";
 			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";
+			echo "</div>"; // </inputDiv>
 			echo "</form>";
 		
 			

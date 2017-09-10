@@ -283,7 +283,8 @@ function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counte
 		e.style.color = "DodgerBlue";
 	}
 	else {
-		e.innerHTML = "You may select up to " + MaxCount + " cans, or 1 bag (" + (MaxCount - runningTotal) + " remaining)";
+		var maxCanCount = document.getElementById("CanBeans").value;
+		e.innerHTML = "You may select up to " + maxCanCount + " cans, or 1 bag (" + (maxCanCount - runningTotal) + " remaining)";
 		if (runningTotal == 0) {
 			baggedBeanSection.style.opacity = 1;
 		}
@@ -320,6 +321,10 @@ function updateCheckedQuantities()	{
 			
 		}
 	}
+}
+
+function showSpecials() {
+    document.getElementById("specialsSection").style.display = "block";
 }
 
 // ********************************************

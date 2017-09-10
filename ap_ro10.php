@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 
 	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>View Redistribution</h3>
+    <h3>View Reallocation</h3>
 	
 	<div class="body_content">
 	

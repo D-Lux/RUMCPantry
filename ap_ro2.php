@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 	<button id='btn_back' onclick="goBack()">Back</button>
 	
-    <h3>Redistribution Partners</h3>
+    <h3>Reallocation Partners</h3>
 
 	<script>
 		if (getCookie("updatePartner") != "") {

@@ -1,6 +1,6 @@
 <?php include 'php/header.php'; ?>
 	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>Redistribution Items (inactive)</h3>
+    <h3>Reallocation Items (inactive)</h3>
 	
 	<script>
 		if (getCookie("redistToggled") != "") {

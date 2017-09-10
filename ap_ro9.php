@@ -2,7 +2,7 @@
 <script src="js/redistOps.js"></script>
 
 	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>New Redistribution</h3>
+    <h3>New Reallocation</h3>
 	
 	<div class="body_content">
 	

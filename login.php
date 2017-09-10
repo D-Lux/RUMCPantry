@@ -4,16 +4,21 @@
 	p {
 		color : red;
 	}
+	
 	</style>
-	<h3>Log In</h3>
+	<h3>Welcome</h3>
 	
 	<div class="body_content">
 		
 		<form method = "POST" action="php/login.php">
-		  Log In: <input type="text" name="login" value="">
-		  <br>
-		  Password: <input type="password" name="password" value="" autocomplete="off">
-		  <br>
+			<div class="inputDiv">
+				<label for="loginTextBox">Log In: </label>
+				<input id="loginTextBox" type="text" name="login" value="">
+				<br>
+				<label for="passwordTextBox">Password: </label>
+				<input id="passwordTextBox" type="password" name="password" value="" autocomplete="off">
+				<br>
+			</div>
 		  <?php
 			if (isset($_GET['err'])) {
 				if ($_GET['err'] == 1) {

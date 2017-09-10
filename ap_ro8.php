@@ -1,15 +1,15 @@
 <?php include 'php/header.php'; ?>
 	<button id='btn_back' onclick="goBack()">Back</button>
 	
-    <h3>Redistributions</h3>
+    <h3>Reallocations</h3>
 
 	<script>
 		if (getCookie("newRedistribution") != "") {
-			window.alert("New Redistribution added!");
+			window.alert("New Reallocation added!");
 			removeCookie("newRedistribution");
 		}
 		if (getCookie("redistributionDeleted") != "") {
-			window.alert("Redistribution removed!");
+			window.alert("Reallocation removed!");
 			removeCookie("redistributionDeleted");
 		}
 	</script>
@@ -73,7 +73,7 @@
 			echo "</table><br>";
 		} 
 		else {
-			echo "No redistribution invoices in database.";
+			echo "No Reallocation invoices in database.";
 		}
 		
 		$conn->close();
@@ -81,7 +81,7 @@
 	
 	<!-- NEW Redistribution Invoice -->
 	<form action="php/redistOps.php" method="post" >
-		<input type="submit" name="newRedistInvoice" value="New Redistribution">
+		<input type="submit" name="newRedistInvoice" value="New Reallocation">
     </form>
 	
 

@@ -1,8 +1,6 @@
 <?php include 'php/header.php';?>
 		<div id='main-page'>
-			<h3>Main Page</h3>
-			
-			
+
 			<form method="get" action="cp1.php">
 				<button type="submit">Client</button>
 			</form>

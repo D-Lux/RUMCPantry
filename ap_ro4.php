@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 <script src="js/redistOps.js"></script>
     <button id='btn_back' onclick="goBack()">Back</button>
-	<h3>Update Partner Information</h3>
+	<h3>Update Reallocation Partner</h3>
 	
 	<script>
 		if (getCookie("newPartner") != "") {
@@ -47,16 +47,25 @@
 			$partnerRow = sqlFetch($partnerInfo);
 			
 			echo "<form name='updateClient' action='php/redistOps.php' onSubmit='return validateNewPartner()' method='post' >";
-			echo "<div id='partnerName' class='required'><label>Partner Name:</label>  <input type='text' name='partnerName' value='" . displaySingleQuote($partnerRow['name']) . "'><br>";
+			
+			// Start inputDiv
+			echo "<div class='inputDiv'>";
+			
+			echo "<div id='partnerName' class='required'><label for='partnerNameInput'>Partner Name:</label>
+					<input id='partnerNameInput' type='text' name='partnerName' value='" . displaySingleQuote($partnerRow['name']) . "'><br>";
 			echo "<input type='hidden' name='partnerID' value='" . $_GET['id'] . "'>";
 
-			echo "Email: <input type='email' name='email' value='" . $partnerRow['email'] . "'><br>";
-			echo "Phone Number: <input type='tel' name='phoneNo' value=" . displayPhoneNo($partnerRow['phoneNumber']) . "><br>";
-			echo "Street Address: <input type='text' name='addressStreet' value='" . $partnerRow['address'] . "' >";
-			echo "City: <input type='text' name='addressCity' value='" . $partnerRow['city'] . "'>";
+			echo "<label for='emailInput'>Email:</label>
+					<input id='emailInput' type='email' name='email' value='" . $partnerRow['email'] . "'><br>";
+			echo "<label for='phoneNoInput'>Phone Number:</label>
+					<input id='phoneNoInput' type='tel' name='phoneNo' value=" . displayPhoneNo($partnerRow['phoneNumber']) . "><br>";
+			echo "<label for='addressStreetInput'>Street Address:</label>
+					<input id='addressStreetInput' type='text' name='addressStreet' value='" . $partnerRow['address'] . "' ><br>";
+			echo "<label for='addressCityInput'>City:</label>
+					<input id='addressCityInput' type='text' name='addressCity' value='" . $partnerRow['city'] . "'><br>";
 			// Dropdown for state
-			echo "State:
-				<select name='addressState'> <option value=" . $partnerRow['state'] . ">" . $partnerRow['state'] . "</option>
+			echo "<label for='addressStateInput'>State:</label>
+				<select id='addressStateInput' name='addressState'> <option value=" . $partnerRow['state'] . ">" . $partnerRow['state'] . "</option>
 				<option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option>
 				<option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option>
 				<option value='DC'>DC</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option>
@@ -71,12 +80,16 @@
 				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
 				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
 			</select><br>";
-			echo "Zip Code: <input type='number' name='addressZip' value=" . $partnerRow['zip'] . ">";
+			echo "<label for='addressZipField'>Zip Code:</label>
+					<input id='addressZipField' type='number' name='addressZip' value=" . $partnerRow['zip'] . ">";
 			
 			//Notes
-			echo "<br><div id='notes' >Notes: <textarea class='notes' type='text' maxlength='256' name='notes'>" . $partnerRow['notes'] . "</textarea></div>";
+			echo "<br><label for='notesInput'>Notes:</label>
+					<textarea id='notesInput' class='notes' type='text' maxlength='256' name='notes'>" . $partnerRow['notes'] . "</textarea><br>";
 			
-			echo "<br>";
+			// </inputDiv>
+			echo "</div><br>";
+			
 			echo "<input type='submit' name='submitUpdateRedist' value='Update'>";
 			echo "</form>";
 		

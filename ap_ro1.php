@@ -1,19 +1,19 @@
 <?php include 'php/header.php'; ?>
     <button id='btn_back' onclick="goBack()">Back</button>
-    <h3>Redistribution Main</h3>
+    <h3>Reallocation Main</h3>
 	
 	<div class="body_content">
 	
     <form method="post" action="ap_ro2.php">
-        <input type="submit" value="View Redistribution Partners">
+        <input type="submit" value="View Reallocation Partners">
     </form>
     
 	<form method="post" action="ap_ro5.php">
-        <input type="submit" value="View Redistribution Items">
+        <input type="submit" value="View Reallocation Items">
     </form>
 	
 	<form method="post" action="ap_ro8.php">
-        <input type="submit" value="View Redistributions">
+        <input type="submit" value="View Reallocations">
     </form>
 	
 	

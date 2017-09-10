@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 
 	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>Redistribution Partners (inactive)</h3>
+    <h3>Reallocation Partners (inactive)</h3>
 	<script>
 		if (getCookie("redistToggled") != "") {
 			window.alert("Partner reactivated!");

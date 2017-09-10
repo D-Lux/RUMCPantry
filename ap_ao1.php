@@ -16,6 +16,7 @@
 		// Create and execute our query string
 		$sql = "SELECT visitDate, COUNT(*) as aCount 
 				FROM Invoice
+				WHERE status!=" . GetRedistributionStatus() . "
 				GROUP BY visitDate
 				ORDER BY visitDate DESC";
 		$result = queryDB($conn, $sql);
