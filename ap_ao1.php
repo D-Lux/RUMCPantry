@@ -12,20 +12,36 @@
 			die("Connection failed: " . $conn->connect_error);
 		}
 		
-		// TODO: show available appointments and total appointments
-		// Create and execute our query string
-		$sql = "SELECT visitDate, COUNT(*) as aCount 
+		// Get our available appointment counts stored off so we can grab them as needed
+		$sql = "SELECT COUNT(*) as availCount, visitDate
 				FROM Invoice
-				WHERE status!=" . GetRedistributionStatus() . "
+				WHERE status=" . GetAvailableStatus() . "
 				GROUP BY visitDate
 				ORDER BY visitDate DESC";
 		$result = queryDB($conn, $sql);
 		
+		$AvailableDates = array();
+		// Loop through our query results
+		if ($result!=null && $result->num_rows > 0) {
+			while($row = sqlFetch($result) ) {
+				$availableDates[$row['visitDate']] = $row['availCount'];
+			}
+		}
+		
+		// Create and execute our query string
+		$sql = "SELECT visitDate, COUNT(*) as numApp 
+				FROM Invoice
+				WHERE status!=" . GetRedistributionStatus() . "
+				GROUP BY visitDate
+				ORDER BY visitDate DESC";
+		
+		
+		$result = queryDB($conn, $sql);
 		// loop through the query results
 		if ($result!=null && $result->num_rows > 0) {
 		
 			// Create the table and add in the headers
-			echo "<table><tr><th>Date</th><th># of Appointments</th></tr>";
+			echo "<table><tr><th>Date</th><th># of Appointments</th><th># Available</th></tr>";
 			
 			while($row = sqlFetch($result) ) {
 				// Start Table row
@@ -37,7 +53,10 @@
 				echo "<td><a href='" . $invoiceLink . "'>" . $date . "</a></td>";
 				
 				// Appointment Count
-				echo "<td>" . $row['aCount'] . "</td>";
+				echo "<td>" . $row['numApp'] . "</td>";
+				
+				// Available Count
+				echo "<td>" . $availableDates[$row["visitDate"]] . "</td>";
 				
 				// Close off the row 
 				echo "</tr>";

@@ -370,6 +370,15 @@ function GetRedistributionStatus() {
 	return SV_REDISTRIBUTION;
 }
 
+// Get processed positions
+function returnProcessedLow() {
+	return SV_PROCESSED_LOW;
+}
+
+function returnProcessedHigh() {
+	return SV_PROCESSED_HIGH;
+}
+
 // **********************************************************
 // * Decoder for family sizes
 define("FAMILY_SIZE_SM_LOW", 1);
