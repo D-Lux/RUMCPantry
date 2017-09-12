@@ -188,6 +188,16 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	
 }
 
+// Requires passing an open database connection and an SQL query
+// Returns a single data point with the indicated keyName
+function getSingleDataPoint($sql, $conn, $keyName) {
+	$result = queryDB($conn, $sql);
+	if ($result!=null && $result->num_rows > 0) {
+		$queryData = sqlFetch($result);
+		return $queryData[$keyName];
+	}
+}
+
 // **********************************************
 // * Cookie functions
 function createCookie($cookieName, $cookieValue, $duration) {

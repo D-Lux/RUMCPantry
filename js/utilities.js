@@ -42,6 +42,7 @@ function goBack() {
 
         case (location.pathname.includes("ap_co2.php")):
         case (location.pathname.includes("ap_co3.php")):
+		case (location.pathname.includes("ap_oo4e.php")):
             window.location.assign("/RUMCPantry/ap_co1.php");
             break;
 

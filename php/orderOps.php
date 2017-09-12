@@ -259,13 +259,11 @@ elseif (isset($_POST['SaveSpecials'])) {
 // * Adding a single item to a client's order
 elseif (isset($_POST['addItemToOrder'])) {
 	// POST Data to use: invoiceID, addItem, qty
-	// POST Data to pass back using session data: name, visitTime, familySize,
-	session_start();
-	// Save post data off into the session global
-	$_SESSION['viewInvoice_invoiceID'] = $_POST['invoiceID'];
-	$_SESSION['viewInvoice_name'] = $_POST['name'];
-	$_SESSION['viewInvoice_visitTime'] = $_POST['visitTime'];
-	$_SESSION['viewInvoice_familySize'] = $_POST['familySize'];
+	// POST Data to pass back using 'get' global: name, visitTime, familySize,
+	
+	// Create our return header to go back to the correct order
+	$returnHeader = "location: /RUMCPantry/ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] . 
+					"&visitTime=" . $_POST['visitTime'] . "&familySize=" . $_POST['familySize'];
 	
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
@@ -295,7 +293,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 		if (queryDB($conn, $sql) === TRUE) {
 			// Successfully updated item quantity, return to the order form!
 			closeDB($conn);
-			header("location: /RUMCPantry/ap_oo4.php");
+			header($returnHeader);
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -325,7 +323,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 			if (queryDB($conn, $sql) === TRUE) {
 				// Success! We've added the new item description values
 				closeDB($conn);
-				header("location: /RUMCPantry/ap_oo4.php");
+				header($returnHeader);
 			}
 			else {
 				echoDivWithColor("Error description: " . mysqli_error($conn), "red");

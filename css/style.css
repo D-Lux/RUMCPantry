@@ -120,7 +120,7 @@ input[type='button']:focus {
 	text-align: center;
 }
 
-#btn_back {
+#btn_back, #btn_print {
 	float: right;
 	height: 33px;
 	width: 100px;
@@ -130,7 +130,7 @@ input[type='button']:focus {
 	cursor: pointer;
 }
 
-#btn_back:active {
+#btn_back:active, #btn_print:active {
 	border: solid 2px #888;
 	background-color: #AAA;
 }
@@ -187,6 +187,7 @@ td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock),
 	width: 175px;
 	vertical-align: middle;
 }
+
 
 /*******************
     Form layout

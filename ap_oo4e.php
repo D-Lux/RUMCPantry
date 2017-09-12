@@ -1,41 +1,17 @@
-<!DOCTYPE html>
-
-<html>
-	<head>
-		<title>Roselle UMC</title>
-		<style>
-			#btn_back, .btn_view {
-				margin: 0 300px 0px 0px;
-				float: right;
-				height: 33px;
-				font-size: 1.1rem;
-				border-radius: 25px;
-				border: solid 2px #AAA;
-				cursor: pointer;
-			}
-
-			#btn_back:active, .btn_view:active {
-				border: solid 2px #888;
-				background-color: #AAA;
-			}
-		</style>
-	</head>
-	<body>
-
-<?php include('php/utilities.php'); ?>
+<?php include 'php/header.php'; ?>
 <script src="js/orderFormOps.js"></script>
-<script src="js/utilities.js"></script>
-<button id='btn_back' onclick="goBack()">Back</button>
-
-<h3>View Order</h3>
+    <button id='btn_back' onclick="goBack()">Back</button>
+	<h3>Edit Order</h3>
 	
+	<div class="body_content">
 	<?php
 	
-	// Post Vars: invoiceID | name | visitTime | familySize
-	$invoiceID = ((isset($_POST['invoiceID'])) ? $_POST['invoiceID'] : 0);
-	$name = ((isset($_POST['name'])) ? $_POST['name'] : null);
-	$visitTime = ((isset($_POST['visitTime'])) ? $_POST['visitTime'] : 0);
-	$familySize = ((isset($_POST['familySize'])) ? $_POST['familySize'] : 0);
+	// Get Vars: invoiceID | name | visitTime | familySize
+	
+	$invoiceID = ((isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0);
+	$name = ((isset($_GET['name'])) ? $_GET['name'] : null);
+	$visitTime = ((isset($_GET['visitTime'])) ? $_GET['visitTime'] : 0);
+	$familySize = ((isset($_GET['familySize'])) ? $_GET['familySize'] : 0);
 	
 	// Create our query to get the invoice data
 	if ( $name != null ) {
@@ -72,26 +48,44 @@
 		echo " | Family Size: " . familySizeDecoder($familySize) . "</h4>";
 		
 		// Print button
-		echo "<button class='btn_view' onClick='window.print()'>Print</button>";
+		echo "<button id='btn_print' onClick='window.print()'>Print</button>";
 		
-		echo "<table id='orderTable'><tr><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr>";
+		// Order information
+		echo "<table id='orderTable'><tr><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th></th></tr>";
 		while( $invoice = sqlFetch($invoiceData) ) {
 			echo "<tr><td>" . $invoice['iName'] . "</td>";
 			echo "<td>" . $invoice['iQty'] . "</td>";
 			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td><td>" . $invoice['rack'] . "</td><td>" . $invoice['shelf'] . "</td>";
 			
-			echo "</tr>";	
+			echo "<td><input value=' ' name=" . $invoice['invoiceDescID'] . " class='btn_trash' name='RemoveItem' ";
+			echo "type='submit' onclick='AJAX_RemoveFromInvoice(this)'></td></tr>";	
+
 		}
-		echo "</table>";
-			
+		echo "</table><br>";
+		
 		// If we came from the checkin page, allow 'mark as processed'
 		if ( (isset($_POST['viewInvoice']) ) && (isset($_POST['status'])) ) {
 			echo "<form method='post' action='php/orderOps.php'>";
 			echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
 			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";
-			echo "<input class='btn_view' type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
+			echo "<input type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
 			echo "</form>";
-		}		
+		}
+		
+		// Add an item
+		echo "<form method='post' action='php/orderOps.php' onSubmit='return validateAddItemToInvoice()'>";
+		echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
+		echo "<input type='hidden' name='name' value='" . $name . "'>";
+		echo "<input type='hidden' name='visitTime' value='" . $visitTime . "'>";
+		echo "<input type='hidden' name='familySize' value='" . $familySize . "'>";
+		
+		echo "Item to Add:";
+		createDatalist_i('', 'itemNames', 'item', 'itemName', 'addItem', 1);
+		echo "<div style='display: inline-block; margin-left: 8px;'>Quantity:<input type='number' id='addQty' name='qty' value=1></div><br>";
+		echo "<input type='submit' name='addItemToOrder' value='Add to Invoice'>";
+		echo "</form>";
+		
+		
 	}
 	else {
 		echo "Something went wrong, please go back and try again.";
@@ -99,7 +93,10 @@
 	
 	echo "<div id='ErrorLog'></div>";
 	?>
+	
 
+	</div><!-- /body_content -->
+	</div><!-- /content -->	
 </body>
 
 </html>

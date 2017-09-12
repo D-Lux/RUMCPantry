@@ -1,12 +1,9 @@
-// *****************************************************************
-// ** AJAX FUNCTIONS
-// **
-
 // Updates the report page based on dates selected
 function AJAX_UpdateReport() {
 	var startDate = document.getElementById("startDate").value;
 	var endDate = document.getElementById("endDate").value;
 
+	// TODO: Date validation to make sure startDate is before endDate
 	xmlhttp = newAJAXObj();
 	
 	xmlhttp.onreadystatechange = function() {

@@ -237,7 +237,7 @@
 					
 					// Start Table row
 					echo "<tr>";
-					echo "<form method='post' action='ap_oo4.php'>";
+					echo "<form method='GET' action='ap_oo4e.php'>";
 					echo "<input type='hidden' name='invoiceID' value=" . $row['invoiceID'] . ">";
 					echo "<input type='hidden' name='name' value='" . $clientName . "'>";
 					echo "<input type='hidden' name='visitTime' value='" . $row['visitTime'] . "'>";
