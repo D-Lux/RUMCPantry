@@ -63,15 +63,6 @@
 		}
 		echo "</table><br>";
 		
-		// If we came from the checkin page, allow 'mark as processed'
-		if ( (isset($_POST['viewInvoice']) ) && (isset($_POST['status'])) ) {
-			echo "<form method='post' action='php/orderOps.php'>";
-			echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
-			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";
-			echo "<input type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
-			echo "</form>";
-		}
-		
 		// Add an item
 		echo "<form method='post' action='php/orderOps.php' onSubmit='return validateAddItemToInvoice()'>";
 		echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
