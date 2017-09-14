@@ -485,14 +485,22 @@ function showCategory($walkIn, $category){
 	// If we need to make more in the future, just add them here
 	$DisabledCategories = array("medicine","specials","redistribution");
 
-	if (!$walkIn) {
-		return true;
-	}	
-	if (in_array(strtolower($category), $DisabledCategories)) {
+	if (($walkIn) && (in_array(strtolower($category), $DisabledCategories)) ) {
 		return false;
 	}
 	return true;
 }
 
+// **************************************
+// ** Weight information for donations
+define("WEIGHT_BAKERY", 15);
+define("WEIGHT_DAIRY", 40);
+define("WEIGHT_MEAT", 40);
+define("WEIGHT_MIX", 25);
+define("WEIGHT_NONFOOD", 25);
+define("WEIGHT_PREPARED", 25);
+define("WEIGHT_PRODUCE", 30);
+define("WEIGHT_FROZEN", 25);
+define("WEIGHT_FOODDRIVE", 25);
 
 ?>

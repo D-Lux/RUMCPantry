@@ -14,7 +14,7 @@
 		}
 		
 		// Create our query string
-		$sql = "SELECT Client.clientID, Client.numOfAdults, Client.numOfKids, Client.isDeleted,
+		$sql = "SELECT Client.clientID, (Client.numOfAdults + Client.numOfKids) as familySize, Client.isDeleted,
 				Client.email, Client.phoneNumber, Client.address, Client.city, Client.state, 
 				Client.zip, Client.foodStamps, Client.notes, FamilyMember.lastName
 				FROM FamilyMember
@@ -45,8 +45,8 @@
 			}
 			else {
 				echo "<table> <tr> <th></th>";
-				echo "<th>Client Name</th><th>Family Size</th>";
-				echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+				echo "<th>Name</th><th>Size</th>";
+				echo "<th>Email</th><th>Phone Number</th>";
 				echo "<th></th></tr>";
 			}
 			while($row = sqlFetch($result)) {
@@ -56,8 +56,8 @@
 						$tabStarted = TRUE;
 						// Create the client table and add in the headers
 						echo "<table id='clientList" . $tabCounter . "' class='tabcontent'> <tr> <th></th>";
-						echo "<th>Client Name</th><th>Family Size</th>";
-						echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+						echo "<th>Client Name</th><th>Size</th>";
+						echo "<th>Email</th><th>Phone Number</th>";
 						echo "<th></th></tr>";							
 						$tabCounter++;
 					}
@@ -78,8 +78,7 @@
 				
 				// Various basic information fields
 				echo "<td>" . $row['lastName'] . "</td>";
-				$familySize = $row["numOfAdults"] + $row["numOfKids"];
-				echo "<td>$familySize</td>";
+				echo "<td>" . $row["familySize"] . "</td>";
 				
 				// Display the email or '-' if not set
 				echo "<td>" . (($row['email'] == NULL) ? "-" : $row['email']) . "</td>";
@@ -89,8 +88,8 @@
 								displayPhoneNo($row['phoneNumber'])) . "</td>";
 
 				// Display Yes/No/Unknown for foodstamps based on 1/0/-1
-				$foodStampStatus = ($row['foodStamps'] == 0 ? "No" : $row['foodStamps'] == 1 ? "Yes" : "Unknown");
-				echo "<td>" . $foodStampStatus . "</td>";
+				//$foodStampStatus = ($row['foodStamps'] == 0 ? "No" : $row['foodStamps'] == 1 ? "Yes" : "Unknown");
+				//echo "<td>" . $foodStampStatus . "</td>";
 				
 				// Switch to html to do the javascript for the inactivate button
 				?>
@@ -100,7 +99,7 @@
 					
 				<?php
 				// Close off the row and form
-				echo "</form>";
+				echo "</tr></form>";
 				
 				// Close off the tab if we've hit our peak
 				if ( ( $makeTabs ) && ( $clientCounter >= $TabSize) ) {

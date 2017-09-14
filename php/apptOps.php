@@ -3,11 +3,9 @@
 <?php
 
 include 'utilities.php';
-date_default_timezone_set('America/Chicago');
 
 function addWalkIn($clientID) {
 	// Walk ins are always day-of (so grab today's date)
-	//$walkInDate = makeString(date('Y-m-d', time()) . " 00:00:00");
 	$walkInDate = makeString(date('Y-m-d', time()));
 	// This is an arbitrary time, noon
 	$walkInTime = makeString("12:00");

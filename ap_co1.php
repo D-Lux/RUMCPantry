@@ -24,7 +24,7 @@
 		}
 		
 		// Create our query string
-		$sql = "SELECT Client.clientID, Client.numOfAdults, Client.numOfKids, Client.isDeleted,
+		$sql = "SELECT Client.clientID, (Client.numOfAdults + Client.numOfKids) as familySize, Client.isDeleted,
 				Client.email, Client.phoneNumber, Client.address, Client.city, Client.state, 
 				Client.zip, Client.foodStamps, Client.clientType, Client.notes, 
 				FamilyMember.firstName as fName, FamilyMember.lastName as lName
@@ -45,7 +45,7 @@
 		if ($result!=null && $result->num_rows > 0) {
 			// If tabsize has been updated from post, grab that, otherwise default to 20
 			$TabSize = (isset($_POST['tabSize']) ? $_POST['tabSize'] : 20);
-			$makeTabs = ( ($result->num_rows) > $TabSize);
+			$makeTabs = ( ($result->num_rows) > $TabSize );
 			$tabCounter = 0;
 			$clientCounter = $TabSize;
 			if ($makeTabs) {
@@ -58,8 +58,8 @@
 			}
 			else {
 				echo "<table> <tr> <th></th>";
-				echo "<th>Client Name</th><th>Family Size</th>";
-				echo "<th>email</th><th>phone number</th><th>Client Type</th><th>food stamps</th>";
+				echo "<th>Name</th><th>Size</th>";
+				echo "<th>Email</th><th>Phone Number</th>";
 				echo "<th></th></tr>";
 			}
 			while($row = sqlFetch($result)) {
@@ -69,8 +69,8 @@
 						$tabStarted = TRUE;
 						// Create the client table and add in the headers
 						echo "<table id='clientList" . $tabCounter . "' class='tabcontent'> <tr> <th></th>";
-						echo "<th>Client Name</th><th>Family Size</th>";
-						echo "<th>email</th><th>phone number</th><th>food stamps</th>";
+						echo "<th>Name</th><th>Size</th>";
+						echo "<th>Email</th><th>Phone Number</th>";
 						echo "<th></th></tr>";							
 						$tabCounter++;
 					}
@@ -91,8 +91,7 @@
 				
 				// Various basic information fields
 				echo "<td>" . $row['lName'] . ", " . $row['fName'] . "</td>";
-				$familySize = $row["numOfAdults"] + $row["numOfKids"];
-				echo "<td>$familySize</td>";
+				echo "<td>" . $row["familySize"] . "</td>";
 				
 				// Display the email or '-' if not set
 				echo "<td>" . (($row['email'] == NULL) ? "-" : $row['email']) . "</td>";
@@ -101,6 +100,7 @@
 				echo "<td>" . (($row['phoneNumber'] == NULL) ? "-" : 
 								displayPhoneNo($row['phoneNumber'])) . "</td>";
 
+				/* No longer Displaying Client Type or Food Stamps on the main page
 				// Display client type based off decoder
 				$clientType = clientTypeDecoder($row['clientType']);
 				echo "<td>" . $clientType . "</td>";
@@ -109,6 +109,7 @@
 				$foodStampStatus = ($row['foodStamps'] == 0 ? "No" : $row['foodStamps'] == 1 ? "Yes" : "Unknown");
 				echo "<td>" . $foodStampStatus . "</td>";
 				//echo " " . $foodStampStatus . " ";
+				*/
 				
 				// Switch to html to do the javascript for the inactivate button
 				?>
@@ -118,7 +119,7 @@
 					
 				<?php
 				// Close off the row and form
-				echo "</form>";
+				echo "</td></form>";
 				
 				// Close off the tab if we've hit our peak
 				if ( ( $makeTabs ) && ( $clientCounter >= $TabSize) ) {

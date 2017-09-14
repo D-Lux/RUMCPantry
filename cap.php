@@ -2,7 +2,7 @@
 
     <button id='btn_back' onclick="goBack()">Back</button>
 
-    <h3>Client appointment page</h3>
+    <h3>Next Appointment</h3>
 	
 	<div class="body_content">
 	
@@ -37,8 +37,7 @@
 		
 		// Warning if there are no available appointments
 		if ( $result==null || $result->num_rows <= 0 ) {
-			echo "No appointments are currently available next month";
-			echo "<br>Please see administration for your next appointment";
+			echo "No appointments are currently available next month.";
 		}
 		else {
 			// Start off our table

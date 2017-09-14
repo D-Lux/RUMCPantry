@@ -169,7 +169,7 @@ input[type='number']:not(#addressZipField) {
 	border-radius: 5px;
 }
 
-table, th, td {
+table:not(.tabcontent), th, td {
 	border: 1px solid black;
 	border-collapse: collapse;
 	text-align: center;
