@@ -91,7 +91,14 @@
 			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";
 			echo "<input class='btn_view' type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
 			echo "</form>";
-		}		
+		}
+		
+		echo "<br><br><hr>";
+		//Print out name tags numNames times
+		$numNames = 2;
+		for ($i = 0; $i < $numNames; $i++) {
+			echo "<h1>" .  $name . "</h1>";
+		}
 	}
 	else {
 		echo "Something went wrong, please go back and try again.";
