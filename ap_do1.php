@@ -1,25 +1,10 @@
-<!DOCTYPE html>
-
-<html>
-
-<head>
-    <title>Roselle United Methodist Church Food Pantry</title>
-    <script src="js/utilities.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <?php include 'php/checkLogin.php';?>
+<?php include 'php/header.php'; ?>
+<?php include 'php/checkLogin.php';?>
 
 
 
-</head>
-
-<body>
-    <h1>Roselle United Methodist Church</h1>
-    <h2>Food Pantry</h2>
-    <h3>Admin Page Donation Ops1</h3>
-
-
-    <button onclick="goBack()">Back</button>
-
+<button id='btn_back' onclick="goBack()">Back</button>
+<h3>Donation Operations</h3>
     <form method="get" action="ap_do2.php">
         <input type="submit" value="Add a donation">
     </form>
@@ -30,6 +15,9 @@
 
     <?php include 'php/displayDonations.php';?>
     <?php include 'php/displayDonationPartners.php';?>
+    
+</div><!-- /body_content -->
+</div><!-- /content -->
 
 </body>
 

@@ -1,5 +1,5 @@
  <?php
- include 'utilities.php';
+ //include 'utilities.php';
  //  first use todays date
  //for tables what information is needed? first and last Name of head of house, time of appointment and a button
 

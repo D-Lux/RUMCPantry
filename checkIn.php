@@ -1,31 +1,23 @@
-<!doctype html>
-<html>
+<?php include 'php/header.php';?>
 
-<head>
-    <script src="js/utilities.js"></script>
 	<meta http-equiv="refresh" content="5" >
 
 
-	<title>Check In</title>
-</head>
-
-<body>
 	<script>
 		if (getCookie("newWalkIn") != "") {
 			window.alert("Walk-In Client added!");
 			removeCookie("newWalkIn");
 		}		
 	</script>
-	
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="checkInBack()">
+		<h3>Check In</h3>
+	<button id='btn_back' onclick="goBack()">Back</button>	
     <button onclick="location.href = 'awc.php';">Add walk in client</button>
-    <h1>
-		Check in for Clients
-    </h1>
+   
 
 	
 	<?php include 'php/checkInOps.php';?>
-	
+	</div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 </html>

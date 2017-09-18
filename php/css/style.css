@@ -1,0 +1,361 @@
+/****************
+#CA3628 - RED
+#FFC047 - YELLOW
+****************/
+
+@font-face { font-family: playfair; src: url('../fonts/PlayfairDisplay-Bold.ttf'); }
+
+/*********
+Universal
+*********/
+
+HTML {
+	background-color: #EEE;
+}
+
+body {
+	background-color: #CCC;
+	font-family: Arial, sans-serif;
+	width: 800px;
+	margin: 0px auto;
+	font-size: 1.1rem;
+}
+
+h1 {
+	font-family: playfair;
+	font-size: 2.75rem;
+}
+
+h2 {
+	font-family: playfair;
+	font-size: 2.25rem;
+}
+
+h3 {
+	margin: 0px;
+	font-size: 2rem;
+}
+
+/**************
+Header Elements
+**************/
+
+header {
+	background-color: #CA3628;
+	padding: 20px;
+}
+
+.rumc {
+	margin: 0px;
+	text-align: center;
+	color: #FFC047;
+}
+
+/************
+Body Elements
+************/
+
+.content {
+	padding: 30px;
+}
+
+
+
+button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+	width: 300px;
+	height: 75px;
+	margin-top: 20px;
+	font-size: 1.15rem;
+	border-radius: 50px;
+	background-color: #57B9FF; //#27B867;
+	border: solid 2px #499BD6; //#099C4A;
+	color: #000;
+	cursor: pointer;
+}
+
+button[type='submit']:active:not(.btn_reactivate), input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+	background-color: #499BD6; //#1C854A;
+	border: solid 2px #3D83B5; //#066630;
+}
+
+button[type='submit']:focus, input[type='submit']:focus {
+	outline: 0;
+}
+
+
+table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+	width: 60px;
+	height: 22px;
+	margin: 0px;
+	font-size: 1rem;
+}
+
+/* I hate specificity */
+input[type='button']:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+	width: 60px;
+	height: 45px;
+	margin: 20px 0px 0px 10px;
+	font-size: 1.1rem;
+	border-radius: 50px;
+	background-color: #57B9FF;
+	border: solid 2px #499BD6;
+	color: #000;
+	cursor: pointer;
+}
+
+input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+	width: 200px;
+	height: 55px;
+}
+input[type='button']:active:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+	background-color: #499BD6;
+	border: solid 2px #3D83B5;
+}
+input[type='button']:focus {
+	outline: 0;
+}
+
+
+#main-page {
+	text-align: center;
+}
+
+#btn_back, #btn_print {
+	float: right;
+	height: 33px;
+	width: 100px;
+	font-size: 1.1rem;
+	border-radius: 25px;
+	border: solid 2px #AAA;
+	cursor: pointer;
+}
+
+#btn_back:active, #btn_print:active {
+	border: solid 2px #888;
+	background-color: #AAA;
+}
+
+.body_content {
+	margin-top: 30px;
+}
+
+input[type='text']:not(.notes), input[type='password'], input[type='email'], 
+form>select, input[type='date'], select, input[type='time'] {
+	height: 35px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+	border-radius: 5px;
+	padding: 5px;
+}
+
+input[type='email'] {
+	width: 300px
+}
+
+input[type='tel'] {
+	height: 35px;
+	width: 150px;
+	border-radius: 5px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+}
+
+input[type='number']:not(#addressZipField) {
+	height: 35px;
+	width: 50px;
+	font-size: 1.1rem;
+	margin-left: 10px;
+	text-align: center;
+	border-radius: 5px;
+}
+
+table:not(.tabcontent), th, td {
+	border: 1px solid black;
+	border-collapse: collapse;
+	text-align: center;
+}
+
+td {
+	padding: 5px;
+}
+
+
+td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock), 
+	td>input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+	margin: 0px;
+	height: 33px;
+	width: 175px;
+	vertical-align: middle;
+}
+
+
+/*******************
+    Form layout
+*******************/
+
+.inputDiv label {
+	display: inline-block;
+	width: 200px;
+}
+.inputDiv input, .inputDiv textarea {
+	width: 200px;
+	margin: 8px;
+}
+
+#addressZipField {
+	height: 35px;
+	width: 120px;
+	border-radius: 5px;
+	font-size: 1.1rem;
+	text-indent: 5px;
+}
+	
+/*******************
+Special case buttons
+*******************/
+.btn_trash {
+	background: url("/RUMCPantry/images/Icon_Trash.png") no-repeat;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	cursor: pointer;
+}
+
+.btn_trash:active {
+	background-image: url(/RUMCPantry/images/Icon_Trash_Active.png);
+}
+
+.btn_reactivate {
+	background: url("/RUMCPantry/images/Icon_Reactivate.png") no-repeat;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	cursor: pointer;
+}
+
+.btn_reactivate:active {
+	background-image: url(/RUMCPantry/images/Icon_Reactivate_Active.png);
+}
+
+.btn_lock {
+	background: url("/RUMCPantry/images/Icon_Lock.png") no-repeat;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	cursor: pointer;
+}
+
+.btn_lock:active {
+	background-image: url(/RUMCPantry/images/Icon_Lock_Active.png);
+}
+
+#btn_tabSize {
+	width: 170px;
+	height: 55px;
+}
+
+/*********
+Order Form
+*********/
+.orderSection {
+	border: 1px solid black;
+	padding: 10px;
+}
+
+#specialsSection {
+	display: none;
+}
+/*********
+Checkboxes
+*********/
+
+input[type="checkbox"], input[type='radio'] {
+  display: none;
+}
+label {
+  cursor: pointer;
+}
+input[type="checkbox"] + label, input[type='radio'] + label:before {
+  border: 1px solid #333;
+  background: #fff;
+  content: "\00a0";
+  display: inline-block;
+  margin: 0 5px 0 0;
+  padding: 0;
+  vertical-align: middle;
+  height: 25px;
+  width: 25px;
+  border-radius: 5px;
+}
+
+input[type='radio'] + label:before {
+  border-radius: 25px;
+}
+
+input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:before {
+  background: #00C300;
+  /* content: "\00a0"; In case we want a checkmark or something */
+}
+input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:after {
+  font-weight: bold;
+}
+
+.selectionBoxes {
+	display: inline-block;
+	margin: 5px 0 5px 15px;
+}
+
+input[type='radio'] + label:before {
+  margin: 0 5px 0 15px;
+}
+/*********************************
+*********************************/
+
+/******
+Tooltip
+******/
+
+.tooltip {
+    position: relative;
+    display: inline-block;
+    border-bottom: 1px dotted black;
+}
+
+.tooltip .tooltiptext {
+    visibility: hidden;
+    width: 120px;
+    background-color: black;
+    color: #fff;
+    text-align: center;
+    border-radius: 6px;
+    padding: 5px 0;
+    /* Position the tooltip */
+    position: absolute;
+    z-index: 1;
+}
+
+.tooltip:hover .tooltiptext {
+    visibility: visible;
+}
+
+.required label:after {
+	color: red;
+	content: ' *';
+	display: inline-block;
+
+}
+
+.notes	{
+	vertical-align: middle;
+	height: 100px;
+	width: 250px;
+	border-radius: 5px;
+	word-wrap: break-word;
+    word-break: normal;
+}

@@ -1,23 +1,14 @@
-<!DOCTYPE html>
+<?php include 'php/header.php'; ?>
 
-<html>
 
-<head>
-    <title>Roselle United Methodist Church Food Pantry</title>
-    <script src="js/utilities.js"></script>
     <script src="js/createDonation.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <?php include 'php/header.php'; ?>
+    
     <?php include 'php/checkLogin.php'; ?>
 	
-</head>
 
-<body>
-    <h1>Roselle United Methodist Church</h1>
-    <h2>Food Pantry</h2>
-    <h3>Admin Page Donation Ops2: Add a donation</h3>
+    <h3>Donation Operations: Add a donation</h3>
 
-    <button onclick="goBack()">Back</button>
+    <button id='btn_back' onclick="goBack()">Back</button>
 
     <form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
@@ -74,6 +65,9 @@
         </br>
         <input type="submit" value="Create" name="createDonation">
     </form>
+
+    </div><!-- /body_content -->
+	</div><!-- /content -->
 
 </body>
 

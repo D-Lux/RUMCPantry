@@ -2,7 +2,7 @@
 
 <?php
 
-include 'utilities.php';
+
 
 if(isset($_POST['createDonation'])) /*when the button is pressed on post request*/
 {
@@ -34,7 +34,7 @@ if(isset($_POST['createDonation'])) /*when the button is pressed on post request
 
 
     /* previous lines set up the strings for connextion*/
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -131,7 +131,7 @@ elseif(isset($_POST['createDonationPartner'])) /*when the button is pressed on p
 
 
 
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -175,7 +175,7 @@ elseif (isset($_GET['UpdateItem'])) {
 	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
-
+  
     $conn = createPantryDatabaseConnection();
     $itemID = $_GET['itemID'];
     /* Check connection*/
@@ -204,6 +204,7 @@ elseif (isset($_GET['updateDonation'])) {
 	header ("location: /RUMCPantry/ap_do4.php?donationID=" . $_GET['donationID']);
 }
 elseif (isset($_GET['deleteDonation'])) {
+  
 	$conn = createPantryDatabaseConnection();
     $donationID = $_GET['donationID'];
     /* Check connection*/
@@ -231,6 +232,7 @@ elseif (isset($_GET['updateDonationPartner'])) {
 	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
+   
 	$conn = createPantryDatabaseConnection();
     $donationPartnerID = $_GET['donationPartnerID'];
     /* Check connection*/
@@ -282,7 +284,7 @@ elseif (isset($_POST['updateDonationIndividual'])) {
 
 
     /* previous lines set up the strings for connextion*/
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -380,7 +382,7 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
 
 
 
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/

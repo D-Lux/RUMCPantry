@@ -1,22 +1,13 @@
-<!doctype html>
-<html>
-
-<head>
-
-    <script src="js/utilities.js"></script>
+<?php include 'php/header.php';?>
+  
     <script src="js/createItem.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <?php include 'php/header.php'; ?>
+
     <?php include 'php/checkLogin.php';?>
 
-    <title>ap_io4</title>
-</head>
 
-<body>
-<button onclick="goBack()">Back</button>
-    <h1>
+    <button id='btn_back' onclick="goBack()">Back</button>    <h3>
         Add a category
-    </h1>
+    </h3>
 
     <form name="addCategory" action="php/itemOps.php" onSubmit="return validateCategoryAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
@@ -79,6 +70,9 @@
     <h2>
         <!--  <?php include 'php/createItem.php';?> -->
     </h2>
+    </div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 
 </html>

@@ -1,24 +1,15 @@
-<!doctype html>
+<?php include 'php/header.php';?>
 <html>
 
 <head>
 
-    <script src="js/utilities.js"></script>
     <script src="js/createItem.js"></script>
-    <script src="js/destinationFunctions.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <?php include 'php/header.php'; ?>
     <?php include 'php/checkLogin.php';?>
 
-    <title>ap_io2</title>
-</head>
-
-<body>
-    <script src="js/destinationFunctions.js"></script>
-    <input type="button" value="Go Back" onclick="ap_io2Back()">
-    <h1>
+    <button id='btn_back' onclick="goBack()">Back</button>    <h1>
+        <h3>
         Add an item to the database:
-    </h1>
+    </h3>
 
     <form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
@@ -41,7 +32,10 @@
             createDatalist("","displayNames","item","displayName","displayName", true);
             ?>
         </div>
-        <div id="price">Price: <input type="number" min="0" max="100000" value="0.00" step="0.01" name="price" /></div>
+        <div id="aisle">Aisle: <input type="number" min="0" max="1000" value="0" step="1" name="aisle" /></div>
+        <div id="rack">Rack: <input type="number" min="0" max="1000" value="0" step="1" name="rack" /></div>
+        <div id="shelf">Shelf: <input type="number" min="0" max="1000" value="0" step="1" name="shelf" /></div>
+        <div id="price">Price: <input type="number" min="0" max="1000" value="0" step="0.01" name="price" /></div>
         <div id="household">How many of each can a household take?</div>
         <div id="small"> 1 to 2:
             <select name="small">
@@ -95,6 +89,9 @@
     <h2>
         <!--  <?php include 'php/createItem.php';?> -->
     </h2>
+    </div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 
 </html>

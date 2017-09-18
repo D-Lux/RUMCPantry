@@ -1,25 +1,23 @@
-<!doctype html>
-<html>
 
-<head>
+	<?php include 'php/header.php';?>
 
-    <script src="js/utilities.js"></script>
-
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
   
     <?php include 'php/checkLogin.php';?>
 
-    <title>ap_io6</title>
+
 </head>
 
 <body>
-<button onclick="goBack()">Back</button>
-    <h1>
-        Deleted items and categories
-    </h1>
+<button id='btn_back' onclick="goBack()">Back</button>    <h1>
+       
+       <h3> Deleted items and categories
+    </h3>
 
     <?php include 'php/displayDeletedItems.php';?>
     <?php include 'php/displayDeletedCategories.php';?>
+    </div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 
 </html>

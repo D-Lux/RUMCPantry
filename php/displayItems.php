@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 
 
  //TODO currently I have it pulling the category ID, need to pull the category name
-$sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID FROM item";
+$sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID, aisle, rack, shelf FROM item";
 $result = $conn->query($sql);
 $hasDeleted =0;
     $hasReal =0;
@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Item ID</th><th>Item Name</th><th>Display Name</th><th>Price</th><th>Small</th><th>Medium</th><th>Large</th><th>Category ID</th><th>Category Name</th><th>Delete</th></tr>";
+    echo "<tr><th>Update</th><th>Item ID</th><th>Item Name</th><th>Display Name</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th>Price</th><th>Small</th><th>Medium</th><th>Large</th><th>Category ID</th><th>Category Name</th><th>Delete</th></tr>";
     while($row = $result->fetch_assoc()) {
         $categoryName ="";
         if($row["isDeleted"] == false)
@@ -54,7 +54,7 @@ if ($result->num_rows > 0) {
                 $itemID=$row["itemID"];
                 echo "<input type='hidden' name='itemID' value='$itemID'>";
                 echo "<td><input type='submit' name='UpdateItem' value='Update'></td>";
-                echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
+                echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["aisle"] .  "</td><td>" . $row["rack"] .  "</td><td>" . $row["shelf"] .  "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
                 echo "<td><input type='submit' name='DeleteItem' value='Delete'></td>";
                 echo "</form>";
                 echo "</tr>";

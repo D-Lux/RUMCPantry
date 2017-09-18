@@ -1,26 +1,11 @@
-<!DOCTYPE html>
+<?php include 'php/header.php';?>
 
-<html>
-
-<head>
-    <title>Roselle United Methodist Church Food Pantry</title>
-    <script src="js/utilities.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
-    <!--<link href='style.css' rel='stylesheet'>-->
     <?php include 'php/checkLogin.php';?>
 
-</head>
-
-<body>
-    <h1>Roselle United Methodist Church</h1>
-    <h2>Food Pantry</h2>
-    <h3>Admin Page Inventory Ops 3</h3>
 
 
-<button onclick="goBack()">Back</button>
-
+    <button id='btn_back' onclick="goBack()">Back</button>
     <?php
-    include 'php/utilities.php';
     echo "<h3> Update item number: ". $_GET['itemID'] . "</h3>";
    
     $servername = "127.0.0.1";
@@ -34,6 +19,9 @@
     $small=0;
     $medium=0;
     $large=0;
+    $aisle=0;
+    $rack=0;
+    $shelf=0;
    
 
     $categoryID=0;
@@ -46,7 +34,7 @@
         die("Connection failed: " . $conn->connect_error);
     } 
 
-    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID FROM item WHERE itemID =". $_GET['itemID'] ;
+    $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID, aisle, rack, shelf FROM item WHERE itemID =". $_GET['itemID'] ;
     $result = $conn->query($sql);
 
     if ($result->num_rows > 0) {
@@ -61,6 +49,10 @@
                     $small = $row["small"];
                     $medium = $row["medium"];
                     $large = $row["large"];
+                    $aisle = $row["aisle"];;
+                    $rack = $row["rack"];;
+                    $shelf = $row["shelf"];;
+
                    
                     $categoryID = $row["categoryID"];      
                                     
@@ -99,9 +91,16 @@
         createDatalist("$displayName", "displayNames", "item", "displayName", "displayName", true);
         echo'</div>';
         
+        echo'<div id="aisle">Aisle: <input type="number" min="0" max="1000"  step="1" name="aisle" value=' . $aisle .' /></div>';
+        echo'<div id="rack">Rack: <input type="number" min="0" max="1000"  step="1" name="rack" value=' . $rack .' /></div>';
+        echo'<div id="shelf">Shelf: <input type="number" min="0" max="1000"  step="1" name="shelf" value=' . $shelf .' /></div>';
+        
+        echo'<div id="price">Price: <input type="number" min="0" max="100000" value=' . $price . ' step="0.01" name="price" /></div>';
     
-        echo '<div id="price">Price: <input type="number" min="0" max="100000" value=' . $price . ' step="0.01" name="price" /></div>';
-    
+        
+
+
+
         echo'<div id="household">How many of each can a household take?</div>';
         echo'<div id="small"> 1 to 2:';
         echo'<select name="small">';
@@ -131,6 +130,8 @@
         echo'<input type="submit" value="Update" name="updateItemIndividual">';
         echo'</form>';
          ?>
+</div><!-- /body_content -->
+	</div><!-- /content -->
 
 </body>
 

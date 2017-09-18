@@ -1,22 +1,11 @@
-<!doctype html>
-<html>
+<?php include 'php/header.php';?>
 
-<head>
-
-    <script src="js/utilities.js"></script>
     <script src="js/createItem.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <?php include 'php/checkLogin.php';?>
 
 
-    <title>ap_io5</title>
-</head>
-
-<body>
-<button onclick="goBack()">Back</button>
-
+    <button id='btn_back' onclick="goBack()">Back</button>
     <?php
-    include 'php/utilities.php';
     echo "<h3> Update category number: ". $_GET['categoryID'] . "</h3>";
    
  
@@ -98,6 +87,9 @@
         <input type="submit" value="Update" name="UpdateCategoryIndividual">
         </form>';
      ?>
+     </div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 
 </html>

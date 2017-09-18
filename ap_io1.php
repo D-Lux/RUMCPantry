@@ -1,20 +1,12 @@
-<!doctype html>
-<html>
+<?php include 'php/header.php'; ?>
 
-<head>
-    <script src="js/utilities.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <?php include 'php/checkLogin.php';?>
-    <title>ap_io1</title>
 
-</head>
 
-<body>
 
-    <button onclick="goBack()">Back</button>
-    <h1>
-        Admin page inventory ops 1
-    </h1>
+    <button id='btn_back' onclick="goBack()">Back</button>    <h3>
+        Inventory Operations
+    </h3>
     <form method="get" action="ap_io2.php">
         <input type="submit" value="Add an item">
     </form>
@@ -31,6 +23,10 @@
 
     <?php include 'php/displayItems.php';?>
     <?php include 'php/displayCategories.php';?>
+
+    </div><!-- /body_content -->
+	</div><!-- /content -->
+
 </body>
 
 </html>

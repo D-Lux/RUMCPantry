@@ -1,28 +1,17 @@
-<!DOCTYPE html>
+<?php include 'php/header.php'; ?>
 
-<html>
-
-<head>
-    <title>Roselle United Methodist Church Food Pantry</title>
-    <script src="js/utilities.js"></script>
     <script src="js/createDonation.js"></script>
-    <link rel="stylesheet" type="text/css" href="css/toolTip.css">
     <!--<link href='style.css' rel='stylesheet'>-->
     <?php include 'php/checkLogin.php';?>
 
 
-</head>
-
-<body>
-    <h1>Roselle United Methodist Church</h1>
-    <h2>Food Pantry</h2>
-    <h3>Admin Page Inventory Ops 3</h3>
 
 
-    <button onclick="goBack()">Back</button>
+    
 
+
+    <button id='btn_back' onclick="goBack()">Back</button>
     <?php
-    include 'php/utilities.php';
     echo "<h3> Update donation number: ". $_GET['donationID'] . "</h3>";
    
  
@@ -145,6 +134,8 @@
 
         <input type="submit" value="Update" name="updateDonationIndividual"> 
         </form>'; ?>
+</div><!-- /body_content -->
+	</div><!-- /content -->
 
 </body>
 
