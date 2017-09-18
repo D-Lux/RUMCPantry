@@ -1,10 +1,11 @@
 <script src="/RUMCPantry/js/utilities.js"></script>
 <?php
 
-include 'utilities.php';
+//include 'utilities.php';
 
 if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
 {
+    include('header.php');
     
 
     $category = $_POST['category'];
@@ -15,6 +16,9 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     $small = $_POST['small'];
     $medium = $_POST['medium'];
     $large = $_POST['large'];
+    $aisle = $_POST['aisle'];
+    $rack = $_POST['rack'];
+    $shelf = $_POST['shelf'];
    
 
 
@@ -25,7 +29,6 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
 
 
     /* previous lines set up the strings for connextion*/
-
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -39,7 +42,7 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         if($result->num_rows == 0) {
         
          $sql = "INSERT INTO category (name, small, medium, large)
-         VALUES ('$category', 0, 0, 0, 0)";
+         VALUES ('$category', 0, 0, 0)";
             if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "New category created: $category", "green");
                 
@@ -54,8 +57,8 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
                 } 
           }
           else{
-            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-            echoDivWithColor("Error, failed to connect to database at category insert.", "red" );
+            echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
+            echoDivWithColor("Error, failed to connect to database at category insert. $sql $conn->error", "red" );
           }
 
                   
@@ -75,12 +78,12 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
     }
 
 
-    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, categoryID)
-    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$categoryID')"; /*standard insert statement using the variables pulled*/
+    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, categoryID, aisle, rack, shelf)
+    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')"; /*standard insert statement using the variables pulled*/
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+        echoDivWithColor( '<button id="btn_back" onclick="goBack()">Back</button>', "green");
 
         echoDivWithColor("Item created successfully", "green" );
         echoDivWithColor("Display Name: $displayName", "green" );
@@ -89,12 +92,14 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         echoDivWithColor("Family allotment for size 1-2: $small", "green" );
         echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
         echoDivWithColor("Family allotment for size 5-6: $large", "green" );
-          
-        
 
+        echoDivWithColor("Aisle: $aisle", "green" );
+        echoDivWithColor("Rack: $rack", "green" );
+        echoDivWithColor("Shelf: $shelf", "green" );
+        
        
     } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at item insert $sql $conn->error", "red" );
      
         
@@ -106,6 +111,7 @@ elseif (isset($_GET['UpdateItem'])) {
 	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
+    
     $servername = "127.0.0.1";
     $username = "root";
     $password = "";
@@ -145,6 +151,12 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $small = $_POST['small'];
     $medium = $_POST['medium'];
     $large = $_POST['large'];
+
+    $aisle = $_POST['aisle'];
+    $rack = $_POST['rack'];
+    $shelf = $_POST['shelf'];
+
+    
    
 
 
@@ -155,7 +167,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
 
 
     /* previous lines set up the strings for connextion*/
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -185,7 +197,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
                 } 
           }
           else{
-            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+            echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
             echoDivWithColor("Error, failed to connect to database at category update.", "red" );
           }
 
@@ -205,12 +217,12 @@ elseif (isset($_POST['updateItemIndividual'])) {
        echoDivWithColor("Category ID: $categoryID", "green" );
     }
 
-        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large Where itemID = $itemID";
+        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large, aisle = $aisle, rack = $rack, shelf = $shelf  Where itemID = $itemID";
 
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+        echoDivWithColor( '<button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
 
         echoDivWithColor("Item updated successfully", "green" );
         echoDivWithColor("Display Name: $displayName", "green" );
@@ -219,11 +231,14 @@ elseif (isset($_POST['updateItemIndividual'])) {
         echoDivWithColor("Family allotment for size 1-2: $small", "green" );
         echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
         echoDivWithColor("Family allotment for size 5-6: $large", "green" );
+        echoDivWithColor("Aisle: $aisle", "green" );
+        echoDivWithColor("Rack: $rack", "green" );
+        echoDivWithColor("Shelf: $shelf", "green" );
         
 
        
     } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at item insert $sql $conn->error", "red" );
      
         
@@ -380,7 +395,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
 
 
     /* previous lines set up the strings for connextion*/
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -398,7 +413,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+        echoDivWithColor( ' <button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
 
         echoDivWithColor("Category updated successfully", "green" );
         echoDivWithColor("Name: $name", "green" );
@@ -409,7 +424,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
 
        
     } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at category update: $sql $conn->error", "red" );
      
         
@@ -426,7 +441,7 @@ elseif (isset($_POST['createCategory'])) {
 
 
 
-
+    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -443,7 +458,7 @@ elseif (isset($_POST['createCategory'])) {
 
     if ($conn->query($sql) === TRUE) {
 
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+        echoDivWithColor( '<button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
 
         echoDivWithColor("Category created successfully", "green" );
         echoDivWithColor("Category name: $name", "green" );
@@ -457,7 +472,7 @@ elseif (isset($_POST['createCategory'])) {
 
        
     } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at category insert $sql $conn->error", "red" );
      
         
