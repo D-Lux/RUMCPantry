@@ -30,7 +30,8 @@
 <h3>View Order</h3>
 	
 	<?php
-	
+	// TODO: go to checkin on back button press
+	// TODO: Set order status to printed (if it is already ready to print)
 	// Post Vars: invoiceID | name | visitTime | familySize
 	$invoiceID = ((isset($_POST['invoiceID'])) ? $_POST['invoiceID'] : 0);
 	$name = ((isset($_POST['name'])) ? $_POST['name'] : null);
