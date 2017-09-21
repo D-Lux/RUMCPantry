@@ -196,10 +196,12 @@ td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock),
 .inputDiv label {
 	display: inline-block;
 	width: 200px;
+	cursor: text;
 }
 .inputDiv input, .inputDiv textarea {
 	width: 200px;
 	margin: 8px;
+	cursor: text;
 }
 
 #addressZipField {

@@ -180,8 +180,8 @@ elseif (isset($_POST['clientApptSelect'])) {
 					// Assignment was successful, victory!
 					closeDB($conn);
 					createCookie("clientApptSet", 1, 30);
-					// TODO: Maybe go back somewhere else in the future?
-					header("location: /RUMCPantry/cp1.php");
+					// Take us back to login page
+					header("location: /RUMCPantry/login.php");
 				}
 				else {
 					// Assignment failed, error back
@@ -199,7 +199,12 @@ elseif (isset($_POST['clientApptSelect'])) {
 		echoDivWithColor("I'm sorry, that appointment time is no longer available.", "red" );	
 	}
 }
-
+// If the client skipped selecting an appointment or there were no appointments to select
+elseif (isset($_POST['SkipApt'])) {
+	createCookie("clientSkippedAppt", 1, 30);
+	// Take us back to login page
+	header("location: /RUMCPantry/login.php");
+}
 // Walk-in appointment creation
 elseif (isset($_GET['newWalkIn'])) {
 	debugEchoPOST();debugEchoGET();

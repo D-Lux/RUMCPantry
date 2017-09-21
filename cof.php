@@ -3,13 +3,18 @@
 <script src='js/orderFormOps.js'></script>
 		<button id='btn_back' onclick="goBack()">Back</button>
 		<?php
-			echo "<h3>Order Form";
-			$ViewMode = false;
-			if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
-				$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
-				echo ": " . $ViewMode;
+			if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
+				echo "<h3>" . $_POST['clientFirstName'] . " " . $_POST['clientLastName'] . "</h3>";
 			}
-			echo "</h3>";
+			else {
+				echo "<h3>Order Form";
+				$ViewMode = false;
+				if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
+					$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
+					echo ": " . $ViewMode;
+				}
+				echo "</h3>";
+			}
 		?>
 		<div class="body_content">
 			<?php

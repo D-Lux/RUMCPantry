@@ -41,39 +41,41 @@
 		else {
 			// Loop through our data and create a list of selectable active appointments
 			while( $invoice = sqlFetch($invoiceData) ) {
-				//echo "ID: " . $invoice['invoiceID'] . "<br>";
-				//echo "Last Name: " . displaySingleQuote($invoice['ln']) . "<br>";
-				//echo "Visit Time: " .  $invoice['visitTime'] . "<br>";
-				echo "<form method='post' action='ap_oo4.php'>";
-				echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
-				echo "<input type='hidden' value='" . $invoice['CID'] . "' name='CID'>";
-				echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='name'>";
-				echo "<input type='hidden' value='" . $invoice['visitTime'] . "' name='visitTime'>";
-				echo "<input type='hidden' value='" . $invoice['status'] . "' name='status'>";
-				echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
-				echo "<input type='submit' value='";
-				// Display order information (firstname lastname visittime decodedstats)
-				echo displaySingleQuote($invoice['fn']) . " ";
-				echo displaySingleQuote($invoice['ln']) . " ";
-				echo returnTime($invoice['visitTime']) . " ";
-				echo visitStatusDecoder($invoice['status']);
-				echo "' name='viewInvoice'>";
-				echo "</form><br>";
+				// Display options to be printed
+				if (IsReadyToPrint($invoice['status'])) {
+					echo "<form method='post' action='ap_oo4.php'>";
+					echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
+					echo "<input type='hidden' value='" . $invoice['CID'] . "' name='CID'>";
+					echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='name'>";
+					echo "<input type='hidden' value='" . $invoice['visitTime'] . "' name='visitTime'>";
+					echo "<input type='hidden' value='" . $invoice['status'] . "' name='status'>";
+					echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
+					echo "<input type='submit' value='View: ";
+					// Display order information (firstname lastname visittime decodedstats)
+					// echo displaySingleQuote($invoice['fn']) . " ";
+					echo displaySingleQuote($invoice['ln']) . " ";
+					echo returnTime($invoice['visitTime']) . " ";
+					//echo visitStatusDecoder($invoice['status']);
+					echo "' name='viewInvoice'>";
+					echo "</form><br>";
+				}
 				
 				// Display order information for review ("Review: " firstname lastname visittime decodedstats)
-				echo "<form method='post' action='rof.php'>";
-				echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
-				echo "<input type='hidden' value='" . $invoice['CID'] . "' name='clientID'>";
-				echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='lname'>";
-				echo "<input type='hidden' value='" . displaySingleQuote($invoice['fn']) . "' name='fname'>";
-				echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
-				echo "<input type='submit' value='Review: ";
-				echo displaySingleQuote($invoice['fn']) . " ";
-				echo displaySingleQuote($invoice['ln']) . " ";
-				echo returnTime($invoice['visitTime']) . " ";
-				echo visitStatusDecoder($invoice['status']);
-				echo "' name='viewInvoice'>";
-				echo "</form><br>";
+				if (IsReadyToReview($invoice['status'])) {
+					echo "<form method='post' action='rof.php'>";
+					echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
+					echo "<input type='hidden' value='" . $invoice['CID'] . "' name='clientID'>";
+					echo "<input type='hidden' value='" . displaySingleQuote($invoice['ln']) . "' name='lname'>";
+					echo "<input type='hidden' value='" . displaySingleQuote($invoice['fn']) . "' name='fname'>";
+					echo "<input type='hidden' value='" . $invoice['FamilySize'] . "' name='familySize'>";
+					echo "<input type='submit' value='Review: ";
+					//echo displaySingleQuote($invoice['fn']) . " ";
+					echo displaySingleQuote($invoice['ln']) . " ";
+					echo returnTime($invoice['visitTime']) . " ";
+					//echo visitStatusDecoder($invoice['status']);
+					echo "' name='viewInvoice'>";
+					echo "</form><br>";
+				}
 			}
 		}
 	?>

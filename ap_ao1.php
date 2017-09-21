@@ -56,7 +56,12 @@
 				echo "<td>" . $row['numApp'] . "</td>";
 				
 				// Available Count
-				echo "<td>" . $availableDates[$row["visitDate"]] . "</td>";
+				if (isset($availableDates[$row["visitDate"]])) {
+					echo "<td>" . $availableDates[$row["visitDate"]] . "</td>";
+				}
+				else {
+					echo "<td>0</td>";
+				}
 				
 				// Close off the row 
 				echo "</tr>";

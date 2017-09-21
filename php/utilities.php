@@ -288,15 +288,22 @@ define("SV_AVAILABLE", 0);
 define("SV_ASSIGNED", 100);
 define("SV_LOCKED", 101);
 define("SV_ACTIVE", 200);
+
 define("SV_ARRIVED_LOW", 300);
 define("SV_ARRIVED_HIGH", 399);
-define("SV_ARRIVED_TO_PROCESSED", 100);
-define("SV_PRINTED_LOW", 400);
-define("SV_PRINTED_HIGH", 499);
-define("SV_PROCESSED_LOW", 500);
-define("SV_PROCESSED_HIGH", 599);
-define("SV_CANCELED", 888);
+define("SV_READY_TO_REVIEW_LOW", 400);
+define("SV_READY_TO_REVIEW_HIGH", 499);
+define("SV_READY_TO_PRINT_LOW", 500);
+define("SV_READY_TO_PRINT_HIGH", 599);
+define("SV_PRINTED_LOW", 600);
+define("SV_PRINTED_HIGH", 699);
+define("SV_COMPLETED", 700);
+define("SV_ADVANCE_STATUS", 100);
+
+define("SV_BAD_DOCUMENTATION", 997);
+define("SV_CANCELED", 998);
 define("SV_NO_SHOW", 999);
+
 define("SV_REDISTRIBUTION", 9999);
 
 function visitStatusDecoder($visitStatus){
@@ -306,48 +313,28 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus == SV_LOCKED): return 'Assigned, Locked';
 		case ($visitStatus == SV_ACTIVE): return 'Active';
 		case ($visitStatus >= SV_ARRIVED_LOW && $visitStatus < SV_ARRIVED_HIGH): return 'Arrived';
-		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
-		case ($visitStatus >= SV_PROCESSED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Processed';
+		case ($visitStatus >= SV_READY_TO_REVIEW_LOW && $visitStatus < SV_READY_TO_REVIEW_HIGH): return 'Ready for Review';
+		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to Print';
+		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Printed';
+		case ($visitStatus == SV_COMPLETED): return 'Completed';
 		
 		// special cases
+		case ($visitStatus == SV_BAD_DOCUMENTATION): return 'Bad documentation';
 		case ($visitStatus == SV_CANCELED): return 'Client canceled';
 		case ($visitStatus == SV_NO_SHOW): return 'Client did not show';
 		
-		case ($visitStatus == SV_REDISTRIBUTION): return 'Redistribution Order';
+		case ($visitStatus == SV_REDISTRIBUTION): return 'Reallocation Order';
 		
 		default: return 'Status not recognized';
 	}		
 }
 
+// *****
+// Basic functions to get the status definitions if needed
 // Return the status # for available
 function GetAvailableStatus() {
 	return SV_AVAILABLE;
 }
-// Return the status # for lowest arrived
-function GetArrivedLow() {
-	return SV_ARRIVED_LOW;
-}
-// Return the status # for highest arrived
-function GetArrivedHigh() {
-	return SV_ARRIVED_HIGH;
-}
-// Return the status # for lowest printed
-function GetPrintedLow() {
-	return SV_PRINTED_LOW;
-}
-// Return the status # for highest printed
-function GetPrintedHigh() {
-	return SV_PRINTED_HIGH;
-}
-// Return the status # for lowest processed
-function GetProcessedLow() {
-	return SV_PROCESSED_LOW;
-}
-// Return the status # for highest processed
-function GetProcessedHigh() {
-	return SV_PROCESSED_HIGH;
-}
-
 // Return the status # for a newly assigned appointment
 function GetAssignedStatus() {
 	return SV_ASSIGNED;
@@ -356,37 +343,86 @@ function GetAssignedStatus() {
 function GetActiveStatus() {
 	return SV_ACTIVE;
 }
-// Returns a bool indicating whether the appointment is active or not
-function IsActiveAppointment($status) {
-	return ( ($status >= SV_ACTIVE) && ($status <= SV_ARRIVED_HIGH) );
-}
-// Returns the highest active status value
+// Return the highest # an order could be and still be considered active
 function GetHighestActiveStatus() {
-	return SV_ARRIVED_HIGH;
+	return SV_READY_TO_PRINT_HIGH;
 }
 
-// Return an appropriate status value to mark the status completed
-function ReturnProcessedStatus($status) {
-	if ($status >= SV_ARRIVED_LOW && $status <= SV_ARRIVED_HIGH) {
-		return ($status + SV_ARRIVED_TO_PROCESSED);
-	}
-	else {
-		return SV_PROCESSED_LOW;
-	}
+
+// Return the status # for lowest arrived
+function GetArrivedLow() {
+	return SV_ARRIVED_LOW;
+}
+// Return the status # for highest arrived
+function GetArrivedHigh() {
+	return SV_ARRIVED_HIGH;
+}
+// Return the status # for lowest ready to review
+function GetReadyToReviewLow() {
+	return SV_READY_TO_REVIEW_LOW;
+}
+// Return the status # for highest ready to review
+function GetReadyToReviewHigh() {
+	return SV_READY_TO_REVIEW_HIGH;
+}
+// Return the status # for lowest ready to print
+function GetReadyToPrintLow() {
+	return SV_READY_TO_PRINT_LOW;
+}
+// Return the status # for highest ready to print
+function GetReadyToPrintHigh() {
+	return SV_READY_TO_PRINT_HIGH;
+}
+
+// Return the status # for lowest printed
+function GetPrintedLow() {
+	return SV_PRINTED_LOW;
+}
+// Return the status # for highest printed
+function GetPrintedHigh() {
+	return SV_PRINTED_HIGH;
+}
+// Return the status # for Completed orders
+function GetCompletedStatus() {
+	return SV_COMPLETED;
+}
+
+// *******
+// Returns the value of the passed status elevated to the next status
+function AdvanceInvoiceStatus($status) {
+	return ($status + SV_ADVANCE_STATUS);
+}
+
+// **********
+// Function to test status
+// Returns a bool indicating whether the appointment is active or not
+function IsActiveAppointment($status) {
+	return ( ($status == SV_ACTIVE ) || ($status == SV_LOCKED) ||
+			( ($status >= SV_ARRIVED_LOW) && ($status <= SV_ARRIVED_HIGH) ));
+}
+// Returns a bool indicating whether the appointment is ready to be reviewed
+function IsReadyToReview($status) {
+	return ( ($status >= SV_READY_TO_REVIEW_LOW) && ($status <= SV_READY_TO_REVIEW_HIGH) );
+}
+// Returns a bool indicating whether the appointment is ready to be printed
+function IsReadyToPrint($status) {
+	return ( ($status >= SV_READY_TO_PRINT_LOW) && ($status <= SV_READY_TO_PRINT_HIGH) );
+}
+// Returns a bool indicating whether the appointment is printed
+function IsPrinted($status) {
+	return ( ($status >= SV_PRINTED_LOW) && ($status <= SV_PRINTED_HIGH) );
+}
+// Returns a bool indicating whether the appointment is complete for any reason
+function IsComplete($status) {
+	return ( ($status == SV_BAD_DOCUMENTATION) ||
+			 ($status == SV_SV_CANCELED) ||
+			 ($status == SV_NO_SHOW)||
+			 ($status == SV_COMPLETED) );
 }
 
 // Returns the Redistribution stats number
 function GetRedistributionStatus() {
 	return SV_REDISTRIBUTION;
-}
-
-// Get processed positions
-function returnProcessedLow() {
-	return SV_PROCESSED_LOW;
-}
-
-function returnProcessedHigh() {
-	return SV_PROCESSED_HIGH;
 }
 
 // **********************************************************

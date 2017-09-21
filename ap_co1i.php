@@ -74,7 +74,7 @@
 				echo "<tr>";
 
 				// Update button				
-				echo "<td><input type='submit' name='GoUpdateClient' value='Update'></td>";
+				echo "<td><input type='submit' name='GoUpdateClient' value='Edit'></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['lastName'] . "</td>";

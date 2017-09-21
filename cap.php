@@ -43,7 +43,7 @@
 			// Start off our table
 			echo "<table><tr><th>Date</th><th>Time Slot</th><th></th></tr>";
 			while ($timeslots = sqlFetch($result)) {
-				// Create a human-readale date string
+				// Create a human-readable date string
 				$dateString = date_format(date_create($timeslots['visitDate']), 'F jS\, Y');
 				echo "<tr><td>" . $dateString . "</td>";
 
@@ -64,8 +64,8 @@
 		}
 		
 		?>
-		<form action='cp1.php'>
-			<input type='submit' name='Return' value='Return'>
+		<form action='php/apptOps.php' method='post'>
+			<input type='submit' name='SkipApt' value='Skip for now'>
 		</form>
 	
 	</div><!-- /body_content -->

@@ -147,8 +147,52 @@ function createInvoiceDesc() {
 		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
 	}
 }
-debugEchoPOST();
 
+// ***************************************************************
+// * Function to set the status of an invoice to the correct value
+function updateStatusFromOrder() {
+	// Connect to the database
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		die("Connection failed: " . $conn->connect_error);
+	}
+
+	// Generate our query to get our current status
+	$sql = "SELECT status
+			FROM Invoice
+			WHERE invoiceID=" . $_POST['invoiceID'] . "
+			LIMIT 1";
+	
+	$result = queryDB($conn, $sql);
+	if ($result === false) {
+		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+		echoDivWithColor("Error, failed to get current status.", "red" );	
+		closeDB($conn);
+	}
+	else {
+		// Now we advance our status variable
+		$fetchData = sqlFetch($result);
+		
+		// Get the status, if the order status isn't set to arrived at least, set it now
+		$currStatus = ($fetchData['status'] >= GetArrivedLow()) ? $fetchData['status'] : GetArrivedLow();
+		$newStatus = AdvanceInvoiceStatus($currStatus) ;
+		
+		// Generate our update query with the new status
+		$sql = "UPDATE Invoice
+				SET status=" . $newStatus . "
+				WHERE invoiceID=" . $_POST['invoiceID'];
+		
+		// Run the query, if we're good, return success
+		if (queryDB($conn, $sql)) {
+			closeDB($conn);
+			return true;
+		}
+		else {
+			closeDB($conn);
+			return false;
+		}
+	}
+}
 
 
 // **************************************************
@@ -156,7 +200,12 @@ debugEchoPOST();
 if (isset($_POST['CreateInvoiceDescriptions'])) {
 	if (createInvoiceDesc()) {
 		echo "Insertion successful";
-		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+		if (updateStatusFromOrder()) {
+			header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+		}
+		else {
+			echo "There was an error creating your order, please try again";
+		}
 	}
 }
 
@@ -165,13 +214,16 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 	if (deleteInvoiceDesc()) {
 		if (createInvoiceDesc()) {
-			// TODO: Add cookie for feedback and update order status to appropriate value
-			// Might want to return to check in page instead of ap1
-			echo "Review Successful!";
-			header("location: /RUMCPantry/ap1.php");
+			if (updateStatusFromOrder()) {
+				echo "Review Successful!";
+				header("location: /RUMCPantry/checkin.php");
+			}
+			else {
+				echo "There was an error reviewing the order, please try again";
+			}
 		}
 	}
-	echo "There was an error";
+	echo "There was an error reviewing the order, please try again";
 }
 
 

@@ -87,7 +87,7 @@
 				echo "<tr>";
 
 				// Update button				
-				echo "<td><input type='submit' name='GoUpdateClient' value='Update'></td>";
+				echo "<td><input type='submit' name='GoUpdateClient' value='Edit'></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['lName'] . ", " . $row['fName'] . "</td>";
@@ -135,9 +135,9 @@
 			echo "<br>";
 			
 			// Allow the user to adjust the tab size
-			echo "<form action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
+			echo "<form id='tabForm' action='" . $_SERVER['PHP_SELF'] . "' method='post'>";
 			echo "<input type='submit' id='btn_tabSize' name='submit' value='Tab Size'>";
-			echo "<select name='tabSize'>";
+			echo "<select name='tabSize' onchange='document.getElementById(\"tabForm\")[0].submit()' >";//onchange='this.form.submit()'>";
 			for ($i=1; $i <= 100; $i+=($i<5 ? 1 : ($i<50 ? 5 : 10))) {
 				echo "<option " . ($_POST['tabSize']!==NULL ? ($_POST['tabSize']==$i ? "selected" : "") 
 								: ($i == $TabSize) ? "selected" : "") . " value='" . $i . "'>" . $i . "</option>";

@@ -9,6 +9,16 @@
 	<h3>Welcome</h3>
 	
 	<div class="body_content">
+		<script>
+		if (getCookie("clientApptSet") != "") {
+			window.alert("Appointment set! Thank you, see you next time!");
+			removeCookie("clientApptSet");
+		}
+		if (getCookie("clientSkippedAppt") != "") {
+			window.alert("Thank you for your order, please give us a call to set up another appointment!");
+			removeCookie("clientSkippedAppt");
+		}		
+		</script>
 		
 		<form method = "POST" action="php/login.php">
 			<div class="inputDiv">
@@ -34,7 +44,7 @@
 
 		<br><br><br>
 		or continue as client
-		<form method="get" action="mainpage.php">
+		<form method="get" action="cp1.php">
 			<input type="submit" value="continue">
     	</form>
 	

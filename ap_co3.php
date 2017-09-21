@@ -140,7 +140,7 @@
 			echo "<br><label for='notesInput'>Notes:</label>
 				  <textarea id='notesInput' class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea><br>";
 			echo "<br><br>";
-			echo "<input type='submit' name='UpdateClient' value='UpdateClient'>";
+			echo "<input type='submit' name='UpdateClient' value='Save'>";
 			echo "</div>"; // </inputDiv>
 			echo "</form>";
 		
@@ -179,7 +179,7 @@
 				echo "<tr>";
 
 					// Update button				
-				echo "<td><input type='submit' name='GoUpdateMember' value='Update'></td>";
+				echo "<td><input type='submit' name='GoUpdateMember' value='Edit'></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['firstName'] . "</td>";
