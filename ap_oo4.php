@@ -18,6 +18,14 @@
 				border: solid 2px #888;
 				background-color: #AAA;
 			}
+			
+			h1 {
+				font-size: 3em;
+				font-family: tahoma;
+			}
+			td {
+				text-align: center;
+			}
 		</style>
 	</head>
 	<body>
@@ -30,16 +38,41 @@
 <h3>View Order</h3>
 	
 	<?php
-	// TODO: go to checkin on back button press
-	// TODO: Set order status to printed (if it is already ready to print)
 	// Post Vars: invoiceID | name | visitTime | familySize
 	$invoiceID = ((isset($_POST['invoiceID'])) ? $_POST['invoiceID'] : 0);
 	$name = ((isset($_POST['name'])) ? $_POST['name'] : null);
 	$visitTime = ((isset($_POST['visitTime'])) ? $_POST['visitTime'] : 0);
 	$familySize = ((isset($_POST['familySize'])) ? $_POST['familySize'] : 0);
 	
-	// Create our query to get the invoice data
-	if ( $name != null ) {
+	
+	if ( ($name != null) && ($invoiceID != 0) ){
+		// Connect to the database
+		$conn = createPantryDatabaseConnection();
+		
+		// Check fail conditions
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		// Get the status variable, if it's in the ready to be printed queue, advance it to the printed queue
+		$sql = "SELECT status
+				FROM Invoice
+				WHERE invoiceID=" . $invoiceID . "
+				LIMIT 1";
+		// Run the query and get the data fetch
+		$statusQuery = queryDB($conn, $sql);
+		$statusData = sqlFetch($statusQuery);
+		
+		if (IsReadyToPrint($statusData['status'])) {
+			$newStatus = AdvanceInvoiceStatus($statusData['status']);
+			// If we are ready to print, advance to printed status
+			$sql = "UPDATE Invoice
+					SET status=" . $newStatus . "
+					WHERE invoiceID=" . $invoiceID;
+			queryDB($conn, $sql);
+		}
+				
+		// Create our query to get the invoice data
 		$sql = "SELECT I.name as iName, I.quantity as iQty, I.invoiceDescID as invoiceDescID,
 					I.rack as rack, I.shelf as shelf, I.aisle as aisle
 				FROM Invoice
@@ -52,14 +85,7 @@
 				ON I.IinvoiceID=Invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
 				ORDER BY aisle, rack, shelf, iName";
-		
-		$conn = createPantryDatabaseConnection();
-		
-		// Check fail conditions
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		
+				
 		$invoiceData = queryDB($conn, $sql);
 		
 		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
@@ -84,7 +110,8 @@
 			echo "</tr>";	
 		}
 		echo "</table>";
-			
+			/*
+			// This happens automatically now
 		// If we came from the checkin page, allow 'mark as processed'
 		if ( (isset($_POST['viewInvoice']) ) && (isset($_POST['status'])) ) {
 			echo "<form method='post' action='php/orderOps.php'>";
@@ -93,7 +120,7 @@
 			echo "<input class='btn_view' type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
 			echo "</form>";
 		}
-		
+		*/
 		echo "<br><br><hr>";
 		//Print out name tags numNames times
 		$numNames = 2;

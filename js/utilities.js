@@ -92,8 +92,6 @@ function goBack() {
             break;
 
         case (location.pathname.includes("ap_oo4.php")):
-            window.location.assign("/RUMCPantry/ap_oo3.php");
-            break;
         case (location.pathname.includes("awc.php")):
             window.location.assign("/RUMCPantry/checkIn.php");
             break;
