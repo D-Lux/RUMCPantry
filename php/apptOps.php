@@ -205,6 +205,10 @@ elseif (isset($_POST['SkipApt'])) {
 	// Take us back to login page
 	header("location: /RUMCPantry/login.php");
 }
+elseif (isset($_POST['NoApptSelection'])) {
+	// Take us back to login page
+	header("location: /RUMCPantry/login.php");
+}
 // Walk-in appointment creation
 elseif (isset($_GET['newWalkIn'])) {
 	debugEchoPOST();debugEchoGET();

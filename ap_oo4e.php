@@ -38,7 +38,7 @@
 		$invoiceData = queryDB($conn, $sql);
 		
 		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
-			echo "error: " . mysqli_error($conn);
+			//echo "error: " . mysqli_error($conn);
 			die("<br>Invoice is currently empty.");
 		}
 		closeDB($conn);

@@ -35,7 +35,7 @@
 <script src="js/utilities.js"></script>
 <button id='btn_back' onclick="goBack()">Back</button>
 
-<h3>View Order</h3>
+<!-- <h3>View Order</h3> -->
 	
 	<?php
 	// Post Vars: invoiceID | name | visitTime | familySize
@@ -123,10 +123,12 @@
 		*/
 		echo "<br><br><hr>";
 		//Print out name tags numNames times
-		$numNames = 2;
-		for ($i = 0; $i < $numNames; $i++) {
-			echo "<h1>" .  $name . "</h1>";
+		echo "<div id='nameTags' style='padding-left:5em'><h1>";
+		$numLines = 4;
+		for ($i = 0; $i < $numLines; $i++) {
+			echo $name . "&emsp;&emsp;" . $name . "<br>";
 		}
+		echo "</h1></div>";
 	}
 	else {
 		echo "Something went wrong, please go back and try again.";

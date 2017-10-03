@@ -9,7 +9,7 @@ function runReportQueries($startDate, $endDate) {
 	}
 	
 	//debug
-	echo "Echo Start Date: " . $startDate . "<br>Echo End Date: " . $endDate . "<br>";
+	//echo "Echo Start Date: " . $startDate . "<br>Echo End Date: " . $endDate . "<br>";
 	
 	// Queries:
 	// lbs of food donated to and from pantry
@@ -26,11 +26,14 @@ function runReportQueries($startDate, $endDate) {
 			ON Invoice.clientID = Client.clientID
 			WHERE Invoice.visitDate > '" . $startDate . "'
 			AND Invoice.visitDate < '" . $endDate . "' 
-			AND Invoice.status > " . GetAvailableStatus() . "
-			AND Invoice.status < " . GetRedistributionStatus();/*
 			AND Invoice.status > " . returnProcessedLow() . "
-			AND Invoice.status < " . returnProcessedHigh(); */
-	// TODO: Fix status check when not just testing
+			AND Invoice.status < " . returnProcessedHigh();
+
+	// Test statement: replace .status blocks above
+	/*
+	AND Invoice.status > " . GetAvailableStatus() . "
+			AND Invoice.status < " . GetRedistributionStatus();
+	*/
 	
 	// Family query test
 	$result = queryDB($conn, $sql);
@@ -45,8 +48,11 @@ function runReportQueries($startDate, $endDate) {
 			ON InvoiceDescription.InvoiceID = Invoice.InvoiceID
 			WHERE Invoice.visitDate > '" . $startDate . "'
 			AND Invoice.visitDate < '" . $endDate . "' 
-			AND Invoice.status > '" . GetAvailableStatus() . "'";
-	// TODO: Fix status check when not just testing
+			AND Invoice.status > " . returnProcessedLow() . "
+			AND Invoice.status < " . returnProcessedHigh();
+	
+	// Test statement: change status blocks above
+	// AND Invoice.status > '" . GetAvailableStatus() . "'";
 			
 	// Invoice query test for donation worth
 	$result = queryDB($conn, $sql);

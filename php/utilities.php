@@ -315,7 +315,7 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus >= SV_ARRIVED_LOW && $visitStatus < SV_ARRIVED_HIGH): return 'Arrived';
 		case ($visitStatus >= SV_READY_TO_REVIEW_LOW && $visitStatus < SV_READY_TO_REVIEW_HIGH): return 'Ready for Review';
 		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to Print';
-		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PROCESSED_HIGH): return 'Printed';
+		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
 		case ($visitStatus == SV_COMPLETED): return 'Completed';
 		
 		// special cases
@@ -390,6 +390,8 @@ function GetCompletedStatus() {
 // *******
 // Returns the value of the passed status elevated to the next status
 function AdvanceInvoiceStatus($status) {
+	// Debug echo
+	//echo "<script>window.alert('CurrStatus: " . $status . " Advancing by: " . SV_ADVANCE_STATUS . "');</script>";
 	return ($status + SV_ADVANCE_STATUS);
 }
 

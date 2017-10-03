@@ -1,13 +1,16 @@
 <?php include 'php/header.php'; ?>
 
+<!-- No back button for this page!
     <button id='btn_back' onclick="goBack()">Back</button>
-
-    <h3>Next Appointment</h3>
+-->
+    
 	
 	<div class="body_content">
 	
 	<?php 
-
+	// Disabled for now, until Vicki wants clients to select their own appointment times
+/*
+		echo "<h3>Next Appointment</h3>";
 		// NOTE To Developer:
 		// The client should only get to this page right after they've completed an order form
 
@@ -63,9 +66,15 @@
 			echo "</table>";
 		}
 		
-		?>
-		<form action='php/apptOps.php' method='post'>
+		echo "<form action='php/apptOps.php' method='post'>
 			<input type='submit' name='SkipApt' value='Skip for now'>
+			</form>";
+			*/
+		?>
+		<h1 style='text-align: center;'>Thank you for your order!</h1>
+		<h3 style='text-align: center;'>Please return this device and set up your next appointment with the registration desk.</h3>
+		<form action='php/apptOps.php' method='post'>
+		<input style='position:relative; left:30%;' type='submit' name='NoApptSelection' value='Finish'>
 		</form>
 	
 	</div><!-- /body_content -->

@@ -32,6 +32,7 @@
 				if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
 				
 				// Check if we are just viewing (from admin)
+				// Viewing means we're looking at an order form without an attached client
 				$ViewMode = false;
 				if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
 					$ViewMode = true;
