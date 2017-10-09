@@ -386,3 +386,28 @@ function AJAX_RemoveFromInvoice(callingSlot) {
 		xmlhttp.send();
 	}
 }
+
+// *********************************************************
+// * Set an order to 'printed' when the print button is hit
+function AJAX_SetInvoicePrinted(invoiceID) {
+	// Run the AJAX stuff
+	xmlhttp = newAJAXObj();
+	
+	xmlhttp.onreadystatechange = function() {
+		if (this.readyState == 4 && this.status == 200) {
+			if (this.responseText == "0") {
+				window.print();
+			}
+			else {
+				// Give a small alert if this was already printed, but bring up the window anyway
+				window.alert("This order has already been printed");
+				window.print();
+			}
+		}
+	};
+	xmlhttp.open("GET","/RUMCPantry/php/ajax/setToPrinted.php?" +
+				 "invoiceID=" + invoiceID, true);
+	xmlhttp.send();
+	
+	
+}

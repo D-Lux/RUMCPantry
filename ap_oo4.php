@@ -1,38 +1,7 @@
-<!DOCTYPE html>
 
-<html>
-	<head>
-		<title>Roselle UMC</title>
-		<style>
-			#btn_back, .btn_view {
-				margin: 0 300px 0px 0px;
-				float: right;
-				height: 33px;
-				font-size: 1.1rem;
-				border-radius: 25px;
-				border: solid 2px #AAA;
-				cursor: pointer;
-			}
-
-			#btn_back:active, .btn_view:active {
-				border: solid 2px #888;
-				background-color: #AAA;
-			}
-			
-			h1 {
-				font-size: 3em;
-				font-family: tahoma;
-			}
-			td {
-				text-align: center;
-			}
-		</style>
-	</head>
-	<body>
-
-<?php include('php/utilities.php'); ?>
+<?php include 'php/header.php'; ?>
 <script src="js/orderFormOps.js"></script>
-<script src="js/utilities.js"></script>
+<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
 <button id='btn_back' onclick="goBack()">Back</button>
 
 <!-- <h3>View Order</h3> -->
@@ -54,30 +23,11 @@
 			die("Connection failed: " . $conn->connect_error);
 		}
 		
-		// Get the status variable, if it's in the ready to be printed queue, advance it to the printed queue
-		$sql = "SELECT status
-				FROM Invoice
-				WHERE invoiceID=" . $invoiceID . "
-				LIMIT 1";
-		// Run the query and get the data fetch
-		$statusQuery = queryDB($conn, $sql);
-		$statusData = sqlFetch($statusQuery);
-		
-		if (IsReadyToPrint($statusData['status'])) {
-			$newStatus = AdvanceInvoiceStatus($statusData['status']);
-			// If we are ready to print, advance to printed status
-			$sql = "UPDATE Invoice
-					SET status=" . $newStatus . "
-					WHERE invoiceID=" . $invoiceID;
-			queryDB($conn, $sql);
-		}
-				
 		// Create our query to get the invoice data
-		$sql = "SELECT I.name as iName, I.quantity as iQty, I.invoiceDescID as invoiceDescID,
-					I.rack as rack, I.shelf as shelf, I.aisle as aisle
+		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle
 				FROM Invoice
-				JOIN (SELECT Item.itemName as name, quantity, invoiceDescID, 
-						InvoiceDescription.invoiceID as IinvoiceID, rack, shelf, aisle
+				JOIN (SELECT Item.itemName as name, quantity, InvoiceDescription.invoiceID as IinvoiceID, 
+						rack, shelf, aisle
 					  FROM InvoiceDescription
 					  JOIN Item
 					  ON Item.itemID=InvoiceDescription.itemID
@@ -94,13 +44,15 @@
 		}
 		closeDB($conn);
 		
-		// Loop through our data and spit out the data into our table
-		echo "<h4>Client: " . $name . " | Appointment Time: " . returnTime($visitTime);
-		echo " | Family Size: " . familySizeDecoder($familySize) . "</h4>";
+		// Show basic client information
+		echo "<table><tr><th>Client</th><th>Time</th><th>Size</th></tr>";
+		echo "<tr><td>" . $name . "</td><td>" . returnTime($visitTime);
+		echo "</td><td>" . familySizeDecoder($familySize) . "</td></tr></table><br>";
 		
 		// Print button
-		echo "<button class='btn_view' onClick='window.print()'>Print</button>";
+		echo "<button id='btn_print' onClick='AJAX_SetInvoicePrinted(" . $invoiceID . ")'>Print</button>";
 		
+		// Loop through our data and spit out the data into our table
 		echo "<table id='orderTable'><tr><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr>";
 		while( $invoice = sqlFetch($invoiceData) ) {
 			echo "<tr><td>" . $invoice['iName'] . "</td>";
@@ -110,25 +62,15 @@
 			echo "</tr>";	
 		}
 		echo "</table>";
-			/*
-			// This happens automatically now
-		// If we came from the checkin page, allow 'mark as processed'
-		if ( (isset($_POST['viewInvoice']) ) && (isset($_POST['status'])) ) {
-			echo "<form method='post' action='php/orderOps.php'>";
-			echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
-			echo "<input type='hidden' name='status' value=" . $_POST['status'] . ">";
-			echo "<input class='btn_view' type='submit' name='SetInvoiceProcessed' value='Mark as Processed'>";
-			echo "</form>";
-		}
-		*/
-		echo "<br><br><hr>";
+
+
 		//Print out name tags numNames times
-		echo "<div id='nameTags' style='padding-left:5em'><h1>";
+		echo "<div id='nameTags' style='display:none;'><br><br><hr><h6>";
 		$numLines = 4;
 		for ($i = 0; $i < $numLines; $i++) {
 			echo $name . "&emsp;&emsp;" . $name . "<br>";
 		}
-		echo "</h1></div>";
+		echo "</h6></div>";
 	}
 	else {
 		echo "Something went wrong, please go back and try again.";

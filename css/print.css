@@ -1,0 +1,12 @@
+#btn_back, #btn_print, h1, h2 {
+	display: none !important;
+}
+
+h6 {
+	font-size: 3em;
+	font-family: tahoma;
+	display: block !important;
+}
+#nameTags {
+	display: block !important;
+}
