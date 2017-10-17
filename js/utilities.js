@@ -6,19 +6,19 @@ function goBack() {
         case (location.pathname.includes("ap_ro2.php")):
         case (location.pathname.includes("ap_ro2i.php")):
         case (location.pathname.includes("ap_ro5.php")):
-		case (location.pathname.includes("ap_ro5i.php")):
-		case (location.pathname.includes("ap_ro8.php")):
+        case (location.pathname.includes("ap_ro5i.php")):
+        case (location.pathname.includes("ap_ro8.php")):
             window.location.assign("/RUMCPantry/ap_ro1.php");
             break;
-		case (location.pathname.includes("ap_ro3.php")):
-		case (location.pathname.includes("ap_ro4.php")):
+        case (location.pathname.includes("ap_ro3.php")):
+        case (location.pathname.includes("ap_ro4.php")):
             window.location.assign("/RUMCPantry/ap_ro2.php");
             break;
-		case (location.pathname.includes("ap_ro9.php")):
-		case (location.pathname.includes("ap_ro10.php")):
-			window.location.assign("/RUMCPantry/ap_ro8.php");
-			break;
-		case (location.pathname.includes("ap_ro6.php")):
+        case (location.pathname.includes("ap_ro9.php")):
+        case (location.pathname.includes("ap_ro10.php")):
+            window.location.assign("/RUMCPantry/ap_ro8.php");
+            break;
+        case (location.pathname.includes("ap_ro6.php")):
         case (location.pathname.includes("ap_ro7.php")):
             window.location.assign("/RUMCPantry/ap_ro5.php");
             break;
@@ -42,7 +42,7 @@ function goBack() {
 
         case (location.pathname.includes("ap_co2.php")):
         case (location.pathname.includes("ap_co3.php")):
-		case (location.pathname.includes("ap_oo4e.php")):
+        case (location.pathname.includes("ap_oo4e.php")):
             window.location.assign("/RUMCPantry/ap_co1.php");
             break;
 
@@ -54,13 +54,24 @@ function goBack() {
             window.location.assign("/RUMCPantry/ap_do1.php");
             break;
 
-        case (location.pathname.includes("ap_io2.php")):
-        case (location.pathname.includes("ap_io3.php")):
-        case (location.pathname.includes("ap_io4.php")):
-        case (location.pathname.includes("ap_io5.php")):
+
+
+
         case (location.pathname.includes("itemOps.php")):
         case (location.pathname.includes("ap_io6.php")):
+        case (location.pathname.includes("ap_io7.php")):
+        case (location.pathname.includes("ap_io8.php")):
             window.location.assign("/RUMCPantry/ap_io1.php");
+            break;
+
+        case (location.pathname.includes("ap_io2.php")):
+        case (location.pathname.includes("ap_io3.php")):
+            window.location.assign("/RUMCPantry/ap_io7.php");
+            break;
+
+        case (location.pathname.includes("ap_io4.php")):
+        case (location.pathname.includes("ap_io5.php")):
+            window.location.assign("/RUMCPantry/ap_io8.php");
             break;
 
         case (location.pathname.includes("ap_oo2.php")):
@@ -82,13 +93,12 @@ function goBack() {
 
         case (location.pathname.includes("cp2.php")):
         case (location.pathname.includes("cof.php")):
-			// If the admin is viewing the order form, we need to go back to a different page
-			if (getQueryVariable("Small") || getQueryVariable("Medium") || getQueryVariable("Large")) {
-				window.location.assign("/RUMCPantry/ap_oo1.php");
-			}
-			else {
-				window.location.assign("/RUMCPantry/cp1.php");
-			}
+            // If the admin is viewing the order form, we need to go back to a different page
+            if (getQueryVariable("Small") || getQueryVariable("Medium") || getQueryVariable("Large")) {
+                window.location.assign("/RUMCPantry/ap_oo1.php");
+            } else {
+                window.location.assign("/RUMCPantry/cp1.php");
+            }
             break;
 
         case (location.pathname.includes("ap_oo4.php")):
@@ -167,18 +177,17 @@ function getElementAndColorIt(elementID, color) {
 
 // For creating an AJAX object
 function newAJAXObj() {
-// Run the AJAX stuff
-	if (window.XMLHttpRequest) {
-		// code for IE7+, Firefox, Chrome, Opera, Safari
-		return (new XMLHttpRequest());
-	} 
-	else {
-		// code for IE6, IE5
-		return (new ActiveXObject("Microsoft.XMLHTTP"));
-	}
+    // Run the AJAX stuff
+    if (window.XMLHttpRequest) {
+        // code for IE7+, Firefox, Chrome, Opera, Safari
+        return (new XMLHttpRequest());
+    } else {
+        // code for IE6, IE5
+        return (new ActiveXObject("Microsoft.XMLHTTP"));
+    }
 }
 
 // For checking if an object is hidden
 function isHiddenElement(e) {
-	return (e.offsetHeight === 0 && e.offsetWidth === 0);
+    return (e.offsetHeight === 0 && e.offsetWidth === 0);
 }

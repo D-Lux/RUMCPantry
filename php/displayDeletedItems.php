@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Item ID</th><th>Item Name</th><th>Display Name</th><th>Price</th><th>Small</th><th>Medium</th><th>Large</th><th>Category ID</th><th>Category Name</th><th>Reactivate</th></tr>";
+    echo "<tr><th>Edit</th><th>Item ID</th><th>Item Name</th><th>Display Name</th><th>Price</th><th>Small</th><th>Medium</th><th>Large</th><th>Category ID</th><th>Category Name</th><th>Reactivate</th></tr>";
     while($row = $result->fetch_assoc()) {
         $categoryName ="";
         if($row["isDeleted"] == true)
@@ -53,7 +53,8 @@ if ($result->num_rows > 0) {
                     echo "<form action=''>";
                     $itemID=$row["itemID"];
                     echo "<input type='hidden' name='itemID' value='$itemID'>";
-                    echo "<td><input type='submit' name='UpdateItem' value='Update'></td>";
+                    echo "<input type='hidden' name='categoryName' value='$categoryName'>";
+                    echo "<td><input type='submit' name='UpdateItem' value='Edit'></td>";
                     echo "<td>". $row["itemID"]. "</td><td>". $row["itemName"]. "</td><td>" . $row["displayName"] . "</td><td>" . $row["price"] . "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td><td>" . $row["categoryID"] . "</td><td>$categoryName</td>";
                     echo "<td><input type='submit' name='ReactivateItem' value='Reactivate'></td>";
                     echo "</form>";

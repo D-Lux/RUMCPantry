@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Category ID</th><th>Name</th><th>Small</th><th>Medium</th><th>Large</th><th>Reactivate category and items</th><th>Reactivate just category</th>";
+    echo "<tr><th>Edit</th><th>Category ID</th><th>Name</th><th>Small</th><th>Medium</th><th>Large</th><th>Reactivate category and items</th><th>Reactivate just category</th>";
     while($row = $result->fetch_assoc()) {
 
             if($row["isDeleted"] == true)
@@ -41,7 +41,7 @@ if ($result->num_rows > 0) {
             echo "<form action=''>";
             $categoryID=$row["categoryID"];
             echo "<input type='hidden' name='categoryID' value='$categoryID'>";
-            echo "<td><input type='submit' name='UpdateCategory' value='Update'></td>";
+            echo "<td><input type='submit' name='UpdateCategory' value='Edit'></td>";
             echo "<td>". $row["categoryID"]. "</td><td>". $row["name"]. "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td>";
             echo "<td><input type='submit' name='ReactivateCategoryAndItems' value='Reactivate category and items'></td>";
             echo "<td><input type='submit' name='ReactivateCategory' value='Reactivate category'></td>";

@@ -358,6 +358,7 @@ elseif (isset($_GET['ReactivateItem'])) {
     $password = "";
     $dbname = "foodpantry";
     $itemID = $_GET['itemID'];
+    $categoryName = $_GET['categoryName'];
 
      $conn = new mysqli($servername, $username, $password, $dbname);
     /* Check connection*/
@@ -369,6 +370,7 @@ elseif (isset($_GET['ReactivateItem'])) {
 
     
    
+   
 
         $sql = "update Item set isDeleted = false where itemID=$itemID";
 
@@ -378,6 +380,15 @@ elseif (isset($_GET['ReactivateItem'])) {
           else{
             echoDivWithColor("Failed to reactivate item", "red" );
           }
+
+          $sql = "update Category set isDeleted = false where name='$categoryName'";
+          
+           if ($conn->query($sql) === TRUE) {
+                  echoDivWithColor("<h3>Category Reactivated with category id $itemID reactivated</h3>", "green");
+            }
+            else{
+              echoDivWithColor("Failed to reactivate category", "red" );
+            }
 
     
 }

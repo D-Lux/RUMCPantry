@@ -1,6 +1,6 @@
  <?php
 
-
+include 'itemOps.php';
 
 
     $servername = "127.0.0.1";
@@ -31,7 +31,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Category ID</th><th>Name</th><th>Small</th><th>Medium</th><th>Large</th><th>Delete</th>";
+    echo "<tr><th>Edit</th><th>Name</th><th>Delete</th>";
     while($row = $result->fetch_assoc()) {
            if($row["isDeleted"] == false)
            {
@@ -40,9 +40,9 @@ if ($result->num_rows > 0) {
                 echo "<form action=''>";
                 $categoryID=$row["categoryID"];
                 echo "<input type='hidden' name='categoryID' value='$categoryID'>";
-                echo "<td><input type='submit' name='UpdateCategory' value='Update'></td>";
-                echo "<td>". $row["categoryID"]. "</td><td>". $row["name"]. "</td><td>" . $row["small"] . "</td><td>" . $row["medium"] . "</td><td>" . $row["large"] . "</td>";
-                echo "<td><input type='submit' name='DeleteCategory' value='Delete'></td>";
+                echo "<td><input type='submit' name='UpdateCategory' value='Edit'></td>";
+                echo "<td>". $row["name"]. "</td>";
+                echo "<td><input type='submit' name='DeleteCategory' class='btn_trash' value=' '></td>";
                 echo "</form>";
                 echo "</tr>";
                 $hasReal++;

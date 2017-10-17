@@ -151,6 +151,53 @@
 
         <input type="submit" value="Update donation partner" name="updateDonationPartnerIndividual">
         </form>';
+
+        $sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM Donation WHERE donationPartnerID = '$donationPartnerID' ";
+        $result = $conn->query($sql);
+        $hasReal =0;
+        if ($result->num_rows > 0) {
+            
+            // output data of each row
+          
+           
+        
+            
+            echo "<table>";
+            echo "<tr><th>Edit</th><th>Donation Partner Name</th><th>Date of Pickup</th><th>Network Partner</th><th>Agency</th><th>Delete</th></tr>";
+            while($row = $result->fetch_assoc()) {
+                $donationParnterName ="";
+        
+                $sql1 = "SELECT DISTINCT name, donationPartnerID FROM DonationPartner WHERE donationPartnerID = ". $row['donationPartnerID'];
+                $result1 = $conn->query($sql1);
+                if ($result1->num_rows > 0) {
+                    while($row1 = $result1->fetch_assoc()) {
+                        $donationParnterName = $row1["name"];
+                    }
+                }
+                echo "<tr>";
+                //grab donation id
+                echo "<form action=''>";
+                $donationID=$row["donationID"];
+                echo "<input type='hidden' name='donationID' value='$donationID'>";
+                echo "<td><input type='submit' name='updateDonation' value='Edit'></td>";
+                echo "<td>$donationParnterName</td><td>". $row["dateOfPickup"]. "</td><td>" . $row["networkPartner"] . "</td><td>" . $row["agency"] . "</td>";
+                echo "<td><input type='submit' name='deleteDonation' class = 'btn_trash' value=' '></td>";
+                echo "</form>";
+                echo "</tr>";
+                $hasReal++;
+                }
+               
+                    
+            }
+           echo "</table>";
+        
+           if($hasReal == 0)
+           {
+                echo "<div>There is currently nothing in the donations table</div>";
+           }
+           
+           
+        $conn->close();
         ?>
 
 </div><!-- /body_content -->

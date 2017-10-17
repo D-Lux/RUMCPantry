@@ -32,7 +32,7 @@ if ($result->num_rows > 0) {
 
     
     echo "<table>";
-    echo "<tr><th>Update</th><th>Donation ID</th><th>Donation Partner Name</th><th>Date of Pickup</th><th>Network Partner</th><th>Agency</th><th>Frozen Non Meat</th><th>Frozen Meat</th><th>Frozen Prepared</th><th>Refridgerated Bakery</th><th>Refridgerated Produce</th><th>Refridgerated Dairy and Deli</th><th>Dry Shelf Stable</th><th>Dry Non Food</th><th>Dry Food Drive</th><th>Delete</th></tr>";
+    echo "<tr><th>Edit</th><th>Donation ID</th><th>Donation Partner Name</th><th>Date of Pickup</th><th>Network Partner</th><th>Agency</th><th>Frozen Non Meat</th><th>Frozen Meat</th><th>Frozen Prepared</th><th>Refridgerated Bakery</th><th>Refridgerated Produce</th><th>Refridgerated Dairy and Deli</th><th>Dry Shelf Stable</th><th>Dry Non Food</th><th>Dry Food Drive</th><th>Delete</th></tr>";
     while($row = $result->fetch_assoc()) {
         $donationParnterName ="";
 
@@ -48,9 +48,9 @@ if ($result->num_rows > 0) {
         echo "<form action=''>";
         $donationID=$row["donationID"];
         echo "<input type='hidden' name='donationID' value='$donationID'>";
-        echo "<td><input type='submit' name='updateDonation' value='Update'></td>";
+        echo "<td><input type='submit' name='updateDonation' value='Edit'></td>";
         echo "<td>". $row["donationID"]. "</td><td>$donationParnterName</td><td>". $row["dateOfPickup"]. "</td><td>" . $row["networkPartner"] . "</td><td>" . $row["agency"] . "</td><td>" . $row["frozenNonMeat"] . "</td><td>" . $row["frozenMeat"] . "</td><td>" . $row["frozenPrepared"] . "</td><td>" . $row["refBakery"] . "</td><td>" . $row["refProduce"] . "</td><td>" . $row["refDairyAndDeli"] . "</td><td>". $row["dryShelfStable"]. "</td><td>". $row["dryNonFood"]. "</td><td>". $row["dryFoodDrive"]. "</td>";
-        echo "<td><input type='submit' name='deleteDonation' value='Delete'></td>";
+        echo "<td><input type='submit' name='deleteDonation' class = 'btn_trash' value=' '></td>";
         echo "</form>";
         echo "</tr>";
         $hasReal++;

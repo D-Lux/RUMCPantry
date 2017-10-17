@@ -13,7 +13,7 @@
         <input type="submit" value="Add a donation partner">
     </form>
 
-    <?php include 'php/displayDonations.php';?>
+    <!--<?php include 'php/displayDonations.php';?> -->
     <?php include 'php/displayDonationPartners.php';?>
     
 </div><!-- /body_content -->

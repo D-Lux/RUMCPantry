@@ -517,6 +517,18 @@ function aisleDecoder($aisle){
 }
 
 // ************************************************************
+// ** encoder for aisle (Takes in a letter and returns a number)
+
+function aisleEncoder($aisle){
+	if ($aisle) {
+		return ord(strtolower($aisle)) - 96; // This forces the aisle letter to lower case and then converts it to the number in ascii, subtracting 96 to get to a = 1
+	}
+	else {
+		return 0;
+	}
+}
+
+// ************************************************************
 // ** Disabled categories for walkIns
 
 function showCategory($walkIn, $category){
