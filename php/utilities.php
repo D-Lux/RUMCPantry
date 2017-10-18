@@ -331,6 +331,19 @@ function visitStatusDecoder($visitStatus){
 
 // *****
 // Basic functions to get the status definitions if needed
+// Return the status # for bad documentation
+function GetBadDocumentationStatus() {
+	return SV_BAD_DOCUMENTATION;
+}
+// Return the status # for cancelled
+function GetCanceledStatus() {
+	return SV_CANCELED;
+}
+// Return the status # for no show
+function GetNoShowStatus() {
+	return SV_NO_SHOW;
+}
+
 // Return the status # for available
 function GetAvailableStatus() {
 	return SV_AVAILABLE;

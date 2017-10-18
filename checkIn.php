@@ -16,6 +16,8 @@
 
 	
 	<?php include 'php/checkInOps.php';?>
+
+	<button onclick="location.href = 'endOfDay.php';">End of day</button>
 	</div><!-- /body_content -->
 	</div><!-- /content -->
 
