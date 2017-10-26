@@ -13,12 +13,11 @@
 					die("Connection failed: " . $conn->connect_error);
 				}
 				
-				// *******************************************
-				// ** Generate the datalist for client drop down
-				// ** Dropdown restricted to people with active appointments
+				// *************************************************
+				// ** Create a list of all active appointments today
 				
 				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, Invoice.clientID as clientID, 
-								status, invoiceID
+								status, visitDate, invoiceID
 						FROM Invoice
 						JOIN (SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
 							FROM FamilyMember
@@ -40,13 +39,14 @@
 					echo "No clients in the database.";
 				}
 				else {
-					$fixItFelix = true;
-					echo "<table><tr><th>Client</th><th></th></tr>";
+					$noOrdersActive = true;
+					echo "<table><tr><th>Client</th><th>Date</th><th></th></tr>";
 					while ($client = sqlFetch($clientInfo)) {
-						if (IsActiveAppointment($client['status'])) {
-							$fixItFelix = false;
+						if (IsReadyToCreateOrder($client['status'])) {
+							$noOrdersActive = false;
 							echo "<tr><td>" . $client['lName'] . ", " . $client['fName'] . "</td>";
-							//echo "<td>";
+							echo "<td>" . $client['visitDate'] . "</td>";
+
 							echo "<form action='cof.php' method='post' >";
 							echo "<input type='hidden' name='clientID' value=" . $client['clientID'] .">";
 							echo "<input type='hidden' name='invoiceID' value=" . $client['invoiceID'] .">";
@@ -55,9 +55,13 @@
 							echo "<td><input type='submit' name='createOrder' value='Begin Order'>";
 							echo "</td></form></tr>";
 						}
+						// Debug
+						//else {
+						//	echo "Order found with status: " . $client['status'] . "<br>";
+						//}
 					}
-					if ($fixItFelix) {
-						echo "<tr><td>No clients at this time</td><td>-</td></tr>";
+					if ($noOrdersActive) {
+						echo "<tr><td>No orders are active at this time</td><td>-</td><td>-</td></tr>";
 					}
 					echo "</table>";
 				}

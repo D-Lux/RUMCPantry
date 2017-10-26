@@ -415,6 +415,11 @@ function IsActiveAppointment($status) {
 	return ( ($status == SV_ACTIVE ) || ($status == SV_LOCKED) ||
 			( ($status >= SV_ARRIVED_LOW) && ($status <= SV_ARRIVED_HIGH) ));
 }
+// Returns a bool indicating whether the appointment is available for fillout
+function IsReadyToCreateOrder($status) {
+	return ( ($status == SV_LOCKED) ||
+			 ( ($status >= SV_ARRIVED_LOW) && ($status <= SV_ARRIVED_HIGH) ));
+}
 // Returns a bool indicating whether the appointment is ready to be reviewed
 function IsReadyToReview($status) {
 	return ( ($status >= SV_READY_TO_REVIEW_LOW) && ($status <= SV_READY_TO_REVIEW_HIGH) );

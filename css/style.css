@@ -60,8 +60,7 @@ Body Elements
 }
 
 
-
-button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+button[type='submit'], .btn_walkIn, input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
 	width: 300px;
 	height: 75px;
 	margin-top: 20px;

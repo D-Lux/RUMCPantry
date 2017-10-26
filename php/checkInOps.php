@@ -23,7 +23,7 @@ date_default_timezone_set('America/Chicago');
     } 
 
 updateStatusInitial($date, $conn);
-echo"<h1>Waiting for clients</h1>";
+echo"<h1>Appointments today</h1>";
 displayWaitTable($date, $conn);
 
 echo"<h1>Clients that are here</h1>";
@@ -46,7 +46,16 @@ function displayWaitTable($date, $conn)
     
 
     
-    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status = " . GetActiveStatus() . " ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status 
+			FROM Invoice 
+			INNER JOIN Client 
+			ON Invoice.clientID=Client.clientID 
+			INNER JOIN FamilyMember 
+			ON Client.clientID=FamilyMember.clientID 
+			WHERE Invoice.visitDate = '$date' 
+			AND FamilyMember.isHeadOfHousehold = true 
+			AND Invoice.status = " . GetActiveStatus() . " 
+			ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) 
     {
@@ -65,13 +74,15 @@ function displayWaitTable($date, $conn)
  
 
             echo "<table>";
-            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Verified?</th></tr>";
+            //echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Verified?</th></tr>";
+			echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Verified?</th></tr>";
             echo "<tr>";
             //grab donation id
             echo "<form action='checkIn.php' method='post'>";
             $invoiceID=$row["invoiceID"];
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
-            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+            //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+			echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
             echo "<td><input type='submit' name='checkInHere' value='Verified'></td>";
             echo "</form>";
             echo "</tr>";    
@@ -87,7 +98,18 @@ function displayWaitTable($date, $conn)
  
 function displayShowedUpTable($date, $conn)
 {
-    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetArrivedLow() . " AND Invoice.status <= " . GetArrivedHigh() . " ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, 
+					Invoice.status, (Client.numOfKids + numOfAdults) AS familySize
+			FROM Invoice
+			INNER JOIN Client
+			ON Invoice.clientID=Client.clientID
+			INNER JOIN FamilyMember
+			ON Client.clientID=FamilyMember.clientID 
+			WHERE Invoice.visitDate = '$date' 
+			AND FamilyMember.isHeadOfHousehold = true 
+			AND Invoice.status >= " . GetArrivedLow() . " 
+			AND Invoice.status <= " . GetArrivedHigh() . " 
+			ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
@@ -106,13 +128,15 @@ function displayShowedUpTable($date, $conn)
 
             echo "<table>";
             echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Ready to review?</th></tr>";
+			//echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Ready to review?</th></tr>";
             echo "<tr>";
             //grab donation id
             echo "<form action='checkIn.php' method='post'>";
             $invoiceID=$row["invoiceID"];
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
             echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-            echo "<td><input type='submit' name='readyToReview' value='Ready to review'></td>";
+            //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
+			echo "<td><input type='submit' name='readyToReview' value='Ready to review'></td>";
             echo "</form>";
             echo "</tr>";        
             echo "</table>";            
@@ -127,7 +151,18 @@ function displayShowedUpTable($date, $conn)
   
 function displayReadyToBeReviewed($date, $conn)
 {
-    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetReadyToReviewLow() . " AND Invoice.status <= " . GetReadyToReviewHigh() . " ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, 
+				Invoice.status, Invoice.clientID, (Client.numOfKids + numOfAdults) AS familySize
+			FROM Invoice 
+			INNER JOIN Client 
+			ON Invoice.clientID=Client.clientID 
+			INNER JOIN FamilyMember 
+			ON Client.clientID=FamilyMember.clientID 
+			WHERE Invoice.visitDate = '$date' 
+			AND FamilyMember.isHeadOfHousehold = true 
+			AND Invoice.status >= " . GetReadyToReviewLow() . " 
+			AND Invoice.status <= " . GetReadyToReviewHigh() . " 
+			ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
@@ -145,14 +180,20 @@ function displayReadyToBeReviewed($date, $conn)
  
 
             echo "<table>";
-            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Review?</th></tr>";
+            //echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Review?</th></tr>";
+			echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Review?</th></tr>";
             echo "<tr>";
             //grab donation id
-            echo "<form action='checkIn.php' method='post'>";
+            echo "<form action='rof.php' method='post'>";
             $invoiceID=$row["invoiceID"];
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
-            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-            echo "<td><input type='submit' name='review' value='Review'></td>";
+			echo "<input type='hidden' name='clientID' value=" . $row["clientID"] . ">";
+			echo "<input type='hidden' name='name' value='" . $row["lastName"] . "'>";
+			echo "<input type='hidden' name='visitTime' value='" . $row["visitTime"] . "'>";
+			echo "<input type='hidden' name='familySize' value=" . $row["familySize"] . ">";
+            //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
+			echo "<td><input type='submit' name='review' value='Review'></td>";
             echo "</form>";
             echo "</tr>";      
             echo "</table>";            
@@ -167,14 +208,24 @@ function displayReadyToBeReviewed($date, $conn)
 
 function displayReadyToPrint($date, $conn)
 {
-    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetReadyToPrintLow() . " AND Invoice.status <= " . GetReadyToPrintHigh() . " ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
+    $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, 
+					Invoice.status, Invoice.clientID, (Client.numOfKids + numOfAdults) AS familySize 
+			FROM Invoice 
+			INNER JOIN Client 
+			ON Invoice.clientID=Client.clientID 
+			INNER JOIN FamilyMember 
+			ON Client.clientID=FamilyMember.clientID 
+			WHERE Invoice.visitDate = '$date' 
+			AND FamilyMember.isHeadOfHousehold = true 
+			AND Invoice.status >= " . GetReadyToPrintLow() . " 
+			AND Invoice.status <= " . GetReadyToPrintHigh() . " 
+			ORDER BY  Invoice.visitTime ASC,Invoice.status ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
     $result = $conn->query($sql);
     if ($result->num_rows > 0) {
         // output data of each row
         $rowTitle = null;
         while($row = $result->fetch_assoc()) 
         {
-            
             if($rowTitle != $row["visitTime"])
             {
                 $rowTitle = $row["visitTime"];
@@ -183,15 +234,21 @@ function displayReadyToPrint($date, $conn)
                 echo "</b>";
             }
  
-
             echo "<table>";
-            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Print?</th></tr>";
+            //echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Print?</th></tr>";
+			echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Print?</th></tr>";
             echo "<tr>";
             //grab donation id
-            echo "<form action='checkIn.php' method='post'>";
+            echo "<form action='ap_oo4.php' method='post'>";
             $invoiceID=$row["invoiceID"];
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
-            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+			echo "<input type='hidden' name='name' value='" . $row["lastName"] . "'>";
+			echo "<input type='hidden' name='clientID' value=" . $row["clientID"] . ">";
+			echo "<input type='hidden' name='visitTime' value='" . $row["visitTime"] . "'>";
+			echo "<input type='hidden' name='familySize' value=" . $row["familySize"] . ">";
+			
+            //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+			echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"] . "</td><td>" . $row["visitTime"] . "</td>";
             echo "<td><input type='submit' name='print' value='Print'></td>";
             echo "</form>";
             echo "</tr>";      
@@ -226,14 +283,16 @@ function displayPrinted($date, $conn)
  
 
             echo "<table>";
-            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th>";
+            //echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th>";
+			echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th>";
             echo "<tr>";
             //grab donation id
             echo "<form action='checkIn.php' method='post'>";
             $invoiceID=$row["invoiceID"];
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
-            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
-            echo "</form>";
+            //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
+            echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
+			echo "</form>";
             echo "</tr>";     
             echo "</table>";            
             
@@ -266,7 +325,7 @@ function displayPrinted($date, $conn)
             
             //update the status numbers on each of the rows
                if ($conn->query($sql) === TRUE) {
-                   echo"<div>status of appointments updated to 200</div>";
+                   //echo"<div>status of appointments updated to 200</div>";
                }
         }
     }
@@ -312,7 +371,10 @@ elseif(isset($_POST['readyToReview'])) /*when the button is pressed on post requ
         echo "<meta http-equiv='refresh' content='0'>";
     }
 }
-elseif(isset($_POST['review'])) /*when the button is pressed on post request*/
+// when the button is pressed on post request
+// Handled in rof.php now
+/*
+elseif(isset($_POST['review']))
 {
     $invoiceID = $_POST['invoiceID'];
     $sqlToSeeHowManyAreHere = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetReadyToPrintLow() . " AND Invoice.status <= " . GetReadyToPrintHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
@@ -331,7 +393,11 @@ elseif(isset($_POST['review'])) /*when the button is pressed on post request*/
         echo "<meta http-equiv='refresh' content='0'>";
     }
 }
-elseif(isset($_POST['print'])) /*when the button is pressed on post request*/
+*/
+// when the button is pressed on post request
+// Handled in ap_oo4.php when the print button is pressed
+/*
+elseif(isset($_POST['print'])) 
 {
     $invoiceID = $_POST['invoiceID'];
     $sqlToSeeHowManyAreHere = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID, Invoice.status, (Client.numOfKids + numOfAdults) AS familySize FROM Invoice INNER JOIN Client ON Invoice.clientID=Client.clientID INNER JOIN FamilyMember On Client.clientID=FamilyMember.clientID WHERE Invoice.visitDate = '$date' AND FamilyMember.isHeadOfHousehold = true AND Invoice.status >= " . GetPrintedLow() . " AND Invoice.status <= " . GetPrintedHigh() . " ORDER BY Invoice.status ASC, Invoice.visitTime ASC, FamilyMember.LastName ASC, FamilyMember.FirstName ASC";
@@ -350,5 +416,6 @@ elseif(isset($_POST['print'])) /*when the button is pressed on post request*/
         echo "<meta http-equiv='refresh' content='0'>";
     }
 }
+*/
 ?>
 

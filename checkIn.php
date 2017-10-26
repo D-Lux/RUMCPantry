@@ -9,15 +9,16 @@
 			removeCookie("newWalkIn");
 		}		
 	</script>
-		<h3>Check In</h3>
+		<!-- <h2>Check In</h2> -->
 	<button id='btn_back' onclick="goBack()">Back</button>	
-    <button onclick="location.href = 'awc.php';">Add walk in client</button>
+    <button class='btn_walkIn' onclick="location.href = 'awc.php';">Add walk in client</button><br>
    
 
 	
 	<?php include 'php/checkInOps.php';?>
 
-	<button onclick="location.href = 'endOfDay.php';">End of day</button>
+	<br><br>
+	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
 	</div><!-- /body_content -->
 	</div><!-- /content -->
 
