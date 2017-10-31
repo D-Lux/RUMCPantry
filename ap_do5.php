@@ -12,7 +12,7 @@
     <button id='btn_back' onclick="goBack()">Back</button>
     <?php
     
-    echo "<h3> Update donation partner number: ". $_GET['donationPartnerID'] . "</h3>";
+    //echo "<h3> Update donation partner number: ". $_GET['donationPartnerID'] . "</h3>";
    
  
     $donationPartnerID = $_GET['donationPartnerID'];
@@ -149,7 +149,7 @@
         
         echo'</div>
 
-        <input type="submit" value="Update donation partner" name="updateDonationPartnerIndividual">
+        <input type="submit" value="Update" name="updateDonationPartnerIndividual">
         </form>';
 
         $sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM Donation WHERE donationPartnerID = '$donationPartnerID' ";
@@ -167,7 +167,8 @@
             while($row = $result->fetch_assoc()) {
                 $donationParnterName ="";
         
-                $sql1 = "SELECT DISTINCT name, donationPartnerID FROM DonationPartner WHERE donationPartnerID = ". $row['donationPartnerID'];
+                $sql1 = "SELECT DISTINCT name, donationPartnerID 
+						  FROM DonationPartner WHERE donationPartnerID = ". $row['donationPartnerID'];
                 $result1 = $conn->query($sql1);
                 if ($result1->num_rows > 0) {
                     while($row1 = $result1->fetch_assoc()) {
@@ -176,9 +177,10 @@
                 }
                 echo "<tr>";
                 //grab donation id
-                echo "<form action=''>";
+                echo "<form action='' method='get'>";
                 $donationID=$row["donationID"];
                 echo "<input type='hidden' name='donationID' value='$donationID'>";
+				echo "<input type='hiddne' name='donationPartnerID' value='$donationPartnerID'>";
                 echo "<td><input type='submit' name='updateDonation' value='Edit'></td>";
                 echo "<td>$donationParnterName</td><td>". $row["dateOfPickup"]. "</td><td>" . $row["networkPartner"] . "</td><td>" . $row["agency"] . "</td>";
                 echo "<td><input type='submit' name='deleteDonation' class = 'btn_trash' value=' '></td>";

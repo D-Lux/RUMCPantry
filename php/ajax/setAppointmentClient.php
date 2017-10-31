@@ -24,7 +24,7 @@
 		// Do the update if appropriate
 		if ( $newStatus > 0 ) {
 				
-			// Find the client ID using the first and last name
+			// Update the invoice status
 			$updateSql = "UPDATE Invoice
 						  SET status=" . $newStatus . "
 						  WHERE invoiceID=" . $_GET['invoiceID'];
@@ -58,8 +58,7 @@
 							  status=" . $newStatus . "
 							  WHERE invoiceID=" . $invoiceID;
 			if (queryDB($conn, $updateInvoice) === FALSE) {
-				echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-				echoDivWithColor("Error, failed to set appointment client.", "red" );	
+				echoDivWithColor("Error!", "red" );	
 			}
 		}
 		else {
@@ -74,37 +73,46 @@
 								FROM FamilyMember
 								WHERE firstName='" . $clientFirstName . "'
 								AND lastName='" . $clientLastName . "'";
-			$findResult = queryDB($conn, $findClientQuery);
-			$fetchData = sqlFetch($findResult);
+
+			$fetchedID = getSingleDataPoint($findClientQuery, $conn, "clientID");
 			
-			// Update the invoice with the new client ID
-			// TODO: A warning if the client already has an appointment in this month
-			// Assigned Status
-			$newStatus = GetAssignedStatus();
-			$updateInvoice = "UPDATE Invoice
-							  SET clientID=" . $fetchData['clientID'] . ",
-							  status=" . $newStatus . "
-							  WHERE invoiceID=" . $invoiceID;
-			if (queryDB($conn, $updateInvoice) === FALSE) {
-				//echo "sql error: " . mysqli_error($conn);
-				echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-				echoDivWithColor("Error, failed to set appointment client.", "red" );	
+			if (!$fetchedID) {
+				// Data replacement output
+				echo "<td> 0 </td>";
+				echo "!PHONENO!";
+				echo "<td> Invalid </td>";
+				echo "!STATUS!";
+				echo "<td> Invalid </td>";
 			}
-			
-			// Get the appropriate family size
-			$famSizeSQL = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber 
-						   FROM Client
-						   WHERE clientID=" . $fetchData['clientID'];
-			$sizeResult = queryDB($conn, $famSizeSQL);
-			$famData = sqlFetch($sizeResult);
-			
-			// Data replacement output
-			echo "<td>" . $famData['familySize'] . "</td>";
-			echo "!PHONENO!";
-			echo "<td>" . displayPhoneNo($famData['phoneNumber']) . "</td>";
-			echo "!STATUS!";
-			$status = visitStatusDecoder($newStatus);
-			echo "<td>" . $status . "</td>";
+			else {
+				// Update the invoice with the new client ID
+				// TODO: A warning if the client already has an appointment in this month
+				// TODO: A warning if another client has the same address this day
+				// Assigned Status
+				$newStatus = GetAssignedStatus();
+				$updateInvoice = "UPDATE Invoice
+								  SET clientID=" . $fetchedID . ",
+								  status=" . $newStatus . "
+								  WHERE invoiceID=" . $invoiceID;
+				if (queryDB($conn, $updateInvoice) === FALSE) {
+					echoDivWithColor("Error!", "red" );	
+				}
+				
+				// Get the appropriate family size
+				$famSizeSQL = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber 
+							   FROM Client
+							   WHERE clientID=" . $fetchedID;
+				$sizeResult = queryDB($conn, $famSizeSQL);
+				$famData = sqlFetch($sizeResult);
+				
+				// Data replacement output
+				echo "<td>" . $famData['familySize'] . "</td>";
+				echo "!PHONENO!";
+				echo "<td>" . displayPhoneNo($famData['phoneNumber']) . "</td>";
+				echo "!STATUS!";
+				$status = visitStatusDecoder($newStatus);
+				echo "<td>" . $status . "</td>";
+			}
 			
 			closeDB($conn);
 		}

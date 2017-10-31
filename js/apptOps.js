@@ -86,7 +86,7 @@ function AJAX_SetAppointment(callingSlot) {
 			
 			var responseData = this.responseText;
 			var findPhoneBreak = responseData.search("!PHONENO!");
-			var findStatusBreak = responseData.search("!STATUS!");	// TODO: Make this cleaner somehow?		
+			var findStatusBreak = responseData.search("!STATUS!");
 			
 			// Defaults
 			var familyData ="<td>0</td>";

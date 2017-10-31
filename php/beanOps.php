@@ -16,7 +16,6 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	// Display category header 
 	echo "<div class='orderSection'>";
 	echo "<h4>Beans</h4>";
-	// TODO TODO: If one or the other is empty, display the non-empty one and be done
 	
 	// Display extra information (only choose one bagged or X canned)
 	echo "<h5><div id='CountBeans' >You may select up to " . $CQty . " cans or 1 bag" .
@@ -28,6 +27,10 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	
 	// Display Canned bean options
 	echo "<div id='CannedBeansSection'><h6>Cans (Max " . $CQty . ")</h6>";
+	// Display a string if no canned beans are available
+	if (count($Cans) <= 0) {
+		echo "&#8226; No canned beans available today";
+	}
 	foreach ($Cans as $BeanID=>$BeanInfo) {
 		echo $BeanInfo->Name;
 		echo "<div class='selectionBoxes'>";
@@ -56,6 +59,10 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	
 	// Display Bagged bean options
 	echo "<div id='BaggedBeansSection'><h6>Bags (Max 1)</h6>";
+	// Display a string if no bagged beans are available
+	if (count($Bags) <= 0) {
+		echo "&#8226; No bagged beans available today";
+	}
 	foreach ($Bags as $BeanID=>$BeanInfo) {
 		echo $BeanInfo->Name;
 		echo "<div class='selectionBoxes'>";
@@ -79,7 +86,9 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 		echo "</div>";	// closing off selectionBoxes
 		echo "<br>";
 	}
-	echo "</div></div>"; // Closing CountBeans and orderSection
+	echo "</div>";
+
+	echo "</div>"; // /orderSection
 }
 
 ?>

@@ -52,7 +52,6 @@
 		// * Item Datalist
 		
 		// get our Redistribution Partner information and store it as a datalist
-		// TODO: Make sure redistribution uses special items only
 		$sql = "SELECT itemID, itemName
 				FROM Item
 				WHERE rack=-1

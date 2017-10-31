@@ -14,7 +14,7 @@
 	
     <button id='btn_back' onclick="goBack()">Back</button>
 	
-	<h3>Appointment Date: <?php echo $_GET['date']; ?></h3>
+	<h3>Appointment Date: <?php echo date("F jS, Y", strtotime($_GET['date'])); ?></h3>
 	<div class="body_content">
 	
 	<?php

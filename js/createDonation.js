@@ -22,12 +22,12 @@ function validateDonationAdd() {
     if (pickupDate == "" || pickupDate.length == 0 || pickupDate == null) {
         getElementAndColorIt("pickupDate", "red");
         errors++;
-        response += "pickupDate field is empty. \n"
+        response += "pickup date field is empty. \n"
     }
     if (networkPartner == "" || networkPartner.length == 0 || networkPartner == null) {
         getElementAndColorIt("networkPartner", "red");
         errors++;
-        response += "networkPartner field is empty. \n"
+        response += "network partner field is empty. \n"
     }
     if (agency == "" || agency.length == 0 || agency == null) {
         getElementAndColorIt("agency", "red");
@@ -37,7 +37,7 @@ function validateDonationAdd() {
     if (donorName == "" || donorName.length == 0 || donorName == null) {
         getElementAndColorIt("donorName", "red");
         errors++;
-        response += "donorName field is empty. \n"
+        response += "donor name field is empty. \n"
     }
     if (city == "" || city.length == 0 || city == null) {
         getElementAndColorIt("city", "red");
@@ -49,47 +49,47 @@ function validateDonationAdd() {
     if (frozenNonMeat < 0 || frozenNonMeat > 100000) {
         getElementAndColorIt("frozenNonMeat", "red");
         errors++;
-        response += "frozenNonMeat field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Non-Meat field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (frozenMeat < 0 || frozenMeat > 100000) {
         getElementAndColorIt("frozenMeat", "red");
         errors++;
-        response += "frozenMeat field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Meat field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (frozenPrepared < 0 || frozenPrepared > 100000) {
         getElementAndColorIt("frozenPrepared", "red");
         errors++;
-        response += "frozenPrepared field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Prepared field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (refBakery < 0 || refBakery > 100000) {
         getElementAndColorIt("refBakery", "red");
         errors++;
-        response += "refBakery field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Bakery field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (refProduce < 0 || refProduce > 100000) {
         getElementAndColorIt("refProduce", "red");
         errors++;
-        response += "refProduce field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Produce field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (refDairyAndDeli < 0 || refDairyAndDeli > 100000) {
         getElementAndColorIt("refDairyAndDeli", "red");
         errors++;
-        response += "refDairyAndDeli field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Dairy And Deli field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (dryShelfStable < 0 || dryShelfStable > 100000) {
         getElementAndColorIt("dryShelfStable", "red");
         errors++;
-        response += "dryShelfStable field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Shelf Stable field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (dryNonFood < 0 || dryNonFood > 100000) {
         getElementAndColorIt("dryNonFood", "red");
         errors++;
-        response += "dryNonFood field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Non-Food field contains a number that is less than 0 or greater than 100000. \n"
     }
     if (dryFoodDrive < 0 || dryFoodDrive > 100000) {
         getElementAndColorIt("dryFoodDrive", "red");
         errors++;
-        response += "dryFoodDrive field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Food Drive field contains a number that is less than 0 or greater than 100000. \n"
     }
 
 
@@ -137,7 +137,7 @@ function validateDonationPartnerAdd() {
     if (phoneNumber == "" || phoneNumber.length == 0 || phoneNumber == null) {
         getElementAndColorIt("phoneNumber", "red");
         errors++;
-        response += "phoneNumber field is empty. \n"
+        response += "phone number field is empty. \n"
     }
 
 

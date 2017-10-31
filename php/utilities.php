@@ -196,6 +196,9 @@ function getSingleDataPoint($sql, $conn, $keyName) {
 		$queryData = sqlFetch($result);
 		return $queryData[$keyName];
 	}
+	else {
+		return false;
+	}
 }
 
 // **********************************************
@@ -507,7 +510,7 @@ define("GENDER_FEMALE", 1);
 
 function genderDecoder($gender){
 	switch(true) {
-		case ($gender == GENDER_UNKNOWN): return '-';
+		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'Male';
 		case ($gender == GENDER_FEMALE): return 'Female';
 		
@@ -516,7 +519,7 @@ function genderDecoder($gender){
 }
 function genderDecoderShort($gender){
 	switch(true) {
-		case ($gender == GENDER_UNKNOWN): return '-';
+		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'M';
 		case ($gender == GENDER_FEMALE): return 'F';
 		

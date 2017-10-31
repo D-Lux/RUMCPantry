@@ -26,8 +26,7 @@ function runReportQueries($startDate, $endDate) {
 			ON Invoice.clientID = Client.clientID
 			WHERE Invoice.visitDate > '" . $startDate . "'
 			AND Invoice.visitDate < '" . $endDate . "' 
-			AND Invoice.status > " . returnProcessedLow() . "
-			AND Invoice.status < " . returnProcessedHigh();
+			AND Invoice.status = " . GetCompletedStatus();
 
 	// Test statement: replace .status blocks above
 	/*
@@ -48,8 +47,7 @@ function runReportQueries($startDate, $endDate) {
 			ON InvoiceDescription.InvoiceID = Invoice.InvoiceID
 			WHERE Invoice.visitDate > '" . $startDate . "'
 			AND Invoice.visitDate < '" . $endDate . "' 
-			AND Invoice.status > " . returnProcessedLow() . "
-			AND Invoice.status < " . returnProcessedHigh();
+			AND Invoice.status = " . GetCompletedStatus();
 	
 	// Test statement: change status blocks above
 	// AND Invoice.status > '" . GetAvailableStatus() . "'";

@@ -127,7 +127,7 @@ function displayShowedUpTable($date, $conn)
  
 
             echo "<table>";
-            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th><th>Ready to review?</th></tr>";
+            echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Status</th></tr>"; //<th>Ready to review?</th></tr>";
 			//echo "<tr><th>First name</th><th>Last name</th><th>Visit Time</th><th>Ready to review?</th></tr>";
             echo "<tr>";
             //grab donation id
@@ -136,7 +136,7 @@ function displayShowedUpTable($date, $conn)
             echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
             echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td><td>" . $row["status"] . "</td>";
             //echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
-			echo "<td><input type='submit' name='readyToReview' value='Ready to review'></td>";
+			//echo "<td><input type='submit' name='readyToReview' value='Ready to review'></td>";
             echo "</form>";
             echo "</tr>";        
             echo "</table>";            

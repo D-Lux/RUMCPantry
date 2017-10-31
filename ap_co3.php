@@ -187,11 +187,10 @@
 				echo "<td>" . $row['birthDate'] . "</td>";
 				echo "<td>" . genderDecoderShort($row['gender']) . "</td>";
 				
-				// Display 'isHeadOfHousehold' as yes or no
-				$head = ($row['isHeadOfHousehold'] ? "Yes" : "No"); 
+				// Display 'isHeadOfHousehold' as a Checkmark or blank
+				$head = ($row['isHeadOfHousehold'] ? "&#10004;" : ""); 
 				
-				// TODO: Maybe make this a check mark if true, nothing if not
-				echo "<td> $head </td>";
+				echo "<td style='color:green;'>$head</td>";
 
 				echo "<td>" . $row['notes'] . "</td>";
 				

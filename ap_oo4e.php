@@ -1,5 +1,6 @@
 <?php include 'php/header.php'; ?>
 <script src="js/orderFormOps.js"></script>
+<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
     <button id='btn_back' onclick="goBack()">Back</button>
 	<h3>Edit Order</h3>
 	
@@ -64,6 +65,7 @@
 		echo "</table><br>";
 		
 		// Add an item
+		echo "<div id='hide_for_print'>";
 		echo "<form method='post' action='php/orderOps.php' onSubmit='return validateAddItemToInvoice()'>";
 		echo "<input type='hidden' name='invoiceID' value=" . $invoiceID . ">";
 		echo "<input type='hidden' name='name' value='" . $name . "'>";
@@ -75,6 +77,7 @@
 		echo "<div style='display: inline-block; margin-left: 8px;'>Quantity:<input type='number' id='addQty' name='qty' value=1></div><br>";
 		echo "<input type='submit' name='addItemToOrder' value='Add to Invoice'>";
 		echo "</form>";
+		echo "</div>"; // /hide_for_print
 		
 		
 	}

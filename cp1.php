@@ -28,8 +28,7 @@
 							AND Client.redistribution=0
 							AND firstName <> 'Available'
 							AND lastName <> 'Available') as clientInfo
-						ON clientInfo.clientID = Invoice.clientID
-						GROUP BY Invoice.clientID";
+						ON clientInfo.clientID = Invoice.clientID";
 				$clientInfo = queryDB($conn, $sql);
 
 				// Close the connection
@@ -40,10 +39,14 @@
 				}
 				else {
 					$noOrdersActive = true;
-					echo "<table><tr><th>Client</th><th>Date</th><th></th></tr>";
+					
 					while ($client = sqlFetch($clientInfo)) {
 						if (IsReadyToCreateOrder($client['status'])) {
-							$noOrdersActive = false;
+							if ($noOrdersActive) {
+								echo "<table><tr><th>Client</th><th>Date</th><th></th></tr>";
+								$noOrdersActive = false;
+							}
+
 							echo "<tr><td>" . $client['lName'] . ", " . $client['fName'] . "</td>";
 							echo "<td>" . $client['visitDate'] . "</td>";
 
@@ -61,7 +64,7 @@
 						//}
 					}
 					if ($noOrdersActive) {
-						echo "<tr><td>No orders are active at this time</td><td>-</td><td>-</td></tr>";
+						echo "No orders are active at this time";
 					}
 					echo "</table>";
 				}
