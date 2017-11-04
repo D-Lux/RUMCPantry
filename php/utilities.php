@@ -303,6 +303,7 @@ define("SV_PRINTED_HIGH", 699);
 define("SV_COMPLETED", 700);
 define("SV_ADVANCE_STATUS", 100);
 
+define("SV_PARTIAL_COMPLETION", 996);
 define("SV_BAD_DOCUMENTATION", 997);
 define("SV_CANCELED", 998);
 define("SV_NO_SHOW", 999);
@@ -316,17 +317,18 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus == SV_LOCKED): return 'Assigned, Locked';
 		case ($visitStatus == SV_ACTIVE): return 'Active';
 		case ($visitStatus >= SV_ARRIVED_LOW && $visitStatus < SV_ARRIVED_HIGH): return 'Arrived';
-		case ($visitStatus >= SV_READY_TO_REVIEW_LOW && $visitStatus < SV_READY_TO_REVIEW_HIGH): return 'Ready for Review';
-		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to Print';
+		case ($visitStatus >= SV_READY_TO_REVIEW_LOW && $visitStatus < SV_READY_TO_REVIEW_HIGH): return 'Ready for review';
+		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to print';
 		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
 		case ($visitStatus == SV_COMPLETED): return 'Completed';
 		
 		// special cases
+		case ($visitStatus == SV_PARTIAL_COMPLETION): return 'Partial completion';
 		case ($visitStatus == SV_BAD_DOCUMENTATION): return 'Bad documentation';
 		case ($visitStatus == SV_CANCELED): return 'Client canceled';
 		case ($visitStatus == SV_NO_SHOW): return 'Client did not show';
 		
-		case ($visitStatus == SV_REDISTRIBUTION): return 'Reallocation Order';
+		case ($visitStatus == SV_REDISTRIBUTION): return 'Reallocation order';
 		
 		default: return 'Status not recognized';
 	}		
@@ -345,6 +347,10 @@ function GetCanceledStatus() {
 // Return the status # for no show
 function GetNoShowStatus() {
 	return SV_NO_SHOW;
+}
+// Return the status # for partial completion
+function GetPartialCompletionStatus() {
+	return SV_PARTIAL_COMPLETION;
 }
 
 // Return the status # for available
@@ -438,6 +444,7 @@ function IsPrinted($status) {
 // Returns a bool indicating whether the appointment is complete for any reason
 function IsComplete($status) {
 	return ( ($status == SV_BAD_DOCUMENTATION) ||
+			 ($status == SV_PARTIAL_COMPLETION) ||
 			 ($status == SV_SV_CANCELED) ||
 			 ($status == SV_NO_SHOW)||
 			 ($status == SV_COMPLETED) );
