@@ -96,7 +96,7 @@ function displayTable($date, $conn)
             
             //update the status numbers on each of the rows
                if ($conn->query($sql) === TRUE) {
-                   echo"<div>status of appointments updated to 200</div>";
+                   
                }
         }
     }
