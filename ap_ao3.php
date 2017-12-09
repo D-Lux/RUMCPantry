@@ -41,6 +41,7 @@
 					WHERE FamilyMember.isHeadOfHousehold=1 ) AS fam
 				ON fam.clientID=Invoice.clientID
 				WHERE visitDate='" . $_GET['date'] . "'
+				AND status NOT IN (" . implode ( ",", GetRedistributionStatuses()) . ")
 				ORDER BY visitTime, invoiceID";
 
 		$visitInfo = queryDB($conn, $sql);

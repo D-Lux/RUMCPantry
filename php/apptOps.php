@@ -40,7 +40,8 @@ if (isset($_POST['CreateInvoiceDate'])) {
 	// Generate our sql query with the new date to see if it exists already
 	$sql = "SELECT visitDate
 			FROM Invoice
-			WHERE visitDate=" . $validateDate;
+			WHERE visitDate=" . $validateDate . "
+			AND status NOT IN (" . implode ( ",", GetRedistributionStatuses()) . ")";
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);

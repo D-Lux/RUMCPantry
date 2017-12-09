@@ -454,6 +454,9 @@ function IsComplete($status) {
 function GetRedistributionStatus() {
 	return SV_REDISTRIBUTION;
 }
+function GetRedistributionStatuses() {
+	return array(SV_REDISTRIBUTION);
+}
 
 // **********************************************************
 // * Decoder for family sizes

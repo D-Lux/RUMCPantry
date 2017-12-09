@@ -19,7 +19,6 @@ Mainpage (client/admin) admin goes to login (if not logged in, otherwise to main
 Special login for registration room (checkin and appropriate pages only)
 
 Tab visits to 10 (in view client page)
-Restrict email in active clients page to a certain number of characters
 Ask about non-day-of order forms
 
 How do we want location of items display?
@@ -29,16 +28,17 @@ Clean up edit item page
 Find pages that have spitout instead of popup and replace with popup
 Category page needs tabbed and add needs to be moved below the table
 Check when deleting and adding new categories
-**If a reallocation is set for a date, you CANNOT create a new set of appointments on that date (FIX PLZ)
+
 
 Main admin page hides all but check in and appointment ops if Registration room login used
 
+Add pet information to client (large dog, small dog, small cat, large cat)
 
 Edit order form should go back to ap_io1
 
 Move tab size selector (Re-label as Show: )
 
-Tabs broken when a category is empty in create order form
+*Tabs broken when a category is empty in create order form
 
 Add a <br> between specials sections
 

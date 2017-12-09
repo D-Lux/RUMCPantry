@@ -94,7 +94,8 @@
 				echo "<td>" . $row["familySize"] . "</td>";
 				
 				// Display the email or '-' if not set
-				echo "<td>" . (($row['email'] == NULL) ? "-" : $row['email']) . "</td>";
+				$displayEmail = (strlen($row['email']) > 20) ? (substr($row['email'], 0, 17) . "...") : $row['email'];
+				echo "<td>" . (($displayEmail == NULL) ? "-" : $displayEmail) . "</td>";
 
 				// Display the phone number or '-' if not set
 				echo "<td>" . (($row['phoneNumber'] == NULL) ? "-" : 
