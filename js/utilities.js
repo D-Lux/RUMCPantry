@@ -36,7 +36,6 @@ function goBack() {
         case (location.pathname.includes("ap_oo3.php")):
         case (location.pathname.includes("ap_ro1.php")):
         case (location.pathname.includes("checkIn.php")):
-        case (location.pathname.includes("ap_oo1.php")):
             window.location.assign("/RUMCPantry/ap1.php");
             break;
 
@@ -61,6 +60,7 @@ function goBack() {
         case (location.pathname.includes("ap_io6.php")):
         case (location.pathname.includes("ap_io7.php")):
         case (location.pathname.includes("ap_io8.php")):
+		case (location.pathname.includes("ap_oo1.php")):
             window.location.assign("/RUMCPantry/ap_io1.php");
             break;
 
@@ -82,10 +82,10 @@ function goBack() {
         case (location.pathname.includes("ap1.php")):
         case (location.pathname.includes("cap.php")):
         case (location.pathname.includes("ciup.php")):
-        case (location.pathname.includes("cp1.php")):
             window.location.assign("/RUMCPantry/mainpage.php");
             break;
 
+		case (location.pathname.includes("cp1.php")):
         case (location.pathname.includes("login.php")):
         case (location.pathname.includes("mainpage.php")):
             window.location.assign("/RUMCPantry/login.php");
