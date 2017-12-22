@@ -6,7 +6,7 @@
 			removeCookie("processError");
 		}
 	</script>
-    <button id='btn_back' onclick="goBack()">Back</button>
+    <?php include 'php/backButton.php'; ?>
 	<h3>View Active Orders</h3>
 	
 	<div class="body_content">
@@ -25,7 +25,7 @@
 					  AND isHeadOfHousehold=TRUE) as FMC_Join
 				ON FMC_Join.JoinID=Invoice.clientID
 				AND status>=" . GetActiveStatus() . "
-				AND status<=" . GetHighestActiveStatus() . "
+				AND status<=" . GetPrintedHigh() . "
 				ORDER BY visitTime, status ASC";
 		
 		$conn = createPantryDatabaseConnection();
