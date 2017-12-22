@@ -1,7 +1,7 @@
 <?php include 'php/header.php'; ?>
 <script src="js/clientOps.js"></script>
 <link rel="stylesheet" type="text/css" href="css/tabs.css" />
-	<button id='btn_back' onclick="goBack()">Back</button>
+	<?php include 'php/backButton.php'; ?>
     <h3>Inactive Clients</h3>
 	
 	<div class="body_content">
@@ -93,9 +93,8 @@
 				
 				// Switch to html to do the javascript for the inactivate button
 				?>
-				
-				<td><input id="ActiveClient" type="submit" class="btn_reactivate" name="ActiveClient" value=" "
-					onclick="return confirm('Do you want to reactivate this client?')"></td>
+
+				<td><button id="ActiveClient" type="submit" class="btn_icon" name="ActiveClient" onclick="return confirm('Do you want to reactivate this client?')"><i style="color:green" class="fa fa-undo"></i></button></td>
 					
 				<?php
 				// Close off the row and form

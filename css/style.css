@@ -59,8 +59,8 @@ Body Elements
 	padding: 30px;
 }
 
-
-button[type='submit'], .btn_walkIn, input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+/* :not(.btn_trash):not(.btn_reactivate):not(.btn_lock) replaced with :not(.btn_icon) */
+button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='submit']:not(.btn_icon) {
 	width: 300px;
 	height: 75px;
 	margin-top: 20px;
@@ -72,7 +72,7 @@ button[type='submit'], .btn_walkIn, input[type='submit']:not(.btn_trash):not(.bt
 	cursor: pointer;
 }
 
-button[type='submit']:active:not(.btn_reactivate), input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+button[type='submit']:active:not(.btn_reactivate):not(.btn_icon), input[type='submit']:active:not(.btn_icon) {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
 }
@@ -82,15 +82,15 @@ button[type='submit']:focus, input[type='submit']:focus {
 }
 
 
-table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
-	width: 60px;
-	height: 22px;
+table>button:not(.btn_icon), .btn_edit:not(.btn_icon) {
+	width: 80px;
+	height: 25px;
 	margin: 0px;
 	font-size: 1rem;
 }
 
 /* I hate specificity */
-input[type='button']:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+input[type='button']:not(.btn_edit):not(.btn_icon) {
 	width: 60px;
 	height: 45px;
 	margin: 20px 0px 0px 10px;
@@ -102,11 +102,19 @@ input[type='button']:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
 	cursor: pointer;
 }
 
-input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+.btn_edit {
+	border-radius: 50px;
+	background-color: #57B9FF;
+	border: solid 2px #499BD6;
+	color: #000;
+	cursor: pointer;
+}
+
+input[type='button']:not(.btn_or):not(.btn_icon) {
 	width: 200px;
 	height: 55px;
 }
-input[type='button']:active:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
+input[type='button']:active:not(.btn_icon) {
 	background-color: #499BD6;
 	border: solid 2px #3D83B5;
 }
@@ -179,8 +187,8 @@ td {
 }
 
 
-td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock), 
-	td>input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+td>button:not(.btn_icon), 
+	td>input[type='submit']:not(.btn_icon) {
 	margin: 0px;
 	height: 33px;
 	width: 175px;
@@ -214,6 +222,21 @@ td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock),
 /*******************
 Special case buttons
 *******************/
+.btn_icon {
+	font-size: 2em;
+	background: none;
+	width: 32px;
+	height: 32px;
+	padding: 0px;
+	margin: 0px;
+	border: 0px;
+	cursor: pointer;
+}
+
+.btn_icon:active {
+	font-weight: bold;
+}
+
 .btn_trash {
 	background: url("/RUMCPantry/images/Icon_Trash.png") no-repeat;
 	width: 32px;

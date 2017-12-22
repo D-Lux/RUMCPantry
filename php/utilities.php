@@ -21,6 +21,11 @@ function debugEchoGET() {
 	var_dump($_GET);
 	echo '</pre>';
 }
+function debugEchoVar($v) {
+	echo '<pre>';
+	var_dump($v);
+	echo '</pre>';
+}
 
 // ************************************************************
 // ** Setting default timezone
@@ -36,9 +41,9 @@ $connectionActive = false;
 function createPantryDatabaseConnection() {
 	// Set up server connection
 	$servername = "127.0.0.1";
-	$username = "root";
-	$password = "";
-	$dbname = "foodpantry";
+	$username   = "root";
+	$password   = "";
+	$dbname     = "foodpantry";
 
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
@@ -64,6 +69,13 @@ function queryDB($conn, $query) {
 function sqlFetch($queryResult) {
 	return (mysqli_fetch_assoc($queryResult));
 	// return ($queryResult->fetch_assoc());
+}
+function returnAssocArray($queryResult) {
+	$returnArr = [];
+	while( $row = sqlFetch($queryResult) ) {
+		$returnArr[] = $row;
+	}
+	return $returnArr;
 }
 
 // *****************************************************************
@@ -95,6 +107,9 @@ function makeString($data) {
 // Displays a phone number as expected (###)-###-####
 // If it is not 10 digits long, just return as is
 function displayPhoneNo($data) {
+	if ($data === null) {
+		return "-";
+	}
 	$len = strlen((string)$data);
 	if($len == 10) {
 		$firstThree = substr($data, 0, 3);
@@ -110,6 +125,17 @@ function displayPhoneNo($data) {
 // Inside single quotes to be stored properly
 function storePhoneNo($data) {
 	return "'" . substr((preg_replace('/[^0-9]/','',$data)), 0, 10) . "'";
+}
+
+// Truncate output to a specified number of characters
+function displayForTable($item, $length, $cutLength=2) {
+	if ( (! (is_string($item))) || ($item == NULL) ) {
+		return "-";
+	}
+	if (strlen($item) > $length ) {
+		return stripslashes((substr($item, 0, ($length - $cutLength)) . "..."));
+	}
+	return stripslashes($item);
 }
 
 function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
@@ -538,25 +564,27 @@ function genderDecoderShort($gender){
 }
 
 // ************************************************************
-// ** Decoder for aisle (Takes in a number and returns a letter (ascii code)
+// ** Decoder/Encoders for item locations
+function aisleDecoder($aisle){ return $aisle; }
+function aisleEncoder($aisle){ return $aisle; }
+// Adding this here in case we want to do something in the future
+function shelfDecoder($shelf){ return $shelf; }
+function shelfEncoder($shelf){ return $shelf; }
 
-function aisleDecoder($aisle){
-	if ($aisle >= 65) {
-		return chr($aisle);
-	}
-	return chr($aisle + 65);
-}
-
-// ************************************************************
-// ** encoder for aisle (Takes in a letter and returns a number)
-
-function aisleEncoder($aisle){
-	if ($aisle) {
-		return ord(strtolower($aisle)) - 96; // This forces the aisle letter to lower case and then converts it to the number in ascii, subtracting 96 to get to a = 1
+function rackEncoder($rack){
+	if ($rack) {
+		return ord(strtolower($rack)) - 96; 
 	}
 	else {
 		return 0;
 	}
+}
+function rackDecoder($rack){
+	return $rack;
+	if ($rack >= 65) {
+		return chr($rack);
+	}
+	return chr($rack + 65);
 }
 
 // ************************************************************
@@ -574,14 +602,14 @@ function showCategory($walkIn, $category){
 
 // **************************************
 // ** Weight information for donations
-define("WEIGHT_BAKERY", 15);
-define("WEIGHT_DAIRY", 40);
-define("WEIGHT_MEAT", 40);
-define("WEIGHT_MIX", 25);
-define("WEIGHT_NONFOOD", 25);
-define("WEIGHT_PREPARED", 25);
-define("WEIGHT_PRODUCE", 30);
-define("WEIGHT_FROZEN", 25);
+define("WEIGHT_BAKERY"	 , 15);
+define("WEIGHT_DAIRY"	 , 40);
+define("WEIGHT_MEAT"	 , 40);
+define("WEIGHT_MIX"		 , 25);
+define("WEIGHT_NONFOOD"	 , 25);
+define("WEIGHT_PREPARED" , 25);
+define("WEIGHT_PRODUCE"	 , 30);
+define("WEIGHT_FROZEN"	 , 25);
 define("WEIGHT_FOODDRIVE", 25);
 
 ?>
