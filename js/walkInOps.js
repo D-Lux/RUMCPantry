@@ -28,22 +28,23 @@ function toggleOption(ele) {
 function validateNewWalkIn() {
 	
     var response = "";
-	var clientFirstName = document.getElementById("newWalkinFName").value;
-    var clientLastName = document.getElementById("newWalkinLName").value;
+	var clientFirstName = $("[name='clientFirstName']").val();
+    var clientLastName  = $("[name='clientLastName']").val();
+	var birthDate  		= $("[name='birthDate']").val();
     var errors = 0;
-	
 
 	if (clientFirstName == "" || clientFirstName == null || clientFirstName.length == 0 ) {
-        getElementAndColorIt("clientFNameField", "red");
         errors++;
         response += "First Name field is empty. \n";
     }
 	if (clientLastName == "" || clientLastName.length == 0 || clientLastName == null) {
-        getElementAndColorIt("clientLNameField", "red");
         errors++;
         response += "Last Name field is empty. \n";
     }
-
+	if (birthDate == "" || birthDate == null || birthDate.length == 0 ) {
+        errors++;
+        response += "Date of Birth is not set. \n";
+    }
     if (errors > 0) {
         alert("There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response);
 		return false;

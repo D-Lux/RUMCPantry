@@ -127,9 +127,7 @@ elseif(isset($_POST['submitClient']))
 				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, $gender, now(), FALSE)";
 		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
-			// Successfully added client and family member (head of household) - go to update page
-			// Set a cookie so we can display a 'new' message
-			createCookie("newClient", 1, 30);
+			// Successfully added client and family member (head of household)
 			
 			// If we came here from adding a walk-in, go back to the apptOps.php to make the invoice
 			if (isset($_POST['newWalkIn'])) {
@@ -137,6 +135,8 @@ elseif(isset($_POST['submitClient']))
 			}
 			// Otherwise go to update page with the client ID
 			else {
+				// Set a cookie so we can display a 'new' message
+				createCookie("newClient", 1, 30);
 				header("location: /RUMCPantry/ap_co3.php?id=$clientID");
 			}
 		}

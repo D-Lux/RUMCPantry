@@ -10,30 +10,30 @@ Universal
 *********/
 
 HTML {
-	background-color: #EEE;
+	background-color: #EEE !important;
 }
 
 body {
-	background-color: #CCC;
-	font-family: Arial, sans-serif;
-	width: 800px;
-	margin: 0px auto;
-	font-size: 1.1rem;
+	background-color: #CCC !important;
+	font-family: Arial, sans-serif !important;
+	width: 800px !important;
+	margin: 0px auto !important;
+	font-size: 1.1rem !important;
 }
 
 h1 {
-	font-family: playfair;
-	font-size: 2.75rem;
+	font-family: playfair !important;
+	font-size: 2.75rem !important;
 }
 
 h2 {
-	font-family: playfair;
-	font-size: 2.25rem;
+	font-family: playfair !important;
+	font-size: 2.25rem !important;
 }
 
 h3 {
-	margin: 0px;
-	font-size: 2rem;
+	margin: 0px !important;
+	font-size: 2rem !important;
 }
 
 /**************
@@ -41,14 +41,14 @@ Header Elements
 **************/
 
 header {
-	background-color: #CA3628;
-	padding: 20px;
+	background-color: #CA3628 !important;
+	padding: 20px !important;
 }
 
 .rumc {
-	margin: 0px;
-	text-align: center;
-	color: #FFC047;
+	margin: 0px !important;
+	text-align: center !important;
+	color: #FFC047 !important;
 }
 
 /************
@@ -56,7 +56,7 @@ Body Elements
 ************/
 
 .content {
-	padding: 30px;
+	padding: 30px !important;
 }
 
 /* :not(.btn_trash):not(.btn_reactivate):not(.btn_lock) replaced with :not(.btn_icon) */

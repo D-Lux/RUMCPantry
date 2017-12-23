@@ -50,7 +50,7 @@
 </div><!-- /content -->	
 </body>
 
-<script>
+<script type="text/javascript">
 
 	$('#iClientTable').DataTable({
       "info"          : true,
