@@ -115,7 +115,7 @@ function displayPhoneNo($data) {
 		$firstThree = substr($data, 0, 3);
 		$middleThree = substr($data, 3, 3);
 		$finalFour = substr($data, 6, 4);
-		return '(' . $firstThree . ')-' . $middleThree . '-' . $finalFour;
+		return '(' . $firstThree . ') ' . $middleThree . '-' . $finalFour;
 	} else {
 		return $data;
 	}
@@ -150,14 +150,7 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 		out all that has been deleted.
 	*/
 	
-    $servername = "127.0.0.1";
-	$username = "root";
-	$password = "";
-	$dbname = "foodpantry";
-	/* previous lines set up the strings for connextion*/
-
-	mysql_connect($servername, $username, $password);
-	mysql_select_db($dbname);
+    $conn = createPantryDatabaseConnection();
 	//standard DB stuff up to here
 	$sql = "SELECT DISTINCT " . $attributeName .
 			" FROM " .  $tableName ;//select distinct values from the collumn in this table
@@ -175,6 +168,8 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
 	}
 	echo "</datalist>";
+	closeDB($conn);
+	
 }
 
 function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
@@ -585,26 +580,23 @@ function genderDecoderShort($gender){
 
 // ************************************************************
 // ** Decoder/Encoders for item locations
-function aisleDecoder($aisle){ return $aisle; }
+define("MIN_AISLE", 1);
+define("MAX_AISLE", 20);
+define("MIN_RACK" , 65);
+define("MAX_RACK" , 90);
+define("MIN_SHELF", 1);
+define("MAX_SHELF", 20);
+function aisleDecoder($aisle){ return (($aisle > 0) ? $aisle : "-"); }
 function aisleEncoder($aisle){ return $aisle; }
 // Adding this here in case we want to do something in the future
-function shelfDecoder($shelf){ return $shelf; }
+function shelfDecoder($shelf){ return (($shelf > 0) ? $shelf : "-"); }
 function shelfEncoder($shelf){ return $shelf; }
 
 function rackEncoder($rack){
-	if ($rack) {
-		return ord(strtolower($rack)) - 96; 
-	}
-	else {
-		return 0;
-	}
+	return ord($rack); 
 }
 function rackDecoder($rack){
-	return $rack;
-	if ($rack >= 65) {
-		return chr($rack);
-	}
-	return chr($rack + 65);
+	return chr($rack);
 }
 
 // ************************************************************

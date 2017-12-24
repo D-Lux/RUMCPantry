@@ -1,96 +1,123 @@
-<?php include 'php/header.php';?>
-<html>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php'; 
+?>
+<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
+<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
+<script src="js/createItem.js"></script>
 
-<head>
+<h3>Add Item</h3>
+<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
+	<!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
+	<!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
+	<div class="row">
+		<div class="col-sm-4"><label class="required categoryField">Category: </label></div>
+		<div class="col-sm-8">
+			<?php
+				createDatalist_i("","categories","category","name","category", false);
+				//createDatalist("","categories","category","name","category", false);
+			?>
+		</div>
+	</div>
+	
+	<div class="row">
+		<div class="col-sm-4"><label class="required itemField">Item Name: </label></div>
+		<div class="col-sm-8">
+			<?php
+				createDatalist_i("","itemNames","item","itemName","itemName", true);
+				//createDatalist("","itemNames","item","itemName","itemName", true);
+			?>
+		</div>
+	</div>
+	<div class="row">
+		<div class="col-sm-4"><label class="required displayField">Display Name: </label></div>
+		<div class="col-sm-8">
+			<?php
+				createDatalist_i("","displayNames","item","displayName","displayName", true);
+				//createDatalist("","displayNames","item","displayName","displayName", true);
+			?>
+		</div>
+	</div>
+	<div style="border: 2px solid #499BD6; padding:5px;margin-top:20px;">
+		<div class="row">
+			<div class="col-sm-2">Location:</div>
+		</div>
+		<div class="row">
+			<!-- Aisle -->
+			<div class="col-sm-1">Aisle:</div>
+			<div class="col-sm-2">
+				<select name="aisle">
+					<option value=0>-</option>
+					<?php
+						for ($i = MIN_AISLE; $i <= MAX_AISLE; $i++) {
+							echo "<option value=" . $i . ">" . aisleDecoder($i) . "</option>";
+						}
+					?>
+				</select>
+			</div>
+			<!-- Rack -->
+			<div class="col-sm-1">Rack:</div>
+			<div class="col-sm-2">
+				<select name="rack">
+					<option value=0>-</option>
+					<?php
+						for ($i = MIN_RACK; $i <= MAX_RACK; $i++) {
+							echo "<option value=" . $i . ">" . rackDecoder($i) . "</option>";
+						}
+					?>
+				</select>
+			</div>
+			<div class="col-sm-1">Shelf:</div>
+			<div class="col-sm-2">
+				<select name="shelf">
+					<option value=0>-</option>
+					<?php
+						for ($i = MIN_SHELF; $i <= MAX_SHELF; $i++) {
+							echo "<option value=" . $i . ">" . shelfDecoder($i) . "</option>";
+						}
+					?>
+				</select>
+			</div>
+		</div>
+	</div>
+	<br>
+	<div class="row">
+		<div class="col-sm-4">Price:</div>
+		<div class="col-sm-8">
+			<span>$</span>
+			<input  style="width: 8em;" type="number" min="0" value="0" step="0.01" name="price">
+		</div>
+	</div>
+	<br>
 
-    <script src="js/createItem.js"></script>
-    <?php include 'php/checkLogin.php';?>
-
-    <button id='btn_back' onclick="goBack()">Back</button>    <h1>
-        <h3>
-        Add an item to the database:
-    </h3>
-
-    <form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
-        <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
-        <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
-        <div id="category">
-            Category<span style="color:red;">*</span> 
-            <?php 
-            createDatalist("","categories","category","name","category", false);
-            ?>
-        </div>
-
-        <div id="itemName">Item name (used for the database):<span style="color:red;">*</span> 
-            <?php 
-            createDatalist("","itemNames","item","itemName","itemName", true);
-            
-            ?>
-        </div>
-        <div id="displayName">Display name (what you want the item to be called):<span style="color:red;">*</span> 
-            <?php 
-            createDatalist("","displayNames","item","displayName","displayName", true);
-            ?>
-        </div>
-        <div id="aisle">Aisle: <input type="number" min="0" max="1000" value="0" step="1" name="aisle" /></div>
-        <div id="rack">Rack: <input type="number" min="0" max="1000" value="0" step="1" name="rack" /></div>
-        <div id="shelf">Shelf: <input type="number" min="0" max="1000" value="0" step="1" name="shelf" /></div>
-        <div id="price">Price: <input type="number" min="0" max="1000" value="0" step="0.01" name="price" /></div>
-        <div id="household">How many of each can a household take?</div>
-        <div id="small"> 1 to 2:
-            <select name="small">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select> </div>
-        <div id="medium">3 to 4:
-            <select name="medium">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select> </div>
-        <div id="large">5+:
-            <select name="large">
-            <option value="0">0</option>
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-            <option value="7">7</option>
-            <option value="8">8</option>
-            <option value="9">9</option>
-            <option value="10">10</option>
-        </select> </div>
-        
-
+	<!-- QTY to take -->
+	<div style="border: 2px solid #499BD6; padding:5px;">
+		<div class="row">
+			<div class="col-sm-4">Order Form Quantities:</div>
+		</div>
+		<div class="row">
+			<div class="col-sm-1">Small:</div>
+			<div class="col-sm-2">
+				<input type="number" min="0" max="20" value="0" step="1" name="small" />
+			</div>
+			<div class="col-sm-1">Medium:</div>
+			<div class="col-sm-2">
+				<input type="number" min="0" max="20" value="0" step="1" name="medium" />
+			</div>
+			<div class="col-sm-1">Large:</div>
+			<div class="col-sm-2">
+				<input type="number" min="0" max="20" value="0" step="1" name="large" />
+			</div>
+		</div>
+	</div>
  
-     
-        </br>
-        <input type="submit" value="Create" name="createItem">
-    </form>
-    <h2>
-        <!--  <?php include 'php/createItem.php';?> -->
-    </h2>
-    </div><!-- /body_content -->
-	</div><!-- /content -->
+	</br>
+	<input type="submit" value="Create" name="createItem">
+</form>
+
+</div> <!-- /container -->
+</div><!-- /body_content -->
+</div><!-- /content -->
 
 </body>
 

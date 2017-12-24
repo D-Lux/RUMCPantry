@@ -1,22 +1,18 @@
-<?php
-
+ <?php
 
 	include '../utilities.php';
-	
-	$availID = getAvailableClient();
-	
-	// Set up server connection
+
 	$conn = createPantryDatabaseConnection();
+		/* Check connection*/
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
-	}
+	} 
+
+	// *******************************************************************************
+	// * Build our column list
+    $columns = array("isDeleted", "categoryID", "name", "small", "medium", "large");
 	
-	// ***********************
-    // * Build our column list
-    // List all of the columns we want
-    $columns = array("Client.clientID", "(Client.numOfAdults + Client.numOfKids) as familySize", 
-				   "Client.email", "Client.phoneNumber", "CONCAT(fm.lastName, ', ', fm.firstName) as cName");
-	$searchableColumns = array("Client.email", "Client.phoneNumber", "fm.lastName" , "fm.firstName");
+	$searchableColumns = array("name", "small", "medium", "large");;
 	
 	// *********************************
     // * Generate our user search query 
@@ -35,7 +31,7 @@
 	
 	// *************************************
 	// * ORDER clause
-	$orderQuery = " ORDER BY fm.lastName ";
+	$orderQuery = " ORDER BY name ";
 	
 	
 	// *************************************
@@ -44,17 +40,14 @@
 	$sql = "SELECT " . implode(", ", $columns);
 	
 	// FROM main table
-	$sql .= " FROM FamilyMember fm ";
-	
+	$sql .= " FROM Category ";
+
 	// JOINs
-	$sql .= " JOIN Client 
-				ON Client.clientID=fm.clientID ";
+	$sql .= " ";
 				
 	// WHERE clauses
-	$sql .= " 	WHERE Client.isDeleted=0
-				AND	Client.clientID<>" . $availID . "
-				AND	fm.isHeadOfHousehold=true
-				AND	Client.redistribution=0 ";
+	$sql .= " WHERE isDeleted=0
+			  AND name<>'Redistribution' ";
 	
 	
 	// Get our total record count
@@ -65,6 +58,7 @@
 	$recordCount = count($results);
 	$returnData = [];
 	$out = [];
+	
 	// Run our paging function using a for loop
 	$showTo = ($_GET['length'] == -1) ? $recordCount : $_GET['length'];
     for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
@@ -73,31 +67,31 @@
         }
         $row = [];
 		
-		$baseLink = "/RUMCPantry/php/clientOps.php?";
-		$IDParam  = "&id=" . $results[$i]['clientID'];
+		$editBase = "/RUMCPantry/ap_io5.php?";
+		$deleteBase = "/RUMCPantry/php/itemOps.php?DeleteCategory=1&";
+		$IDParam  = "categoryID=" . $results[$i]['categoryID'];
 		
 		$editLink   = "<button type='submit' class='btn_edit' 
-					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
+					   value='" . $editBase . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 		$deleteLink = "<button type='submit' class='btn_icon'
-					   value='" . $baseLink . "InactiveClient=1" . $IDParam . "'><i class='fa fa-trash'></i></button>";
+					   value='" . $deleteBase . $IDParam . "'><i class='fa fa-trash'></i></button>";
 		
 		$row[0] = $editLink;
-		$row[1] = $results[$i]['cName'];
-		$row[2] = $results[$i]['familySize'];
-		$row[3] = displayForTable($results[$i]['email'], 20);
-		$row[4] = displayPhoneNo($results[$i]['phoneNumber']);
+		$row[1] = $results[$i]['name'];
+		$row[2] = $results[$i]['small'];
+		$row[3] = $results[$i]['medium'];
+		$row[4] = $results[$i]['large'];
 		$row[5] = $deleteLink;
 		
 		$out[] = $row;
-	}
-
+	}	
 	
-	
-	$returnData['draw'] = $_GET['draw'];
-    $returnData['data'] = $out;
-    $returnData['recordsTotal'] = $totalRecordCount;
-    $returnData['recordsFiltered'] = $recordCount;
+	$returnData['draw'] 			= $_GET['draw'];
+    $returnData['data']  		    = $out;
+    $returnData['recordsTotal'] 	= $totalRecordCount;
+    $returnData['recordsFiltered']  = $recordCount;
 	closeDB($conn);
 
-	echo json_encode($returnData);//echo json_encode( $returnArr );
-?>
+	echo json_encode($returnData);
+
+ ?>

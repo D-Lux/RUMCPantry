@@ -1,32 +1,22 @@
 <script src="/RUMCPantry/js/utilities.js"></script>
 <?php
 
-//include 'utilities.php';
+include('utilities.php');
 
-if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
-{
-    include('header.php');
-    
-
-    $category = $_POST['category'];
-    $itemName = $_POST['itemName']; /*grab the name textbox*/
+if(isset($_POST['createItem'])) {
+    $category 	 = $_POST['category'];
+    $itemName 	 = $_POST['itemName']; /*grab the name textbox*/
     $displayName = $_POST['displayName'];
-    $price = $_POST['price'];
-
-    $small = $_POST['small'];
-    $medium = $_POST['medium'];
-    $large = $_POST['large'];
-    $aisle = $_POST['aisle'];
-    $rack = $_POST['rack'];
-    $shelf = $_POST['shelf'];
-   
-
-
-
-    $categoryID = null;
-
-
-
+    $price 		 = $_POST['price'];
+    $small 		 = $_POST['small'];
+    $medium 	 = $_POST['medium'];
+    $large 		 = $_POST['large'];
+    $aisle 		 = aisleEncoder($_POST['aisle']);
+    $rack 		 = rackEncoder($_POST['rack']);
+    $shelf 		 = shelfEncoder($_POST['shelf']);
+    $categoryID  = null;
+	$newCategory = FALSE;
+	
 
     /* previous lines set up the strings for connextion*/
     /* Create connection*/
@@ -36,104 +26,60 @@ if(isset($_POST['createItem'])) /*when the button is pressed on post request*/
         die("Connection failed: " . $conn->connect_error);
     } 
 
-
-    //check to see if category ecists, if not create it.
-        $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
-        if($result->num_rows == 0) {
-        
-         $sql = "INSERT INTO category (name, small, medium, large)
-         VALUES ('$category', 0, 0, 0)";
-            if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "New category created: $category", "green");
-                
-                
-                $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            $categoryID = $row["categoryID"];
-                        }
-                    echoDivWithColor("Category ID: $categoryID", "green" );
-                } 
-          }
-          else{
-            echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-            echoDivWithColor("Error, failed to connect to database at category insert. $sql $conn->error", "red" );
-          }
-
-                  
-          
-
-    } else {
-        $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $categoryID = $row["categoryID"];
-                }
-                
-            }
-       echoDivWithColor( "$category category already in database", "green");
-       echoDivWithColor("Category ID: $categoryID", "green" );
+    //check to see if category exists, if not create it.
+	$result = $conn->query("SELECT DISTINCT categoryID FROM Category WHERE name = '" . $category . "'");
+	if($result->num_rows == 0) {
+		$sql = "INSERT INTO category (name, small, medium, large)
+				VALUES ('" . $category . "', 0, 0, 0)";
+		if ($conn->query($sql) === TRUE) {
+			$newCategory = TRUE;
+			$categoryID = $conn->insert_id;
+        }
+		else {
+			closeDB($conn);
+			createCookie("errCreate", 1, 30);
+			header("location: /RUMCPantry/ap_io7.php");
+		}
+    } 
+	else {
+		$row = sqlFetch($result);
+        $categoryID = $row["categoryID"];
     }
 
 
     $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, categoryID, aisle, rack, shelf)
-    VALUES ('$itemName', '$displayName', '$price', now(), 'false', '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')"; /*standard insert statement using the variables pulled*/
+    VALUES ('$itemName', '$displayName', '$price', now(), 0, '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')";
 
     if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button id="btn_back" onclick="goBack()">Back</button>', "green");
-
-        echoDivWithColor("Item created successfully", "green" );
-        echoDivWithColor("Display Name: $displayName", "green" );
-        echoDivWithColor("Item name: $itemName", "green" );
-        echoDivWithColor("Price: $price", "green" );
-        echoDivWithColor("Family allotment for size 1-2: $small", "green" );
-        echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
-        echoDivWithColor("Family allotment for size 5-6: $large", "green" );
-
-        echoDivWithColor("Aisle: $aisle", "green" );
-        echoDivWithColor("Rack: $rack", "green" );
-        echoDivWithColor("Shelf: $shelf", "green" );
-        
-       
-    } else {
-        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at item insert $sql $conn->error", "red" );
-     
-        
+		closeDB($conn);
+		createCookie("newItem", 1, 30);
+		header("location: /RUMCPantry/ap_io7.php");  
+    } 
+	else {
+		if ($newCategory) {
+			$conn->query("DELETE FROM Category WHERE categoryID = " . $categoryID);
+		}
+		closeDB($conn);
+        createCookie("errCreate", 1, 30);
+		header("location: /RUMCPantry/ap_io7.php");    
     }
-
-    $conn->close();
-}
-elseif (isset($_GET['UpdateItem'])) {
-	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['DeleteItem'])) {
-    
-    $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $itemID = $_GET['itemID'];
-
-     $conn = new mysqli($servername, $username, $password, $dbname);
+	$itemID = $_GET['itemID'];
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
-
-
     
-    $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = '$itemID'");
+    $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = " . $itemID);
     if($result->num_rows > 0) {
 
-        $sql = "update Item set isDeleted=true where itemID=$itemID";
+        $sql = "update Item set isDeleted=true where itemID=" . $itemID;
 
          if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Item with item id $itemID deleted</h3>", "green");
+            createCookie("itemDeleted", 1, 30);
+			header("location: /RUMCPantry/ap_io7.php");
           }
           else{
             echoDivWithColor("Error, failed to connect to database at delete.", "red" );
@@ -142,167 +88,110 @@ elseif (isset($_GET['DeleteItem'])) {
    
 }
 elseif (isset($_POST['updateItemIndividual'])) {
-    $itemID = $_POST['itemID'];
-	$category = $_POST['category'];
-    $itemName = $_POST['itemName']; /*grab the name textbox*/
+    $itemID   	 = $_POST['itemID'];
+	$category 	 = $_POST['category'];
+    $itemName 	 = $_POST['itemName'];
     $displayName = $_POST['displayName'];
-    $price = $_POST['price'];
-
-    $small = $_POST['small'];
-    $medium = $_POST['medium'];
-    $large = $_POST['large'];
-
-    $aisle = $_POST['aisle'];
-    $rack = $_POST['rack'];
-    $shelf = $_POST['shelf'];
-
-    
-   
-
-
+    $price 		 = $_POST['price'];
+    $small 		 = $_POST['small'];
+    $medium 	 = $_POST['medium'];
+    $large 		 = $_POST['large'];
+    $aisle 		 = $_POST['aisle'];
+    $rack 		 = $_POST['rack'];
+    $shelf 		 = $_POST['shelf'];
 
     $categoryID = null;
 
-
-
-
-    /* previous lines set up the strings for connextion*/
-    include('header.php');
     /* Create connection*/
+    $conn = createPantryDatabaseConnection();
+    /* Check connection*/
+    if ($conn->connect_error) {
+		createCookie("errConnection", 1, 30);
+		header("location: /RUMCPantry/ap_io7.php"); 
+    } 
+
+
+    //check to see if category ecists, if not create it.
+    $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
+	if($result->num_rows == 0) {
+		$sql = "INSERT INTO category (name, small, medium, large)
+				VALUES ('$category', 0, 0, 0, 0)";
+		if ($conn->query($sql) === TRUE) {
+			$sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
+			$result = $conn->query($sql);
+			if ($result->num_rows > 0) {
+				while($row = $result->fetch_assoc()) {
+					$categoryID = $row["categoryID"];
+				}
+			} 
+		}
+		else{
+			createCookie("errUpdate", 1, 30);
+			header("location: /RUMCPantry/ap_io7.php"); 
+		}
+	} 
+	else {
+		$sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
+		$result = $conn->query($sql);
+		if ($result->num_rows > 0) {
+			while($row = $result->fetch_assoc()) {
+				$categoryID = $row["categoryID"];
+			}
+			
+		}
+	}
+
+	$sql = "UPDATE Item 
+			SET categoryID  = " . $categoryID . ",  itemName = '" . $itemName . "', 
+				displayName = '" . $displayName . "', price = " . $price . ", 
+				timestamp = now(), small = " . $small . ", medium = " . $medium . ", 
+				large = " . $large . ", aisle = " . $aisle . ", rack = " . $rack . ", shelf = " . $shelf . "  
+			WHERE itemID = " . $itemID;
+
+    if ($conn->query($sql) === TRUE) {
+		createCookie("itemUpdated", 1, 30);
+		header("location: /RUMCPantry/ap_io7.php");
+    } 
+	else {
+        createCookie("errUpdate", 1, 30);
+		header("location: /RUMCPantry/ap_io7.php"); 
+    }
+
+    $conn->close();
+}
+elseif (isset($_GET['DeleteCategory'])) {
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
-
-    //check to see if category ecists, if not create it.
-        $result = $conn->query("SELECT DISTINCT name FROM Category WHERE name = '$category'");
-        if($result->num_rows == 0) {
-        
-
-         $sql = "INSERT INTO category (name, small, medium, large)
-         VALUES ('$category', 0, 0, 0, 0)";
-            if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "New category created: $category", "green");
-                
-                
-                $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            $categoryID = $row["categoryID"];
-                        }
-                    echoDivWithColor("Category ID: $categoryID", "green" );
-                } 
-          }
-          else{
-            echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-            echoDivWithColor("Error, failed to connect to database at category update.", "red" );
-          }
-
-                  
-          
-
-    } else {
-        $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $categoryID = $row["categoryID"];
-                }
-                
-            }
-       echoDivWithColor( "$category category already in database", "green");
-       echoDivWithColor("Category ID: $categoryID", "green" );
-    }
-
-        $sql = "UPDATE Item SET categoryID = $categoryID,  itemName = '$itemName', displayName = '$displayName', price = $price, timestamp = now(), small = $small, medium = $medium, large = $large, aisle = $aisle, rack = $rack, shelf = $shelf  Where itemID = $itemID";
-
-
-    if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Item updated successfully", "green" );
-        echoDivWithColor("Display Name: $displayName", "green" );
-        echoDivWithColor("Item name: $itemName", "green" );
-        echoDivWithColor("Price: $price", "green" );
-        echoDivWithColor("Family allotment for size 1-2: $small", "green" );
-        echoDivWithColor("Family allotment for size 3-4: $medium", "green" );     
-        echoDivWithColor("Family allotment for size 5-6: $large", "green" );
-        echoDivWithColor("Aisle: $aisle", "green" );
-        echoDivWithColor("Rack: $rack", "green" );
-        echoDivWithColor("Shelf: $shelf", "green" );
-        
-
-       
-    } else {
-        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at item insert $sql $conn->error", "red" );
-     
-        
-    }
-
-    $conn->close();
-}
-elseif (isset($_GET['UpdateCategory'])) {
-    header ("location: /RUMCPantry/ap_io5.php?categoryID=" . $_GET['categoryID']);
-}
-elseif (isset($_GET['DeleteCategory'])) {
-       $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $categoryID = $_GET['categoryID'];
-
-     $conn = new mysqli($servername, $username, $password, $dbname);
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-
-
+    $categoryID = $_GET['categoryID']; 
+    $sql = "update Category set isDeleted = true where categoryID=" . $categoryID;
     
-   
-
-        $sql = "update Category set isDeleted = true where categoryID=$categoryID";
-
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Category with category id $categoryID deleted</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Failed to delete category", "red" );
-          }
-
-          $sql = "update item set isDeleted = true where categoryID=$categoryID";
-        
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>items with category id $categoryID deleted</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Failed to delete items", "red" );
-          }
-    
+	if ($conn->query($sql) === FALSE) {
+        createCookie("delError", 1, 30);
+		header("location: /RUMCPantry/ap_io8.php");
+    }
+    else {
+        $sql = "update item set isDeleted = true where categoryID=$categoryID";
+        if ($conn->query($sql) === FALSE) {
+            createCookie("delError", 1, 30);
+			header("location: /RUMCPantry/ap_io8.php");
+        }
+        else{
+            createCookie("categoryDeleted", 1, 30);
+			header("location: /RUMCPantry/ap_io8.php");;
+        }
+    }
 }
 elseif (isset($_GET['ReactivateCategoryAndItems'])) {
-       $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $categoryID = $_GET['categoryID'];
-
-     $conn = new mysqli($servername, $username, $password, $dbname);
+	//TODO FIX
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
-
-
-    
-   
+    $categoryID = $_GET['categoryID'];   
 
         $sql = "update Category set isDeleted = false where categoryID=$categoryID";
 
@@ -324,24 +213,16 @@ elseif (isset($_GET['ReactivateCategoryAndItems'])) {
     
 }
 elseif (isset($_GET['ReactivateCategory'])) {
-       $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $categoryID = $_GET['categoryID'];
-
-     $conn = new mysqli($servername, $username, $password, $dbname);
+	//TODO FIX
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    } 
+    }
+	
+    $categoryID = $_GET['categoryID'];
 
-
-
-    
-   
-
-        $sql = "update Category set isDeleted = false where categoryID=$categoryID";
+	$sql = "update Category set isDeleted = false where categoryID=$categoryID";
 
          if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "<h3>Category with category id $categoryID reactivated</h3>", "green");
@@ -353,24 +234,15 @@ elseif (isset($_GET['ReactivateCategory'])) {
     
 }
 elseif (isset($_GET['ReactivateItem'])) {
-       $servername = "127.0.0.1";
-    $username = "root";
-    $password = "";
-    $dbname = "foodpantry";
-    $itemID = $_GET['itemID'];
-    $categoryName = $_GET['categoryName'];
-
-     $conn = new mysqli($servername, $username, $password, $dbname);
+	//TODO FIX
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
-
-
-    
-   
-   
+	
+    $itemID = $_GET['itemID'];
+    $categoryName = $_GET['categoryName'];   
 
         $sql = "update Item set isDeleted = false where itemID=$itemID";
 
@@ -394,19 +266,11 @@ elseif (isset($_GET['ReactivateItem'])) {
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];
-    $name = $_POST['name'];
-    $small = $_POST['small']; 
-    $medium = $_POST['medium'];
-    $large = $_POST['large'];
+    $name 	 	= $_POST['category'];
+    $small 		= $_POST['small']; 
+    $medium 	= $_POST['medium'];
+    $large 		= $_POST['large'];
 
-   
-
-
-
-
-
-    /* previous lines set up the strings for connextion*/
-    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -416,43 +280,32 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
 
 
     //check to see if category exists, if not create it.
-        
-
-
-    $sql = "UPDATE Category SET categoryID = $categoryID, name = '$name', small = $small, medium = $medium, large = $large Where categoryID = $categoryID";
+    $sql = "UPDATE Category
+			SET categoryID = "  . $categoryID . ", 
+				name 	   = '" . $name       . "', 
+				small      = "  . $small      . ", 
+				medium     = "  . $medium     . ", 
+				large      = "  . $large      . " 
+			WHERE categoryID = $categoryID";
 
 
     if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( ' <button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Category updated successfully", "green" );
-        echoDivWithColor("Name: $name", "green" );
-        echoDivWithColor("Small: $small", "green" );
-        echoDivWithColor("Medium: $medium", "green" );
-        echoDivWithColor("Large: $large", "green" );
- 
-
-       
-    } else {
-        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at category update: $sql $conn->error", "red" );
-     
-        
+		createCookie("categoryUpdated", 1, 30);
+		header("location: /RUMCPantry/ap_io8.php"); 
+    } 
+	else {
+        createCookie("errUpdate", 1, 30);
+		header("location: /RUMCPantry/ap_io8.php");   
     }
 
     $conn->close();
 }
 elseif (isset($_POST['createCategory'])) {
-    $name = $_POST['name'];
-    $small = $_POST['small']; 
+    $name 	= $_POST['category'];
+    $small 	= $_POST['small']; 
     $medium = $_POST['medium'];
-    $large = $_POST['large'];
+    $large 	= $_POST['large'];
 
-
-
-
-    include('header.php');
     /* Create connection*/
     $conn = createPantryDatabaseConnection();
     /* Check connection*/
@@ -460,35 +313,16 @@ elseif (isset($_POST['createCategory'])) {
         die("Connection failed: " . $conn->connect_error);
     } 
 
-
-  
-
-
-    $sql = "INSERT INTO Category (name, small, medium, large)
-       VALUES ('$name', $small, $medium, $large)"; /*standard insert statement using the variables pulled*/
+    $sql = "INSERT INTO Category (name, small, medium, large, isDeleted)
+			VALUES ('" . $name . "', " . $small . ", " . $medium . ", " . $large . ", 0)";
 
     if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button id= "btn_back" onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Category created successfully", "green" );
-        echoDivWithColor("Category name: $name", "green" );
-        echoDivWithColor("Small: $small", "green" );
-        echoDivWithColor("Medium: $medium", "green" );
-        echoDivWithColor("Large: $large", "green" );
-       
-      
-
-        
-
-       
+		createCookie("newCategory", 1, 30);
+		header("location: /RUMCPantry/ap_io8.php");
     } else {
-        echoDivWithColor('<button id= "btn_back" onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at category insert $sql $conn->error", "red" );
-     
-        
+        createCookie("errCreate", 1, 30);
+		header("location: /RUMCPantry/ap_io8.php");       
     }
-
     $conn->close();
 }
 

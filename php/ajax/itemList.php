@@ -1,22 +1,20 @@
 <?php
 
+include '../utilities.php';
 
-	include '../utilities.php';
-	
-	$availID = getAvailableClient();
-	
-	// Set up server connection
-	$conn = createPantryDatabaseConnection();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	
-	// ***********************
+$conn = createPantryDatabaseConnection();
+    /* Check connection*/
+if ($conn->connect_error) {
+    die("Connection failed: " . $conn->connect_error);
+} 
+
+// *******************************************************************************
+// ***********************
     // * Build our column list
     // List all of the columns we want
-    $columns = array("Client.clientID", "(Client.numOfAdults + Client.numOfKids) as familySize", 
-				   "Client.email", "Client.phoneNumber", "CONCAT(fm.lastName, ', ', fm.firstName) as cName");
-	$searchableColumns = array("Client.email", "Client.phoneNumber", "fm.lastName" , "fm.firstName");
+    $columns = array("itemID", "itemName", "category.name as cName", "aisle", "rack", "shelf");
+	
+	$searchableColumns = array("itemName", "category.name", "aisle", "rack", "shelf");
 	
 	// *********************************
     // * Generate our user search query 
@@ -35,7 +33,7 @@
 	
 	// *************************************
 	// * ORDER clause
-	$orderQuery = " ORDER BY fm.lastName ";
+	$orderQuery = " ORDER BY itemName ";
 	
 	
 	// *************************************
@@ -44,17 +42,17 @@
 	$sql = "SELECT " . implode(", ", $columns);
 	
 	// FROM main table
-	$sql .= " FROM FamilyMember fm ";
-	
+	$sql .= " FROM item ";
+
 	// JOINs
-	$sql .= " JOIN Client 
-				ON Client.clientID=fm.clientID ";
+	$sql .= " JOIN category
+			  ON category.categoryID=item.categoryID ";
 				
 	// WHERE clauses
-	$sql .= " 	WHERE Client.isDeleted=0
-				AND	Client.clientID<>" . $availID . "
-				AND	fm.isHeadOfHousehold=true
-				AND	Client.redistribution=0 ";
+	// Rack set to -1 are strictly redistribution items
+	$sql .= " 	WHERE item.isDeleted=0
+				AND (item.rack>=0
+				OR item.rack IS NULL) ";
 	
 	
 	// Get our total record count
@@ -65,6 +63,7 @@
 	$recordCount = count($results);
 	$returnData = [];
 	$out = [];
+	
 	// Run our paging function using a for loop
 	$showTo = ($_GET['length'] == -1) ? $recordCount : $_GET['length'];
     for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
@@ -73,31 +72,32 @@
         }
         $row = [];
 		
-		$baseLink = "/RUMCPantry/php/clientOps.php?";
-		$IDParam  = "&id=" . $results[$i]['clientID'];
+		$editLink = "/RUMCPantry/ap_io3.php?";
+		$deleteLink = "/RUMCPantry/php/itemOps.php?DeleteItem=1&";
+		$IDParam  = "itemID=" . $results[$i]['itemID'];
 		
 		$editLink   = "<button type='submit' class='btn_edit' 
-					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
+					   value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 		$deleteLink = "<button type='submit' class='btn_icon'
-					   value='" . $baseLink . "InactiveClient=1" . $IDParam . "'><i class='fa fa-trash'></i></button>";
+					   value='" . $deleteLink . $IDParam . "'><i class='fa fa-trash'></i></button>";
 		
 		$row[0] = $editLink;
-		$row[1] = $results[$i]['cName'];
-		$row[2] = $results[$i]['familySize'];
-		$row[3] = displayForTable($results[$i]['email'], 20);
-		$row[4] = displayPhoneNo($results[$i]['phoneNumber']);
-		$row[5] = $deleteLink;
+		$row[1] = $results[$i]['itemName'];
+		$row[2] = $results[$i]['cName'];
+		$row[3] = aisleDecoder($results[$i]['aisle']);
+		$row[4] = rackDecoder($results[$i]['rack']);
+		$row[5] = shelfDecoder($results[$i]['shelf']);
+		$row[6] = $deleteLink;
 		
 		$out[] = $row;
-	}
-
+	}	
 	
-	
-	$returnData['draw'] = $_GET['draw'];
-    $returnData['data'] = $out;
-    $returnData['recordsTotal'] = $totalRecordCount;
-    $returnData['recordsFiltered'] = $recordCount;
+	$returnData['draw'] 			= $_GET['draw'];
+    $returnData['data']  		    = $out;
+    $returnData['recordsTotal'] 	= $totalRecordCount;
+    $returnData['recordsFiltered']  = $recordCount;
 	closeDB($conn);
 
 	echo json_encode($returnData);//echo json_encode( $returnArr );
-?>
+
+ ?>
