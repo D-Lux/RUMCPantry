@@ -237,46 +237,8 @@ Special case buttons
 	font-weight: bold;
 }
 
-.btn_trash {
-	background: url("/RUMCPantry/images/Icon_Trash.png") no-repeat;
-	width: 32px;
-	height: 32px;
-	padding: 0px;
-	margin: 0px;
-	border: 0px;
-	cursor: pointer;
-}
-
-.btn_trash:active {
-	background-image: url(/RUMCPantry/images/Icon_Trash_Active.png);
-}
-
-.btn_reactivate {
-	background: url("/RUMCPantry/images/Icon_Reactivate.png") no-repeat;
-	width: 32px;
-	height: 32px;
-	padding: 0px;
-	margin: 0px;
-	border: 0px;
-	cursor: pointer;
-}
-
 .btn_reactivate:active {
 	background-image: url(/RUMCPantry/images/Icon_Reactivate_Active.png);
-}
-
-.btn_lock {
-	background: url("/RUMCPantry/images/Icon_Lock.png") no-repeat;
-	width: 32px;
-	height: 32px;
-	padding: 0px;
-	margin: 0px;
-	border: 0px;
-	cursor: pointer;
-}
-
-.btn_lock:active {
-	background-image: url(/RUMCPantry/images/Icon_Lock_Active.png);
 }
 
 #btn_tabSize {

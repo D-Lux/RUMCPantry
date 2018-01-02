@@ -36,8 +36,10 @@ function validateNewAppts() {
 	}
 }
 
-function deleteTimeTableRow(row)	{
-	document.getElementById('timeTable').deleteRow(row.parentNode.parentNode.rowIndex);
+function deleteTimeTableRow(row){
+	if (confirm("Are you sure you want to remove this time slot?")) {
+		document.getElementById('timeTable').deleteRow(row.parentNode.parentNode.rowIndex);
+	}
 }
 
 function addTimeSlot() {
@@ -55,7 +57,14 @@ function addTimeSlot() {
 	// Add default information to these cells:
 	cell1.innerHTML = "<input type='time' name='time[]' value='10:00' step='900'>";
 	cell2.innerHTML = "<input type='number' name='qty[]' value='5' min='1' >";
-	cell3.innerHTML = "<input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'>";
+	cell3.innerHTML = "<a class='rm_row btn_icon' href='#' ><i class='fa fa-trash'></i></a>";
+	
+	// Re-add the click events
+	$('.rm_row').off("click").on("click", function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		deleteTimeTableRow(this);
+	});
 }
 
 function AJAX_SetAppointment(callingSlot) {
@@ -115,7 +124,6 @@ function AJAX_SetAppointment(callingSlot) {
 
 function AJAX_ActivateAppointment(callingSlot) {
 	// Gets the setID number so we can pull information needed from the page
-
 	var IDNum = callingSlot.id.substring(4);
 	var statusIDTag = document.getElementById("status" + IDNum);
 	var invoiceIDNum = document.getElementById("InvoiceID" + IDNum).value;

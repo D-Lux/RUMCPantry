@@ -1,18 +1,25 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/apptOps.js"></script>
-	<script>
-		if (getCookie("newAppt") != "") {
-			window.alert("New Date Added!");
-			removeCookie("newAppt");
-		}
-		if (getCookie("newTimeSlots") != "") {
-			window.alert("Time Slots Added!");
-			removeCookie("newTimeSlots");
-		}
-		
-	</script>
+<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
+<style>
+	.btn_lock {
+		color: black !important;
+	}
+</style>
+<script>
+	if (getCookie("newAppt") != "") {
+		window.alert("New Date Added!");
+		removeCookie("newAppt");
+	}
+	if (getCookie("newTimeSlots") != "") {
+		window.alert("Time Slots Added!");
+		removeCookie("newTimeSlots");
+	}
 	
-    <button id='btn_back' onclick="goBack()">Back</button>
+</script>
 	
 	<h3>Appointment Date: <?php echo date("F jS, Y", strtotime($_GET['date'])); ?></h3>
 	<div class="body_content">
@@ -146,11 +153,12 @@
 				
 				if ($invoice['status'] < GetActiveStatus()) {
 					// --==[*DELETE*]==-- Button
-					echo "<td><input id='deleteInvoice' value=' ' class='btn_trash' name='DeleteInvoice' type='submit' ";
-					echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'></td>";
+					echo "<td><button type='submit' id='deleteInvoice' class='btn_icon' name='DeleteInvoice' ";
+					echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'>";
+					echo "<i class='fa fa-trash'></i></button></td>";
 				
 					// --==[*Lock*]==-- Button
-					echo "<td><input id='lock" . $setID . "' type='button' class='btn_lock'  onclick='AJAX_ActivateAppointment(this)'></td>";
+					echo "<td><button id='lock" . $setID . "' type='submit' class='btn_lock btn_icon'><i class='fa fa-lock'></i></button></td>";
 				}
 				echo "</form>";
 				
@@ -173,12 +181,18 @@
 		// --==[*NEW TIME SLOT*]==--
 		echo "<br><form action='ap_ao4.php' method='post'>";
 		echo "<input type='hidden' name='date' value=" . $_GET['date'] . ">";	// Send the date we're adding to
-		echo "<input id='newSlots' type='submit' name='newSlots' value='New Time Slots'>";	
+		echo "<button id='newSlots' type='submit' name='newSlots' ><i class='fa fa-clock'></i> New Time Slots</button>";	
 		echo "</form>";
 	?>
 	
 	</div><!-- /body_content -->
 	</div><!-- /content -->	
 </body>
-
+<script type="text/javascript">
+	$('.btn_lock').on("click", function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		AJAX_ActivateAppointment(this);
+	});
+</script>
 </html>

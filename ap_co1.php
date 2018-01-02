@@ -1,4 +1,7 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/clientOps.js"></script>
 <script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
 <script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
@@ -12,8 +15,6 @@
 			removeCookie("clientUpdated");
 		}		
 	</script>
-	
-	<?php include 'php/backButton.php'; ?>
 	
     <h3>Active Clients</h3>
 	

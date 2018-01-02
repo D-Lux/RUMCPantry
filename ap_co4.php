@@ -1,7 +1,9 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/clientOps.js"></script>
 
-    <button id='btn_back' onclick="goBack()">Back</button>
 	<h3>New Family Member</h3>
 	
 	<div class="body_content">

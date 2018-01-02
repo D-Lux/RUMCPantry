@@ -1,7 +1,10 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/orderFormOps.js"></script>
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-    <button id='btn_back' onclick="goBack()">Back</button>
+
 	<h3>Edit Order</h3>
 	
 	<div class="body_content">

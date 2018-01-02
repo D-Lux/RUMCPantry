@@ -1,8 +1,13 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
+
 <script src="js/clientOps.js"></script>
-    <button id='btn_back' onclick="goBack()">Back</button>
-	
-	<h3>Update Client</h3>
+<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
+<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
+<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 
 	<script>
 		if (getCookie("newClient") != "") {
@@ -46,13 +51,7 @@
 				WHERE clientID=" . $_GET['id'] . "
 				AND isDeleted<>1";
 		$familyInfo = queryDB($conn, $sql);
-		
-		// Grab invoice information
-		$sql = "SELECT invoiceID, visitDate, status, visitTime
-				FROM Invoice
-				WHERE clientID=" . $_GET['id'];
-		$invoiceInfo = queryDB($conn, $sql);
-		
+				
 		// Grab the client family name
 		$sql = "SELECT lastName 
 				FROM FamilyMember
@@ -73,77 +72,127 @@
 		// "Update" button at end will take all values and update the client entry with those values
 		
 		if (($clientInfo->num_rows > 0) AND ($familyInfo->num_rows > 0)) {
-			$clientRow = sqlFetch($clientInfo);
-			echo "Client Family Name: $clientName <br><br><br>";
-			
-			echo "<form name='updateClient' action='php/clientOps.php' method='post' >";
-			
-			echo "<input type='hidden' name='id' value='" . $_GET['id'] . "'>";
-			
-			// Open a div to set spacing
-			echo "<div class='inputDiv'>";
-			
-			echo "<div class='required'><label for='numAdultsInput'>Number of Adults:</label>";
-			echo "<input id='numAdultsInput' type='number' min=1 name='numAdults' value=" . $clientRow['numOfAdults'] . "></div>";
-			echo "<label for='numKidsInput'>Number of Children: </label>";
-			echo "<input id='numKidsInput' type='number' name='numKids' value=" . $clientRow['numOfKids'] . "><br>";
-			$familySize =  $clientRow['numOfKids'] + $clientRow['numOfAdults'];
-			
-			echo "<br>";
-			
+			$clientRow 		 = sqlFetch($clientInfo);
+			$familySize 	 = $clientRow['numOfKids'] + $clientRow['numOfAdults'];
 			$foodStampStatus = $clientRow['foodStamps'];
-			// Auto select the correct food stamp selection based on database value
-			echo "<label for='foodStampsInput'>Foodstamp Status:</label>
-				<select id='foodStampsInput' name='foodStamps'> 
-				<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>
-				<option value=1 " . ($foodStampStatus == 1 ? "selected" : "") . ">Yes</option>
-				<option value=0 " . ($foodStampStatus == 0 ? "selected" : "") . ">No</option>
-				</select><br>";
-				
-			$clientType = $clientRow['clientType'];
-			echo "<label id='clientTypeInput'>Client Type:</label>
-				<select id='clientTypeInput' name='clientType'> 
-				<option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
-				<option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
-				<option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
-				<option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
-				</select><br>";
+			$clientType 	 = $clientRow['clientType'];
+			?>
 			
-			echo "<label for='phoneNoInput'>Phone Number:</label>
-				  <input type='tel' name='phoneNo' value=" . displayPhoneNo($clientRow['phoneNumber']) . "><br>";
-			echo "<label for='emailInput'>Email:</label>
-				  <input id='emailInput' type='email' name='email' value='" . $clientRow['email'] . "'><br>";
-			echo "<label for='addressStreetInput'>Street Address:</label>
-				  <input id='addressStreetInput' type='text' name='addressStreet' value='" . $clientRow['address'] . "' ><br>";
-			echo "<label for='addressCityInput'>City:</label>
-				  <input id='addressCityInput' type='text' name='addressCity' value='" . $clientRow['city'] . "'><br>";
-			// Dropdown for state
-			echo "<label for='addressStateInput'>State:</label>
-				<select id='addressStateInput' name='addressState'> <option value=" . $clientRow['state'] . ">" . $clientRow['state'] . "</option>
-				<option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option>
-				<option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option>
-				<option value='DC'>DC</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option>
-				<option value='ID'>ID</option> <option value='IL'>IL</option> <option value='IN'>IN</option> <option value='IA'>IA</option>
-				<option value='KS'>KS</option> <option value='KY'>KY</option> <option value='LA'>LA</option> <option value='ME'>ME</option>
-				<option value='MD'>MD</option> <option value='MA'>MA</option> <option value='MI'>MI</option> <option value='MN'>MN</option>
-				<option value='MS'>MS</option> <option value='MO'>MO</option> <option value='MT'>MT</option> <option value='NE'>NE</option>
-				<option value='NV'>NV</option> <option value='NH'>NH</option> <option value='NJ'>NJ</option> <option value='NM'>NM</option>
-				<option value='NY'>NY</option> <option value='NC'>NC</option> <option value='ND'>ND</option> <option value='OH'>OH</option>
-				<option value='OK'>OK</option> <option value='OR'>OR</option> <option value='PA'>PA</option> <option value='RI'>RI</option>
-				<option value='SC'>SC</option> <option value='SD'>SD</option> <option value='TN'>TN</option> <option value='TX'>TX</option>
-				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
-				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
-			</select> <br>";
-			echo "<label for='addressZipField'>Zip Code:</label>
-				  <input type='number' id='addressZipField' name='addressZip' value=" . $clientRow['zip'] . "><br>";
+			<h3>Client: <?= $clientName ?> </h3><br>
 			
-			echo "<br><label for='notesInput'>Notes:</label>
-				  <textarea id='notesInput' class='notes' type='text' name='notes'>" . $clientRow['notes'] . "</textarea><br>";
-			echo "<br><br>";
-			echo "<input type='submit' name='UpdateClient' value='Save'>";
-			echo "</div>"; // </inputDiv>
-			echo "</form>";
+			<form name='updateClient' action='php/clientOps.php' method='post'>
+			<input type='hidden' name='id' value='<?= $_GET['id'] ?>'>
+			<!-- Number of Adults -->
+			<div class="row">
+				<div class="col-sm-4"><label class="required">Number of Adults:</label></div>
+				<div class="col-sm-8">
+					<input id='numAdultsInput' type='number' min=1 name='numAdults' value=<?= $clientRow['numOfAdults'] ?> >
+				</div>
+			</div>
+			<!-- Number of Children -->
+			<div class="row">
+				<div class="col-sm-4">Number of Children:</div>
+				<div class="col-sm-8">
+					<input id='numKidsInput' type='number' name='numKids' value=<?= $clientRow['numOfKids'] ?> >
+				</div>
+			</div>
+			<!-- Phone Number -->
+			<div class="row">
+				<div class="col-sm-4">Phone Number:</div>
+				<div class="col-sm-8">
+					<input type='tel' name='phoneNo' value='<?= displayPhoneNo($clientRow['phoneNumber']) ?>' >
+				</div>
+			</div>
+			<!-- Email -->
+			<div class="row">
+				<div class="col-sm-4">Email:</div>
+				<div class="col-sm-8">
+					<input id='emailInput' type='email' name='email' value='<?= $clientRow['email'] ?>'>
+				</div>
+			</div>
+			<!-- ------- Address ---- -->
+			<div class="row">
+				<div class="col-sm-2"><strong>Address</strong></div>
+			</div>
+			<div style="border: 2px solid #499BD6; padding:5px;margin-top:3px;">
+				<!-- street Address -->
+				<div class="row">
+					<div class="col-sm-4">Street Address:</div>
+					<div class="col-sm-8">
+						<input id='addressStreetInput' type='text' name='addressStreet' value='<?= $clientRow['address'] ?>' >
+					</div>
+				</div>
+				<!-- city -->
+				<div class="row">
+					<div class="col-sm-4">City:</div>
+					<div class="col-sm-8">
+						<input id='addressCityInput' type='text' name='addressCity' value='<?= $clientRow['city'] ?>' >
+					</div>
+				</div>
+				<!-- dropdown for state -->
+				<div class="row">
+					<div class="col-sm-4">State:</div>
+					<div class="col-sm-8">
+						<select id="addressStateInput" id="addressState" name="addressState">
+							<?php
+								getStateOptions($clientRow['state']);
+							?>
+						</select>
+					</div>
+				</div>
+				<!-- zipcode -->
+				<div class="row">
+					<div class="col-sm-4">Zip Code</div>
+					<div class="col-sm-8">
+						<input type='number' id='addressZipField' name='addressZip' value=<?= $clientRow['zip'] ?> >
+					</div>
+				</div>
+			</div>
+			<br>
+			<!-- Foodstamp Status -->
+			<div class="row">
+				<div class="col-sm-3">Foodstamp Status:</div>
+				<div class="col-sm-3">
+					<select id='foodStampsInput' name='foodStamps'>
+						<?php 
+							echo "<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>";
+							echo "<option value=1 "  . ($foodStampStatus == 1  ? "selected" : "") . ">Yes</option>";
+							echo "<option value=0 "  . ($foodStampStatus == 0  ? "selected" : "") . ">No</option>";
+						?>
+					</select>
+				</div>
+			<!-- Client Type -->
+				<div class="col-sm-3">Client Type:</div>
+				<div class="col-sm-3">
+					<select id='clientTypeInput' name='clientType'> 
+						<?php echo "
+							<option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
+							<option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
+							<option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
+							<option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
+							</select>";
+						?>
+					</select>
+				</div>
+			</div>
+			<br>
+			<!-- Notes -->
+			<div class="row">
+				<div class="col-sm-4">Notes:</div>
+				<div class="col-sm-8">
+					<textarea id='notesInput' class='notes' type='text' name='notes'><?= $clientRow['notes'] ?></textarea>
+				</div>
+			</div>
+
+			
+			<input type="submit" name="UpdateClient" value="Save">
+			</form>
 		
+			
+			
+			<?php
+			
+			
 			
 			// ***********************************************************************
 			// DISPLAY FAMILY MEMBERS
@@ -178,8 +227,8 @@
 				// Start Table row
 				echo "<tr>";
 
-					// Update button				
-				echo "<td><input type='submit' name='GoUpdateMember' value='Edit'></td>";
+					// Update button
+				echo "<td><input type='submit' class='btn_edit' name='GoUpdateMember' value='View'></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['firstName'] . "</td>";
@@ -224,36 +273,26 @@
 			// ***********************************************************************
 			// SHOW VISITS
 			// Show all of the visits (actionable to view further information)
-			// Add a button to add an appointment
-			
-			echo "<br><br><br><h3>Visits</h3>";
-			if ($invoiceInfo!=null && $invoiceInfo->num_rows > 0) {
-		
-				// Create the invoice table and add in the headers
-				echo "<table> <tr> <th>Invoice Date</th><th>Status</th></tr>";
-				
-				while($row = sqlFetch($invoiceInfo)) {						
+			// TODO Add a button to add an appointment
+			?>
+			<hr><br><h3>Appointments</h3>
+			<table width='95%' id="invoiceTable" class="display">
+				<thead>
+					<tr>
+						<th width='5%'></th>
+						<th>Date</th>
+						<th>Status</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+			<table id="">
+				<tr>
 					
-					// Start Table row
-					echo "<tr>";
-					echo "<form method='GET' action='ap_oo4e.php'>";
-					echo "<input type='hidden' name='invoiceID' value=" . $row['invoiceID'] . ">";
-					echo "<input type='hidden' name='name' value='" . $clientName . "'>";
-					echo "<input type='hidden' name='visitTime' value='" . $row['visitTime'] . "'>";
-					echo "<input type='hidden' name='familySize' value='" . $familySize . "'>";
-					echo "<td><input type='submit' name='fromUpdate' value=" . $row['visitDate'] . "></td>";
-					echo "</form>";
-					$status = visitStatusDecoder($row['status']);
-					echo "<td>" . $status . "</td>";
-					
-					// Close off the row and form
-					echo "</tr></form>";
-				}
-				echo "</table>";
-			} 
-			else {
-				echo "No Visits in Database.";
-			}
+				</tr>
+			</table>				
+			<?php
 		} 
 		else {
 			echo "Client was not found.";
@@ -263,5 +302,35 @@
 	</div><!-- /body_content -->
 	</div><!-- /content -->	
 </body>
+
+<script type="text/javascript">
+	<?php
+		echo "var Params = '?cid=" . $_GET['id'] . "';";
+	?>
+	$('#invoiceTable').DataTable({
+      "info"          : true,
+      "paging"        : true,
+      "destroy"       : true,
+      "searching"     : false,
+      "processing"    : true,
+      "serverSide"    : true,
+      "orderClasses"  : false,
+      "autoWidth"     : false,
+      "ordering"      : false,
+      "pagingType"    : "full_numbers",
+	  "language"	  : {
+		"emptyTable"  : "No Appointments in Database."
+					    },
+      "ajax"	      : {
+          "url"       : "php/ajax/clientApptList.php" + Params,
+						},
+	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+	});
+	$(document).ready(function(){
+		$('#invoiceTable').on('click', '.btn_edit', function () {
+			window.location.assign($(this).attr('value'));
+		});
+	});
+</script>
 
 </html>

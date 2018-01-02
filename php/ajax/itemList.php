@@ -98,6 +98,6 @@ if ($conn->connect_error) {
     $returnData['recordsFiltered']  = $recordCount;
 	closeDB($conn);
 
-	echo json_encode($returnData);//echo json_encode( $returnArr );
+	echo json_encode($returnData);
 
  ?>

@@ -21,12 +21,6 @@
 	<div class="body_content">
 	
 	<?php
-	// Get a datalist for the clients set up
-	// Button for Existing or new client
-	// New client shows new client div
-	// Existing shows existing div
-	
-	// New client div matches new client creation
 	
 		// *******************************************
 		// ** Generate the datalist for client drop down

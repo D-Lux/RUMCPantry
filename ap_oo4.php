@@ -1,8 +1,9 @@
-
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/orderFormOps.js"></script>
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-<button id='btn_back' onclick="goBack()">Back</button>
 
 <!-- <h3>View Order</h3> -->
 	
@@ -64,9 +65,9 @@
 		echo "</table>";
 
 
-		//Print out name tags numNames times
+		//Print out name tags numLines times
 		echo "<div id='nameTags' style='display:none;'><br><br><hr><h6>";
-		$numLines = 4;
+		$numLines = orderFormNameTagLength($familySize);
 		for ($i = 0; $i < $numLines; $i++) {
 			echo $name . "&emsp;&emsp;" . $name . "<br>";
 		}

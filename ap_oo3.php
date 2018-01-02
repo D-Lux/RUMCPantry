@@ -1,4 +1,7 @@
-<?php include 'php/header.php'; ?>
+<?php
+include 'php/header.php'; 
+include 'php/backButton.php'; 
+?>
     <meta http-equiv="refresh" content="15" >
 	<script>
 		if (getCookie("processError") != "") {
@@ -6,7 +9,7 @@
 			removeCookie("processError");
 		}
 	</script>
-    <?php include 'php/backButton.php'; ?>
+   
 	<h3>View Active Orders</h3>
 	
 	<div class="body_content">

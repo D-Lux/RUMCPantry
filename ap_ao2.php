@@ -1,5 +1,9 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 <script src="js/apptOps.js"></script>
+<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
 
 	<style>
 		#addTimeSlot {
@@ -15,9 +19,11 @@
 			border: solid 2px #888;
 			background-color: #AAA;
 		}
+		.rm_row {
+			color: black !important;
+		}
 	
 	</style>
-	<button id='btn_back' onclick="goBack()">Back</button>
 	<script>
 		// Bad date validation (after returning from apptOps.php)
 		if (getCookie("badAppDate") != "") {
@@ -84,7 +90,7 @@
 						echo "<tr><td><input type='time' name='time[]' value='"
 								. $timeSlot . "' step='900'></td>";
 						echo "<td><input type='number' name='qty[]' value='" . $numSlots . "' min='1'></td>";
-						echo "<td><input class='btn_trash' type='button' value=' ' onclick='deleteTimeTableRow(this)'></td>";
+						echo "<td><a class='rm_row btn_icon' href='#' ><i class='fa fa-trash'></i></a></td>";
 						echo "</tr>";
 					
 						$timeSlot =  date('H:i', strtotime($timeSlot) + (60*30));
@@ -100,4 +106,11 @@
 	</div><!-- /content -->	
 </body>
 
+<script type="text/javascript">
+	$('.rm_row').on("click", function(e) {
+		e.stopPropagation();
+		e.preventDefault();
+		deleteTimeTableRow(this);
+	});
+</script>
 </html>

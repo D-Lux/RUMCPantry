@@ -1,4 +1,7 @@
-<?php include 'php/header.php'; ?>
+<?php 
+	include 'php/header.php';
+	include 'php/backButton.php';
+?>
 
 	<script>
 		if (getCookie("SpecialsSaved") != "") {
@@ -6,7 +9,7 @@
 			removeCookie("SpecialsSaved");
 		}		
 	</script>
-    <button id='btn_back' onclick="goBack()">Back</button>
+    
     <h3>Order Forms</h3>
 	
 	<div class="body_content">
