@@ -4,7 +4,7 @@
 	include '../utilities.php';
 	
 	$availID = getAvailableClient();
-	
+	$deleted = isset($_GET['deleted']) ? 1 : 0;
 	// Set up server connection
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {
@@ -51,11 +51,10 @@
 				ON Client.clientID=fm.clientID ";
 				
 	// WHERE clauses
-	$sql .= " 	WHERE Client.isDeleted=0
+	$sql .= " 	WHERE Client.isDeleted=" . $deleted . "
 				AND	Client.clientID<>" . $availID . "
 				AND	fm.isHeadOfHousehold=true
 				AND	Client.redistribution=0 ";
-	
 	
 	// Get our total record count
 	$totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
@@ -73,20 +72,27 @@
         }
         $row = [];
 		
+		//Build our links
 		$baseLink = "/RUMCPantry/php/clientOps.php?";
 		$IDParam  = "&id=" . $results[$i]['clientID'];
 		
 		$editLink   = "<button type='submit' class='btn_edit' 
 					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
-		$deleteLink = "<button type='submit' class='btn_icon'
-					   value='" . $baseLink . "InactiveClient=1" . $IDParam . "'><i class='fa fa-trash'></i></button>";
+		$actionLink = "<button type='submit' class='btn_icon'
+					   value='" . $baseLink . 
+					   (($deleted == 1) ? 'ActiveClient' : 'InactiveClient') . "=1" . $IDParam . "'><i class='fa fa-" .
+					   (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
 		
-		$row[0] = $editLink;
-		$row[1] = $results[$i]['cName'];
-		$row[2] = $results[$i]['familySize'];
-		$row[3] = displayForTable($results[$i]['email'], 20);
-		$row[4] = displayPhoneNo($results[$i]['phoneNumber']);
-		$row[5] = $deleteLink;
+		$col = 0;
+		// Don't allow editing if we're deleted (For now, complicates the view client page)
+		if ($deleted == 0) {
+			$row[$col++] = $editLink;
+		}
+		$row[$col++] = $results[$i]['cName'];
+		$row[$col++] = $results[$i]['familySize'];
+		$row[$col++] = displayForTable($results[$i]['email'], 20);
+		$row[$col++] = displayPhoneNo($results[$i]['phoneNumber']);
+		$row[$col++] = $actionLink;
 		
 		$out[] = $row;
 	}

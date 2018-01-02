@@ -68,11 +68,6 @@
           "url"       : "php/ajax/clientList.php",
       },
 	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
-      //columnDefs      : [
-      //                   {"className": "dt-center", "targets": (0,2,3)}
-      //                  ],
-      //"lengthMenu"    : [[ 10, 20, 50, 100, -1], [ 10, 20, 50 100, "All"]],
-      //"pageLength"    : 10,
 	});
 
 	$(document).ready(function(){
@@ -88,7 +83,7 @@
 		});
 	});
 		
-	</script>
+</script>
 	
 	
 </html>
