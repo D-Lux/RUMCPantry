@@ -72,6 +72,9 @@ button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='su
 	cursor: pointer;
 }
 
+button:hover {
+  background-color: #93C5FF;
+}
 button[type='submit']:active:not(.btn_reactivate):not(.btn_icon), input[type='submit']:active:not(.btn_icon) {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
