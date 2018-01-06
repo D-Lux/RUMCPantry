@@ -22,7 +22,7 @@
 			WHERE Invoice.visitDate = '" . $date . "'
 			AND Invoice.status >= 200
 			AND FamilyMember.isHeadOfHousehold =true
-			ORDER BY Invoice.visitTime ASC, Invoice.status ASC";
+			ORDER BY Invoice.visitTime ASC, Invoice.status ASC, FamilyMember.LastName ASC";
 			
 	$results = returnAssocArray(queryDB($conn, $sql));
 	closeDB($conn);
