@@ -72,7 +72,7 @@ button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='su
 	cursor: pointer;
 }
 
-button:hover {
+input[type='submit']:hover, button:hover:not(.btn_icon):not(#btn_back) {
   background-color: #93C5FF;
 }
 button[type='submit']:active:not(.btn_reactivate):not(.btn_icon), input[type='submit']:active:not(.btn_icon) {
@@ -138,11 +138,20 @@ input[type='button']:focus {
 	border-radius: 25px;
 	border: solid 2px #AAA;
 	cursor: pointer;
+	box-shadow: 0 2px #999;
 }
 
 #btn_back:active, #btn_print:active {
 	border: solid 2px #888;
 	background-color: #AAA;
+	box-shadow: 0 1px #666;
+	transform: translateY(1px);
+}
+#btn_back:focus {outline:0;}
+
+#btn_back:hover {
+	background-color: #CCC;
+	border: solid 2px #888;
 }
 
 .body_content {
