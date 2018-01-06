@@ -1,84 +1,38 @@
 <?php 
 	include 'php/header.php';
 	include 'php/backButton.php';
+	
+	$date = date("M j, Y");
+	$dbDate = date("Y-m-d", strtotime($date));
+	
+	$conn = createPantryDatabaseConnection();
+	if ($conn->connect_error) {
+		echo "Connection failed: " . $conn->connect_error;
+		die();
+	}
+	$sql = "UPDATE Invoice 
+			SET status = " . GetActiveStatus() . " 
+			WHERE visitDate = '" . $dbDate . "'
+			AND status = " . GetAssignedStatus() . "";
+	if ($conn->query($sql) === FALSE) {
+		die("There was an error updating initial statuses");
+	}
 ?>
 <script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-<h3>Registration Room: 
-<?php
-    $date = date("M j, Y");
-    echo "$date </h3>";
+<link rel="stylesheet" type="text/css" href="css/checkInStyle.css">
+<h3>Registration Room: <?= $date ?> </h3>
 
-    /* Create connection*/
-    $conn = createPantryDatabaseConnection();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-?>
 <div class="clearfix"></div>
-<style>
+<div id="msgField"></div>
 
-/* Style the tab pane */
-.tab {
-  float: left;
-  border-style: solid none solid solid;
-  border-width: 1px;
-  border-color: #ccc;
-  /*background-color: #f1f1f1;*/
-  width: 20%;
-  height: 500px;
-}
-
-/* Style the buttons inside the tab */
-.tab button {
-  display: block;
-  background-color: #57B9FF;
-  color: black;
-  width: 100%;
-  height: 16.667%;
-  outline: none;
-  text-align: center;
-  cursor: pointer;
-  transition: 0.3s;
-  font-size: 17px;
-}
-
-/* Change background color of buttons on hover */
-.tab button:hover {
-  background-color: #93C5FF;
-}
-
-/* Create an active/current "tab button" class */
-.tab button.activeButton {
-  background-color: #E5E5E5;
-  color: DodgerBlue;
-  border: none;
-}
-
-/* Style the tab content */
-.tabcontent {
-  float: left;
-  padding: 0px 12px;
-  border: 1px solid #ccc;
-  background-color: #E5E5E5;
-  width: 80%;
-  border-left: none;
-  height: 500px;
-  display: none;
-}
-.active {
-  display: block;
-}
-</style>
 <div class="tab">
-  <button class="tablinks defaultTab" id="Arrive">Due In<br><i class="fa fa-sign-in fa-3x"></i></button>
-  <button class="tablinks" id="Order">To Order<br><i class="fa fa-wpforms fa-3x"></i></button>
-  <button class="tablinks" id="Review">To Review<br><i class="fa fa-edit fa-3x"></i></button>
-  <button class="tablinks" id="Print">To Print<br><i class="fa fa-print fa-3x"></i></button>
-  <button class="tablinks" id="Wait">Waiting<br><i class="fa fa-coffee fa-3x"></i></button>
-  <button class="tablinks" id="Complete">Completed<br><i class="fa fa-check fa-3x"></i></button>
+  <button class="tablinks" id="Arrive">Due In <p id="arriveCount"></p><br><i class="fa fa-sign-in fa-3x"></i></button>
+  <button class="tablinks" id="Order">To Order <p id="orderCount"></p><br><i class="fa fa-wpforms fa-3x"></i></button>
+  <button class="tablinks" id="Review">To Review <p id="reviewCount"></p><br><i class="fa fa-edit fa-3x"></i></button>
+  <button class="tablinks" id="Print">To Print <p id="printCount"></p><br><i class="fa fa-print fa-3x"></i></button>
+  <button class="tablinks" id="Wait">Waiting <p id="waitCount"></p><br><i class="fa fa-coffee fa-3x"></i></button>
+  <button class="tablinks" id="Complete">Completed <p id="completeCount"></p><br><i class="fa fa-check fa-3x"></i></button>
 </div>
 
   <div id="ArriveContent" class="tabcontent">
@@ -118,7 +72,42 @@
       $(this).addClass("activeButton");
     });
     
-    $(".defaultTab").click();
+    $("#Arrive").click();
+	
+	(function worker() {
+      $.ajax({
+        url: 'php/ajax/checkIn.php',
+        dataType: "json",
+		type: 'POST',
+		data: { field1: "<?= $dbDate ?>", },
+        success: function(data) {
+          $('#ArriveContent').html(data.due);
+          $('#OrderContent').html(data.order);
+          $('#ReviewContent').html(data.review);
+          $('#PrintContent').html(data.print);
+          $('#WaitContent').html(data.wait);
+          $('#CompleteContent').html(data.complete);
+
+          $('#arriveCount').html(data.dueCount);
+          $('#orderCount').html(data.orderCount);
+          $('#reviewCount').html(data.reviewCount);
+          $('#printCount').html(data.printCount);
+          $('#waitCount').html(data.waitCount);
+          $('#completeCount').html(data.completeCount);
+		  
+		  $('#msgField').html(data.error);
+        },
+        complete: function() {
+          // Schedule the next request when the current one's complete
+          setTimeout(worker, 5000);
+        }
+      });
+    })();
+
+    $(document).ready(function() {
+      // run the first time; all subsequent calls will take care of themselves
+      setTimeout(worker, 50);
+    });
   </script>
 	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
 	</div><!-- /body_content -->
