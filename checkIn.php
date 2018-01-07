@@ -35,32 +35,26 @@
   <button class="tablinks" id="Complete">Completed <p id="completeCount"></p><br><i class="fa fa-check fa-3x"></i></button>
 </div>
 
-  <div id="ArriveContent" class="tabcontent">
+  <div id="ArriveContent" class="tabcontent defaultTab">
     <h3>Due In</h3>
-    <p>London is the capital city of England.</p>
   </div>
 
   <div id="OrderContent" class="tabcontent">
     <h3>Ordering</h3>
-    <p>Paris is the capital of France.</p>
   </div>
 
   <div id="ReviewContent" class="tabcontent">
     <h3>Review</h3>
-    <p>Tokyo is the capital of Japan.</p>
   </div>
 
   <div id="PrintContent" class="tabcontent">
     <h3>Print</h3>
-    <p>Tokyo is the capital of Japan.</p>
   </div>
   <div id="WaitContent" class="tabcontent">
     <h3>Waiting</h3>
-    <p>Tokyo is the capital of Japan.</p>
   </div>
   <div id="CompleteContent" class="tabcontent">
     <h3>Completed</h3>
-    <p>Tokyo is the capital of Japan.</p>
   </div>
 </body>
   <script>
@@ -74,13 +68,25 @@
     
     $("#Arrive").click();
 	
-	(function worker() {
+    function ajax_PerformAction(obj) {
       $.ajax({
-        url: 'php/ajax/checkIn.php',
+        url     : 'php/ajax/checkIn_Advance.php',
         dataType: "json",
-		type: 'POST',
-		data: { field1: "<?= $dbDate ?>", },
-        success: function(data) {
+        type    : 'POST',
+        data    : { field1: "<?= $dbDate ?>", field2: obj.id, },
+        success : function(data) {
+          ("#msgField").html(data);
+        }
+      });
+    }
+  
+    (function tabRefresher() {
+      $.ajax({
+        url     : 'php/ajax/ajax_checkIn.php',
+        dataType: "json",
+        type    : 'POST',
+        data    : { field1: "<?= $dbDate ?>", },
+        success : function(data) {
           $('#ArriveContent').html(data.due);
           $('#OrderContent').html(data.order);
           $('#ReviewContent').html(data.review);
@@ -94,19 +100,23 @@
           $('#printCount').html(data.printCount);
           $('#waitCount').html(data.waitCount);
           $('#completeCount').html(data.completeCount);
+          
+          $('.btn_checkIn').off('click').on('click', function() {
+            ajax_PerformAction(this);
+          });
 		  
-		  $('#msgField').html(data.error);
+          $('#msgField').html(data.error);
         },
-        complete: function() {
+        complete  : function() {
           // Schedule the next request when the current one's complete
-          setTimeout(worker, 5000);
+          setTimeout(tabRefresher, 5000);
         }
       });
     })();
 
     $(document).ready(function() {
       // run the first time; all subsequent calls will take care of themselves
-      setTimeout(worker, 50);
+      setTimeout(tabRefresher, 5000);
     });
   </script>
 	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>

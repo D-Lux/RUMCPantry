@@ -10,6 +10,7 @@
 	
 	$date = $_POST['field1'];
 	
+  // Query the database to get all of our client data for the passed date
 	$sql = "SELECT  CONCAT(FamilyMember.LastName, ', ' , FamilyMember.firstName) as cName,
 					(Client.numOfKids + numOfAdults) AS familySize,
 					Invoice.invoiceID, Invoice.clientID, 
@@ -20,16 +21,20 @@
 			JOIN FamilyMember 
 				ON Client.clientID=FamilyMember.clientID
 			WHERE Invoice.visitDate = '" . $date . "'
-			AND Invoice.status >= 200
+			AND Invoice.status BETWEEN " .  GetActiveStatus() . " AND " . GetCompletedStatus() . "
 			AND FamilyMember.isHeadOfHousehold =true
 			ORDER BY Invoice.visitTime ASC, Invoice.status ASC, FamilyMember.LastName ASC";
 			
 	$results = returnAssocArray(queryDB($conn, $sql));
 	closeDB($conn);
 	
-	$dataBlock             = [];
-	$blockKeys = array ('due','order','review','print','wait','complete');
+  // Start our return array
+	$dataBlock  = [];
+  
+  // Array for our status types
+	$blockKeys  = array ('due','order','review','print','wait','complete');
 	foreach ($blockKeys as $blockKey) {
+    // Initialize counts and table headers
 		$dataBlock[$blockKey . 'Count'] = 0;
 		$dataBlock[$blockKey] = '<table style="margin-top:10px;" width="100%"><thead><tr><th>Client</th><th>Family Size</th>
 								 <th>Appointment Time</th><th>Action</th></tr></thead>';
@@ -39,7 +44,7 @@
 		if ($result['status'] == GetActiveStatus()) {
 			$dataBlock['dueCount']++;
 			$dataBlock['due'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
-								 "</td><td>" . $result['visitTime'] . "</td><td>Check-In</td></tr>";
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='D" . $result['invoiceID'] . "' class='btn_checkIn'>Check-In</button></td></tr>";
 		}
 		else if (($result['status'] >= GetArrivedLow()) && ($result['status'] <= GetArrivedHigh())) {
 			$dataBlock['orderCount']++;

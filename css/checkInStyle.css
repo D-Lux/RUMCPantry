@@ -40,8 +40,12 @@
   width: 80%;
   border-left: none;
   height: 500px;
+}
+
+.tabcontent:not(.defaultTab) {
   display: none;
 }
+
 .active {
   display: block;
 }
