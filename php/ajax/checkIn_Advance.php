@@ -2,12 +2,6 @@
 
 	include '../utilities.php';
 
-	$conn = createPantryDatabaseConnection();
-	if ($conn->connect_error) {
-		$dataBlock['error'] = "Connection failed: " . $conn->connect_error;
-		die();
-	}
-
   // field1 is the date - immediately usable by a sql query
   $date   = $_POST['field1'];
   // field2 is in the form of A###, where A denotes the status and the number following is the invoiceID
@@ -32,7 +26,7 @@
       break;
     case 'R':
       reviewOrder($ID);
-      //break;
+      break;
     case 'P':
       //printOrder($ID);
       break;
@@ -45,17 +39,62 @@
   
   
   function advanceToOrdering($ID, $date) {
+    $conn = createPantryDatabaseConnection();
+    if ($conn->connect_error) {
+      $dataBlock['error'] = "Connection failed: " . $conn->connect_error;
+      die();
+    }
     // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
     $sql = " SELECT COUNT(*) as ct
               FROM Invoice
-              WHERE Invoice.visitDate = '" . $date . "'
-              AND Invoice.status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
+              WHERE visitDate = '" . $date . "'
+              AND invoiceID <> " . $ID . "
+              AND status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
     $results = returnAssocArray(queryDB($conn, $sql));
     $currCount = current($results)['ct'];
-    
+   
+    // Update my status to the next status marker above 200
     $sql = " UPDATE Invoice
-             SET
+             SET status = " . (GetArrivedLow() + $currCount) . "
+             WHERE invoiceID = " . $ID;
+    
+    if (queryDB($conn, $sql) === TRUE) {
+      return "!SUCCESS!";
+    }
+    else {
+      return "!FAIL!";
+    }
   }
+  
+    function reviewOrder($ID, $date) {
+    $conn = createPantryDatabaseConnection();
+    if ($conn->connect_error) {
+      $dataBlock['error'] = "Connection failed: " . $conn->connect_error;
+      die();
+    }
+    // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
+    $sql = " SELECT COUNT(*) as ct
+              FROM Invoice
+              WHERE visitDate = '" . $date . "'
+              AND invoiceID <> " . $ID . "
+              AND status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
+    $results = returnAssocArray(queryDB($conn, $sql));
+    $currCount = current($results)['ct'];
+   
+    // Update my status to the next status marker above 200
+    $sql = " UPDATE Invoice
+             SET status = " . (GetArrivedLow() + $currCount) . "
+             WHERE invoiceID = " . $ID;
+    
+    if (queryDB($conn, $sql) === TRUE) {
+      return "!SUCCESS!";
+    }
+    else {
+      return "!FAIL!";
+    }
+  }
+  
+  
   
 	
 	//echo ("Oh, Hai Mawrk"); //json_encode($date)

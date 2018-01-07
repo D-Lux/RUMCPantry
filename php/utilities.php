@@ -498,11 +498,11 @@ function runFamilyDecoder($famSize, $valS, $valM, $valL){
 }
 
 function familySizeDecoder($famSize){
-	runFamilyDecoder($famSize, 'Small', 'Medium', 'Large');	
+	return (runFamilyDecoder($famSize, 'Small', 'Medium', 'Large'));	
 }
 
 function orderFormNameTagLength($familySize) {
-	runFamilyDecoder($famSize, 3, 4, 5);
+	return (runFamilyDecoder($famSize, 3, 4, 5));
 }
 
 // ***********************************************************

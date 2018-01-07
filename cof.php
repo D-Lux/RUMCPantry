@@ -58,7 +58,6 @@
 						$famData = sqlFetch($famQuery);
 						$familyType = familySizeDecoder($famData['familySize']);
 					}
-					
 					// Force family type to small if this is a walkin client
 					$WIQuery = queryDB($conn, $walkinSql);
 					
@@ -168,7 +167,7 @@
 								echo "<h5><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
 									" (" . ($item['CQty']) . " remaining)</div></h5>";
 								// Include hidden values so we can track the category
-								echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
+								echo "<input type='hidden' value=" . $item['CQty'] . " id='" . $item['CName'] . "'>";
 								$currCategory = $item['CName'];
 							}
 							// Display the Item name

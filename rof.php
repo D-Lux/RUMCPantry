@@ -6,16 +6,6 @@
 		<div class="body_content">
 <?php
 
-	/*
-	Pull up the invoice and invoice descriptions
-	Build a key->qty relationship (key is itemID)
-	
-	rebuild order form, if an item exists in the key->qty array, subtract 1 from qty and check the box
-	
-	On submit, erase item descriptions and rebuild from this page
-	
-	*/
-
 	// *******************************************************
 	// * Run our SQL Queries
 	
@@ -41,8 +31,11 @@
 		$walkIn = $walkInData['walkIn'];
 	}
 	
-	$familyType = ( ($walkIn == 1) ? "Small" : 
-					(ISSET($_POST['familySize']) ? familySizeDecoder($_POST['familySize']) : "Small" ));
+	$familyType = ( ($walkIn == 1) 
+                  ? "Small" 
+                  : (ISSET($_POST['familySize']) 
+                    ? familySizeDecoder($_POST['familySize']) 
+                    : "Small" ));
 
 	// ************************************
 	// --== Client current order query ==--

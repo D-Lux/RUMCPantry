@@ -40,17 +40,35 @@
   width: 80%;
   border-left: none;
   height: 500px;
-}
-
-.tabcontent:not(.defaultTab) {
   display: none;
 }
 
 .active {
   display: block;
 }
+
 button p {
   padding: 0px;
   margin: 0px;
   display: inline;
 }
+/*
+.btn_Action {
+  border-radius: 5px !important;
+	border: solid 2px #AAA !important;
+	cursor: pointer;
+	box-shadow: 0 2px #999 !important;
+}
+
+.btn_Action:active {
+	border: solid 2px #888;
+	background-color: #AAA;
+	box-shadow: 0 1px #666 !important;
+	transform: translateY(1px);
+}
+.btn_Action:focus {outline:0 !important; }
+
+.btn_Action:hover {
+	background-color: #CCC !important;
+	border: solid 2px #888;
+}*/

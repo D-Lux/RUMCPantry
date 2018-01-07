@@ -73,9 +73,37 @@
         url     : 'php/ajax/checkIn_Advance.php',
         dataType: "json",
         type    : 'POST',
-        data    : { field1: "<?= $dbDate ?>", field2: obj.id, },
+        data    : { field1: '<?= $dbDate ?>', field2: obj.id, },
         success : function(data) {
           ("#msgField").html(data);
+          // Action was successful, pop an extra update immediately
+          $.ajax({
+            url     : 'php/ajax/ajax_checkIn.php',
+            dataType: "json",
+            type    : 'POST',
+            data    : { field1: "<?= $dbDate ?>", },
+            success : function(data) {
+              $('#ArriveContent').html(data.due);
+              $('#OrderContent').html(data.order);
+              $('#ReviewContent').html(data.review);
+              $('#PrintContent').html(data.print);
+              $('#WaitContent').html(data.wait);
+              $('#CompleteContent').html(data.complete);
+
+              $('#arriveCount').html(data.dueCount);
+              $('#orderCount').html(data.orderCount);
+              $('#reviewCount').html(data.reviewCount);
+              $('#printCount').html(data.printCount);
+              $('#waitCount').html(data.waitCount);
+              $('#completeCount').html(data.completeCount);
+              
+              $('.btn_Action').off('click').on('click', function() {
+                ajax_PerformAction(this);
+              });
+          
+              $('#msgField').html(data.error);
+            },
+          });
         }
       });
     }
@@ -101,7 +129,7 @@
           $('#waitCount').html(data.waitCount);
           $('#completeCount').html(data.completeCount);
           
-          $('.btn_checkIn').off('click').on('click', function() {
+          $('.btn_Action').off('click').on('click', function() {
             ajax_PerformAction(this);
           });
 		  
@@ -119,6 +147,7 @@
       setTimeout(tabRefresher, 5000);
     });
   </script>
+  <div class="clearfix"></div>
 	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
 	</div><!-- /body_content -->
 	</div><!-- /content -->

@@ -205,7 +205,6 @@ function countOrder(callingSlot)	{
 	// Get the name field (without the [])
 	var boxName = callingSlot.name;
 	var nameField = boxName.substr(0, ( boxName.length - 2 ));
-	
 	// Get the total number of items selectable in this item's category
 	var Category = document.getElementById(nameField);
 	var MaxCount = Category.value;

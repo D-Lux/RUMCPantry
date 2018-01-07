@@ -36,35 +36,41 @@
 	foreach ($blockKeys as $blockKey) {
     // Initialize counts and table headers
 		$dataBlock[$blockKey . 'Count'] = 0;
-		$dataBlock[$blockKey] = '<table style="margin-top:10px;" width="100%"><thead><tr><th>Client</th><th>Family Size</th>
-								 <th>Appointment Time</th><th>Action</th></tr></thead>';
+		$dataBlock[$blockKey] = '<h3>' . $blockKey . '</h3><table style="margin-top:10px;" width="100%"><thead><tr><th>Client</th><th>Size</th>
+								 <th>Time Slot</th><th>Action</th></tr></thead>';
 	}
 	
 	foreach ($results as $result) {
+    // If the client has yet to arrive, build their row
 		if ($result['status'] == GetActiveStatus()) {
 			$dataBlock['dueCount']++;
 			$dataBlock['due'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
-								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='D" . $result['invoiceID'] . "' class='btn_checkIn'>Check-In</button></td></tr>";
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='D" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-sign-in'></i> Check-In</button></td></tr>";
 		}
 		else if (($result['status'] >= GetArrivedLow()) && ($result['status'] <= GetArrivedHigh())) {
 			$dataBlock['orderCount']++;
-			$dataBlock['order'] .= time() . " data for order page";
+      $dataBlock['order'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-wpforms '> Client Ordering...</i></button></td></tr>";
 		}
 		else if (($result['status'] >= GetReadyToReviewLow()) && ($result['status'] <= GetReadyToReviewHigh())) {
 			$dataBlock['reviewCount']++;
-			$dataBlock['review'] .= time() . " data for review page";
+      $dataBlock['review'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='R" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-edit'></i> Review</button></td></tr>";
 		}
 		else if (($result['status'] >= GetReadyToPrintLow()) && ($result['status'] <= GetReadyToPrintHigh())) {
 			$dataBlock['printCount']++;
-			$dataBlock['print'] .= time() . " data for print page";
+			$dataBlock['print'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Print</button></td></tr>";
 		}
 		else if (($result['status'] >= GetPrintedLow()) && ($result['status'] <= GetPrintedHigh())) {
 			$dataBlock['waitCount']++;
-			$dataBlock['wait'] .= time() . " data for waiting page";
+      $dataBlock['order'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-coffee '> To Produce</i></button></td></tr>";
 		}
 		if ($result['status'] == GetCompletedStatus()) {
 			$dataBlock['completeCount']++;
-			$dataBlock['complete'] .= time() . " data for completed page";
+      $dataBlock['complete'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-check '> No Action</i></button></td></tr>";
 		}
 	}
 
