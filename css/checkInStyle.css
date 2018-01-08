@@ -52,23 +52,12 @@ button p {
   margin: 0px;
   display: inline;
 }
-/*
-.btn_Action {
-  border-radius: 5px !important;
-	border: solid 2px #AAA !important;
+.btn_Action:enabled {
 	cursor: pointer;
-	box-shadow: 0 2px #999 !important;
 }
-
-.btn_Action:active {
-	border: solid 2px #888;
-	background-color: #AAA;
-	box-shadow: 0 1px #666 !important;
-	transform: translateY(1px);
-}
-.btn_Action:focus {outline:0 !important; }
-
 .btn_Action:hover {
 	background-color: #CCC !important;
-	border: solid 2px #888;
-}*/
+}
+.btn_Action:disabled {
+	cursor: not-allowed;
+}

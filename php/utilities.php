@@ -78,6 +78,14 @@ function returnAssocArray($queryResult) {
 	return $returnArr;
 }
 
+function runQuery($conn, $query) {
+  return returnAssocArray(queryDB($conn, $query));
+}
+
+function runQueryForOne($conn, $query) {
+  return current(returnAssocArray(queryDB($conn, $query)));
+}
+
 // *****************************************************************
 // * Display and Query functions
 
@@ -614,13 +622,17 @@ function showCategory($walkIn, $category){
 // **************************************
 // ** Weight information for donations
 define("WEIGHT_BAKERY"	 , 15);
-define("WEIGHT_DAIRY"	 , 40);
-define("WEIGHT_MEAT"	 , 40);
-define("WEIGHT_MIX"		 , 25);
+define("WEIGHT_DAIRY"	   , 40);
+define("WEIGHT_MEAT"	   , 40);
+define("WEIGHT_MIX"		   , 25);
 define("WEIGHT_NONFOOD"	 , 25);
 define("WEIGHT_PREPARED" , 25);
 define("WEIGHT_PRODUCE"	 , 30);
 define("WEIGHT_FROZEN"	 , 25);
 define("WEIGHT_FOODDRIVE", 25);
+
+// ****************************************
+// * AJAX defines
+define("AJAX_REDIRECT", "!REDIRECT!");
 
 ?>

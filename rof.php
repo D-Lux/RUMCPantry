@@ -1,47 +1,52 @@
-<?php include 'php/header.php'; ?>
-<?php include 'php/beanOps.php'; ?>
+<?php 
+  include 'php/header.php';
+  include 'php/beanOps.php';
+  include 'php/backButton.php';
+?>
 <script src='js/orderFormOps.js'></script>
-		<button id='btn_back' onclick="goBack()">Back</button>
-		<h3>Review Order Form</h3>
-		<div class="body_content">
+
 <?php
-
-	// *******************************************************
-	// * Run our SQL Queries
-	
 	// Open the database connection
-	$conn = createPantryDatabaseConnection();
+  $conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
-	
-	
-	// --== familySize query (for walkin, Post should tell us family size) ==--
-	$walkinSql = "SELECT walkIn
-			   FROM Invoice
-			   WHERE invoiceID=" . $_POST['invoiceID'];
-	
-	// Set the family size, forced to small if this is a walkin client (using our walkin query)
-	$WIQuery = queryDB($conn, $walkinSql);
-	$walkIn = 0;
-	if ($WIQuery === FALSE) {
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-	}
-	else {
-		$walkInData = sqlFetch($WIQuery);
-		$walkIn = $walkInData['walkIn'];
-	}
-	
-	$familyType = ( ($walkIn == 1) 
-                  ? "Small" 
-                  : (ISSET($_POST['familySize']) 
-                    ? familySizeDecoder($_POST['familySize']) 
-                    : "Small" ));
-
+  
+  
+  $invoiceID  = 0;
+  if (isset($_GET['invoiceID'])) {
+    $invoiceID =  $_GET['invoiceID'];
+  }
+  else {
+    header("Location: /RUMCPantry/ap_oo3.php"); // TODO
+  } 
+  
+  // *******************************************************
+	// * Query for starting information
+  // Using our invoice ID, get the family size, client ID and name
+  $sql = " SELECT Client.clientID, (numOfAdults + numOfKids) as familySize, 
+                  walkIn, CONCAT(lastName , ', ', firstName) as cName
+            FROM Invoice
+            JOIN Client
+              ON Client.clientID = Invoice.clientID
+            JOIN FamilyMember
+              ON FamilyMember.clientID = Invoice.clientID
+            WHERE invoiceID = " . $invoiceID;
+            
+  $result = runQueryForOne($conn, $sql);  
+  
+  $clientID   = $result['clientID'];
+  $familySize = $result['familySize'];
+  $walkIn     = $result['walkIn'];
+  
+  $familyType = ($walkIn == 1) ? "Small" : familySizeDecoder($familySize);
+  
+  echo "<h3>Review Order Form</h3>";
+  echo "<h4>Client: " . $result['cName'] . "</h4>";
+	echo "<div class='body_content'>";
 	// ************************************
 	// --== Client current order query ==--
 	$orderSql = "SELECT itemID, quantity, special
 				 FROM InvoiceDescription
-				 WHERE invoiceID=" . $_POST['invoiceID'];
+				 WHERE invoiceID=" . $invoiceID;
 	$orderData = queryDB($conn, $orderSql);
 	if ($orderData === FALSE) { die("Order could not be found or has not yet been completed"); }
 	
@@ -81,6 +86,7 @@
 		echo "sql error: " . mysqli_error($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 	}
+  
 	closeDB($conn);
 	
 	// ************************************************************
@@ -88,8 +94,8 @@
 	
 	// Start the form and add a hidden field for client info
 	echo "<form method='post' action='php/orderOps.php' name='CreateReviewedInvoiceDescriptions'>";
-	echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
-	echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
+	echo "<input type='hidden' value=" . $clientID . " name='clientID'>";
+	echo "<input type='hidden' value=" . $invoiceID . " name='invoiceID'>";
 	echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
 	
 	// Set defaults
@@ -151,7 +157,7 @@
 					echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
 						" (" . ($item['CQty']) . " remaining)</div></h4>";
 					// Include hidden values so we can track the category
-					echo "<input type='hidden' value=" . $item['CQty'] . " id=" . $item['CName'] . ">";
+					echo "<input type='hidden' value=" . $item['CQty'] . " id='" . $item['CName'] . "'>";
 					$currCategory = $item['CName'];
 				}
 		

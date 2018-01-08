@@ -37,7 +37,7 @@
       break;
   }
   
-  
+  // Set the client to arrived, with numerical indicator as to the order in which they arrived
   function advanceToOrdering($ID, $date) {
     $conn = createPantryDatabaseConnection();
     if ($conn->connect_error) {
@@ -66,32 +66,10 @@
     }
   }
   
-    function reviewOrder($ID, $date) {
-    $conn = createPantryDatabaseConnection();
-    if ($conn->connect_error) {
-      $dataBlock['error'] = "Connection failed: " . $conn->connect_error;
-      die();
-    }
-    // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
-    $sql = " SELECT COUNT(*) as ct
-              FROM Invoice
-              WHERE visitDate = '" . $date . "'
-              AND invoiceID <> " . $ID . "
-              AND status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
-    $results = returnAssocArray(queryDB($conn, $sql));
-    $currCount = current($results)['ct'];
-   
-    // Update my status to the next status marker above 200
-    $sql = " UPDATE Invoice
-             SET status = " . (GetArrivedLow() + $currCount) . "
-             WHERE invoiceID = " . $ID;
-    
-    if (queryDB($conn, $sql) === TRUE) {
-      return "!SUCCESS!";
-    }
-    else {
-      return "!FAIL!";
-    }
+  // Open the review order form page
+  function reviewOrder($ID) {
+    $returnArr['link']  = "!REDIRECT!/RUMCPantry/rof.php?invoiceID=" . $ID;
+    echo json_encode($returnArr);
   }
   
   

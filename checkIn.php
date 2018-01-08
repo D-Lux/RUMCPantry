@@ -75,36 +75,44 @@
         type    : 'POST',
         data    : { field1: '<?= $dbDate ?>', field2: obj.id, },
         success : function(data) {
-          ("#msgField").html(data);
-          // Action was successful, pop an extra update immediately
-          $.ajax({
-            url     : 'php/ajax/ajax_checkIn.php',
-            dataType: "json",
-            type    : 'POST',
-            data    : { field1: "<?= $dbDate ?>", },
-            success : function(data) {
-              $('#ArriveContent').html(data.due);
-              $('#OrderContent').html(data.order);
-              $('#ReviewContent').html(data.review);
-              $('#PrintContent').html(data.print);
-              $('#WaitContent').html(data.wait);
-              $('#CompleteContent').html(data.complete);
+          // If we're getting redirected to a new page, go there
+          if (typeof data.link !== 'undefined') {
+            var pageToLoad = data.link.substring(10);
+             window.location.assign(pageToLoad);   
+          }
+          else {
+            //("#msgField").html(data);
+            // Action was successful, pop an extra update immediately
+            $.ajax({
+              url     : 'php/ajax/ajax_checkIn.php',
+              dataType: "json",
+              type    : 'POST',
+              data    : { field1: "<?= $dbDate ?>", },
+              success : function(data) {
+                $('#ArriveContent').html(data.due);
+                $('#OrderContent').html(data.order);
+                $('#ReviewContent').html(data.review);
+                $('#PrintContent').html(data.print);
+                $('#WaitContent').html(data.wait);
+                $('#CompleteContent').html(data.complete);
 
-              $('#arriveCount').html(data.dueCount);
-              $('#orderCount').html(data.orderCount);
-              $('#reviewCount').html(data.reviewCount);
-              $('#printCount').html(data.printCount);
-              $('#waitCount').html(data.waitCount);
-              $('#completeCount').html(data.completeCount);
-              
-              $('.btn_Action').off('click').on('click', function() {
-                ajax_PerformAction(this);
-              });
-          
-              $('#msgField').html(data.error);
-            },
-          });
-        }
+                $('#arriveCount').html(data.dueCount);
+                $('#orderCount').html(data.orderCount);
+                $('#reviewCount').html(data.reviewCount);
+                $('#printCount').html(data.printCount);
+                $('#waitCount').html(data.waitCount);
+                $('#completeCount').html(data.completeCount);
+                
+                $('.btn_Action').off('click').on('click', function() {
+                  ajax_PerformAction(this);
+                });
+            
+                $('#msgField').html(data.error);
+              }
+            });
+          }
+         
+        },
       });
     }
   
@@ -115,6 +123,7 @@
         type    : 'POST',
         data    : { field1: "<?= $dbDate ?>", },
         success : function(data) {
+          // TODO: compare with current HTML, if same, don't update
           $('#ArriveContent').html(data.due);
           $('#OrderContent').html(data.order);
           $('#ReviewContent').html(data.review);

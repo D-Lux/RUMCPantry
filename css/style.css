@@ -72,7 +72,7 @@ button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='su
 	cursor: pointer;
 }
 
-input[type='submit']:hover, button:hover:not(.btn_icon):not(#btn_back) {
+input[type='submit']:hover, button:hover:enabled:not(.btn_icon):not(#btn_back) {
   background-color: #93C5FF;
 }
 button[type='submit']:active:not(.btn_reactivate):not(.btn_icon), input[type='submit']:active:not(.btn_icon) {
@@ -117,7 +117,7 @@ input[type='button']:not(.btn_or):not(.btn_icon) {
 	width: 200px;
 	height: 55px;
 }
-input[type='button']:active:not(.btn_icon) {
+input[type='button']:active:enabled:not(.btn_icon) {
 	background-color: #499BD6;
 	border: solid 2px #3D83B5;
 }
