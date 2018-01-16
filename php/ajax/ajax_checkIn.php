@@ -32,7 +32,7 @@
 	$dataBlock  = [];
   
   // Array for our status types
-	$blockKeys  = array ('due','order','review','print','wait','complete');
+	$blockKeys  = array ('due','order','review','print','wait','completed');
 	foreach ($blockKeys as $blockKey) {
     // Initialize counts and table headers
 		$dataBlock[$blockKey . 'Count'] = 0;
@@ -50,7 +50,7 @@
 		else if (($result['status'] >= GetArrivedLow()) && ($result['status'] <= GetArrivedHigh())) {
 			$dataBlock['orderCount']++;
       $dataBlock['order'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
-								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-wpforms '> Client Ordering...</i></button></td></tr>";
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-wpforms'> Client Ordering...</i></button></td></tr>";
 		}
 		else if (($result['status'] >= GetReadyToReviewLow()) && ($result['status'] <= GetReadyToReviewHigh())) {
 			$dataBlock['reviewCount']++;
@@ -64,12 +64,12 @@
 		}
 		else if (($result['status'] >= GetPrintedLow()) && ($result['status'] <= GetPrintedHigh())) {
 			$dataBlock['waitCount']++;
-      $dataBlock['order'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
-								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-coffee '> To Produce</i></button></td></tr>";
+      $dataBlock['wait'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button id='W" . $result['invoiceID'] . "' type='button' class='btn_Action'><i class='fa fa-shopping-cart'> To Produce</i></button></td></tr>";
 		}
 		if ($result['status'] == GetCompletedStatus()) {
-			$dataBlock['completeCount']++;
-      $dataBlock['complete'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
+			$dataBlock['completedCount']++;
+      $dataBlock['completed'] .= "<tr><td>" . $result['cName'] . "</td><td>" . $result['familySize'] . 
 								 "</td><td>" . returnTime($result['visitTime']) . "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-check '> No Action</i></button></td></tr>";
 		}
 	}

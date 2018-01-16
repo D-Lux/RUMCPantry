@@ -22,7 +22,7 @@
   font-size: 17px;
 }
 /* Change background color of buttons on hover */
-.tab button:hover {
+.tab button:hover:not(.activeButton) {
   background-color: #93C5FF;
 }
 /* Create an active/current "tab button" class */

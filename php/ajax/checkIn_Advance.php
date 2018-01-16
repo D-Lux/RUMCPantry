@@ -28,21 +28,22 @@
       reviewOrder($ID);
       break;
     case 'P':
-      //printOrder($ID);
+      printOrder($ID);
       break;
     case 'W':
-      //advanceToCompleted($ID);
+      advanceToCompleted($ID);
       break;
     case 'C':
       break;
+	default:
+	  break;
   }
   
   // Set the client to arrived, with numerical indicator as to the order in which they arrived
   function advanceToOrdering($ID, $date) {
     $conn = createPantryDatabaseConnection();
     if ($conn->connect_error) {
-      $dataBlock['error'] = "Connection failed: " . $conn->connect_error;
-      die();
+		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
     }
     // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
     $sql = " SELECT COUNT(*) as ct
@@ -59,10 +60,10 @@
              WHERE invoiceID = " . $ID;
     
     if (queryDB($conn, $sql) === TRUE) {
-      return "!SUCCESS!";
+      echo json_encode(array("Message" => "!SUCCESS!"));
     }
     else {
-      return "!FAIL!";
+      echo json_encode(array("Message" => "!FAIL!"));
     }
   }
   
@@ -72,8 +73,31 @@
     echo json_encode($returnArr);
   }
   
+  // Open the print order form page
+  function printOrder($ID) {
+    $returnArr['link']  = "!REDIRECT!/RUMCPantry/ap_oo4.php?invoiceID=" . $ID;
+    echo json_encode($returnArr);
+  }
   
-  
+  // Set the client to completed
+  function advanceToCompleted($ID) {
+    $conn = createPantryDatabaseConnection();
+    if ($conn->connect_error) {
+		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
+    }
+	
+    $sql = " UPDATE Invoice
+             SET status = " . GetCompletedStatus() . "
+             WHERE invoiceID = " . $ID;
+    
+    if (queryDB($conn, $sql) === TRUE) {
+      echo json_encode(array("Message" => "!SUCCESS!"));
+    }
+    else {
+      echo json_encode(array("Message" => "!FAIL!"));
+    }
+  }
+  die();
 	
 	//echo ("Oh, Hai Mawrk"); //json_encode($date)
 ?>

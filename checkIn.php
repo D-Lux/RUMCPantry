@@ -70,38 +70,38 @@
 	
     function ajax_PerformAction(obj) {
       $.ajax({
-        url     : 'php/ajax/checkIn_Advance.php',
-        dataType: "json",
-        type    : 'POST',
-        data    : { field1: '<?= $dbDate ?>', field2: obj.id, },
-        success : function(data) {
+        url      : 'php/ajax/checkIn_Advance.php',
+        dataType : 'json',
+        type     : 'POST',
+        data     : { field1: '<?=$dbDate?>', field2: obj.id, },
+        success  : function(data) {
           // If we're getting redirected to a new page, go there
           if (typeof data.link !== 'undefined') {
             var pageToLoad = data.link.substring(10);
-             window.location.assign(pageToLoad);   
+            window.location.assign(pageToLoad);   
           }
           else {
-            //("#msgField").html(data);
+            // $("#msgField").html(data.Message);
             // Action was successful, pop an extra update immediately
             $.ajax({
               url     : 'php/ajax/ajax_checkIn.php',
               dataType: "json",
               type    : 'POST',
-              data    : { field1: "<?= $dbDate ?>", },
+              data    : { field1: '<?=$dbDate?>', },
               success : function(data) {
                 $('#ArriveContent').html(data.due);
-                $('#OrderContent').html(data.order);
+				$('#OrderContent').html(data.order);
                 $('#ReviewContent').html(data.review);
                 $('#PrintContent').html(data.print);
                 $('#WaitContent').html(data.wait);
-                $('#CompleteContent').html(data.complete);
+                $('#CompleteContent').html(data.completed);
 
                 $('#arriveCount').html(data.dueCount);
                 $('#orderCount').html(data.orderCount);
                 $('#reviewCount').html(data.reviewCount);
                 $('#printCount').html(data.printCount);
                 $('#waitCount').html(data.waitCount);
-                $('#completeCount').html(data.completeCount);
+                $('#completeCount').html(data.completedCount);
                 
                 $('.btn_Action').off('click').on('click', function() {
                   ajax_PerformAction(this);
@@ -119,9 +119,9 @@
     (function tabRefresher() {
       $.ajax({
         url     : 'php/ajax/ajax_checkIn.php',
-        dataType: "json",
+        dataType: 'json',
         type    : 'POST',
-        data    : { field1: "<?= $dbDate ?>", },
+        data    : { field1: '<?=$dbDate?>', },
         success : function(data) {
           // TODO: compare with current HTML, if same, don't update
           $('#ArriveContent').html(data.due);
@@ -129,14 +129,14 @@
           $('#ReviewContent').html(data.review);
           $('#PrintContent').html(data.print);
           $('#WaitContent').html(data.wait);
-          $('#CompleteContent').html(data.complete);
+          $('#CompleteContent').html(data.completed);
 
           $('#arriveCount').html(data.dueCount);
           $('#orderCount').html(data.orderCount);
           $('#reviewCount').html(data.reviewCount);
           $('#printCount').html(data.printCount);
           $('#waitCount').html(data.waitCount);
-          $('#completeCount').html(data.completeCount);
+          $('#completeCount').html(data.completedCount);
           
           $('.btn_Action').off('click').on('click', function() {
             ajax_PerformAction(this);
@@ -158,8 +158,8 @@
   </script>
   <div class="clearfix"></div>
 	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
-	</div><!-- /body_content -->
-	</div><!-- /content -->
+</div><!-- /body_content -->
+</div><!-- /content -->
 
 </body>
 </html>
