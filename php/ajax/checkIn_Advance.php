@@ -98,6 +98,4 @@
     }
   }
   die();
-	
-	//echo ("Oh, Hai Mawrk"); //json_encode($date)
 ?>

@@ -2,13 +2,11 @@
 include 'php/header.php'; 
 include 'php/backButton.php';
 ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-<script src="js/createItem.js"></script>
+
   
-<h3>
-	Add Category
-</h3>
+<h3>Add Category</h3>
+<div class="body_content">
 <br>
 <form name="addCategory" action="php/itemOps.php" onSubmit="return validateCategoryAdd()" method="post">
 	<div class="row">
@@ -46,7 +44,5 @@ include 'php/backButton.php';
 	<input type="submit" value="Create" name="createCategory">
 </form>
 
-</div><!-- /body_content -->
-</div><!-- /content -->
-</body>
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/createItem.js"></script>

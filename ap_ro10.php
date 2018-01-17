@@ -1,7 +1,9 @@
-<?php include 'php/header.php'; ?>
+<?php 
+include 'php/header.php';
+include 'php/backButton.php'
+?>
 
-	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>View Reallocation</h3>
+  <h3>View Reallocation</h3>
 	
 	<div class="body_content">
 	
@@ -77,8 +79,4 @@
 		
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-</body>
-</html>
+<?php include 'php/footer.php'; ?>

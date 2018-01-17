@@ -18,8 +18,8 @@
 		die("There was an error updating initial statuses");
 	}
 ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
+
+
 <link rel="stylesheet" type="text/css" href="css/checkInStyle.css">
 <h3>Registration Room: <?= $date ?> </h3>
 
@@ -56,110 +56,109 @@
   <div id="CompleteContent" class="tabcontent">
     <h3>Completed</h3>
   </div>
-</body>
-  <script>
-    $(".tablinks").on("click", function() {
-      $(".tabcontent").removeClass("active");
-      $(".tablinks").removeClass("activeButton");
-      var openTab = "#" + this.id + "Content";
-      $(openTab).addClass("active");
-      $(this).addClass("activeButton");
-    });
-    
-    $("#Arrive").click();
-	
-    function ajax_PerformAction(obj) {
-      $.ajax({
-        url      : 'php/ajax/checkIn_Advance.php',
-        dataType : 'json',
-        type     : 'POST',
-        data     : { field1: '<?=$dbDate?>', field2: obj.id, },
-        success  : function(data) {
-          // If we're getting redirected to a new page, go there
-          if (typeof data.link !== 'undefined') {
-            var pageToLoad = data.link.substring(10);
-            window.location.assign(pageToLoad);   
-          }
-          else {
-            // $("#msgField").html(data.Message);
-            // Action was successful, pop an extra update immediately
-            $.ajax({
-              url     : 'php/ajax/ajax_checkIn.php',
-              dataType: "json",
-              type    : 'POST',
-              data    : { field1: '<?=$dbDate?>', },
-              success : function(data) {
-                $('#ArriveContent').html(data.due);
-				$('#OrderContent').html(data.order);
-                $('#ReviewContent').html(data.review);
-                $('#PrintContent').html(data.print);
-                $('#WaitContent').html(data.wait);
-                $('#CompleteContent').html(data.completed);
 
-                $('#arriveCount').html(data.dueCount);
-                $('#orderCount').html(data.orderCount);
-                $('#reviewCount').html(data.reviewCount);
-                $('#printCount').html(data.printCount);
-                $('#waitCount').html(data.waitCount);
-                $('#completeCount').html(data.completedCount);
-                
-                $('.btn_Action').off('click').on('click', function() {
-                  ajax_PerformAction(this);
-                });
-            
-                $('#msgField').html(data.error);
-              }
-            });
-          }
-         
-        },
-      });
-    }
-  
-    (function tabRefresher() {
-      $.ajax({
-        url     : 'php/ajax/ajax_checkIn.php',
-        dataType: 'json',
-        type    : 'POST',
-        data    : { field1: '<?=$dbDate?>', },
-        success : function(data) {
-          // TODO: compare with current HTML, if same, don't update
-          $('#ArriveContent').html(data.due);
-          $('#OrderContent').html(data.order);
-          $('#ReviewContent').html(data.review);
-          $('#PrintContent').html(data.print);
-          $('#WaitContent').html(data.wait);
-          $('#CompleteContent').html(data.completed);
-
-          $('#arriveCount').html(data.dueCount);
-          $('#orderCount').html(data.orderCount);
-          $('#reviewCount').html(data.reviewCount);
-          $('#printCount').html(data.printCount);
-          $('#waitCount').html(data.waitCount);
-          $('#completeCount').html(data.completedCount);
-          
-          $('.btn_Action').off('click').on('click', function() {
-            ajax_PerformAction(this);
-          });
-		  
-          $('#msgField').html(data.error);
-        },
-        complete  : function() {
-          // Schedule the next request when the current one's complete
-          setTimeout(tabRefresher, 5000);
-        }
-      });
-    })();
-
-    $(document).ready(function() {
-      // run the first time; all subsequent calls will take care of themselves
-      setTimeout(tabRefresher, 5000);
-    });
-  </script>
   <div class="clearfix"></div>
 	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
-</div><!-- /body_content -->
-</div><!-- /content -->
+  <button class='btn_walkIn' onclick="location.href = 'awc.php';">Add Walk-In</button>
+  
+<?php include 'php/footer.php'; ?>
 
-</body>
-</html>
+<script>
+  $(".tablinks").on("click", function() {
+    $(".tabcontent").removeClass("active");
+    $(".tablinks").removeClass("activeButton");
+    var openTab = "#" + this.id + "Content";
+    $(openTab).addClass("active");
+    $(this).addClass("activeButton");
+  });
+  
+  $("#Arrive").click();
+
+  function ajax_PerformAction(obj) {
+    $.ajax({
+      url      : 'php/ajax/checkIn_Advance.php',
+      dataType : 'json',
+      type     : 'POST',
+      data     : { field1: '<?=$dbDate?>', field2: obj.id, },
+      success  : function(data) {
+        // If we're getting redirected to a new page, go there
+        if (typeof data.link !== 'undefined') {
+          var pageToLoad = data.link.substring(10);
+          window.location.assign(pageToLoad);   
+        }
+        else {
+          // $("#msgField").html(data.Message);
+          // Action was successful, pop an extra update immediately
+          $.ajax({
+            url     : 'php/ajax/ajax_checkIn.php',
+            dataType: "json",
+            type    : 'POST',
+            data    : { field1: '<?=$dbDate?>', },
+            success : function(data) {
+              $('#ArriveContent').html(data.due);
+              $('#OrderContent').html(data.order);
+              $('#ReviewContent').html(data.review);
+              $('#PrintContent').html(data.print);
+              $('#WaitContent').html(data.wait);
+              $('#CompleteContent').html(data.completed);
+
+              $('#arriveCount').html(data.dueCount);
+              $('#orderCount').html(data.orderCount);
+              $('#reviewCount').html(data.reviewCount);
+              $('#printCount').html(data.printCount);
+              $('#waitCount').html(data.waitCount);
+              $('#completeCount').html(data.completedCount);
+              
+              $('.btn_Action').off('click').on('click', function() {
+                ajax_PerformAction(this);
+              });
+          
+              $('#msgField').html(data.error);
+            }
+          });
+        }
+       
+      },
+    });
+  }
+
+  (function tabRefresher() {
+    $.ajax({
+      url     : 'php/ajax/ajax_checkIn.php',
+      dataType: 'json',
+      type    : 'POST',
+      data    : { field1: '<?=$dbDate?>', },
+      success : function(data) {
+        // TODO: compare with current HTML, if same, don't update
+        $('#ArriveContent').html(data.due);
+        $('#OrderContent').html(data.order);
+        $('#ReviewContent').html(data.review);
+        $('#PrintContent').html(data.print);
+        $('#WaitContent').html(data.wait);
+        $('#CompleteContent').html(data.completed);
+
+        $('#arriveCount').html(data.dueCount);
+        $('#orderCount').html(data.orderCount);
+        $('#reviewCount').html(data.reviewCount);
+        $('#printCount').html(data.printCount);
+        $('#waitCount').html(data.waitCount);
+        $('#completeCount').html(data.completedCount);
+        
+        $('.btn_Action').off('click').on('click', function() {
+          ajax_PerformAction(this);
+        });
+    
+        $('#msgField').html(data.error);
+      },
+      complete  : function() {
+        // Schedule the next request when the current one's complete
+        setTimeout(tabRefresher, 5000);
+      }
+    });
+  })();
+
+  $(document).ready(function() {
+    // run the first time; all subsequent calls will take care of themselves
+    setTimeout(tabRefresher, 5000);
+  });
+</script>

@@ -1,6 +1,8 @@
-<?php include 'php/header.php'; ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script src="js/walkInOps.js"></script>
+<?php 
+include 'php/header.php';
+include 'php/backButton.php'; 
+?>
+
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 	<style>
 		.awc_hidden {
@@ -15,7 +17,7 @@
 		}
 	</style>
 	
-    <?php include 'php/backButton.php'; ?>
+    
 	<h3>Add Walk-In</h3>
 	
 	<div class="body_content">
@@ -62,10 +64,11 @@
 	
 	
 		echo "<div id='existingOption' class='awc_hidden' >";
-			echo "<form action='php/apptOps.php' method='post' >";
+			echo "<form id='existingForm' action='php/apptOps.php' method='post' >";
 			echo "Name: ";
 			echo $clientDataList . "<br><br>";
-			echo "<input type='hidden' ID='clientID-hidden' name='clientID' value=0>";
+      echo "<input type='hidden' name='existingWalkIn' value=1>";
+			echo "<input type='hidden' ID='clientID-hidden' name='clientID' value=-1>";
 			echo "<input type='submit' name='existingWalkIn' value='Add Walk-In'>";
 			echo "</form>";
 		echo "</div>";
@@ -140,11 +143,11 @@
 					return array("Header" => $header, "inputType" => $inputType, "fieldName" => $fieldName);
 				}
 				$simpleRows = array(
-									makeArraySet("Email"		  , "email"	, "email"		 ),
-									makeArraySet("Phone Number"	  , "tel"	, "phoneNo"		 ), 
-									makeArraySet("Street Address" , "text"	, "addressStreet"),
-									makeArraySet("City"			  , "text"	, "addressCity"  ),
-									makeArraySet("Zip Code" 	  , "text"	, "addressZip"	 ));
+									makeArraySet("Email"		      , "email"	, "email"		      ),
+									makeArraySet("Phone Number"	  , "tel"	  , "phoneNo"		    ), 
+									makeArraySet("Street Address" , "text"	, "addressStreet" ),
+									makeArraySet("City"			      , "text"	, "addressCity"   ),
+									makeArraySet("Zip Code" 	    , "text"	, "addressZip"	 ));
 				
 				foreach ($simpleRows as $row) {
 					echo 	"<div class='row'>
@@ -175,8 +178,5 @@
 		</form>
 		</div>	<!-- End of hidden add-walk-in -->
 		
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-
-</body>
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/walkInOps.js"></script>

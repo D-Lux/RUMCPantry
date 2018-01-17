@@ -3,9 +3,9 @@ include 'php/header.php';
 include 'php/backButton.php'; 
 ?>
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-<script src="js/createItem.js"></script>
-<h3>Category Update</h3>
 
+<h3>Category Update</h3>
+<div class="body_content">
 <?php 
     $categoryID = $_GET['categoryID'];
     $name 		= "";
@@ -74,7 +74,5 @@ include 'php/backButton.php';
 </form>
 
 
-</div><!-- /body_content -->
-</div><!-- /content -->
-</body>
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/createItem.js"></script>

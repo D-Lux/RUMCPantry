@@ -3,8 +3,6 @@ include 'php/header.php';
 include 'php/backButton.php'; 
 ?>
 
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Item Inventory</h3>
@@ -34,10 +32,9 @@ include 'php/backButton.php';
     </form>
 	
 	<!-- TODO: View 'deleted' items -->
-</div><!-- /body_content -->
-</div><!-- /content -->	
-</body>
-
+  
+<?php include 'php/footer.php'; ?>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 
 	$('#iCategoryTable').DataTable({
@@ -92,13 +89,8 @@ include 'php/backButton.php';
 			window.alert("There was an error when attempting to update the category.");
 			removeCookie("errUpdate");
 		}
-		
-		
-		
+
 	});
 		
 	</script>
-	
-	
-</html>
     

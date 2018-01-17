@@ -25,12 +25,43 @@ function toggleOption(ele) {
 	document.getElementById("awc_options").style.display = "none";
 }
 
+
+$( document ).ready(function() {
+    $("#existingForm").on('submit', function( e ) {
+      e.preventDefault();
+      $.ajax({
+        url      : 'php/ajax/ajax_WalkInChecker.php',
+        dataType : 'json',
+        type     : 'POST',
+        data     : { field1: $("#clientID-hidden").val() },
+        success  : function(data) {
+          // If we're getting redirected to a new page, go there
+          if (data.status == 1) {
+            $('#existingForm').off('submit').submit();
+            //$(this).submit();
+          }
+          else if (data.status == 2) {
+            alert("Client already has an appointment today.");
+          }
+          else {
+            alert("Please select a valid client.");
+          }     
+        },
+        error    : function() {
+          alert("There was a connection error, reload and try again.");
+        }
+      });
+      
+    });
+});
+
+
 function validateNewWalkIn() {
 	
-    var response = "";
-	var clientFirstName = $("[name='clientFirstName']").val();
+    var response        = "";
+    var clientFirstName = $("[name='clientFirstName']").val();
     var clientLastName  = $("[name='clientLastName']").val();
-	var birthDate  		= $("[name='birthDate']").val();
+    var birthDate  		  = $("[name='birthDate']").val();
     var errors = 0;
 
 	if (clientFirstName == "" || clientFirstName == null || clientFirstName.length == 0 ) {

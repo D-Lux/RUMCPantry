@@ -1,8 +1,10 @@
-<?php include 'php/header.php'; ?>
-<script src="js/redistOps.js"></script>
+<?php 
+include 'php/header.php'; 
+include 'php/backButton.php'
+?>
 
-	<button id='btn_back' onclick="goBack()">Back</button>
-    <h3>New Reallocation</h3>
+  
+  <h3>New Reallocation</h3>
 	
 	<div class="body_content">
 	
@@ -121,9 +123,6 @@
 			echo "<input type='submit' name='submitRedistribution' value='Save'></form>";
 		}
 	?>
-
-
-	</div><!-- /body_content -->
-	</div><!-- /content -->
-</body>
-</html>
+  
+<?php include 'php/footer.php'; ?>
+<script src="js/redistOps.js"></script>

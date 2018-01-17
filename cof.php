@@ -1,7 +1,8 @@
-<?php include 'php/header.php'; ?>
-<?php include 'php/beanOps.php'; ?>
-<script src='js/orderFormOps.js'></script>
-		<button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+include 'php/header.php';
+include 'php/beanOps.php'; 
+include 'php/backButton.php'
+?>
 		<?php
 			if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
 				echo "<h3>" . $_POST['clientFirstName'] . " " . $_POST['clientLastName'] . "</h3>";
@@ -266,7 +267,5 @@
 					echo "</form>";
 				}
 			?>
-		</div><!-- /body_content -->
-	</div><!-- /content -->
-	</body>
-</html>
+<?php include 'php/footer.php'; ?>
+<script src='js/orderFormOps.js'></script>

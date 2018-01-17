@@ -3,8 +3,6 @@ include 'php/header.php';
 include 'php/backButton.php';
 ?>
 
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <style>
@@ -14,14 +12,7 @@ include 'php/backButton.php';
 	
 </style>
 
-<script>
-	if (getCookie("clientUpdated") != "") {
-		window.alert("Client data updated!");
-		removeCookie("clientUpdated");
-	}		
-</script>
-	
-    <h3>Inactive Clients</h3>
+  <h3>Inactive Clients</h3>
 	
 	<div class="body_content">		
 		<div id="datatableContainer">
@@ -48,12 +39,13 @@ include 'php/backButton.php';
 
 	<div id="errorLog"></div>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
+<?php include 'php/footer.php'; ?>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
-
+	if (getCookie("clientUpdated") != "") {
+		window.alert("Client data updated!");
+		removeCookie("clientUpdated");
+	}
 	$('#iClientTable').DataTable({
       "info"          : true,
       "paging"        : true,
@@ -84,5 +76,3 @@ include 'php/backButton.php';
 		});
 	});
 </script>
-
-</html>

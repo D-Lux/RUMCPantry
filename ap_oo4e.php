@@ -2,7 +2,7 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/orderFormOps.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
 
 	<h3>Edit Order</h3>
@@ -89,11 +89,6 @@
 	}
 	
 	echo "<div id='ErrorLog'></div>";
-	?>
-	
 
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
-</html>
+  include 'php/footer.php'; ?>
+<script src="js/orderFormOps.js"></script>

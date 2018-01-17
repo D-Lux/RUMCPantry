@@ -1,8 +1,7 @@
-<?php include 'php/header.php'; ?>
-<script src="js/redistOps.js"></script>
-
-    <button id='btn_back' onclick="goBack()">Back</button>
-	<h3>Add New Reallocation Item</h3>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 	
 	<div class="body_content">
 	
@@ -16,9 +15,5 @@
         <input type="submit" name="submitNewRedistItem" value="Create Item" >
     </form>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/redistOps.js"></script>

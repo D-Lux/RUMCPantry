@@ -36,7 +36,7 @@
 	foreach ($blockKeys as $blockKey) {
     // Initialize counts and table headers
 		$dataBlock[$blockKey . 'Count'] = 0;
-		$dataBlock[$blockKey] = '<h3>' . $blockKey . '</h3><table style="margin-top:10px;" width="100%"><thead><tr><th>Client</th><th>Size</th>
+		$dataBlock[$blockKey] = '<table style="margin-top:10px;" width="100%"><thead><tr><th>Client</th><th>Size</th>
 								 <th>Time Slot</th><th>Action</th></tr></thead>';
 	}
 	

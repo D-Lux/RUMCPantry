@@ -1,7 +1,8 @@
-<?php include 'php/header.php';?>
-<script src="js/orderFormOps.js"></script>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 
-	<button id='btn_back' onclick="goBack()">Back</button>
 	<h3>Order Form: Specials</h3>
 	
 	<div class="body_content">
@@ -133,10 +134,5 @@
 		echo "<div id='errorLog'> </div>";
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-	
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/orderFormOps.js"></script>

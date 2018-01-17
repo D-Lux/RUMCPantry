@@ -1,5 +1,7 @@
-<?php include 'php/header.php'; ?>
-	<button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 	
     <h3>Reallocations</h3>
 
@@ -83,9 +85,5 @@
 	<form action="php/redistOps.php" method="post" >
 		<input type="submit" name="newRedistInvoice" value="New Reallocation">
     </form>
-	
-
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-</html>
+    
+<?php include 'php/footer.php'; ?>

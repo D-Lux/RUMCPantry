@@ -1,14 +1,9 @@
-<?php include 'php/header.php'; ?>
-
-
-    <script src="js/createDonation.js"></script>
-    
-    <?php include 'php/checkLogin.php'; ?>
-	
-
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
     <h3>Donation Operations: Add a donation</h3>
-
-    <button id='btn_back' onclick="goBack()">Back</button>
+    <div class="body_content">
 
     <form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
@@ -66,9 +61,6 @@
         <input type="submit" value="Create" name="createDonation">
     </form>
 
-    </div><!-- /body_content -->
-	</div><!-- /content -->
-
-</body>
-
-</html>
+    
+<?php include 'php/footer.php'; ?>
+<script src="js/createDonation.js"></script>

@@ -2,24 +2,12 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/apptOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
+
 <style>
 	.btn_lock {
 		color: black !important;
 	}
 </style>
-<script>
-	if (getCookie("newAppt") != "") {
-		window.alert("New Date Added!");
-		removeCookie("newAppt");
-	}
-	if (getCookie("newTimeSlots") != "") {
-		window.alert("Time Slots Added!");
-		removeCookie("newTimeSlots");
-	}
-	
-</script>
 	
 	<h3>Appointment Date: <?php echo date("F jS, Y", strtotime($_GET['date'])); ?></h3>
 	<div class="body_content">
@@ -185,14 +173,22 @@
 		echo "</form>";
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
+<?php include 'php/footer.php'; ?>
+
+<script src="js/apptOps.js"></script>
 <script type="text/javascript">
+  if (getCookie("newAppt") != "") {
+		window.alert("New Date Added!");
+		removeCookie("newAppt");
+	}
+	if (getCookie("newTimeSlots") != "") {
+		window.alert("Time Slots Added!");
+		removeCookie("newTimeSlots");
+	}
+  
 	$('.btn_lock').on("click", function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		AJAX_ActivateAppointment(this);
 	});
 </script>
-</html>

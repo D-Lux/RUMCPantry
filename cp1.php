@@ -1,8 +1,7 @@
-<?php include 'php/header.php'; ?>
-
-		<button id='btn_back' onclick="goBack()">Back</button>
-		
-		
+<?php 
+include 'php/header.php'; 
+include 'php/backButton.php'
+?>
 		<h3>Order Selection</h3>
 		<div class='body_content'>
 			<!-- Refresh button -->
@@ -69,34 +68,5 @@
 					echo "</table>";
 				}
 				
-					
-				/*
-				// Generate the string we'll need to display the client datalist
-				$clientDataList = "<input type='select' name='clientName' list='Clients' autocomplete='off' id='clientID'";
-				$clientDataList .= " onchange='updateHiddenData()'><datalist id='Clients' >";
-				while($client = sqlFetch($clientInfo) ) {
-					// Only show active appointments in the dropdown
-					if (IsActiveAppointment($client['status'])) {
-						$clientDataList .= "<option data-value=" . $client['clientID'] . ">";
-						$clientDataList .= $client['lName'] . ", " . $client['fName'] . "</option>";
-					}
-				}
-				$clientDataList .= "</datalist>";
-
-				echo "<form action='cp2.php' method='post' >";
-				echo "Name: ";
-				echo $clientDataList . "<br><br>";
-				echo "<input type='hidden' ID='clientID-hidden' name='clientID' value=0>";
-				echo "<div id='invoiceHidden'>";
-				//echo "<input type='hidden' ID='invoiceID-hidden' name='invoiceID' value=0>";
-				echo "CurrID: 0";
-				echo "</div>";
-				echo "<input type='submit' value='Continue'>";
-				echo "</form>";
-				*/
-
 			?>
-		</div><!-- /body_content -->
-	</div><!-- /content -->
-	</body>
-</html>
+<?php include 'php/footer.php'; ?>

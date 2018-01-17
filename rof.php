@@ -3,7 +3,6 @@
   include 'php/beanOps.php';
   include 'php/backButton.php';
 ?>
-<script src='js/orderFormOps.js'></script>
 
 <?php
 	// Open the database connection
@@ -276,8 +275,5 @@
 ?>
 			<button type="submit" name="CreateReviewedInvoiceDescriptions">Verify Order</button>
 		</form>
-
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	</body>
-</html>
+<?php include 'php/footer.php'; ?>
+<script src='js/orderFormOps.js'></script>

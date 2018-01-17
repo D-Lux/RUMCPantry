@@ -1,17 +1,10 @@
-<?php include 'php/header.php'; ?>
-    <script src="js/createDonation.js"></script>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
     
-    <?php include 'php/checkLogin.php';?>
-
-
-
-
-
-
-
-    <button id='btn_back' onclick="goBack()">Back</button>
-    <?php
-    
+    <div class="body_content">
+    <?php  
     //echo "<h3> Update donation partner number: ". $_GET['donationPartnerID'] . "</h3>";
    
  
@@ -26,7 +19,7 @@
     
 
      /* Create connection*/
- 	$conn = createPantryDatabaseConnection();
+    $conn = createPantryDatabaseConnection();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -68,65 +61,11 @@
             
             createDatalist("$city","cities","DonationPartner","city","city", false);
         
-        echo'</div>
-        <div id="state">
-            State:
-            
-            <select name="state">';
-               
-                echo"<option value='AL' " . ("AL" == $state ? "selected" : "") . ">AL</option>"; 
-                echo"<option value='AK' " . ("AK" == $state ? "selected" : "") . ">AK</option>"; 
-                echo"<option value='AZ' " . ("AZ" == $state ? "selected" : "") . ">AZ</option>"; 
-                echo"<option value='AR' " . ("AR" == $state ? "selected" : "") . ">AR</option>"; 
-                echo"<option value='CA' " . ("CA" == $state ? "selected" : "") . ">CA</option>"; 
-                echo"<option value='CO' " . ("CO" == $state ? "selected" : "") . ">CO</option>"; 
-                echo"<option value='CT' " . ("CT" == $state ? "selected" : "") . ">CT</option>"; 
-                echo"<option value='DE' " . ("DE" == $state ? "selected" : "") . ">DE</option>"; 
-                echo"<option value='DC' " . ("DC" == $state ? "selected" : "") . ">DC</option>"; 
-                echo"<option value='FL' " . ("FL" == $state ? "selected" : "") . ">FL</option>"; 
-                echo"<option value='GA' " . ("GA" == $state ? "selected" : "") . ">GA</option>"; 
-                echo"<option value='HI' " . ("HI" == $state ? "selected" : "") . ">HI</option>"; 
-                echo"<option value='ID' " . ("ID" == $state ? "selected" : "") . ">ID</option>"; 
-                echo"<option value='IL' " . ("IL" == $state ? "selected" : "") . ">IL</option>"; 
-                echo"<option value='IN' " . ("IN" == $state ? "selected" : "") . ">IN</option>"; 
-                echo"<option value='IA' " . ("IA" == $state ? "selected" : "") . ">IA</option>"; 
-                echo"<option value='KS' " . ("KS" == $state ? "selected" : "") . ">KS</option>"; 
-                echo"<option value='KY' " . ("KY" == $state ? "selected" : "") . ">KY</option>"; 
-                echo"<option value='LA' " . ("LA" == $state ? "selected" : "") . ">LA</option>"; 
-                echo"<option value='ME' " . ("ME" == $state ? "selected" : "") . ">ME</option>"; 
-                echo"<option value='MD' " . ("MD" == $state ? "selected" : "") . ">MD</option>"; 
-                echo"<option value='MA' " . ("MA" == $state ? "selected" : "") . ">MA</option>"; 
-                echo"<option value='MI' " . ("MI" == $state ? "selected" : "") . ">MI</option>"; 
-                echo"<option value='MN' " . ("MN" == $state ? "selected" : "") . ">MN</option>"; 
-                echo"<option value='MS' " . ("MS" == $state ? "selected" : "") . ">MS</option>"; 
-                echo"<option value='MO' " . ("MO" == $state ? "selected" : "") . ">MO</option>"; 
-                echo"<option value='MT' " . ("MT" == $state ? "selected" : "") . ">MT</option>"; 
-                echo"<option value='NE' " . ("NE" == $state ? "selected" : "") . ">NE</option>"; 
-                echo"<option value='NV' " . ("NV" == $state ? "selected" : "") . ">NV</option>"; 
-                echo"<option value='NH' " . ("NH" == $state ? "selected" : "") . ">NH</option>"; 
-                echo"<option value='NJ' " . ("NJ" == $state ? "selected" : "") . ">NJ</option>"; 
-                echo"<option value='NM' " . ("NM" == $state ? "selected" : "") . ">NM</option>"; 
-                echo"<option value='NY' " . ("NY" == $state ? "selected" : "") . ">NY</option>"; 
-                echo"<option value='NC' " . ("NC" == $state ? "selected" : "") . ">NC</option>"; 
-                echo"<option value='ND' " . ("ND" == $state ? "selected" : "") . ">ND</option>"; 
-                echo"<option value='OH' " . ("OH" == $state ? "selected" : "") . ">OH</option>"; 
-                echo"<option value='OK' " . ("OK" == $state ? "selected" : "") . ">OK</option>"; 
-                echo"<option value='OR' " . ("OR" == $state ? "selected" : "") . ">OR</option>"; 
-                echo"<option value='PA' " . ("PA" == $state ? "selected" : "") . ">PA</option>"; 
-                echo"<option value='RI' " . ("RI" == $state ? "selected" : "") . ">RI</option>"; 
-                echo"<option value='SC' " . ("SC" == $state ? "selected" : "") . ">SC</option>"; 
-                echo"<option value='SD' " . ("SD" == $state ? "selected" : "") . ">SD</option>"; 
-                echo"<option value='TN' " . ("TN" == $state ? "selected" : "") . ">TN</option>"; 
-                echo"<option value='TX' " . ("TX" == $state ? "selected" : "") . ">TX</option>"; 
-                echo"<option value='UT' " . ("UT" == $state ? "selected" : "") . ">UT</option>"; 
-                echo"<option value='VT' " . ("VT" == $state ? "selected" : "") . ">VT</option>"; 
-                echo"<option value='VA' " . ("VA" == $state ? "selected" : "") . ">VA</option>"; 
-                echo"<option value='WA' " . ("WA" == $state ? "selected" : "") . ">WA</option>"; 
-                echo"<option value='WV' " . ("WV" == $state ? "selected" : "") . ">WV</option>"; 
-                echo"<option value='WI' " . ("WI" == $state ? "selected" : "") . ">WI</option>"; 
-                echo"<option value='WY' " . ("WY" == $state ? "selected" : "") . ">WY</option>";
-                echo'</select>
-        </div>
+        echo "</div>";
+        echo "<div id='state'>State:<select name='state'>";
+        getStateOptions($state);
+        echo'</select></div>
+        
         <div id="zip">
             Zip:<span style="color:red;">*</span>';
             
@@ -202,9 +141,5 @@
         $conn->close();
         ?>
 
-</div><!-- /body_content -->
-	</div><!-- /content -->
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/createDonation.js"></script>

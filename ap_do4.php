@@ -1,19 +1,11 @@
-<?php include 'php/header.php'; ?>
-
-    <script src="js/createDonation.js"></script>
-    <!--<link href='style.css' rel='stylesheet'>-->
-    <?php include 'php/checkLogin.php';?>
-
-
-
-
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
     
-
-
-    <button id='btn_back' onclick="goBack()">Back</button>
     <?php
     echo "<h3> Update donation number: ". $_GET['donationID'] . "</h3>";
-   
+    echo "<div class='body_content'>";
  
     $donationID = $_GET['donationID'];
     $donationPartnerID ="";
@@ -134,9 +126,6 @@
 
         <input type="submit" value="Update" name="updateDonationIndividual"> 
         </form>'; ?>
-</div><!-- /body_content -->
-	</div><!-- /content -->
-
-</body>
-
-</html>
+        
+<?php include 'php/footer.php'; ?>        
+<script src="js/createDonation.js"></script>

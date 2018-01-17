@@ -1,4 +1,5 @@
 <?php include 'php/header.php';?>
+  <div class='body-content'>
 		<div id='main-page'>
 
 			<form method="get" action="cp1.php">
@@ -11,14 +12,12 @@
 				<button type="submit">Log Out</button>
 			</form>
 		</div>
- 
-	</div><!-- /content -->
-	</body>
 	
-	<?php
-		if ($_SERVER["REQUEST_METHOD"] == "POST") {
-			createCookie("loggedin", 0, -1);
-			header ("location: /RUMCPantry/login.php");
-		}
-	?>
-</html>
+<?php
+  if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    createCookie("loggedin", 0, -1);
+    header ("location: /RUMCPantry/login.php");
+  }
+  
+  include 'php/footer.php'; 
+ ?>

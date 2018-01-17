@@ -3,7 +3,7 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/orderFormOps.js"></script>
+
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
 
 <!-- <h3>View Order</h3> -->
@@ -29,7 +29,7 @@
 	
 	$results    = returnAssocArray(queryDB($conn, $sql));
 	$name       = current($results)['firstName'] . " " . current($results)['lastName'];
-	$printName	= current($results)['firstName'];
+	$printName	= current($results)['lastName'];
 	$visitTime  = current($results)['visitTime'];
 	$familySize = current($results)['familySize'];
 	
@@ -95,6 +95,5 @@
 	echo "<div id='ErrorLog'></div>";
 	?>
 
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/orderFormOps.js"></script>

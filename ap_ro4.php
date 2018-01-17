@@ -1,6 +1,7 @@
-<?php include 'php/header.php'; ?>
-<script src="js/redistOps.js"></script>
-    <button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 	<h3>Update Reallocation Partner</h3>
 	
 	<script>
@@ -120,9 +121,5 @@
 		}	
 	?>
 
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/redistOps.js"></script>

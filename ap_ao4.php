@@ -1,7 +1,7 @@
-<?php include 'php/header.php'; ?>
-
-	<button id='btn_back' onclick="goBack()">Back</button>
-	
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 	<h3>Add Appointment Time Slot</h3>
 	<div class="body_content">
 	<!-- Start the form for creating a new date -->
@@ -31,8 +31,4 @@
 		<input type="submit" name="CreateInvoiceTimeSlot" value="Create Time Slots">
 	</form>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>

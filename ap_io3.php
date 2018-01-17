@@ -1,9 +1,12 @@
-<?php include 'php/header.php';?>
-<?php include 'php/backButton.php'; ?>
+<?php
+include 'php/header.php';
+include 'php/backButton.php';
+?>
 
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-<script src="js/createItem.js"></script>
+
 <h3>Update Item</h3>
+<div class="body_content">
 <?php
     $itemID 		= $_GET['itemID'];
     $itemName 		="";
@@ -164,9 +167,5 @@
 	<input type="submit" value="Update" name="updateItemIndividual">
 </form>
  
-</div><!-- /body_content -->
-</div><!-- /content -->
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/createItem.js"></script>

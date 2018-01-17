@@ -1,8 +1,6 @@
 <?php include 'php/header.php'; ?>
 
-<!-- No back button for this page!
-    <button id='btn_back' onclick="goBack()">Back</button>
--->
+<!-- No back button for this page! -->
     
 	
 	<div class="body_content">
@@ -77,9 +75,4 @@
 		<input style='position:relative; left:30%;' type='submit' name='NoApptSelection' value='Finish'>
 		</form>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>

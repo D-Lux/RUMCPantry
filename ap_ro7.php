@@ -1,6 +1,7 @@
-<?php include 'php/header.php'; ?>
-<script src="js/redistOps.js"></script>
-    <button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 	<h3>Update Reallocation Item</h3>
 	
 	<div class="body_content">	
@@ -53,9 +54,5 @@
 		echo "</form>";	
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/redistOps.js"></script>

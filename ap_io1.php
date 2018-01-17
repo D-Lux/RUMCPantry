@@ -1,9 +1,11 @@
-<?php include 'php/header.php'; ?>
-<?php include 'php/backButton.php'; ?>    
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>   
 <h3>
     Inventory Operations
 </h3>
-
+<div class="body_content">
     <form method="get" action="ap_io7.php">
         <input type="submit" value="Item Operations">
     </form>
@@ -20,9 +22,4 @@
         <input type="submit" value="Deleted items and categories">
     </form>
 -->
-    </div><!-- /body_content -->
-	</div><!-- /content -->
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>

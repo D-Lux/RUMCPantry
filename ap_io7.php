@@ -1,8 +1,6 @@
 <?php include 'php/header.php'; ?>
 <?php include 'php/backButton.php'; ?>
 
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Item Inventory</h3>
@@ -33,10 +31,9 @@
 	</form>
 	
 	<!-- TODO: View 'deleted' items -->
-</div><!-- /body_content -->
-</div><!-- /content -->	
-</body>
-
+  
+<?php include 'php/footer.php'; ?>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 
 	$('#iItemTable').DataTable({
@@ -95,6 +92,3 @@
 	});
 		
 	</script>
-	
-	
-</html>

@@ -2,7 +2,6 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/clientOps.js"></script>
 
 	<h3>Update Family Member Information</h3>
 	
@@ -88,9 +87,6 @@
 			echo "Family Member not found.";
 		}
 	?>
-	
-	
 
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>  
+<script src="js/clientOps.js"></script>

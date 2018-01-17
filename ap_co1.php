@@ -2,19 +2,8 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/clientOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
-
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
-	<script>
-		if (getCookie("clientUpdated") != "") {
-			window.alert("Client data updated!");
-			removeCookie("clientUpdated");
-		}		
-	</script>
 	
     <h3>Active Clients</h3>
 	
@@ -47,12 +36,16 @@
 	<form action="ap_co1i.php">
 		<input type="submit" name="ShowInactive" value="View Inactive Clients">
     </form>
-</div><!-- /body_content -->
-</div><!-- /content -->	
-</body>
+    
+<?php include 'php/footer.php'; ?>
 
+<script src="js/clientOps.js"></script>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
-
+  if (getCookie("clientUpdated") != "") {
+			window.alert("Client data updated!");
+			removeCookie("clientUpdated");
+	}	
 	$('#iClientTable').DataTable({
       "info"          : true,
       "paging"        : true,
@@ -84,6 +77,3 @@
 	});
 		
 </script>
-	
-	
-</html>

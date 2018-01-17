@@ -3,9 +3,6 @@
 	include 'php/backButton.php';
 ?>
 
-<script src="js/clientOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 
@@ -299,10 +296,9 @@
 		}	
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
+<?php include 'php/footer.php'; ?>
+<script src="js/clientOps.js"></script>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 	<?php
 		echo "var Params = '?cid=" . $_GET['id'] . "';";
@@ -332,5 +328,3 @@
 		});
 	});
 </script>
-
-</html>

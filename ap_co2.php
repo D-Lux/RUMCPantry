@@ -1,6 +1,8 @@
-<?php include 'php/header.php'; ?>
-<script src="js/clientOps.js"></script>
-    <button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
+
 	<h3>Add New Client</h3>
 	
 	<div class="body_content">
@@ -66,10 +68,6 @@
 			<br>
 			<input type="submit" name="submitClient" value="Create" >
 		</form>
-		
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
 
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/clientOps.js"></script>    

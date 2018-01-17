@@ -2,11 +2,10 @@
 	include 'php/header.php';
 	include 'php/backButton.php'; 
 ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
 <link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
-<script src="js/createItem.js"></script>
 
 <h3>Add Item</h3>
+<div class="body_content">
 <form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
 	<!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
 	<!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
@@ -115,10 +114,5 @@
 	<input type="submit" value="Create" name="createItem">
 </form>
 
-</div> <!-- /container -->
-</div><!-- /body_content -->
-</div><!-- /content -->
-
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/createItem.js"></script>

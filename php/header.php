@@ -10,10 +10,10 @@ echo "<!DOCTYPE html>
 <html>
 	<head>
 		<title>Roselle UMC</title>
-		<script src='js/utilities.js'></script>
-		<link href='css/style.css' rel='stylesheet'>
 		<?php include 'php/checkLogin.php';?>
-		<link href='includes/fontawesome/css/font-awesome.min.css' rel='stylesheet'>
+    <link href='css/style.css' rel='stylesheet'>
+		<link href='includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
+    <link href='includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >
 	</head>
 	<body>
 		<header>

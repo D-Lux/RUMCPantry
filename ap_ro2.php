@@ -1,6 +1,7 @@
-<?php include 'php/header.php'; ?>
-	<button id='btn_back' onclick="goBack()">Back</button>
-	
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
     <h3>Reallocation Partners</h3>
 
 	<script>
@@ -94,8 +95,4 @@
 
 	<div id="errorLog"></div>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-</body>
-</html>
+<?php include 'php/footer.php'; ?>

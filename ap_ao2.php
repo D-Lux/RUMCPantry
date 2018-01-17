@@ -2,8 +2,7 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/apptOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery-3.2.1.min.js"></script>
+
 
 	<style>
 		#addTimeSlot {
@@ -24,13 +23,6 @@
 		}
 	
 	</style>
-	<script>
-		// Bad date validation (after returning from apptOps.php)
-		if (getCookie("badAppDate") != "") {
-			window.alert("Date already exists in database");
-			removeCookie("badAppDate");
-		}
-	</script>
 	
 	<h3>Create Appointment Date</h3>
 	<div class="body_content">
@@ -102,15 +94,18 @@
 			<input type="submit" name="CreateInvoiceDate" value="Create Appointments">
 		</form>
 		
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
+<?php include 'php/footer.php'; ?>
+<script src="js/apptOps.js"></script>
 <script type="text/javascript">
+  // Bad date validation (after returning from apptOps.php)
+  if (getCookie("badAppDate") != "") {
+    window.alert("Date already exists in database");
+    removeCookie("badAppDate");
+  }
+    
 	$('.rm_row').on("click", function(e) {
 		e.stopPropagation();
 		e.preventDefault();
 		deleteTimeTableRow(this);
 	});
 </script>
-</html>

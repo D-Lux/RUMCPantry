@@ -2,8 +2,6 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-<script src="js/clientOps.js"></script>
-
 	<h3>New Family Member</h3>
 	
 	<div class="body_content">
@@ -45,9 +43,5 @@
 			<input type="submit" value="Create" name="submitMember">
 		</form>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>
+<script src="js/clientOps.js"></script>

@@ -1,6 +1,7 @@
-<?php include 'php/header.php'; ?>
-
-    <?php include 'php/backButton.php'; ?>
+<?php 
+include 'php/header.php';
+include 'php/backButton.php';
+?>
     <h3>Main Administrator Navigation</h3>
 	<div class="body_content">
 	
@@ -38,8 +39,4 @@
         <input type="submit" value="Order Forms">
     </form>
 	-->
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-
-</html>
+<?php include 'php/footer.php'; ?>

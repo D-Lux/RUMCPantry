@@ -1,5 +1,7 @@
-<?php include 'php/header.php'; ?>
-	<button id='btn_back' onclick="goBack()">Back</button>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
     <h3>Reallocation Items</h3>
 
 	<script>
@@ -88,7 +90,4 @@
 		<input type="submit" name="ShowInactive" value="View Deactivated Items">
     </form>
 
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-</body>
-</html>
+<?php include 'php/footer.php'; ?>

@@ -1,7 +1,8 @@
-<?php include 'php/header.php'; ?>
-<script src="js/orderFormOps.js"></script>
+<?php 
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 <link rel="stylesheet" type="text/css" href="css/tabs.css" />
-    <button id='btn_back' onclick="goBack()">Back</button>
 
 	<?php
 		echo "<h3>Order Form: ";
@@ -145,15 +146,10 @@
 		echo "</div>";
 	?>
 	
-	</div><!-- /body_content -->
-	</div><!-- /content -->	
-	
-	
-	<script>
-		// Open the default tab (if tabs exist)
-		document.getElementById("defaultOpen").click();
-	</script>
-
-</body>
-
-</html>
+  
+<?php include 'php/footer.php'; ?>
+<script src="js/orderFormOps.js"></script>
+<script>
+  // Open the default tab (if tabs exist)
+  document.getElementById("defaultOpen").click();
+</script>
