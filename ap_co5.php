@@ -2,7 +2,6 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-
 	<h3>Update Family Member Information</h3>
 	
 	<div class="body_content">
@@ -30,62 +29,81 @@
 		// "Update" button at end will take all values and update the family member entry with those values
 		if ($familyInfo->num_rows > 0) {
 			$familyRow = $familyInfo->fetch_assoc();
-
-			// Start the form with appropriate modifiers
-			echo "<form name='UpdateMember' action='php/clientOps.php' method='post' onSubmit='return validateNewClientMember()' >";
+      ?>
+			<!-- Start the form with appropriate modifiers -->
+			<form name='UpdateMember' action='php/clientOps.php' method='post' onSubmit='return validateNewClientMember()' >
 			
-			// Pass along the member ids for correct updating
-			echo "<input type='hidden' name='clientID' value=" . $_GET['clientID'] . ">";
-			echo "<input type='hidden' name='memberID' value=" . $_GET['memberID'] . ">";
+			<!-- Pass along the member ids for correct updating -->
+			<input type='hidden' name='clientID' value=<?=$_GET['clientID']?>>
+			<input type='hidden' name='memberID' value=<?=$_GET['memberID']?>>
 		
-			echo "<div class='inputDiv'>";
-			// First Name Field - auto filled in with database data
-			echo "<div id='memberFirstName' class='required'><label for='memberFirstNameField'>First Name:</label>
-				<input type='text' id='memberFirstNameField' name='memberFirstName' maxlength='45' value='" . displaySingleQuote($familyRow['firstName']) . "'> </div>";
-				
-			// Last Name
-			echo "<div id='memberLastName' class='required'><label for='memberLastNameField'>Last Name:</label>
-				<input type='text' id='memberLastNameField' id='validateNewClientMember' name='memberLastName' maxlength='45' value='" . displaySingleQuote($familyRow['lastName']) . "'> </div>";
+			<!--Fields autofilled with form data -->
+      <div class="row">
+				<div class="col-sm-4"><label for="memberFirstNameField" class="required">First Name:</label></div>
+        <div class="col-sm-8">
+          <input type="text" id="memberFirstNameField" name="memberFirstName" maxlength="45" value='<?=displaySingleQuote($familyRow['firstName'])?>'>
+        </div>
+      </div>
+      <div class="row">
+				<div class="col-sm-4"><label for="memberLastNameField" class="required">First Name:</label></div>
+        <div class="col-sm-8">
+          <input type="text" id="memberLastNameField" name="memberLastName" maxlength="45" 
+            value="<?=displaySingleQuote($familyRow['lastName'])?>">
+        </div>
+      </div>
+      <div class="row">
+				<div class="col-sm-4"><label for="birthDateInput">Birthday:</label></div>
+        <div class="col-sm-8">
+          <input id='birthDateInput' type='date' name='birthDate' min='1900-01-01' value='<?=$familyRow['birthDate']?>'>
+        </div>
+      </div>
+      
+			<br>
+      
+      <div class="row">
+        <?php
+          if ($familyRow['isHeadOfHousehold']) {
+            echo "<div class='col-sm-4' id='head'>Member is Head of Household</div>";
+          }
+          else {
+            echo "<div class='selectionBoxes'>";
+            echo "<div id='head'>Head of Household: ";
+            echo "<input type='checkbox' id='HoH' name='head' value='head'>";
+            echo "<label for='HoH' ></label>";
+            echo "</div></div>";
+          }
+        ?>
+        <div class="col-sm-2"></div>
+				<div class="col-sm-2"><label for="genderInput">Gender:</label></div>
+        <div class="col-sm-2">
+          <?php
+            $gender = $familyRow['gender'];
+            echo "<select id='genderInput' name='gender'> 
+            <option value=0 " . ($gender == 0 ? "selected" : "") . ">-</option>
+            <option value=-1 " . ($gender == -1 ? "selected" : "") . ">Male</option>
+            <option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
+            </select>";
+          ?>
+        </div>
+      </div>
+			
+      <div class="row">
+				<div class="col-sm-4"><label for='notesInput'>Notes:</label></div>
+        <div class="col-sm-8">
+          <textarea class='notes' type='text' name='notes'><?=$familyRow['notes']?></textarea>
+        </div>
+      </div>
+			
+			
+			<input type='submit' class='btn-nav' name='UpdateMember' value='Update'>
+		</form>
+    <?php
+	}
+			
 
-			echo "<label for='birthDateInput'>Birthday:</label>
-				<input id='birthDateInput' type='date' name='birthDate' min='1900-01-01' value='" . $familyRow['birthDate'] . "'><br>";
-			
-			$gender = $familyRow['gender'];
-			echo "<label for='genderInput'>Gender:</label>
-				<select id='genderInput' name='gender'> 
-				<option value=0 " . ($gender == 0 ? "selected" : "") . ">-</option>
-				<option value=-1 " . ($gender == -1 ? "selected" : "") . ">Male</option>
-				<option value=1 " . ($gender == 1 ? "selected" : "") . ">Female</option>
-				</select> <br>";
-			
-			echo "<label for='notesInput'>Notes:</label>
-				  <textarea class='notes' type='text' name='notes'>" . $familyRow['notes'] . "</textarea><br>";
-			
-			// If the person is already the head of the household, we just say that.
-			// Otherwise, place a checkbox to change head of household
-			if ($familyRow['isHeadOfHousehold']) {
-				echo "<div id='head'>Member is Head of Household</div><br>";
-			}
-			else {
-				echo "<div class='selectionBoxes'>";
-				echo "<div id='head'>Head of Household: ";
-				echo "<input type='checkbox' id='HoH' name='head' value='head'>";
-				echo "<label for='HoH' ></label>";
-				echo "</div></div><br>";
-			}
-			
-			// </inputDiv>
-			echo "</div>";
-			
-			// submit button
-			echo "<input type='submit' name='UpdateMember' value='Update'>";
-			echo "</form>";
-		}
-			
-
-		else {
-			echo "Family Member not found.";
-		}
+	else {
+		echo "Family Member not found.";
+	}
 	?>
 
 <?php include 'php/footer.php'; ?>  

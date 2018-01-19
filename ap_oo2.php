@@ -38,54 +38,49 @@
 		// Create our query from the Item and Category tables
 		// Item Name, $familyType, category name, category family type, itemid
 		$sql = "SELECT itemID, rack, shelf, aisle, itemName, Item." . $familyType . " as IQty, 
-					Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID,
-					Count(Category.name) as CCount					
-				FROM Item
-				JOIN Category
-				ON Item.categoryID=Category.categoryID
-				WHERE item.isDeleted=0
-				AND Category.isDeleted=0
-				AND Category.name<>'Specials'
-				AND Category.name<>'redistribution'
-				GROUP BY itemID
-				ORDER BY Category.name, aisle, rack, shelf, itemName";
+            Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID			
+            FROM Item
+            LEFT JOIN Category
+            ON Item.categoryID=Category.categoryID
+            WHERE item.isDeleted=0
+            AND Category.isDeleted=0
+            AND Category.name<>'Specials'
+            AND Category.name<>'redistribution'
+            ORDER BY Category.name, aisle, rack, shelf, itemName";
 
-		$itemList = queryDB($conn, $sql);
+		$items = returnAssocArray(queryDB($conn, $sql));
 		
-		if ($itemList === FALSE) {
-			// Assignment failed, error back
-			echo "sql error: " . mysqli_error($conn);
-			closeDB($conn);
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Bad SQL query.", "red" );
+		if ( count($itemList) <= 0 ) {
+			echo "No Items were in the database.";
+      die();
 		}
-		
+    
+    $categoryList = [];
+    foreach ($items as $item) {
+      if (! in_array($item['CName'], $categoryList)) {
+        $categoryList[$item['categoryID']] = $item['cName'];
+      }
+    }
+    
 		// *********************************************
 		// * Create our tabs
-		
-		$sql = "SELECT DISTINCT name 
-				FROM Category
-				WHERE name<>'redistribution'
-				AND name<>'Specials'
-				ORDER BY name";
-		$numTabs = queryDB($conn, $sql);
 		
 		// If the number of tabs becomes too large, advance to the next line
 		$tabRow = 0;
 		$tabRowCount = 5;
 		echo "<div class='tab'>";
-		for ($i=0; $i< $numTabs->num_rows; $i++) {
-			$tab = sqlFetch($numTabs);
-			echo "<button class='tablinks' onclick='viewTab(event, itemList" . $i . ")'";
-			echo ($i > 0 ? "" : " id='defaultOpen' ") . ">" . $tab['name'] . "</button>";
+    
+    foreach ($categoryList as $cid => $category) {
+			echo "<button class='tablinks' onclick='viewTab(event, itemList" . $cid . ")'";
+			echo ($cid > 0 ? "" : " id='defaultOpen' ") . ">" . $category . "</button>";
 			
 			// Check the number of tabs we've shown
 			$tabRow++;
 			if ($tabRow > $tabRowCount) {
 				$tabRow = 0;
-				echo "<br><br>";
+				echo "<div class='clearfix'></div>";//br><br>";
 			}
-		}
+    }
 		echo "</div><br>";
 		
 		// ******************************************************
@@ -124,8 +119,8 @@
 			// Print this item's name and show it's location
 			echo "<tr><td>" . $item['itemName'] . "</td>";
 			echo "<td>" . aisleDecoder($item['aisle']) . "</td>";
-			echo "<td>" . $item['rack'] . "</td>";
-			echo "<td>" . $item['shelf'] . "</td>";
+			echo "<td>" . rackDecoder($item['rack']) . "</td>";
+			echo "<td>" . shelfDecoder($item['shelf']) . "</td>";
 			
 			// *****************************************
 			// This is the dropdown selection list

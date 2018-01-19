@@ -14,7 +14,6 @@
 		<div class="col-sm-8">
 			<?php
 				createDatalist_i("","categories","category","name","category", false);
-				//createDatalist("","categories","category","name","category", false);
 			?>
 		</div>
 	</div>
@@ -24,7 +23,6 @@
 		<div class="col-sm-8">
 			<?php
 				createDatalist_i("","itemNames","item","itemName","itemName", true);
-				//createDatalist("","itemNames","item","itemName","itemName", true);
 			?>
 		</div>
 	</div>
@@ -33,7 +31,6 @@
 		<div class="col-sm-8">
 			<?php
 				createDatalist_i("","displayNames","item","displayName","displayName", true);
-				//createDatalist("","displayNames","item","displayName","displayName", true);
 			?>
 		</div>
 	</div>
@@ -111,7 +108,7 @@
 	</div>
  
 	</br>
-	<input type="submit" value="Create" name="createItem">
+	<input type="submit" class='btn-nav' value="Create" name="createItem">
 </form>
 
 <?php include 'php/footer.php'; ?>

@@ -6,6 +6,7 @@ include 'php/backButton.php';
 
 <div class="body_content">
 <?php
+
 // Future: May allow them to select the day of check in page in the future
 $date = date("Y-m-d");  
 
@@ -24,43 +25,42 @@ $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime,
           On Client.clientID=FamilyMember.clientID 
         WHERE Invoice.visitDate = '$date'
         AND FamilyMember.isHeadOfHousehold = true 
-        AND Invoice.status != " . GetCompletedStatus() . " 
+        AND Invoice.status != " . GetCompletedStatus() . "
+        AND Invoice.status < " . GetCompletedStatus() . " 
         ORDER BY  Invoice.visitTime ASC, FamilyMember.LastName ASC";
 
-$result = returnAssocArray(queryDB($conn, $sql));
-if (count($result) > 0) {
+$results = returnAssocArray(queryDB($conn, $sql));
+if (count($results) > 0) {
   echo"<h3>Incomplete Clients</h3>";
-    // output data of each row
-    $rowTitle = null;
-    while($row = $result->fetch_assoc()) {
-      if($rowTitle != $row["visitTime"]) {
-        if ($rowTitle != null) {
-          echo "</table>"; 
-        }
-          $rowTitle = $row["visitTime"];
-          echo "<b>";            
-          echo returnTime($rowTitle);
-          echo "</b>";
+  $rowTitle = null;
+  foreach ($results as $result) {
+    if($rowTitle != $result["visitTime"]) {
+      if ($rowTitle != null) {
+        echo "</table>"; 
       }
-
-
+      $rowTitle = $result["visitTime"];           
+      echo "<b>" . returnTime($rowTitle). "</b>";
       echo "<table>";
-      echo "<tr><th>First name</th><th>Last name</th><th>No show?</th><th>Incorrect documentation?</th><th>Cancelled?</th></tr>";
-      echo "<tr>";
-      //grab donation id
-      echo "<form action='endOfDay.php' method='post'>";
-      $invoiceID=$row["invoiceID"];
-      echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
-      echo "<td>". $row["firstName"]. "</td><td>". $row["lastName"]. "</td><td>" . $row["visitTime"] . "</td>";
-      echo "<td><input type='submit' name='noShow' value='No show'></td>";
-      echo "<td><input type='submit' name='documentation' value='Documentation'></td>";
-      echo "<td><input type='submit' name='cancelled' value='Cancelled'></td>";
-      echo "</form>";
-      echo "</tr>";    
+      echo "<tr><th>First name</th><th>Last name</th><th>Actions</th></tr>";
+     }
+    
+    echo "<tr>";
+    //grab donation id
+    echo "<form action='endOfDay.php' method='post'>";
+    $invoiceID=$result["invoiceID"];
+    echo "<input type='hidden' name='invoiceID' value='$invoiceID'>";
+    echo "<td>". $result["firstName"]. "</td><td>". $result["lastName"]. "</td>";
+    echo "<td>";
+      echo "<button type='submit' class='btn_edit' name='noShow'><i class='fa fa-eye-slash'></i> No Show</button>";
+      echo "<button type='submit' class='btn_edit' name='documentation'><i class='fa fa-file'></i> Bad Documentation</button>";
+      echo "<button type='submit' class='btn_edit' name='cancelled'><i class='fa fa-ban'></i> Cancelled </button>";
+    echo "</td>";
+    echo "</form>";
+    echo "</tr>";    
                    
-    }
-    echo "</table>";
-}
+  }
+   echo "</table>";
+}    
 else {
   echo "End of Day Successful!";
 }     

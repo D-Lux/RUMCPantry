@@ -58,8 +58,8 @@ include 'php/backButton.php';
 		closeDB($conn);
 		
 		echo "<div id='awc_options'>";
-			echo "<input type='button' onclick='toggleOption(this)' name='existingOption' value='Existing Client'>";
-			echo "<input type='button' onclick='toggleOption(this)' name='newOption' value='New Client'>";
+			echo "<input type='button' class='btn-nav' onclick='toggleOption(this)' name='existingOption' value='Existing Client'>";
+			echo "<input type='button' class='btn-nav' onclick='toggleOption(this)' name='newOption' value='New Client'>";
 		echo "</div>";
 	
 	

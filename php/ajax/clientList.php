@@ -76,7 +76,7 @@
 		$baseLink = "/RUMCPantry/php/clientOps.php?";
 		$IDParam  = "&id=" . $results[$i]['clientID'];
 		
-		$editLink   = "<button type='submit' class='btn_edit' 
+		$editLink   = "<button type='submit' class='btn-table btn_edit' 
 					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 		$actionLink = "<button type='submit' class='btn_icon'
 					   value='" . $baseLink . 

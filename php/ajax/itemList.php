@@ -54,12 +54,11 @@ if ($conn->connect_error) {
 				AND (item.rack>=0
 				OR item.rack IS NULL) ";
 	
-	
 	// Get our total record count
 	$totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
 	
 	// Run our query with search and order conditions
-    $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
+  $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
 	$recordCount = count($results);
 	$returnData = [];
 	$out = [];
@@ -76,7 +75,7 @@ if ($conn->connect_error) {
 		$deleteLink = "/RUMCPantry/php/itemOps.php?DeleteItem=1&";
 		$IDParam  = "itemID=" . $results[$i]['itemID'];
 		
-		$editLink   = "<button type='submit' class='btn_edit' 
+		$editLink   = "<button type='submit' class='btn-table btn_edit' 
 					   value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 		$deleteLink = "<button type='submit' class='btn_icon'
 					   value='" . $deleteLink . $IDParam . "'><i class='fa fa-trash'></i></button>";

@@ -164,7 +164,7 @@ include 'php/backButton.php';
 			</div>
 		</div>
 	</div>
-	<input type="submit" value="Update" name="updateItemIndividual">
+	<input type="submit" class='btn-nav' value="Update" name="updateItemIndividual">
 </form>
  
 <?php include 'php/footer.php'; ?>

@@ -46,11 +46,11 @@
 		echo $itemList;
 		
 		// "OR" Button and div to add Special Options
-		echo "<input id='OrBtn_' class='btn_or' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
+		echo "<input id='OrBtn_' class='btn_edit' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
 		echo "<div id='OrSlot_'></div><br>";
 		
 		// Delete Button for a section
-		echo "<input id='DelBtn_' type='button' value='Remove Specials' onclick='deleteSpecials(this)' >";
+		echo "<input id='DelBtn_' class='btn_edit' type='button' value='Remove Specials' onclick='deleteSpecials(this)' >";
 		echo "<br><hr>";
 		echo "</div>";
 		
@@ -124,13 +124,12 @@
 			
 		echo "<br>";
 		// Button to create a new set of special options
-		echo "<input type='button' value='New Item' onclick='addSpecialItem()'><br>";
+		echo "<input class='btn-nav' type='button' value='New Item' onclick='addSpecialItem()'><br>";
 		
 		// Save button and close the form
-		echo "<input type='submit' name='SaveSpecials' value='Save'></form>";
+		echo "<input class='btn-nav' type='submit' name='SaveSpecials' value='Save'></form>";
 
 		// Error log for debug
-		echo "<br><br><br>";
 		echo "<div id='errorLog'> </div>";
 	?>
 	

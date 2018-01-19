@@ -29,12 +29,12 @@
 	
 	<!-- NEW Client -->
 	<form action="ap_co2.php">
-		<input id="CreateNew" type="submit" name="GoNewClient" value="New Client">
+		<input id="CreateNew" class="btn-nav" type="submit" name="GoNewClient" value="New Client">
     </form>
 	
 	<!-- View Inactive Clients -->
 	<form action="ap_co1i.php">
-		<input type="submit" name="ShowInactive" value="View Inactive Clients">
+		<input type="submit" class="btn-nav" name="ShowInactive" value="View Inactive Clients">
     </form>
     
 <?php include 'php/footer.php'; ?>

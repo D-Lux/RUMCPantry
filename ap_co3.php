@@ -182,7 +182,7 @@
 			</div>
 
 			
-			<input type="submit" name="UpdateClient" value="Save">
+			<input class="btn-nav" type="submit" name="UpdateClient" value="Save">
 			</form>
 		
 			
@@ -202,7 +202,7 @@
 			echo "<table> <tr> <th></th>";
 			echo "<th>First Name</th><th>Last Name</th>";
 			echo "<th>Birth Date</th><th>Gender</th>";
-			echo "<th>Head of Household</th><th>Notes</th>";
+			echo "<th>Head of Household</th>";//<th>Notes</th>";
 			
 			$showDeleteColumn = ($familyInfo->num_rows > 1);
 			if ($showDeleteColumn) {
@@ -225,7 +225,8 @@
 				echo "<tr>";
 
 					// Update button
-				echo "<td><input type='submit' class='btn_edit' name='GoUpdateMember' value='View'></td>";
+        echo "<td><button type='submit' class='btn-table btn_edit' 
+					     name='GoUpdateMember' value='View'><i class='fa fa-eye'> View</i></button></td>";
 				
 				// Various basic information fields
 				echo "<td>" . $row['firstName'] . "</td>";
@@ -238,17 +239,19 @@
 				
 				echo "<td style='color:green;'>$head</td>";
 
-				echo "<td>" . $row['notes'] . "</td>";
+				//echo "<td>" . $row['notes'] . "</td>";
 				
 				// Delete button
 				if ($showDeleteColumn) {
-					echo "<td><input id='InactiveMember' value=' ' class='btn_trash' name='DeleteMember' ";
+					echo "<td>";
+          echo "<button id='InactiveMember' name='DeleteMember' class='btn_icon' ";
 					if (!$row['isHeadOfHousehold']) {
-						echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'></td>";	
+						echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'>";	
 					}
 					else {
-						echo "type='button' onclick=\"javascript: alert('Cannot delete the head of household.');\")'></td>";
+						echo "type='button' onclick=\"javascript: alert('Cannot delete the head of household.');\")'>";
 					}
+          echo "<i class='fa fa-trash'></i></button></td>";
 				}
 				
 				// Close off the row and form
@@ -264,7 +267,7 @@
 			// Send along the client last name so we can autofill the last name
 			echo "<input type='hidden' name='lnamedefault' value='" . $clientName . "'>";
 			
-			echo "<input id='newMember' type='submit' name='newMember' value='New Family Member'>";	
+			echo "<input class='btn-nav' id='newMember' type='submit' name='newMember' value='New Family Member'>";	
 			echo "</form>";
 			
 			// ***********************************************************************

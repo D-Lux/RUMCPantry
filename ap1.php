@@ -8,30 +8,30 @@ include 'php/backButton.php';
 	
 	<div style="float: right;">
 		<form method="post" action="ap_io1.php">
-			<input type="submit" value="Inventory operations">
+			<input class="btn-nav" type="submit" value="Inventory operations">
 		</form>
 		<form method="post" action="ap_do1.php">
-			<input type="submit" value="Donation operations">
+			<input class="btn-nav" type="submit" value="Donation operations">
 		</form>
 		<form method="post" action="ap_ro1.php">
-			<input type="submit" value="Reallocation operations">
+			<input class="btn-nav" type="submit" value="Reallocation operations">
 		</form>
 		<form method="post" action="reporting.php">
-			<input type="submit" value="Reporting">
+			<input class="btn-nav" type="submit" value="Reporting">
 		</form>
 	</div>
 	
 	<form method="post" action="checkIn.php">
-        <input type="submit" value="Check in page">
+        <input class="btn-nav" type="submit" value="Check in page">
     </form>
     <form method="post" action="ap_co1.php">
-        <input type="submit" value="Client operations">
+        <input class="btn-nav" type="submit" value="Client operations">
     </form>
     <form method="post" action="ap_ao1.php">
-        <input type="submit" value="Appointment operations">
+        <input class="btn-nav" type="submit" value="Appointment operations">
     </form>
 	<form method="post" action="ap_oo3.php">
-        <input type="submit" value="View Active Order Forms">
+        <input class="btn-nav" type="submit" value="View Active Order Forms">
     </form>
 	<!-- Removed because it can be accessed from the inventory ops page -->
 	<!--

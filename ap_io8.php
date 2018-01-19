@@ -28,8 +28,8 @@ include 'php/backButton.php';
 	
 	<!-- New Item -->
 	<form method="get" action="ap_io4.php">
-        <input type="submit" value="Add a category">
-    </form>
+    <input class='btn-nav' type="submit" value="Add a category">
+  </form>
 	
 	<!-- TODO: View 'deleted' items -->
   

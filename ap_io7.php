@@ -27,7 +27,7 @@
 	
 	<!-- New Item -->
 	<form method="get" action="ap_io2.php">
-		<input type="submit" value="Add an item">
+		<input class='btn-nav' type="submit" value="Add an item">
 	</form>
 	
 	<!-- TODO: View 'deleted' items -->

@@ -7,13 +7,13 @@
 </h3>
 <div class="body_content">
     <form method="get" action="ap_io7.php">
-        <input type="submit" value="Item Operations">
+        <input class='btn-nav' type="submit" value="Item Operations">
     </form>
     <form method="get" action="ap_io8.php">
-        <input type="submit" value="Category Operations">
+        <input class='btn-nav' type="submit" value="Category Operations">
     </form>
     <form method="get" action="ap_oo1.php">
-        <input type="submit" value="Edit order form">
+        <input class='btn-nav' type="submit" value="Edit order form">
     </form>
 
 	<!-- temporarily disabled -->

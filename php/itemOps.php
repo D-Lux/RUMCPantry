@@ -29,8 +29,8 @@ if(isset($_POST['createItem'])) {
     //check to see if category exists, if not create it.
 	$result = $conn->query("SELECT DISTINCT categoryID FROM Category WHERE name = '" . $category . "'");
 	if($result->num_rows == 0) {
-		$sql = "INSERT INTO category (name, small, medium, large)
-				VALUES ('" . $category . "', 0, 0, 0)";
+		$sql = "INSERT INTO category (name, small, medium, large, isDeleted)
+				VALUES ('" . $category . "', 0, 0, 0, 0)";
 		if ($conn->query($sql) === TRUE) {
 			$newCategory = TRUE;
 			$categoryID = $conn->insert_id;
@@ -169,20 +169,18 @@ elseif (isset($_GET['DeleteCategory'])) {
     $sql = "update Category set isDeleted = true where categoryID=" . $categoryID;
     
 	if ($conn->query($sql) === FALSE) {
-        createCookie("delError", 1, 30);
-		header("location: /RUMCPantry/ap_io8.php");
+      createCookie("delError", 1, 30);
+  }
+  else {
+    $sql = "update item set isDeleted = true where categoryID=$categoryID";
+    if ($conn->query($sql) === FALSE) {
+      createCookie("delError", 1, 30);
     }
-    else {
-        $sql = "update item set isDeleted = true where categoryID=$categoryID";
-        if ($conn->query($sql) === FALSE) {
-            createCookie("delError", 1, 30);
-			header("location: /RUMCPantry/ap_io8.php");
-        }
-        else{
-            createCookie("categoryDeleted", 1, 30);
-			header("location: /RUMCPantry/ap_io8.php");;
-        }
+    else{
+        createCookie("categoryDeleted", 1, 30);
     }
+  }
+  header("location: /RUMCPantry/ap_io8.php");
 }
 elseif (isset($_GET['ReactivateCategoryAndItems'])) {
 	//TODO FIX

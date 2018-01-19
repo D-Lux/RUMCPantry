@@ -35,31 +35,19 @@
   <button class="tablinks" id="Complete">Completed <p id="completeCount"></p><br><i class="fa fa-check fa-3x"></i></button>
 </div>
 
-  <div id="ArriveContent" class="tabcontent defaultTab">
-    <h3>Due In</h3>
-  </div>
+  <div id="ArriveContent" class="tabcontent defaultTab"></div>
 
-  <div id="OrderContent" class="tabcontent">
-    <h3>Ordering</h3>
-  </div>
+  <div id="OrderContent" class="tabcontent"></div>
 
-  <div id="ReviewContent" class="tabcontent">
-    <h3>Review</h3>
-  </div>
+  <div id="ReviewContent" class="tabcontent"></div>
 
-  <div id="PrintContent" class="tabcontent">
-    <h3>Print</h3>
-  </div>
-  <div id="WaitContent" class="tabcontent">
-    <h3>Waiting</h3>
-  </div>
-  <div id="CompleteContent" class="tabcontent">
-    <h3>Completed</h3>
-  </div>
+  <div id="PrintContent" class="tabcontent"></div>
+  <div id="WaitContent" class="tabcontent"></div>
+  <div id="CompleteContent" class="tabcontent"></div>
 
   <div class="clearfix"></div>
-	<button class='btn_walkIn' onclick="location.href = 'endOfDay.php';">End of day</button>
-  <button class='btn_walkIn' onclick="location.href = 'awc.php';">Add Walk-In</button>
+	<button class='btn_walkIn btn-nav' onclick="location.href = 'endOfDay.php';">End of day</button>
+  <button class='btn_walkIn btn-nav' onclick="location.href = 'awc.php';">Add Walk-In</button>
   
 <?php include 'php/footer.php'; ?>
 

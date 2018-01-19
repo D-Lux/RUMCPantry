@@ -10,7 +10,7 @@
 
 	// *******************************************************************************
 	// * Build our column list
-    $columns = array("isDeleted", "categoryID", "name", "small", "medium", "large");
+  $columns = array("isDeleted", "categoryID", "name", "small", "medium", "large");
 	
 	$searchableColumns = array("name", "small", "medium", "large");;
 	
@@ -46,15 +46,14 @@
 	$sql .= " ";
 				
 	// WHERE clauses
-	$sql .= " WHERE isDeleted=0
+	$sql .= " WHERE isDeleted = 0
 			  AND name<>'Redistribution' ";
-	
-	
+        
 	// Get our total record count
 	$totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
 	
 	// Run our query with search and order conditions
-    $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
+  $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
 	$recordCount = count($results);
 	$returnData = [];
 	$out = [];
@@ -71,7 +70,7 @@
 		$deleteBase = "/RUMCPantry/php/itemOps.php?DeleteCategory=1&";
 		$IDParam  = "categoryID=" . $results[$i]['categoryID'];
 		
-		$editLink   = "<button type='submit' class='btn_edit' 
+		$editLink   = "<button type='submit' class='btn_edit btn-table' 
 					   value='" . $editBase . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 		$deleteLink = "<button type='submit' class='btn_icon'
 					   value='" . $deleteBase . $IDParam . "'><i class='fa fa-trash'></i></button>";

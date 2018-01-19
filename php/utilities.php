@@ -599,9 +599,8 @@ function aisleEncoder($aisle){ return $aisle; }
 function shelfDecoder($shelf){ return (($shelf > 0) ? $shelf : "-"); }
 function shelfEncoder($shelf){ return $shelf; }
 
-function rackEncoder($rack){
-	return ord($rack); 
-}
+function rackEncoder($rack){	return $rack; }
+
 function rackDecoder($rack){
 	return chr($rack);
 }

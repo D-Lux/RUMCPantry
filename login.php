@@ -39,13 +39,13 @@
 				}
 			}
 		  ?>
-		  <input type="submit" value="Submit">
+		  <input class='btn-nav' type="submit" value="Submit">
 		</form>
 
 		<br><br><br>
 		or continue as client
 		<form method="get" action="cp1.php">
-			<input type="submit" value="continue">
+			<input class='btn-nav' type="submit" value="continue">
     	</form>
 	
 <?php include 'php/footer.php'; ?>

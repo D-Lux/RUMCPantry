@@ -60,7 +60,7 @@ Body Elements
 }
 
 /* :not(.btn_trash):not(.btn_reactivate):not(.btn_lock) replaced with :not(.btn_icon) */
-button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='submit']:not(.btn_icon) {
+.btn-nav {
 	width: 300px;
 	height: 75px;
 	margin-top: 20px;
@@ -72,27 +72,27 @@ button[type='submit']:not(.btn_icon):not(.btn_edit), .btn_walkIn, input[type='su
 	cursor: pointer;
 }
 
-input[type='submit']:hover, button:hover:enabled:not(.btn_icon):not(#btn_back) {
+.btn-nav:hover {
   background-color: #93C5FF;
 }
-button[type='submit']:active:not(.btn_reactivate):not(.btn_icon), input[type='submit']:active:not(.btn_icon) {
+.btn-nav:active {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
 }
 
-button[type='submit']:focus, input[type='submit']:focus {
+.btn-nav:focus {
 	outline: 0;
 }
 
-
-table>button:not(.btn_icon), .btn_edit:not(.btn_icon) {
-	width: 80px;
-	height: 25px;
+.btn-table {
+	width: 125px;
+	height: 33px;
 	margin: 0px;
 	font-size: 1rem;
+  vertical-align: middle;
 }
 
-/* I hate specificity */
+/* I hate specificity 
 input[type='button']:not(.btn_edit):not(.btn_icon) {
 	width: 60px;
 	height: 45px;
@@ -103,7 +103,7 @@ input[type='button']:not(.btn_edit):not(.btn_icon) {
 	border: solid 2px #499BD6;
 	color: #000;
 	cursor: pointer;
-}
+}*/
 
 .btn_edit {
 	border-radius: 50px;
@@ -113,15 +113,15 @@ input[type='button']:not(.btn_edit):not(.btn_icon) {
 	cursor: pointer;
 }
 
-input[type='button']:not(.btn_or):not(.btn_icon) {
+.btn-input {
 	width: 200px;
 	height: 55px;
 }
-input[type='button']:active:enabled:not(.btn_icon) {
+.btn-input:active:enabled {
 	background-color: #499BD6;
 	border: solid 2px #3D83B5;
 }
-input[type='button']:focus {
+.btn-input:focus {
 	outline: 0;
 }
 
@@ -199,29 +199,9 @@ td {
 }
 
 
-td>button:not(.btn_icon), 
-	td>input[type='submit']:not(.btn_icon) {
-	margin: 0px;
-	height: 33px;
-	width: 175px;
-	vertical-align: middle;
-}
-
-
 /*******************
     Form layout
 *******************/
-
-.inputDiv label {
-	display: inline-block;
-	width: 200px;
-	cursor: text;
-}
-.inputDiv input, .inputDiv textarea {
-	width: 200px;
-	margin: 8px;
-	cursor: text;
-}
 
 #addressZipField {
 	height: 35px;
