@@ -4,7 +4,7 @@
 	include '../utilities.php';
 	
 	$availID = getAvailableClient();
-	$deleted = isset($_GET['deleted']) ? 1 : 0;
+	$deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 	// Set up server connection
 	$conn = createPantryDatabaseConnection();
 	if ($conn->connect_error) {

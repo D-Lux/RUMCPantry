@@ -50,7 +50,7 @@
 
 		$items = returnAssocArray(queryDB($conn, $sql));
 		
-		if ( count($itemList) <= 0 ) {
+		if ( count($items) <= 0 ) {
 			echo "No Items were in the database.";
       die();
 		}
@@ -58,7 +58,7 @@
     $categoryList = [];
     foreach ($items as $item) {
       if (! in_array($item['CName'], $categoryList)) {
-        $categoryList[$item['categoryID']] = $item['cName'];
+        $categoryList[$item['categoryID']] = $item['CName'];
       }
     }
     
@@ -68,17 +68,18 @@
 		// If the number of tabs becomes too large, advance to the next line
 		$tabRow = 0;
 		$tabRowCount = 5;
+    $startTab = true;
 		echo "<div class='tab'>";
     
     foreach ($categoryList as $cid => $category) {
 			echo "<button class='tablinks' onclick='viewTab(event, itemList" . $cid . ")'";
-			echo ($cid > 0 ? "" : " id='defaultOpen' ") . ">" . $category . "</button>";
-			
+			echo ($startTab ? "id='defaultOpen'" : "  ") . ">" . $category . "</button>";
+			$startTab = false;
 			// Check the number of tabs we've shown
 			$tabRow++;
 			if ($tabRow > $tabRowCount) {
 				$tabRow = 0;
-				echo "<div class='clearfix'></div>";//br><br>";
+				echo "<div class='clearfix'></div>";
 			}
     }
 		echo "</div><br>";
@@ -87,8 +88,8 @@
 		// ** Create our table of information
 
 		$currCategory = "";
-		$tabCounter = 0;
-		while ($item = sqlFetch($itemList)) {
+		//while ($item = sqlFetch($itemList)) {
+    foreach ($items as $item) {
 			// if this is a new category
 			if ($currCategory != $item['CName']) {
 				// If we were in a different category, close off that category's table
@@ -97,9 +98,7 @@
 					echo "</div>";
 				}
 				// Print out the category name, followed by the selection qty and start a new table
-				//echo $item['CName'] . "<br>"; // The category name is in the tab name now
-				echo "<div id='itemList" . $tabCounter . "' class='tabcontent'>";
-				$tabCounter++;
+				echo "<div id='itemList" . $item['categoryID'] . "' class='tabcontent'>";
 				echo "Selection Quantity: ";
 				/*	// Text field version
 				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='number' min=0 

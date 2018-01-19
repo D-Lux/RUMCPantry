@@ -92,18 +92,10 @@ Body Elements
   vertical-align: middle;
 }
 
-/* I hate specificity 
-input[type='button']:not(.btn_edit):not(.btn_icon) {
-	width: 60px;
-	height: 45px;
-	margin: 20px 0px 0px 10px;
-	font-size: 1.1rem;
-	border-radius: 50px;
-	background-color: #57B9FF;
-	border: solid 2px #499BD6;
-	color: #000;
-	cursor: pointer;
-}*/
+.btn-table:disabled {
+	background-color: grey;
+  cursor: not-allowed;; 
+}
 
 .btn_edit {
 	border-radius: 50px;

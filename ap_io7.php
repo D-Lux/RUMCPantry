@@ -1,10 +1,28 @@
-<?php include 'php/header.php'; ?>
-<?php include 'php/backButton.php'; ?>
+<?php 
+include 'php/header.php';
+include 'php/backButton.php';
+
+$showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
+if (isset($_GET['showDeleted'])) {
+  $showDeleted = $_GET['showDeleted'];
+}
+?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Item Inventory</h3>
-	
+
+<style>
+.btn_reactivate {
+		color:green;
+	}
+</style>
+  
+<?php
+if ($showDeleted) {
+    echo "<h4>Deactivated Items</h4>";
+}
+?>
 	<div class="body_content">
 	
 		<div id="datatableContainer">
@@ -29,8 +47,17 @@
 	<form method="get" action="ap_io2.php">
 		<input class='btn-nav' type="submit" value="Add an item">
 	</form>
-	
-	<!-- TODO: View 'deleted' items -->
+  
+  <!-- Show Deleted Items -->
+  <?php if ($showDeleted) { ?>
+    <form method="post" action="ap_io7.php">
+      <button type="submit" class="btn-nav" name="showNormal" value=1>Show Items</button>
+    </form>
+  <?php } else { ?>
+    <form method="post" action="ap_io7.php">
+      <button type="submit" class="btn-nav" name="showDeleted" value=1>Show Deactivated Items</button>
+    </form>
+  <?php } ?>
   
 <?php include 'php/footer.php'; ?>
 <script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
@@ -48,17 +75,23 @@
       "ordering"      : false,
       "pagingType"    : "full_numbers",
       "ajax": {
-          "url"       : "php/ajax/itemList.php",
+          "url"       : "php/ajax/itemList.php?deleted=<?=$showDeleted?>",
       },
 	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 
 	$(document).ready(function(){
+    var deleteMode = <?=$showDeleted?>;
 		$('#iItemTable').on('click', '.btn_icon, .btn_edit', function () {
 			if ($(this).hasClass('btn_icon')) {
-				if (confirm("Are you sure you want to deactivate this item?")) {
-					window.location.assign($(this).attr('value'));
-				}
+        var mod = "d";
+        if (deleteMode == 1) { mod = "r"; }
+        
+        if (confirm("Are you sure you want to " + mod + "eactivate this item?")) {
+          window.location.assign($(this).attr('value'));
+
+        }
+				
 			}
 			else {
 				window.location.assign($(this).attr('value'));
@@ -88,6 +121,20 @@
 			window.alert("There was an error when attempting to create!");
 			removeCookie("errCreate");
 		}
+    // Reactivation cookies
+    if (getCookie("itemReactivated") != "") {
+			window.alert("Item reactivated!");
+			removeCookie("itemReactivated");
+		}
+    if (getCookie("err_itemReactivated2") != "") {
+			window.alert("Item reactivated, failed to reactivate category!");
+			removeCookie("err_itemReactivated2");
+		}
+    if (getCookie("err_itemReactivated1") != "") {
+			window.alert("Failed to reactivate item!");
+			removeCookie("err_itemReactivated1");
+		}
+
 		
 	});
 		

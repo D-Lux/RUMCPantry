@@ -1,45 +1,46 @@
 <?php
 
-include '../utilities.php';
+  include '../utilities.php';
+  $deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 
-$conn = createPantryDatabaseConnection();
-    /* Check connection*/
-if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
-} 
+  $conn = createPantryDatabaseConnection();
+      /* Check connection*/
+  if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+  } 
 
-// *******************************************************************************
-// ***********************
-    // * Build our column list
-    // List all of the columns we want
-    $columns = array("itemID", "itemName", "category.name as cName", "aisle", "rack", "shelf");
-	
-	$searchableColumns = array("itemName", "category.name", "aisle", "rack", "shelf");
-	
-	// *********************************
-    // * Generate our user search query 
-    $searchVal = trim($_GET['search']['value']);
-    $searchConditions = '';
-    if ($searchVal != '') {
-        $searchConditions = " AND (";
-		
-        $searchColumns = explode(",", implode(", OR ", $searchableColumns));
+  // *******************************************************************************
+  // ***********************
+  // * Build our column list
+  // List all of the columns we want
+  $columns = array("itemID", "itemName", "category.name as cName", "category.categoryID", "aisle", "rack", "shelf");
+    
+  $searchableColumns = array("itemName", "category.name", "aisle", "rack", "shelf");
+    
+  // *********************************
+  // * Generate our user search query 
+  $searchVal = trim($_GET['search']['value']);
+  $searchConditions = '';
+  if ($searchVal != '') {
+      $searchConditions = " AND (";
 
-        foreach ($searchColumns as $column) {
-            $searchConditions .= $column . " LIKE '%" . $searchVal . "%'";
-        }
-        $searchConditions .= ") ";
-    }
-	
-	// *************************************
-	// * ORDER clause
-	$orderQuery = " ORDER BY itemName ";
-	
-	
-	// *************************************
-	// * Build the query 
-	// Select our Query string
-	$sql = "SELECT " . implode(", ", $columns);
+      $searchColumns = explode(",", implode(", OR ", $searchableColumns));
+
+      foreach ($searchColumns as $column) {
+          $searchConditions .= $column . " LIKE '%" . $searchVal . "%'";
+      }
+      $searchConditions .= ") ";
+  }
+
+  // *************************************
+  // * ORDER clause
+  $orderQuery = " ORDER BY itemName ";
+
+
+  // *************************************
+  // * Build the query 
+  // Select our Query string
+  $sql = "SELECT " . implode(", ", $columns);
 	
 	// FROM main table
 	$sql .= " FROM item ";
@@ -50,7 +51,7 @@ if ($conn->connect_error) {
 				
 	// WHERE clauses
 	// Rack set to -1 are strictly redistribution items
-	$sql .= " 	WHERE item.isDeleted=0
+	$sql .= " 	WHERE item.isDeleted=" . $deleted . "
 				AND (item.rack>=0
 				OR item.rack IS NULL) ";
 	
@@ -65,20 +66,24 @@ if ($conn->connect_error) {
 	
 	// Run our paging function using a for loop
 	$showTo = ($_GET['length'] == -1) ? $recordCount : $_GET['length'];
-    for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
+  for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
         if ($i > ($recordCount - 1)) {
             break;
         }
         $row = [];
 		
-		$editLink = "/RUMCPantry/ap_io3.php?";
-		$deleteLink = "/RUMCPantry/php/itemOps.php?DeleteItem=1&";
-		$IDParam  = "itemID=" . $results[$i]['itemID'];
 		
-		$editLink   = "<button type='submit' class='btn-table btn_edit' 
+		$IDParam  = "itemID=" . $results[$i]['itemID'];
+    
+		$editLink = "/RUMCPantry/ap_io3.php?";
+		$editLink   = "<button type='submit' class='btn-table btn_edit' " . (($deleted==1) ? "disabled" : " " ) . "
 					   value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
-		$deleteLink = "<button type='submit' class='btn_icon'
-					   value='" . $deleteLink . $IDParam . "'><i class='fa fa-trash'></i></button>";
+             
+    $baseLink = "/RUMCPantry/php/itemOps.php?";		
+		$actionLink = "<button type='submit' class='btn_icon" . (($deleted==1) ? " btn_reactivate" : "") . "'
+					   value='" . $baseLink . 
+					   (($deleted == 1) ? 'categoryID=' . $results[$i]['categoryID'] . '&ReactivateItem' : 'DeleteItem') . "=1&" . $IDParam . "'><i class='fa fa-" .
+					   (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
 		
 		$row[0] = $editLink;
 		$row[1] = $results[$i]['itemName'];
@@ -86,15 +91,15 @@ if ($conn->connect_error) {
 		$row[3] = aisleDecoder($results[$i]['aisle']);
 		$row[4] = rackDecoder($results[$i]['rack']);
 		$row[5] = shelfDecoder($results[$i]['shelf']);
-		$row[6] = $deleteLink;
+		$row[6] = $actionLink;
 		
 		$out[] = $row;
 	}	
 	
-	$returnData['draw'] 			= $_GET['draw'];
-    $returnData['data']  		    = $out;
-    $returnData['recordsTotal'] 	= $totalRecordCount;
-    $returnData['recordsFiltered']  = $recordCount;
+	$returnData['draw'] 			      = $_GET['draw'];
+  $returnData['data']  		        = $out;
+  $returnData['recordsTotal'] 	  = $totalRecordCount;
+  $returnData['recordsFiltered']  = $recordCount;
 	closeDB($conn);
 
 	echo json_encode($returnData);
