@@ -16,7 +16,7 @@
 		
 		echo "</h3>";
 		
-		
+		echo "<div id='errMsgs' style='display:none;color:red;'></div>";
 		if ($familyType === ""){
 			header("location: /RUMCPantry/ap_oo1.php");
 		}
@@ -146,4 +146,13 @@
 <script>
   // Open the default tab (if tabs exist)
   document.getElementById("defaultOpen").click();
+  $(document).ready()
+  $( document ).ready(function() {
+    $("select").on("change", function() {
+      $("#errMsgs").hide(200);
+    });
+    $(".tablinks").on("click", function() {
+      $("#errMsgs").hide(200);
+    });
+  });
 </script>

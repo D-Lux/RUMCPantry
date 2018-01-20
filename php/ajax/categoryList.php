@@ -1,6 +1,7 @@
  <?php
 
 	include '../utilities.php';
+  $deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 
 	$conn = createPantryDatabaseConnection();
 		/* Check connection*/
@@ -46,7 +47,7 @@
 	$sql .= " ";
 				
 	// WHERE clauses
-	$sql .= " WHERE isDeleted = 0
+	$sql .= " WHERE isDeleted = " . $deleted . "
 			  AND name<>'Redistribution' ";
         
 	// Get our total record count
@@ -65,25 +66,31 @@
             break;
         }
         $row = [];
-		
-		$editBase = "/RUMCPantry/ap_io5.php?";
-		$deleteBase = "/RUMCPantry/php/itemOps.php?DeleteCategory=1&";
-		$IDParam  = "categoryID=" . $results[$i]['categoryID'];
-		
-		$editLink   = "<button type='submit' class='btn_edit btn-table' 
-					   value='" . $editBase . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
-		$deleteLink = "<button type='submit' class='btn_icon'
-					   value='" . $deleteBase . $IDParam . "'><i class='fa fa-trash'></i></button>";
-		
-		$row[0] = $editLink;
-		$row[1] = $results[$i]['name'];
-		$row[2] = $results[$i]['small'];
-		$row[3] = $results[$i]['medium'];
-		$row[4] = $results[$i]['large'];
-		$row[5] = $deleteLink;
-		
-		$out[] = $row;
-	}	
+        
+        $IDParam  = "categoryID=" . $results[$i]['categoryID'];
+        $functionParam = ($deleted == 1) ? 'ReactivateCategory' : 'DeleteCategory';
+        $classList = 'btn_icon' . (($deleted == 1) ? ' btn_reactivate' : ' ');
+                 
+        
+        $editLink = "/RUMCPantry/ap_io5.php?";
+        $editLink   = "<button type='submit' class='btn-table btn_edit' " . (($deleted==1) ? "disabled" : " " ) . "
+                 value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
+        
+        
+        $baseLink = "/RUMCPantry/php/itemOps.php?";		
+        $actionLink = "<button type='submit' class='" . $classList . "'
+                 value='" . $baseLink . $functionParam . "=1&" . $IDParam . "'>
+                 <i class='fa fa-" . (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
+        
+        $row[0] = $editLink;
+        $row[1] = $results[$i]['name'];
+        $row[2] = $results[$i]['small'];
+        $row[3] = $results[$i]['medium'];
+        $row[4] = $results[$i]['large'];
+        $row[5] = $actionLink;
+        
+        $out[] = $row;
+    }	
 	
 	$returnData['draw'] 			= $_GET['draw'];
     $returnData['data']  		    = $out;

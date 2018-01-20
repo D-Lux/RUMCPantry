@@ -5,13 +5,6 @@ include 'php/backButton.php';
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
-<style>
-	.btn_icon {
-		color:green;
-	}
-	
-</style>
-
   <h3>Inactive Clients</h3>
 	
 	<div class="body_content">		
@@ -34,7 +27,7 @@ include 'php/backButton.php';
 	
 	<!-- View Active Clients -->
 	<form action="ap_co1.php">
-		<input type="submit" name="ShowActive" value="View Active Clients">
+		<input class="btn-nav" type="submit" name="ShowActive" value="View Active Clients">
     </form>
 
 	<div id="errorLog"></div>

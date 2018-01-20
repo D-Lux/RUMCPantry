@@ -160,76 +160,43 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $conn->close();
 }
 elseif (isset($_GET['DeleteCategory'])) {
-    $conn = createPantryDatabaseConnection();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-    $categoryID = $_GET['categoryID']; 
-    $sql = "update Category set isDeleted = true where categoryID=" . $categoryID;
+  $conn = createPantryDatabaseConnection();
+  if ($conn->connect_error) {
+    createCookie("conErr", 1, 30);
+    header("location: /RUMCPantry/ap_io8.php");
+  } 
+  $categoryID = $_GET['categoryID']; 
+  $sql = "UPDATE Category SET isDeleted = true WHERE categoryID=" . $categoryID;
     
 	if ($conn->query($sql) === FALSE) {
-      createCookie("delError", 1, 30);
+    createCookie("delError", 1, 30);
   }
   else {
-    $sql = "update item set isDeleted = true where categoryID=$categoryID";
+    $sql = "UPDATE item SET isDeleted = true WHERE categoryID=$categoryID";
     if ($conn->query($sql) === FALSE) {
       createCookie("delError", 1, 30);
     }
     else{
-        createCookie("categoryDeleted", 1, 30);
+      createCookie("categoryDeleted", 1, 30);
     }
   }
   header("location: /RUMCPantry/ap_io8.php");
 }
-elseif (isset($_GET['ReactivateCategoryAndItems'])) {
-	//TODO FIX
-    $conn = createPantryDatabaseConnection();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-    $categoryID = $_GET['categoryID'];   
-
-        $sql = "update Category set isDeleted = false where categoryID=$categoryID";
-
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Category with category id $categoryID reactivated</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Failed to reactivate category", "red" );
-          }
-
-          $sql = "update item set isDeleted = false where categoryID=$categoryID";
-        
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>items with category id $categoryID reactivated</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Failed to Reactivate items", "red" );
-          }
-    
-}
 elseif (isset($_GET['ReactivateCategory'])) {
-	//TODO FIX
-    $conn = createPantryDatabaseConnection();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    }
-	
-    $categoryID = $_GET['categoryID'];
+  $conn = createPantryDatabaseConnection();
+  if ($conn->connect_error) {
+    createCookie("conErr", 1, 30);
+  }
 
-	$sql = "update Category set isDeleted = false where categoryID=$categoryID";
+	$sql = "UPDATE Category SET isDeleted = false WHERE categoryID=" . $_GET['categoryID'];
 
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Category with category id $categoryID reactivated</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Failed to reactivate category", "red" );
-          }
-
-    
+  if ($conn->query($sql) === FALSE) {
+    createCookie("reactivateError", 1, 30);
+  }
+  else{
+    createCookie("categoryReactivated", 1, 30);
+  }
+  header("location: /RUMCPantry/ap_io8.php?showDeleted=1");
 }
 elseif (isset($_GET['ReactivateItem'])) {
     $conn = createPantryDatabaseConnection();
@@ -271,7 +238,6 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
 
     //check to see if category exists, if not create it.
     $sql = "UPDATE Category

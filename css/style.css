@@ -230,6 +230,11 @@ Special case buttons
 	height: 55px;
 }
 
+.btn_reactivate {
+		color:green;
+}
+
+
 /*********
 Order Form
 *********/

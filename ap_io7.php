@@ -11,12 +11,6 @@ if (isset($_GET['showDeleted'])) {
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Item Inventory</h3>
-
-<style>
-.btn_reactivate {
-		color:green;
-	}
-</style>
   
 <?php
 if ($showDeleted) {

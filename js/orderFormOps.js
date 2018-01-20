@@ -188,14 +188,14 @@ function checkQuantitySelections() {
 		if (!isHiddenElement(elem)) {
 			var currItemCount = parseInt(elem.value);
 			if (currItemCount > currCategoryCount) {
-				window.alert("An item's allowed quantity should not be greater than the category quantity.");
+        $("#errMsgs").html("An item's allowed quantity should not be greater than the category quantity.").show(300);
 			}
 			totalItemCount += currItemCount;
 		}
 	}
 	
 	if (totalItemCount < currCategoryCount) {
-		window.alert("There are not enough items in this category to match the selection quantity.");
+    $("#errMsgs").html("There are not enough items in this category to match the selection quantity.").show(300);
 	}
 }
 

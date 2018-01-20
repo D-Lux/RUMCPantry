@@ -14,7 +14,7 @@
 	// ***********************
     // * Build our column list
     // List all of the columns we want
-    $columns = array("Client.clientID", "(Client.numOfAdults + Client.numOfKids) as familySize", 
+  $columns = array("Client.clientID", "(Client.numOfAdults + Client.numOfKids) as familySize", 
 				   "Client.email", "Client.phoneNumber", "CONCAT(fm.lastName, ', ', fm.firstName) as cName");
 	$searchableColumns = array("Client.email", "Client.phoneNumber", "fm.lastName" , "fm.firstName");
 	
@@ -78,7 +78,8 @@
 		
 		$editLink   = "<button type='submit' class='btn-table btn_edit' 
 					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
-		$actionLink = "<button type='submit' class='btn_icon'
+             
+		$actionLink = "<button type='submit' class='btn_icon" . (($deleted==1) ? " btn_reactivate" : "") . "'
 					   value='" . $baseLink . 
 					   (($deleted == 1) ? 'ActiveClient' : 'InactiveClient') . "=1" . $IDParam . "'><i class='fa fa-" .
 					   (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
