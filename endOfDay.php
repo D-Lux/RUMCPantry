@@ -11,7 +11,7 @@ include 'php/backButton.php';
 $date = date("Y-m-d");  
 
 // Create and test connection
-$conn = createPantryDatabaseConnection();
+$conn = connectDB();
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
 } 

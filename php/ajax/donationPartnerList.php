@@ -6,7 +6,7 @@
 	$availID = getAvailableClient();
 	$deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}

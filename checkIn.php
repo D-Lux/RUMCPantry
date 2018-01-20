@@ -5,7 +5,7 @@
 	$date = date("M j, Y");
 	$dbDate = date("Y-m-d", strtotime($date));
 	
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		echo "Connection failed: " . $conn->connect_error;
 		die();

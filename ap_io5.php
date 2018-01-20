@@ -14,7 +14,7 @@ include 'php/backButton.php';
     $large		= 0;
    
      /* Create connection*/
- 	$conn = createPantryDatabaseConnection();
+ 	$conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -33,6 +33,7 @@ include 'php/backButton.php';
 		$large		= $row["large"];
     }
     else {
+      // TODO: Remove this
         echoDivWithColor("<h1><b>Category does not exist!</h1></b>","red");
     }
 

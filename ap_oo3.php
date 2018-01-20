@@ -31,7 +31,7 @@ include 'php/backButton.php';
 				AND status<=" . GetPrintedHigh() . "
 				ORDER BY visitTime, status ASC";
 		
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}

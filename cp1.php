@@ -7,7 +7,7 @@ include 'php/backButton.php'
 			<!-- Refresh button -->
 			<button id='btn_back' onclick="location.reload()">Refresh</button>
 			<?php
-				$conn = createPantryDatabaseConnection();
+				$conn = connectDB();
 				if ($conn->connect_error) {
 					die("Connection failed: " . $conn->connect_error);
 				}

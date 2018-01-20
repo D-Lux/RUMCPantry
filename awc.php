@@ -27,7 +27,7 @@ include 'php/backButton.php';
 		// *******************************************
 		// ** Generate the datalist for client drop down
 		
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		$sql = "SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
 				FROM FamilyMember
 				JOIN Client
@@ -41,6 +41,7 @@ include 'php/backButton.php';
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
 			//echo "No clients in the database.";
+      // TODO: Add some sort of warning instead
 			//echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		}
 		

@@ -26,7 +26,7 @@
     
 
      /* Create connection*/
- 	$conn = createPantryDatabaseConnection();
+ 	$conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -68,6 +68,7 @@
     }
     else
     {
+      // TODO remove this
         echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
     }
 

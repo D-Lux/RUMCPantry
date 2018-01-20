@@ -3,7 +3,7 @@
 	include '../utilities.php';
   $deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 		/* Check connection*/
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);

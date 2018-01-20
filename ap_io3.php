@@ -22,7 +22,7 @@ include 'php/backButton.php';
     $categoryName   = "";
 
      /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -57,6 +57,8 @@ include 'php/backButton.php';
 
 		}
 		else  {
+      
+      // TODO: Remove echo div with color
 		  echoDivWithColor("<h1><b><i>This item is deactivated.<br>Please reactivate it to edit it</i></b></h1>","purple");
 		}
     }

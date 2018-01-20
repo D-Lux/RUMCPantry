@@ -27,7 +27,7 @@
 		
 		echo "<div class='body_content'>";
 		
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}

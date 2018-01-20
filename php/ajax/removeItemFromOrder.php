@@ -4,7 +4,7 @@
 	// AJAX call to remove an item from an order
 	if (isset($_GET['invoiceDescID'])) {
 		
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			echo "ERROR - No database connection";
 			die("Connection failed: " . $conn->connect_error);

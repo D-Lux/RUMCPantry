@@ -12,7 +12,7 @@
 		// * Do our SQL query and store off a datalist of items
 		
 		// Set up server connection
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -72,7 +72,7 @@
 		
 		// *************************************************************
 		// * load the save file here and add appropriate boxes as needed
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}

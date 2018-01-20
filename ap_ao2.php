@@ -38,7 +38,7 @@
 			<!-- Get the Date for this set of invoices -->
 			<?php
 				// Set up server connection
-				$conn = createPantryDatabaseConnection();
+				$conn = connectDB();
 				if ($conn->connect_error) {
 					die("Connection failed: " . $conn->connect_error);
 				}

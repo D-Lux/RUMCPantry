@@ -2,7 +2,7 @@
 	include('../utilities.php');
 
 	if (isset($_GET['activate'])) {
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -48,7 +48,7 @@
 		if ( ($clientFirstName == "Available") && ($clientLastName == "Available") ) {
 			$clientID = getAvailableClient();
 			// Assign invoice to this client id
-			$conn = createPantryDatabaseConnection();
+			$conn = connectDB();
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			}
@@ -63,7 +63,7 @@
 		}
 		else {
 			// open a connection to the database
-			$conn = createPantryDatabaseConnection();
+			$conn = connectDB();
 			if ($conn->connect_error) {
 				die("Connection failed: " . $conn->connect_error);
 			}
@@ -95,6 +95,7 @@
 								  status=" . $newStatus . "
 								  WHERE invoiceID=" . $invoiceID;
 				if (queryDB($conn, $updateInvoice) === FALSE) {
+          // TODO: Remove this
 					echoDivWithColor("Error!", "red" );	
 				}
 				

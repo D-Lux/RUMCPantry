@@ -32,7 +32,7 @@
 				WHERE invoiceID=" . $invoiceID . "
 				ORDER BY aisle, rack, shelf, iName";
 		
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		
 		// Check fail conditions
 		if ($conn->connect_error) {

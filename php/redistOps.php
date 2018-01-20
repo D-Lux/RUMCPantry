@@ -41,7 +41,7 @@ elseif(isset($_POST['submitRedistribution'])) {
 	// * --== Create our item ID / Price array ==--
 	
 	// Connect to the database and grab Item ID and Price information
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -111,7 +111,7 @@ elseif(isset($_POST['submitRedistribution'])) {
 // --== Delete invoice ==--
 elseif(isset($_POST['deleteRedistInvoice'])) {
 	// Connect to the database and grab Item ID and Price information
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -149,7 +149,7 @@ elseif(isset($_POST['submitNewRedistPartner'])) {
 	$clientLastName = makeString(fixInput($_POST['partnerName']));
 
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -212,7 +212,7 @@ elseif(isset($_POST['submitUpdateRedist'])) {
 	$partnerName = makeString(fixInput($_POST['partnerName']));
 		
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -265,7 +265,7 @@ elseif(isset($_POST['submitNewRedistItem'])) {
 	echo "RedistID = " . $category . "<br>";
 	
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -300,7 +300,7 @@ elseif(isset($_POST['submitUpdateRedistItem'])) {
 	$itemID =$_POST['id'];
 		
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -362,7 +362,7 @@ function toggleRedistributionClient($isDeleted) { toggleRedistribution("Client",
 function toggleRedistribution($db, $field, $isDeleted) {
 	debugEchoPOST();
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -400,7 +400,7 @@ function toggleRedistribution($db, $field, $isDeleted) {
 // We need a custom category called REDISTRIBUTION
 // This function finds the Category ID
 function getRedistributionCategory() {
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -425,7 +425,7 @@ function getRedistributionCategory() {
 }
 
 function createRedistributionCategory(){
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}

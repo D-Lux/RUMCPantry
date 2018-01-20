@@ -29,7 +29,7 @@ include 'php/backButton.php'
 				$walkIn = 0;
 				
 				// Open the database connection
-				$conn = createPantryDatabaseConnection();
+				$conn = connectDB();
 				if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
 				
 				// Check if we are just viewing (from admin)
@@ -52,6 +52,7 @@ include 'php/backButton.php'
 					
 					$famQuery = queryDB($conn, $famSql);
 					if ($famQuery === FALSE) {
+            // TODO: Fix this
 						echo "sql error: " . mysqli_error($conn);
 						echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 					}
@@ -63,6 +64,7 @@ include 'php/backButton.php'
 					$WIQuery = queryDB($conn, $walkinSql);
 					
 					if ($WIQuery === FALSE) {
+            // TODO: Remove this in favor of a better error message
 						echo "sql error: " . mysqli_error($conn);
 						echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 					}
@@ -207,7 +209,7 @@ include 'php/backButton.php'
 					echo "<div id='specialsSection'>";
 					$specialsFile = fopen("specials.txt","r") or die();
 					echo "<hr><h3>Specials</h3><h4>Please select one item from each section</h4>";
-					$conn = createPantryDatabaseConnection();
+					$conn = connectDB();
 					if ($conn->connect_error) {
 						die("Connection failed: " . $conn->connect_error);
 					}

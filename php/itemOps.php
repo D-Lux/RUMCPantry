@@ -20,7 +20,7 @@ if(isset($_POST['createItem'])) {
 
   /* previous lines set up the strings for connextion*/
   /* Create connection*/
-  $conn = createPantryDatabaseConnection();
+  $conn = connectDB();
   /* Check connection*/
   if ($conn->connect_error) {
     createCookie("errConnection", 1, 30);
@@ -67,7 +67,7 @@ if(isset($_POST['createItem'])) {
 }
 elseif (isset($_GET['DeleteItem'])) {
 	$itemID = $_GET['itemID'];
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -106,7 +106,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
     $categoryID = null;
 
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
@@ -164,7 +164,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
   closeDB($conn);
 }
 elseif (isset($_GET['DeleteCategory'])) {
-  $conn = createPantryDatabaseConnection();
+  $conn = connectDB();
   if ($conn->connect_error) {
     createCookie("conErr", 1, 30);
     header("location: /RUMCPantry/ap_io8.php");
@@ -188,7 +188,7 @@ elseif (isset($_GET['DeleteCategory'])) {
   header("location: /RUMCPantry/ap_io8.php");
 }
 elseif (isset($_GET['ReactivateCategory'])) {
-  $conn = createPantryDatabaseConnection();
+  $conn = connectDB();
   if ($conn->connect_error) {
     createCookie("conErr", 1, 30);
   }
@@ -205,7 +205,7 @@ elseif (isset($_GET['ReactivateCategory'])) {
   header("location: /RUMCPantry/ap_io8.php?showDeleted=1");
 }
 elseif (isset($_GET['ReactivateItem'])) {
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
       header("location: /RUMCPantry/ap_io7.php");
@@ -241,7 +241,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $large 		= $_POST['large'];
 
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
@@ -276,7 +276,7 @@ elseif (isset($_POST['createCategory'])) {
     $large 	= $_POST['large'];
 
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);

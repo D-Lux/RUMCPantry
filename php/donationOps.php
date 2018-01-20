@@ -26,7 +26,7 @@ if(isset($_POST['createDonation'])) {
     /* previous lines set up the strings for connextion*/
     include('header.php');
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -123,7 +123,7 @@ elseif(isset($_POST['createDonationPartner'])) /*when the button is pressed on p
 
     include('header.php');
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -166,7 +166,7 @@ elseif (isset($_GET['UpdateItem'])) {
 }
 elseif (isset($_GET['DeleteItem'])) {
   
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     $itemID = $_GET['itemID'];
     /* Check connection*/
     if ($conn->connect_error) {
@@ -195,7 +195,7 @@ elseif (isset($_GET['updateDonation'])) {
 }
 elseif (isset($_GET['deleteDonation'])) {
   
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
     $donationID = $_GET['donationID'];
     /* Check connection*/
     if ($conn->connect_error) {
@@ -223,7 +223,7 @@ elseif (isset($_GET['updateDonationPartner'])) {
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
    
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
     $donationPartnerID = $_GET['donationPartnerID'];
     /* Check connection*/
     if ($conn->connect_error) {
@@ -276,7 +276,7 @@ elseif (isset($_POST['updateDonationIndividual'])) {
     /* previous lines set up the strings for connextion*/
     include('header.php');
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
@@ -374,7 +374,7 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
 
     include('header.php');
     /* Create connection*/
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);

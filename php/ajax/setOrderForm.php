@@ -8,7 +8,7 @@
 		$newQty = $_GET['newQty'];
 		$familyType = $_GET['familyType'];
 
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 			echo "ERROR";
@@ -30,7 +30,7 @@
 		$itemID = $_GET['itemID'];
 		$newFX = $_GET['newFx'];
 
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -50,7 +50,7 @@
 		$cQty = $_GET['cQty'];
 		$familyType = $_GET['familyType'];
 
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}

@@ -6,7 +6,7 @@
 
 <?php
 	// Open the database connection
-  $conn = createPantryDatabaseConnection();
+  $conn = connectDB();
 	if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
   
   
@@ -203,7 +203,7 @@
 		echo "<div id='specialsSection'>";
 		$specialsFile = fopen("specials.txt","r") or die();
 		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3>";
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}

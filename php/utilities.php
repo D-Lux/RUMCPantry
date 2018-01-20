@@ -1,13 +1,13 @@
 <?php
-
+session_start();
 // **********************************************
 // * Debug functions
 
+// TODO: Find all of these and replace with proper error messages for users
 function echoDivWithColor($message, $color){
-   // echo  '<div style="color: '.$color.';">'; /*must do color like this, can't do these three lines on the same line*/
 	echo  '<div>';
-    echo $message;
-    echo  '</div>';
+  echo $message;
+  echo  '</div>';
 }
 
 function debugEchoPOST() {
@@ -38,7 +38,7 @@ date_default_timezone_set('America/Chicago');
 // Creating a global connection function so that if we ever need to change the database information
 // it's all in one place
 $connectionActive = false;
-function createPantryDatabaseConnection() {
+function connectDB() {
 	// Set up server connection
 	$servername = "127.0.0.1";
 	$username   = "root";
@@ -158,7 +158,7 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 		out all that has been deleted.
 	*/
 	
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
 	//standard DB stuff up to here
 	$sql = "SELECT DISTINCT " . $attributeName .
 			" FROM " .  $tableName ;//select distinct values from the collumn in this table
@@ -192,7 +192,7 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 		out all that has been deleted.
 	*/
 	
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -247,7 +247,7 @@ function removeCookie($cookieName) {
 // This function will check the database for this client, and create it if it doesn't exist yet
 // Returns the appropriate clientID
 function getAvailableClient() {
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -274,7 +274,7 @@ function getAvailableClient() {
 }
 
 function createAvailableClient(){
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}

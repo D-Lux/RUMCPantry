@@ -12,7 +12,7 @@ function toggleClientActive($isDeleted=0) {
 		die("Invalid!");
 	}
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -102,7 +102,7 @@ elseif(isset($_POST['submitClient']))
 	$gender = $_POST['gender'];
 
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -189,7 +189,7 @@ elseif(isset($_POST['UpdateClient']))
 	$notes = makeString($_POST['notes']);
 		
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -244,7 +244,7 @@ elseif(isset($_POST['submitMember']))
 	$clientID = $_POST['id'];
 	
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -287,7 +287,7 @@ elseif(isset($_POST['submitMember']))
 elseif(isset($_POST['UpdateMember']))
 {
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	} 
@@ -366,7 +366,7 @@ elseif(isset($_GET['DeleteMember']))
 {
 	debugEchoPOST();debugEchoGET();
 	// Set up server connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}

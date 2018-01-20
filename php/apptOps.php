@@ -13,7 +13,7 @@ function addWalkIn($clientID) {
 	$sql .= "( " . $walkInDate . ", " . $walkInTime . ", " . $clientID . ", " . SV_ASSIGNED . ", 1)";
 	
 	// Open database connection and perform insertion
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
@@ -42,7 +42,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 			FROM Invoice
 			WHERE visitDate=" . $validateDate . "
 			AND status NOT IN (" . implode ( ",", GetRedistributionStatuses()) . ")";
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -75,7 +75,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		}
 		
 		// perform insertion
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		
 		if (queryDB($conn, $sql) === TRUE) {
 			closeDB($conn);
@@ -110,7 +110,7 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		$sql .= "( " . $validateDate . ", '" . $timeSlot . "', $availID, 0, 0)";
 	}
 	// open the database connection and perform insertion
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
@@ -120,6 +120,7 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		
 	} 
 	else {
+    // TODO: Remove this
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		echoDivWithColor("Error, failed to insert invoices.", "red" );	
 	}
@@ -129,7 +130,7 @@ elseif (isset($_POST['DeleteInvoice'])) {
 	// Generate our sql query to delete the invoice date in question
 	$sql = "DELETE FROM Invoice
 			WHERE invoiceID=" . $_POST['invoiceID'];
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -156,7 +157,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 			FROM Invoice
 			WHERE visitDate='" . $_POST['visitDate'] . "'
 			AND visitTime='" . $_POST['visitTime'] . "'";
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -212,7 +213,6 @@ elseif (isset($_POST['NoApptSelection'])) {
 }
 // Walk-in appointment creation
 elseif (isset($_GET['newWalkIn'])) {
-	debugEchoPOST();debugEchoGET();
 	addWalkIn($_GET['clientID']);
 }
 elseif (isset($_POST['existingWalkIn'])) {

@@ -14,6 +14,7 @@
 		</div>
 	
 <?php
+// show buttons based on permissions (remove this page, basically)
   if ($_SERVER["REQUEST_METHOD"] == "POST") {
     createCookie("loggedin", 0, -1);
     header ("location: /RUMCPantry/login.php");

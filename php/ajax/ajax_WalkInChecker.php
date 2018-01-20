@@ -7,7 +7,7 @@ $response['status'] = -1;
 
 if ($cid == -1) { die( json_encode($response)); }
 
-$conn = createPantryDatabaseConnection();
+$conn = connectDB();
 if ($conn->connect_error) {
   die("Connection failed: " . $conn->connect_error);
 }

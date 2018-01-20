@@ -1,13 +1,22 @@
 <?php
 
-if (($_COOKIE["loggedin"]) != 1) {
-	header ("location: /RUMCPantry/login.php?err=2");
+
+if( !isset($_SESSION['last_access']) || (time() - $_SESSION['last_access']) > 60 ) 
+  $_SESSION['last_access'] = time(); 
+
+if (!isset($pageRestriction)) {
+  //header ("location: /RUMCPantry/login.php?err=2");
 }
+
+if ($pageRestriction > -1) {
+  //$_SESSION['perms']
+  // stuff
+}
+
 
 /*
 echo "<br>";
-      //$pw = password_hash("Test", PASSWORD_BCRYPT, ['cost' => 8]);
-      $result = password_verify("Test", "\$2y\$08\$aNuRvtdzYuk1nPJ1WAczWutZvVoCkA6XNslhVzebJB0X31PxH5SH6");
+      //$pw = 
       //echo $pw;
       echo "<br>" . $result;
 

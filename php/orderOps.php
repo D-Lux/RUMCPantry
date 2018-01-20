@@ -32,7 +32,7 @@ function deleteInvoiceDesc() {
 	// Open up the database and delete all invoice descriptions that match the invoice ID
 	
 	// Connect to the database
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -59,7 +59,7 @@ function createInvoiceDesc() {
 	// * --== Create our item ID / Price array ==--
 	
 	// Connect to the database and grab Item ID and Price information
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -152,7 +152,7 @@ function createInvoiceDesc() {
 // * Function to set the status of an invoice to the correct value
 function updateStatusFromOrder() {
 	// Connect to the database
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -236,7 +236,7 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 	// * --== Create our update query ==--
 	
 	// Connect to the database
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -264,7 +264,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 	// itemID1,itemID2,itemID3, - use explode(",",getLine($filename)); to extract arrays of item IDs
 	
 	// Open our database connection
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
@@ -317,7 +317,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 	$returnHeader = "location: /RUMCPantry/ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] . 
 					"&visitTime=" . $_POST['visitTime'] . "&familySize=" . $_POST['familySize'];
 	
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}

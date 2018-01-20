@@ -4,7 +4,7 @@ include '../utilities.php';
 
 // ******************************************
 // Set up server connection
-$conn = createPantryDatabaseConnection();
+$conn = connectDB();
 if ($conn->connect_error) {
 	die("Connection failed: " . $conn->connect_error);
 }

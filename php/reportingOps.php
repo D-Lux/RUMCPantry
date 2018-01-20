@@ -2,7 +2,7 @@
 // Called as an AJAX request when a date is changed and automatically when reporting.php is loaded
 
 function runReportQueries($startDate, $endDate) {
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 		echo "Database Error";

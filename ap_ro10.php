@@ -9,7 +9,7 @@ include 'php/backButton.php'
 	
 	<?php
 		// Set up server connection
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -22,6 +22,7 @@ include 'php/backButton.php'
 						WHERE InvoiceDescription.invoiceID=" . $_GET['id'];
 		$invoiceQuery = queryDB($conn, $invoiceSql);
 		if ($invoiceQuery === FALSE) {
+      // TODO: remove this (replace with loading previous page and warning message)
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 			echoDivWithColor("Error, failed to locate invoice descriptions.", "red" );	

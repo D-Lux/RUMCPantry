@@ -28,7 +28,7 @@
 				AND YEAR(visitDate)=" . $selectYear . "
 				AND clientID=" . $availID . "
 				GROUP BY visitTime";
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 			echo "ERROR";

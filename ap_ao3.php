@@ -14,7 +14,7 @@
 	
 	<?php
 		// Set up server connection
-		$conn = createPantryDatabaseConnection();
+		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -56,6 +56,7 @@
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
 			echo "Error, bad SQL Query";
+      // TODO remove this
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
 		}
 		

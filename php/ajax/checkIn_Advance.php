@@ -41,7 +41,7 @@
   
   // Set the client to arrived, with numerical indicator as to the order in which they arrived
   function advanceToOrdering($ID, $date) {
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     if ($conn->connect_error) {
 		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
     }
@@ -81,7 +81,7 @@
   
   // Set the client to completed
   function advanceToCompleted($ID) {
-    $conn = createPantryDatabaseConnection();
+    $conn = connectDB();
     if ($conn->connect_error) {
 		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
     }

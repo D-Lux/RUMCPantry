@@ -2,7 +2,7 @@
 
 	include '../utilities.php';
 
-	$conn = createPantryDatabaseConnection();
+	$conn = connectDB();
 	if ($conn->connect_error) {
 		$dataBlock['error'] = "Connection failed: " . $conn->connect_error;
 		die();
