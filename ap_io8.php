@@ -127,6 +127,10 @@ if ($showDeleted) {
       window.alert("There was an error attempting to connect to the database.");
 			removeCookie("reactivateError");
     }
+    if (getCookie("CatExists") != "") {
+      window.alert("That category already exists.");
+			removeCookie("CatExists");
+    }
     
     
 
