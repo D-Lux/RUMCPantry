@@ -2,11 +2,8 @@
 
 <?php
 
-
-
-if(isset($_POST['createDonation'])) /*when the button is pressed on post request*/
-{
-    
+/*when the button is pressed on post request*/
+if(isset($_POST['createDonation'])) {
 
     $pickupDate = $_POST['pickupDate'];
     $networkPartner = $_POST['networkPartner']; 
@@ -24,14 +21,7 @@ if(isset($_POST['createDonation'])) /*when the button is pressed on post request
     $dryNonFood = $_POST['dryNonFood'];
     $dryFoodDrive = $_POST['dryFoodDrive'];
 
-
-
-    
-
     $donorID = null;
-
-
-
 
     /* previous lines set up the strings for connextion*/
     include('header.php');

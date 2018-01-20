@@ -5,7 +5,7 @@
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 	
-    <h3>Active Clients</h3>
+<h3>Active Clients</h3>
 	
 	<div class="body_content">
 	
