@@ -1,13 +1,14 @@
-<?php 
-include 'php/header.php';
-include 'php/reportingOps.php';
-include 'php/backButton.php';
+<?php
+  $pageRestriction = 99;
+  include 'php/header.php';
+  include 'php/reportingOps.php';
+  include 'php/backButton.php';
 ?>
 
 <h3>Reporting</h3>
 
 <?php
-  echo "<div class='body_content'>";
+  echo "<div class='body-content'>";
   
   $startDate = date('Y-m-d', strtotime('first day of last month'));
   $endDate = date('Y-m-d', strtotime('last day of last month'));

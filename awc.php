@@ -1,4 +1,5 @@
-<?php 
+<?php
+$pageRestriction = 10;
 include 'php/header.php';
 include 'php/backButton.php'; 
 ?>
@@ -20,7 +21,7 @@ include 'php/backButton.php';
     
 	<h3>Add Walk-In</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 	

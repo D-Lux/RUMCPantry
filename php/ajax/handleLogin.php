@@ -1,10 +1,9 @@
 <?php 
 include '../utilities.php';
 
-// if login and password are blank, apply permissions 1
-// if login isn't blank, check it against the database, if it doesn't match anything, return a warning
-// if Password isn't blank, check it against a matching login, if it doesn't match, return a warning
-// Else, apply permissions for associated login (from db)
+// passwords and logins are generated using the password_has function as follows
+// password_hash("Test", PASSWORD_BCRYPT, ['cost' => 8]);
+// password_verify("Test", "\$2y\$08\$aNuRvtdzYuk1nPJ1WAczWutZvVoCkA6XNslhVzebJB0X31PxH5SH6");
 
 
 $name = $_POST['field1'];
@@ -55,8 +54,5 @@ else {
   $data['err']  = 1;
   die(json_encode($data));
 }
-
-//password_hash("Test", PASSWORD_BCRYPT, ['cost' => 8]);
-//password_verify("Test", "\$2y\$08\$aNuRvtdzYuk1nPJ1WAczWutZvVoCkA6XNslhVzebJB0X31PxH5SH6");
 
 ?>

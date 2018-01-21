@@ -1,10 +1,10 @@
-<?php 
+<?php
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 
 	<script>
 		if (getCookie("newClient") != "") {
@@ -22,7 +22,7 @@
 		
 	</script>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 		// Set up server connection
@@ -225,7 +225,7 @@
 				echo "<tr>";
 
 					// Update button
-        echo "<td><button type='submit' class='btn-table btn_edit' 
+        echo "<td><button type='submit' class='btn-table btn-edit' 
 					     name='GoUpdateMember' value='View'><i class='fa fa-eye'> View</i></button></td>";
 				
 				// Various basic information fields
@@ -244,7 +244,7 @@
 				// Delete button
 				if ($showDeleteColumn) {
 					echo "<td>";
-          echo "<button id='InactiveMember' name='DeleteMember' class='btn_icon' ";
+          echo "<button id='InactiveMember' name='DeleteMember' class='btn-icon' ";
 					if (!$row['isHeadOfHousehold']) {
 						echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'>";	
 					}
@@ -326,7 +326,7 @@
 	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 	$(document).ready(function(){
-		$('#invoiceTable').on('click', '.btn_edit', function () {
+		$('#invoiceTable').on('click', '.btn-edit', function () {
 			window.location.assign($(this).attr('value'));
 		});
 	});

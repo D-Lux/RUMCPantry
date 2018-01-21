@@ -1,9 +1,10 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
     <h3>Donation Operations: Add a donation</h3>
-    <div class="body_content">
+    <div class="body-content">
 
     <form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">
         <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->

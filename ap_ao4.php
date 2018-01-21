@@ -1,9 +1,10 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 	<h3>Add Appointment Time Slot</h3>
-	<div class="body_content">
+	<div class="body-content">
 	<!-- Start the form for creating a new date -->
 	<form id="AppointmentForm" name="AppointmentForm" 
 			action="php/apptOps.php" method="post" >

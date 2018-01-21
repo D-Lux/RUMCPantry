@@ -1,11 +1,12 @@
-<?php 
-include 'php/header.php';
-include 'php/backButton.php';
+<?php
+  $pageRestriction = 99;
+  include 'php/header.php';
+  include 'php/backButton.php';
 
-$showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
-if (isset($_GET['showDeleted'])) {
-  $showDeleted = $_GET['showDeleted'];
-}
+  $showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
+  if (isset($_GET['showDeleted'])) {
+    $showDeleted = $_GET['showDeleted'];
+  }
 ?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
@@ -17,7 +18,7 @@ if ($showDeleted) {
     echo "<h4>Deactivated Items</h4>";
 }
 ?>
-	<div class="body_content">
+	<div class="body-content">
 	
 		<div id="datatableContainer">
 			<table width='95%' id="iItemTable" class="display">
@@ -76,8 +77,8 @@ if ($showDeleted) {
 
 	$(document).ready(function(){
     var deleteMode = <?=$showDeleted?>;
-		$('#iItemTable').on('click', '.btn_icon, .btn_edit', function () {
-			if ($(this).hasClass('btn_icon')) {
+		$('#iItemTable').on('click', '.btn-icon, .btn-edit', function () {
+			if ($(this).hasClass('btn-icon')) {
         var mod = "d";
         if (deleteMode == 1) { mod = "r"; }
         

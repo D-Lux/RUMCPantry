@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 10;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
@@ -6,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Appointment Operations</h3><br>	
-	<div class="body_content">
+	<div class="body-content">
 		<div id="datatableContainer">
 			<table width='95%' id="apptTable" class="display">
 				<thead>
@@ -24,9 +25,11 @@
 	
 	<br>
 	<!-- NEW Date -->
+  <?php if ($_SESSION['perms'] >= 99) { ?>
 	<form action="ap_ao2.php">
 		<input id="NewDate" type="submit" name="NewDate" value="New Appointment Date">
     </form>
+  <?php } ?>
 
 <?php include 'php/footer.php'; ?>
 <script src="js/clientOps.js"></script>
@@ -50,7 +53,7 @@
 	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 	$(document).ready(function(){
-		$('#apptTable').on('click', '.btn_edit', function () {
+		$('#apptTable').on('click', '.btn-edit', function () {
 			window.location.assign($(this).attr('value'));
 		});
 	});

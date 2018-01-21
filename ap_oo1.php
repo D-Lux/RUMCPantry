@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 99;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
@@ -12,7 +13,7 @@
     
     <h3>Order Forms</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	<!-- View order forms -->
 		<div style="float: right;">
 			<form method="get" action="cof.php">

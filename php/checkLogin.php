@@ -5,51 +5,48 @@ if( !isset($_SESSION['last_access']) || (time() - $_SESSION['last_access']) > 60
   $_SESSION['last_access'] = time(); 
 
 if (!isset($pageRestriction)) {
-  //header ("location: /RUMCPantry/login.php?err=2");
+  createCookie("badRestrictions", 1, 30);
+  header ("location: /RUMCPantry/mainpage.php");
 }
 
 if ($pageRestriction > -1) {
-  //$_SESSION['perms']
-  // stuff
+  if ($_SESSION['perms'] < $pageRestriction) {
+    createCookie("noPermission", 1, 30);
+    header ("location: /RUMCPantry/mainpage.php");
+  }
 }
 
 
-/*
-echo "<br>";
-      //$pw = 
-      //echo $pw;
-      echo "<br>" . $result;
-
-      //store logins md5,
-      //store passwords using above
-
-      /*
-      session_start(); (search for and remove, add to include.php)
-      $_SESSION['permissions'];
-      session_destroy();
-      unset($_SESSION['permissions']);
+$debug = false; //true; //false
 
 
-      $sql = "SELECT login, password, permissions
-              FROM logins"
-      $results = queryDB($conn, $sql);
-      $loginFound = false;
-      foreach ($results as $result) {
-        if ((md5($login) == $result['login']) && (password_verify($pw, $result['password']) )) {
-          // Found a match, store off our permissions
-          SESSIONS['permissions'] = $result['permissions'];
-          $loginFound = true;
-          break;
-        }
-      }
-
-      if (!loginFound) {
-        // return to login with fail message
-      }
-      else {
-        // Go to appropriate page based on permissions
-      }
-
-*/
+if ($debug) {
 
 ?>
+
+  <style>
+    .testHover {
+      position: fixed;
+      left: 5%;
+      top: 5%;
+      z-index: 10;
+      background-color: black;
+      color: white;
+    }
+  </style>
+
+  <div class="testHover">
+    Permissions: <?=$_SESSION['perms']?><br>
+    Restrictions: <?=$pageRestriction?><br>
+    <?php 
+      if ($_SESSION['perms'] >= $pageRestriction) {
+        echo "Page Access Allowed";
+      }
+      else {
+        echo "Page Access Denied";
+      }
+    ?>
+
+  </div>
+
+<?php } ?>

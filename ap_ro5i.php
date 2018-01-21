@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction == 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
@@ -11,7 +12,7 @@
 		}
 	</script>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 		// Set up server connection
@@ -53,7 +54,7 @@
 
 				// Set Active button
 				?>
-				<td><input type="submit" class="btn_reactivate" name="activateRedistItem" value=" "
+				<td><input type="submit" class="btn-reactivate" name="activateRedistItem" value=" "
 				onclick="return confirm('Do you want to reactivate this item?')"></td>
 				<?php
 				// Close off the row and form

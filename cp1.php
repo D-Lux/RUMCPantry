@@ -1,11 +1,12 @@
-<?php 
-include 'php/header.php'; 
-include 'php/backButton.php'
+<?php
+  $pageRestriction = 1;
+  include 'php/header.php'; 
+  include 'php/backButton.php'
 ?>
 		<h3>Order Selection</h3>
-		<div class='body_content'>
+		<div class='body-content'>
 			<!-- Refresh button -->
-			<button id='btn_back' onclick="location.reload()">Refresh</button>
+			<button id='btn-back' onclick="location.reload()">Refresh</button>
 			<?php
 				$conn = connectDB();
 				if ($conn->connect_error) {
@@ -54,7 +55,7 @@ include 'php/backButton.php'
 							echo "<input type='hidden' name='invoiceID' value=" . $client['invoiceID'] .">";
 							echo "<input type='hidden' name='clientFirstName' value=" .  $client['fName'] .">";
 							echo "<input type='hidden' name='clientLastName' value=" .  $client['lName'] .">";
-							echo "<td><input type='submit' name='createOrder' value='Begin Order'>";
+							echo "<td><input type='submit' class='btn-table btn-edit' name='createOrder' value='Begin Order'>";
 							echo "</td></form></tr>";
 						}
 						// Debug

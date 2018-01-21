@@ -1,4 +1,5 @@
-<?php 
+<?php
+$pageRestriction = 99;
 include 'php/header.php'; 
 include 'php/backButton.php'
 ?>
@@ -6,7 +7,7 @@ include 'php/backButton.php'
   
   <h3>New Reallocation</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 		// Set up server connection

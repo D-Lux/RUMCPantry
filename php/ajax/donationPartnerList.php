@@ -70,7 +70,7 @@
 		//Build our link
 		$viewLink = "/RUMCPantry/ap_do3.php?donationPartnerID=" . $results[$i]['donationPartnerID'];
 		
-		$viewLink = "<button type='submit' class='btn-table btn_edit' 
+		$viewLink = "<button type='submit' class='btn-table btn-edit' 
                     value='" . viewLink . "'><i class='fa fa-eye'> View</i></button>";
  
     $row[0] = $viewLink;

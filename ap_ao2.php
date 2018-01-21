@@ -1,8 +1,8 @@
-<?php 
+<?php
+  $pageRestriction = 99;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-
 
 	<style>
 		#addTimeSlot {
@@ -25,7 +25,7 @@
 	</style>
 	
 	<h3>Create Appointment Date</h3>
-	<div class="body_content">
+	<div class="body-content">
 		
 		<div >
 			<!-- Button to add a new time slot -->
@@ -82,7 +82,7 @@
 						echo "<tr><td><input type='time' name='time[]' value='"
 								. $timeSlot . "' step='900'></td>";
 						echo "<td><input type='number' name='qty[]' value='" . $numSlots . "' min='1'></td>";
-						echo "<td><a class='rm_row btn_icon' href='#' ><i class='fa fa-trash'></i></a></td>";
+						echo "<td><a class='rm_row btn-icon' href='#' ><i class='fa fa-trash'></i></a></td>";
 						echo "</tr>";
 					
 						$timeSlot =  date('H:i', strtotime($timeSlot) + (60*30));

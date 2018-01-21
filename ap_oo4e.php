@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 99;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
@@ -7,7 +8,7 @@
 
 	<h3>Edit Order</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	<?php
 	
 	// Get Vars: invoiceID | name | visitTime | familySize
@@ -52,7 +53,7 @@
 		echo " | Family Size: " . familySizeDecoder($familySize) . "</h4>";
 		
 		// Print button
-		echo "<button id='btn_print' onClick='window.print()'>Print</button>";
+		echo "<button id='btn-print' onClick='window.print()'>Print</button>";
 		
 		// Order information
 		echo "<table id='orderTable'><tr><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th></th></tr>";

@@ -76,10 +76,10 @@
 		$baseLink = "/RUMCPantry/php/clientOps.php?";
 		$IDParam  = "&id=" . $results[$i]['clientID'];
 		
-		$editLink   = "<button type='submit' class='btn-table btn_edit' 
+		$editLink   = "<button type='submit' class='btn-table btn-edit' 
 					   value='" . $baseLink . "GoUpdateClient=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
              
-		$actionLink = "<button type='submit' class='btn_icon" . (($deleted==1) ? " btn_reactivate" : "") . "'
+		$actionLink = "<button type='submit' class='btn-icon" . (($deleted==1) ? " btn-reactivate" : "") . "'
 					   value='" . $baseLink . 
 					   (($deleted == 1) ? 'ActiveClient' : 'InactiveClient') . "=1" . $IDParam . "'><i class='fa fa-" .
 					   (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";

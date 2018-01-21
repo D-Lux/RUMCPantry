@@ -45,7 +45,7 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 	$invoiceLink = "/RUMCPantry/ap_oo4e.php?invoiceID=" . $results[$i]['invoiceID'] . "&name=" . $lastName . 
 					"&visitTime=" . $results[$i]['visitTime'] . "&familySize=" . $familySize ;
 	
-	$row[0] = "<button type='submit' class='btn_edit' 
+	$row[0] = "<button type='submit' class='btn-edit' 
 				   value='" . $invoiceLink . "'><i class='fa fa-eye'> View</i></button>";
 	$row[1] = date("F jS, Y", strtotime($results[$i]["visitDate"]));
 	$row[2] = visitStatusDecoder($results[$i]['status']);			

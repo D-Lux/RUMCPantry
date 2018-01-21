@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
@@ -10,7 +11,7 @@
 </style>
 	
 	<h3>Appointment Date: <?php echo date("F jS, Y", strtotime($_GET['date'])); ?></h3>
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 		// Set up server connection
@@ -142,12 +143,12 @@
 				
 				if ($invoice['status'] < GetActiveStatus()) {
 					// --==[*DELETE*]==-- Button
-					echo "<td><button type='submit' id='deleteInvoice' class='btn_icon' name='DeleteInvoice' ";
+					echo "<td><button type='submit' id='deleteInvoice' class='btn-icon' name='DeleteInvoice' ";
 					echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'>";
 					echo "<i class='fa fa-trash'></i></button></td>";
 				
 					// --==[*Lock*]==-- Button
-					echo "<td><button id='lock" . $setID . "' type='submit' class='btn_lock btn_icon'><i class='fa fa-lock'></i></button></td>";
+					echo "<td><button id='lock" . $setID . "' type='submit' class='btn_lock btn-icon'><i class='fa fa-lock'></i></button></td>";
 				}
 				echo "</form>";
 				
@@ -168,10 +169,12 @@
 		
 		echo "<div id='ErrorLog'></div>";
 		// --==[*NEW TIME SLOT*]==--
-		echo "<br><form action='ap_ao4.php' method='post'>";
-		echo "<input type='hidden' name='date' value=" . $_GET['date'] . ">";	// Send the date we're adding to
-		echo "<button id='newSlots' type='submit' name='newSlots' ><i class='fa fa-clock'></i> New Time Slots</button>";	
-		echo "</form>";
+    if ($_SESSION['perms'] >= 99) {
+      echo "<br><form action='ap_ao4.php' method='post'>";
+      echo "<input type='hidden' name='date' value=" . $_GET['date'] . ">";	// Send the date we're adding to
+      echo "<button id='newSlots' type='submit' name='newSlots' ><i class='fa fa-clock'></i> New Time Slots</button>";	
+      echo "</form>";
+    }
 	?>
 	
 <?php include 'php/footer.php'; ?>

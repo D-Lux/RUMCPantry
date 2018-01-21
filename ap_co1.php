@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
@@ -7,7 +8,7 @@
 	
 <h3>Active Clients</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	
 		<div id="datatableContainer">
@@ -64,8 +65,8 @@
 	});
 
 	$(document).ready(function(){
-		$('#iClientTable').on('click', '.btn_icon, .btn_edit', function () {
-			if ($(this).hasClass('btn_icon')) {
+		$('#iClientTable').on('click', '.btn-icon, .btn-edit', function () {
+			if ($(this).hasClass('btn-icon')) {
 				if (confirm("Are you sure you want to deactivate this client?")) {
 					window.location.assign($(this).attr('value'));
 				}

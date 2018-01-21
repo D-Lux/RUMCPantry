@@ -1,12 +1,12 @@
 <?php
-include 'php/header.php'; 
-include 'php/backButton.php';
+  $pageRestriction = 99;
+  include 'php/header.php'; 
+  include 'php/backButton.php';
 ?>
-<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 
   
 <h3>Add Category</h3>
-<div class="body_content">
+<div class="body-content">
 <br>
 <form name="addCategory" action="php/itemOps.php" onSubmit="return validateCategoryAdd()" method="post">
 	<div class="row">

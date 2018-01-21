@@ -1,5 +1,5 @@
-
-<?php 
+<?php
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
@@ -64,7 +64,7 @@
 		echo "</td><td>" . familySizeDecoder($familySize) . "</td></tr></table><br>";
 		
 		// Print button
-		echo "<button id='btn_print' onClick='AJAX_SetInvoicePrinted(" . $invoiceID . ")'><i class='fa fa-print'></i> Print</button>";
+		echo "<button id='btn-print' onClick='AJAX_SetInvoicePrinted(" . $invoiceID . ")'><i class='fa fa-print'></i> Print</button>";
 		
 		// Loop through our data and spit out the data into our table
 		echo "<table id='orderTable'><tr><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr>";

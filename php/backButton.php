@@ -1,6 +1,6 @@
 <?php
 
-echo "<button id='btn_back' onclick='goBack()'><i style='padding-bottom=\"5px\";' style='font-size:0.8em;' class='fa fa-chevron-circle-left'></i> Back</button>";
+echo "<button id='btn-back' onclick='goBack()'><i style='padding-bottom=\"5px\";' style='font-size:0.8em;' class='fa fa-chevron-circle-left'></i> Back</button>";
 
 
 ?>
@@ -59,13 +59,11 @@ echo "<button id='btn_back' onclick='goBack()'><i style='padding-bottom=\"5px\";
             break;
 
 
-
-
         case (location.pathname.includes("itemOps.php")):
         case (location.pathname.includes("ap_io6.php")):
         case (location.pathname.includes("ap_io7.php")):
         case (location.pathname.includes("ap_io8.php")):
-		case (location.pathname.includes("ap_oo1.php")):
+        case (location.pathname.includes("ap_oo1.php")):
             window.location.assign("/RUMCPantry/ap_io1.php");
             break;
 
@@ -84,16 +82,11 @@ echo "<button id='btn_back' onclick='goBack()'><i style='padding-bottom=\"5px\";
             window.location.assign("/RUMCPantry/ap_oo1.php");
             break;
 
+        case (location.pathname.includes("cp1.php")):
         case (location.pathname.includes("ap1.php")):
         case (location.pathname.includes("cap.php")):
         case (location.pathname.includes("ciup.php")):
             window.location.assign("/RUMCPantry/mainpage.php");
-            break;
-
-		case (location.pathname.includes("cp1.php")):
-        case (location.pathname.includes("login.php")):
-        case (location.pathname.includes("mainpage.php")):
-            window.location.assign("/RUMCPantry/login.php");
             break;
 
         case (location.pathname.includes("cp2.php")):

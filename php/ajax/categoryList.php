@@ -69,11 +69,11 @@
         
         $IDParam  = "categoryID=" . $results[$i]['categoryID'];
         $functionParam = ($deleted == 1) ? 'ReactivateCategory' : 'DeleteCategory';
-        $classList = 'btn_icon' . (($deleted == 1) ? ' btn_reactivate' : ' ');
+        $classList = 'btn-icon' . (($deleted == 1) ? ' btn-reactivate' : ' ');
                  
         
         $editLink = "/RUMCPantry/ap_io5.php?";
-        $editLink   = "<button type='submit' class='btn-table btn_edit' " . (($deleted==1) ? "disabled" : " " ) . "
+        $editLink   = "<button type='submit' class='btn-table btn-edit' " . (($deleted==1) ? "disabled" : " " ) . "
                  value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
         
         

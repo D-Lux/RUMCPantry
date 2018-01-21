@@ -1,9 +1,10 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
     
-    <div class="body_content">
+    <div class="body-content">
     <?php  
     //echo "<h3> Update donation partner number: ". $_GET['donationPartnerID'] . "</h3>";
    

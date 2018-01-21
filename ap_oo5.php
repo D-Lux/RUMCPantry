@@ -1,11 +1,12 @@
-<?php 
+<?php
+    $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 
 	<h3>Order Form: Specials</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	<?php
 
 		// *****************************************************
@@ -46,11 +47,11 @@
 		echo $itemList;
 		
 		// "OR" Button and div to add Special Options
-		echo "<input id='OrBtn_' class='btn_edit' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
+		echo "<input id='OrBtn_' class='btn-edit' type='button' value='OR' onclick='addSpecialOrItem(this)' >";
 		echo "<div id='OrSlot_'></div><br>";
 		
 		// Delete Button for a section
-		echo "<input id='DelBtn_' class='btn_edit' type='button' value='Remove Specials' onclick='deleteSpecials(this)' >";
+		echo "<input id='DelBtn_' class='btn-edit' type='button' value='Remove Specials' onclick='deleteSpecials(this)' >";
 		echo "<br><hr>";
 		echo "</div>";
 		

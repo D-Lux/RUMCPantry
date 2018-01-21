@@ -1,11 +1,12 @@
-<?php 
+<?php
+  $pageRestriction = 10;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 
 	<h3>Add New Client</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 		<form name="addClient" action="php/clientOps.php" onSubmit="return validateNewClient()" method="post">
 		

@@ -1,10 +1,11 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 	<h3>Add New Reallocation Partner</h3>
 	
-	<div class="body_content">	
+	<div class="body-content">	
 	
 	<form name="submitNewRedist" action="php/redistOps.php" onSubmit="return validateNewPartner()" method="post">
 		<div class="inputDiv">

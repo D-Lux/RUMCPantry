@@ -1,10 +1,11 @@
-<?php 
+<?php
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
 	<h3>Update Family Member Information</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php
 		// Set up server connection
@@ -45,7 +46,7 @@
         </div>
       </div>
       <div class="row">
-				<div class="col-sm-4"><label for="memberLastNameField" class="required">First Name:</label></div>
+				<div class="col-sm-4"><label for="memberLastNameField" class="required">Last Name:</label></div>
         <div class="col-sm-8">
           <input type="text" id="memberLastNameField" name="memberLastName" maxlength="45" 
             value="<?=displaySingleQuote($familyRow['lastName'])?>">

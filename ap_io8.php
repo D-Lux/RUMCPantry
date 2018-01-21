@@ -1,11 +1,12 @@
-<?php 
-include 'php/header.php';
-include 'php/backButton.php';
+<?php
+  $pageRestriction = 99;
+  include 'php/header.php';
+  include 'php/backButton.php';
 
-$showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
-if (isset($_GET['showDeleted'])) {
-  $showDeleted = $_GET['showDeleted'];
-}
+  $showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
+  if (isset($_GET['showDeleted'])) {
+    $showDeleted = $_GET['showDeleted'];
+  }
 ?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
@@ -17,7 +18,7 @@ if ($showDeleted) {
     echo "<h4>Deactivated Items</h4>";
 }
 ?>
-	<div class="body_content">
+	<div class="body-content">
 	
 		<div id="datatableContainer">
 			<table width='90%' id="iCategoryTable" class="display">
@@ -74,9 +75,9 @@ if ($showDeleted) {
 	});
 
 	$(document).ready(function(){
-		$('#iCategoryTable').on('click', '.btn_icon, .btn_edit', function () {
-			if ($(this).hasClass('btn_icon')) {
-        if ($(this).hasClass('btn_reactivate')) {
+		$('#iCategoryTable').on('click', '.btn-icon, .btn-edit', function () {
+			if ($(this).hasClass('btn-icon')) {
+        if ($(this).hasClass('btn-reactivate')) {
           if (confirm("Are you sure you want to reactivate this category?")) {
             window.location.assign($(this).attr('value'));
           }

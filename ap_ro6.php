@@ -1,9 +1,10 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<form name="submitNewRedistItem" action="php/redistOps.php" onSubmit="return validateNewRedistItem()" method="post">
 		<div class="inputDiv">

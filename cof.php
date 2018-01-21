@@ -1,7 +1,8 @@
-<?php 
-include 'php/header.php';
-include 'php/beanOps.php'; 
-include 'php/backButton.php'
+<?php
+  $pageRestriction = 1;
+  include 'php/header.php';
+  include 'php/beanOps.php'; 
+  include 'php/backButton.php'
 ?>
 		<?php
 			if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
@@ -17,7 +18,7 @@ include 'php/backButton.php'
 				echo "</h3>";
 			}
 		?>
-		<div class="body_content">
+		<div class="body-content">
 			<?php
 				// *******************************************************
 				// * Run our SQL Queries

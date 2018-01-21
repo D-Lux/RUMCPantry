@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
@@ -25,7 +26,7 @@
 		
 		echo "<div id='ErrorLog'></div>";
 		
-		echo "<div class='body_content'>";
+		echo "<div class='body-content'>";
 		
 		$conn = connectDB();
 		if ($conn->connect_error) {

@@ -1,4 +1,5 @@
 <?php 
+  $pageRestriction = 10;
   include 'php/header.php';
   include 'php/beanOps.php';
   include 'php/backButton.php';
@@ -40,7 +41,7 @@
   
   echo "<h3>Review Order Form</h3>";
   echo "<h4>Client: " . $result['cName'] . "</h4>";
-	echo "<div class='body_content'>";
+	echo "<div class='body-content'>";
 	// ************************************
 	// --== Client current order query ==--
 	$orderSql = "SELECT itemID, quantity, special

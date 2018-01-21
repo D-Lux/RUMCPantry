@@ -1,4 +1,5 @@
 <?php 
+  $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
 	

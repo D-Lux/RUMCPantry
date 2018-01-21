@@ -59,68 +59,11 @@ Body Elements
 	padding: 30px;
 }
 
-
-
-button[type='submit'], input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
-	width: 300px;
-	height: 75px;
-	margin-top: 20px;
-	font-size: 1.15rem;
-	border-radius: 50px;
-	background-color: #57B9FF; //#27B867;
-	border: solid 2px #499BD6; //#099C4A;
-	color: #000;
-	cursor: pointer;
-}
-
-button[type='submit']:active:not(.btn_reactivate), input[type='submit']:active:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
-	background-color: #499BD6; //#1C854A;
-	border: solid 2px #3D83B5; //#066630;
-}
-
-button[type='submit']:focus, input[type='submit']:focus {
-	outline: 0;
-}
-
-
-table>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
-	width: 60px;
-	height: 22px;
-	margin: 0px;
-	font-size: 1rem;
-}
-
-/* I hate specificity */
-input[type='button']:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
-	width: 60px;
-	height: 45px;
-	margin: 20px 0px 0px 10px;
-	font-size: 1.1rem;
-	border-radius: 50px;
-	background-color: #57B9FF;
-	border: solid 2px #499BD6;
-	color: #000;
-	cursor: pointer;
-}
-
-input[type='button']:not(.btn_or):not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
-	width: 200px;
-	height: 55px;
-}
-input[type='button']:active:not(.btn_lock):not(.btn_trash):not(.btn_reactivate) {
-	background-color: #499BD6;
-	border: solid 2px #3D83B5;
-}
-input[type='button']:focus {
-	outline: 0;
-}
-
-
 #main-page {
 	text-align: center;
 }
 
-#btn_back, #btn_print {
+#btn-back, #btn-print {
 	float: right;
 	height: 33px;
 	width: 100px;
@@ -130,12 +73,12 @@ input[type='button']:focus {
 	cursor: pointer;
 }
 
-#btn_back:active, #btn_print:active {
+#btn-back:active, #btn-print:active {
 	border: solid 2px #888;
 	background-color: #AAA;
 }
 
-.body_content {
+.body-content {
 	margin-top: 30px;
 }
 
@@ -180,8 +123,8 @@ td {
 }
 
 
-td>button:not(.btn_trash):not(.btn_reactivate):not(.btn_lock), 
-	td>input[type='submit']:not(.btn_trash):not(.btn_reactivate):not(.btn_lock) {
+td>button:not(.btn_trash):not(.btn-reactivate):not(.btn_lock), 
+	td>input[type='submit']:not(.btn_trash):not(.btn-reactivate):not(.btn_lock) {
 	margin: 0px;
 	height: 33px;
 	width: 175px;
@@ -227,7 +170,7 @@ Special case buttons
 	background-image: url(/RUMCPantry/images/Icon_Trash_Active.png);
 }
 
-.btn_reactivate {
+.btn-reactivate {
 	background: url("/RUMCPantry/images/Icon_Reactivate.png") no-repeat;
 	width: 32px;
 	height: 32px;
@@ -237,7 +180,7 @@ Special case buttons
 	cursor: pointer;
 }
 
-.btn_reactivate:active {
+.btn-reactivate:active {
 	background-image: url(/RUMCPantry/images/Icon_Reactivate_Active.png);
 }
 
@@ -253,11 +196,6 @@ Special case buttons
 
 .btn_lock:active {
 	background-image: url(/RUMCPantry/images/Icon_Lock_Active.png);
-}
-
-#btn_tabSize {
-	width: 170px;
-	height: 55px;
 }
 
 /*********

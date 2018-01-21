@@ -1,4 +1,5 @@
-<?php 
+<?php
+  $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
@@ -6,7 +7,7 @@
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
 <h3>Donation Operations</h3>
-<div class="body_content">
+<div class="body-content">
 	
 	
   <div id="datatableContainer">

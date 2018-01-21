@@ -1,11 +1,11 @@
-<?php 
+<?php
+  $pageRestriction = 99;
 	include 'php/header.php';
 	include 'php/backButton.php'; 
 ?>
-<link rel="stylesheet" type="text/css" href="includes/bootstrap/css/bootstrap.min.css">
 
 <h3>Add Item</h3>
-<div class="body_content">
+<div class="body-content">
 <form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
 	<!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
 	<!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->

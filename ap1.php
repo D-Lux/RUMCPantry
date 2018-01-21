@@ -1,11 +1,12 @@
-<?php 
-include 'php/header.php';
-include 'php/backButton.php';
+<?php
+  $pageRestriction = 10;
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
-    <h3>Main Administrator Navigation</h3>
-	<div class="body_content">
+    <h3>Main Navigation</h3>
+	<div class="body-content">
 	
-	
+	<?php if ($_SESSION['perms'] >= 99) { ?>
 	<div style="float: right;">
 		<form method="post" action="ap_io1.php">
 			<input class="btn-nav" type="submit" value="Inventory operations">
@@ -20,6 +21,7 @@ include 'php/backButton.php';
 			<input class="btn-nav" type="submit" value="Reporting">
 		</form>
 	</div>
+  <?php } ?>
 	
 	<form method="post" action="checkIn.php">
         <input class="btn-nav" type="submit" value="Check in page">

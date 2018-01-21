@@ -1,6 +1,7 @@
 <?php
-include 'php/header.php'; 
-include 'php/backButton.php'; 
+  $pageRestriction = 10;
+  include 'php/header.php'; 
+  include 'php/backButton.php'; 
 ?>
     <meta http-equiv="refresh" content="15" >
 	<script>
@@ -12,7 +13,7 @@ include 'php/backButton.php';
    
 	<h3>View Active Orders</h3>
 	
-	<div class="body_content">
+	<div class="body-content">
 	<?php 
 		// Query the database for all active orders
 		// Create list of all orders, selectable to view that order

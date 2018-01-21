@@ -1,9 +1,12 @@
-<?php include 'php/header.php'; ?>
+<?php 
+  $pageRestriction = 1;
+  include 'php/header.php';
+?>
 
 <!-- No back button for this page! -->
     
 	
-	<div class="body_content">
+	<div class="body-content">
 	
 	<?php 
 	// Disabled for now, until Vicki wants clients to select their own appointment times
@@ -71,8 +74,8 @@
 		?>
 		<h1 style='text-align: center;'>Thank you for your order!</h1>
 		<h3 style='text-align: center;'>Please return this device and set up your next appointment with the registration desk.</h3>
-		<form action='php/apptOps.php' method='post'>
-		<input style='position:relative; left:30%;' type='submit' name='NoApptSelection' value='Finish'>
+		<form action='cp1.php' method='post'>
+      <input style='position:relative; left:30%;' class="btn-nav" type='submit' name='NoApptSelection' value='Finish'>
 		</form>
 	
 <?php include 'php/footer.php'; ?>

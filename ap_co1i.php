@@ -1,13 +1,14 @@
-<?php 
-include 'php/header.php';
-include 'php/backButton.php';
+<?php
+  $pageRestriction = 10; 
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 
   <h3>Inactive Clients</h3>
 	
-	<div class="body_content">		
+	<div class="body-content">		
 		<div id="datatableContainer">
 			<table width='95%' id="iClientTable" class="display">
 				<thead>
@@ -57,8 +58,8 @@ include 'php/backButton.php';
 	});
 
 	$(document).ready(function(){
-		$('#iClientTable').on('click', '.btn_icon, .btn_edit', function () {
-			if ($(this).hasClass('btn_icon')) {
+		$('#iClientTable').on('click', '.btn-icon, .btn-edit', function () {
+			if ($(this).hasClass('btn-icon')) {
 				if (confirm("Are you sure you want to reactivate this client?")) {
 					window.location.assign($(this).attr('value'));
 				}
