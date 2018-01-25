@@ -8,13 +8,11 @@
 <h3>Add Category</h3>
 <div class="body-content">
 <br>
-<form name="addCategory" action="php/itemOps.php" onSubmit="return validateCategoryAdd()" method="post">
+<form name="addCategory" action="php/categoryOps.php" onSubmit="return validateCategoryAdd()" method="post">
 	<div class="row">
-		<div class="col-sm-4"><label class="required nameField">Category: </label></div>
+		<div class="col-sm-4">Category Name:</div>
 		<div class="col-sm-8">
-			<?php
-				createDatalist_i("","categories","category","name","category", false);
-			?>
+      <input type="text" name="category">
 		</div>
 	</div>
 	<div style="border: 2px solid #499BD6; padding:5px;margin-top:20px;">
@@ -41,7 +39,7 @@
 		</div>
 	</div>
 	</br>
-	<input type="submit" value="Create" name="createCategory">
+	<input type="submit" class="btn-nav" value="Create" name="createCategory">
 </form>
 
 <?php include 'php/footer.php'; ?>

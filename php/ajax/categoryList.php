@@ -77,7 +77,7 @@
                  value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
         
         
-        $baseLink = "/RUMCPantry/php/itemOps.php?";		
+        $baseLink = "/RUMCPantry/php/categoryOps.php?";		
         $actionLink = "<button type='submit' class='" . $classList . "'
                  value='" . $baseLink . $functionParam . "=1&" . $IDParam . "'>
                  <i class='fa fa-" . (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
