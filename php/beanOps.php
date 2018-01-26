@@ -15,10 +15,10 @@ class CLASS_BeanInfo {
 function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	// Display category header 
 	echo "<div class='orderSection'>";
-	echo "<h4>Beans</h4>";
+	echo "<h4 class='text-center'>Beans</h4>";
 	
 	// Display extra information (only choose one bagged or X canned)
-	echo "<h5><div id='CountBeans' >You may select up to " . $CQty . " cans or 1 bag" .
+	echo "<h5 class='text-center'><div id='CountBeans'>You may select up to " . $CQty . " cans or 1 bag" .
 		" (" . $CQty . " remaining)</div></h5>";
 	
 	// Include hidden values so we can track the category
@@ -26,18 +26,19 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	echo "<input type='hidden' value=" . $CQty . " id='CanBeans'>";
 	
 	// Display Canned bean options
-	echo "<div id='CannedBeansSection'><h6>Cans (Max " . $CQty . ")</h6>";
+	echo "<div id='CannedBeansSection'><h6 class='text-center'>Cans (Max " . $CQty . ")</h6>";
 	// Display a string if no canned beans are available
 	if (count($Cans) <= 0) {
 		echo "&#8226; No canned beans available today";
 	}
 	foreach ($Cans as $BeanID=>$BeanInfo) {
-		echo $BeanInfo->Name;
-		echo "<div class='selectionBoxes'>";
+    echo "<div class='row'>";
+		echo "<div class='col-sm text-right'>" . $BeanInfo->Name . "</div>";
+		echo "<div class='selectionBoxes col-sm'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)
 			$customID = "box" . $BeanID . "n" . $i;
-			echo "<input type='checkbox' id=$customID value=" . $BeanID;
+			echo "<input type='checkbox' class='align-top' id=$customID value=" . $BeanID;
 			echo " onclick='countCanBeans(this)' name='CanBeans[]' ";
 					
 			// If this item was selected, check it and reduce our count
@@ -53,19 +54,20 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 			echo "<label for=$customID ></label>";
 		}
 		echo "</div>";	// closing off selectionBoxes
-		echo "<br>";
+    echo "</div>"; // close off the row
 	}
 	echo "</div>";
 	
 	// Display Bagged bean options
-	echo "<div id='BaggedBeansSection'><h6>Bags (Max 1)</h6>";
+	echo "<div id='BaggedBeansSection'><h6 class='text-center'>Bags (Max 1)</h6>";
 	// Display a string if no bagged beans are available
 	if (count($Bags) <= 0) {
 		echo "&#8226; No bagged beans available today";
 	}
 	foreach ($Bags as $BeanID=>$BeanInfo) {
-		echo $BeanInfo->Name;
-		echo "<div class='selectionBoxes'>";
+    echo "<div class='row'>";
+		echo "<div class='col-sm text-right'>" . $BeanInfo->Name . "</div>";
+		echo "<div class='selectionBoxes col-sm'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)
 			$customID = "box" . $BeanID . "n" . $i;
@@ -84,7 +86,8 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 			echo "<label for=$customID ></label>";
 		}
 		echo "</div>";	// closing off selectionBoxes
-		echo "<br>";
+    echo "</div>"; // closing the row
+		//echo "<br>";
 	}
 	echo "</div>";
 

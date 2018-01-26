@@ -59,6 +59,9 @@ Body Elements
 	padding: 30px !important;
 }
 
+.paginate_button {
+  border-radius: 10px !important;
+}
 .btn-nav {
 	width: 300px;
 	height: 75px;
@@ -71,15 +74,15 @@ Body Elements
 	cursor: pointer;
 }
 
-.btn-nav:hover {
+.btn-nav:hover, .btn-table:hover {
   background-color: #93C5FF;
 }
-.btn-nav:active {
+.btn-nav:active, .btn-table:active {
 	background-color: #499BD6; //#1C854A;
 	border: solid 2px #3D83B5; //#066630;
 }
 
-.btn-nav:focus {
+.btn-nav:focus, .btn-table:focus, .btn-icon:focus  {
 	outline: 0;
 }
 
@@ -104,18 +107,6 @@ Body Elements
 	cursor: pointer;
 }
 
-.btn-input {
-	width: 200px;
-	height: 55px;
-}
-.btn-input:active:enabled {
-	background-color: #499BD6;
-	border: solid 2px #3D83B5;
-}
-.btn-input:focus {
-	outline: 0;
-}
-
 
 #main-page {
 	text-align: center;
@@ -138,7 +129,7 @@ Body Elements
 	box-shadow: 0 1px #666;
 	transform: translateY(1px);
 }
-#btn-back:focus {outline:0;}
+#btn-back:focus, #btn-print:focus {outline:0;}
 
 #btn-back:hover {
 	background-color: #CCC;
@@ -208,24 +199,23 @@ Special case buttons
 .btn-icon {
 	font-size: 2em;
 	background: none;
-	width: 32px;
-	height: 32px;
 	padding: 0px;
 	margin: 0px;
 	border: 0px;
 	cursor: pointer;
+  color: black;
+}
+
+.btn-icon:hover {
+	color: silver;
 }
 
 .btn-icon:active {
-	font-weight: bold;
-}
-
-.btn-reactivate:active {
-	background-image: url(/RUMCPantry/images/Icon_Reactivate_Active.png);
+	color: grey;
 }
 
 .btn-reactivate {
-		color:green;
+		color:green !important;
 }
 
 

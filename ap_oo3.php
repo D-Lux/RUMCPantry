@@ -49,7 +49,7 @@
 				if (IsReadyToPrint($invoice['status'])) {
 					echo "<form method='get' action='ap_oo4.php'>";
 					echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
-					echo "<input type='submit' value='View: ";
+					echo "<input type='submit' class='btn-nav' value='View: ";
 					echo displaySingleQuote($invoice['ln']) . " ";
 					echo returnTime($invoice['visitTime']) . " ";
 					echo "' name='viewInvoice'>";
@@ -60,7 +60,7 @@
 				if (IsReadyToReview($invoice['status'])) {
 					echo "<form method='get' action='rof.php'>";
 					echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
-					echo "<input type='submit' value='Review: ";
+					echo "<input type='submit' class='btn-nav' value='Review: ";
 					echo displaySingleQuote($invoice['ln']) . " ";
 					echo returnTime($invoice['visitTime']) . " ";
 					echo "' name='viewInvoice'>";

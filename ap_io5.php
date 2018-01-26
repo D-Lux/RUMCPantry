@@ -41,9 +41,9 @@
 <form name="addCategory" action="php/categoryOps.php" onSubmit="return validateCategoryAdd()" method="post">
 	<div class="row">
 		<input type="hidden" name="categoryID" value='<?= $categoryID ?>'>
-		<div class="col-sm-4"><label class="required nameField">Category: </label></div>
+		<div class="col-sm-4">Category:</div>
 		<div class="col-sm-8">
-      <input type="text" name="category" value=<?=$name?>>
+      <input type="text" name="category" value='<?=$name?>'>
 		</div>
 	</div>
 	<div style="border: 2px solid #499BD6; padding:5px;margin-top:20px;">

@@ -64,26 +64,17 @@
     }
     
 		// *********************************************
-		// * Create our tabs
-		
-		// If the number of tabs becomes too large, advance to the next line
-		$tabRow = 0;
-		$tabRowCount = 5;
-    $startTab = true;
-		echo "<div class='tab'>";
-    
+		// * Show our Dropdown
+    $firstCat = null;
+    echo "<select id='catSelector'>";
     foreach ($categoryList as $cid => $category) {
-			echo "<button class='tablinks' onclick='viewTab(event, itemList" . $cid . ")'";
-			echo ($startTab ? "id='defaultOpen'" : "  ") . ">" . $category . "</button>";
-			$startTab = false;
-			// Check the number of tabs we've shown
-			$tabRow++;
-			if ($tabRow > $tabRowCount) {
-				$tabRow = 0;
-				echo "<div class='clearfix'></div>";
-			}
+			echo "<option value='itemList" . $cid . "'>" . $category . "</option>";
+      if ($firstCat == null ) {
+        $firstCat = '#itemList' . $cid;
+      }
     }
-		echo "</div><br>";
+    echo "</select>";
+    
 		
 		// ******************************************************
 		// ** Create our table of information
@@ -146,14 +137,19 @@
 <script src="js/orderFormOps.js"></script>
 <script>
   // Open the default tab (if tabs exist)
-  document.getElementById("defaultOpen").click();
-  $(document).ready()
+  //document.getElementById("defaultOpen").click();
   $( document ).ready(function() {
     $("select").on("change", function() {
       $("#errMsgs").hide(200);
     });
     $(".tablinks").on("click", function() {
       $("#errMsgs").hide(200);
+    });
+    $("<?=$firstCat?>").css({ "display": "block"});
+    $("#catSelector").on("change", function(e) {
+      var showTab = "#" + $(this).val();
+      $(".tabcontent").css({ "display": "none"});
+      $(showTab).css({ "display": "block"});
     });
   });
 </script>

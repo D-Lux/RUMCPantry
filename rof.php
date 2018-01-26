@@ -152,9 +152,9 @@
 					echo "<div class='orderSection'>";
 					$divOpen = true;
 					
-					echo "<h3>" . $item['CName'] . "</h3>";
+					echo "<h4 class='text-center'>" . $item['CName'] . "</h3>";
 					// Create a special div so the client can see an updated count of selected items
-					echo "<h4><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
+					echo "<h5 class='text-center'><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
 						" (" . ($item['CQty']) . " remaining)</div></h4>";
 					// Include hidden values so we can track the category
 					echo "<input type='hidden' value=" . $item['CQty'] . " id='" . $item['CName'] . "'>";
@@ -163,8 +163,12 @@
 		
 
 				// Display the Item name
-				echo $item['displayName'];
-				echo "<div class='selectionBoxes'>";
+        // Display the Item name
+        echo "<div class='row'>";
+        echo "<div class='col-sm text-right'>";
+        echo $item['displayName'];
+        echo "</div>";
+				echo "<div class='selectionBoxes col-sm'>";
 				for ($i = 0; $i < $item['IQty']; $i++) {
 					// Value is the item's ID
 					// Name is the item's category[] (in array)
@@ -184,7 +188,7 @@
 					echo "<label for=$customID ></label>";
 				}
 				echo "</div>";
-				echo "<br>";
+				echo "</div>";
 			}
 		}
 	}
@@ -274,7 +278,18 @@
 	echo "<script type='text/javascript'> updateCheckedQuantities(); </script>";
 	
 ?>
-			<button type="submit" name="CreateReviewedInvoiceDescriptions">Verify Order</button>
+      <style>
+        input[type="checkbox"], label {
+          float: left;
+          line-height: 1.6em;
+          height: 1.6em;
+          margin: 0px;
+          padding: 0px;
+          font-size: inherit;
+        }
+      </style>
+      
+			<button type="submit" class='btn-nav' name="CreateReviewedInvoiceDescriptions">Verify Order</button>
 		</form>
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>
