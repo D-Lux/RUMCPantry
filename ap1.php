@@ -20,25 +20,23 @@
 		<form method="post" action="reporting.php">
 			<input class="btn-nav" type="submit" value="Reporting">
 		</form>
+    <form method="post" action="adjustLogins.php">
+			<input class="btn-nav" type="submit" value="Permissions">
+		</form>
 	</div>
   <?php } ?>
 	
 	<form method="post" action="checkIn.php">
-        <input class="btn-nav" type="submit" value="Check in page">
-    </form>
-    <form method="post" action="ap_co1.php">
-        <input class="btn-nav" type="submit" value="Client operations">
-    </form>
-    <form method="post" action="ap_ao1.php">
-        <input class="btn-nav" type="submit" value="Appointment operations">
-    </form>
+    <input class="btn-nav" type="submit" value="Check in page">
+  </form>
+  <form method="post" action="ap_co1.php">
+    <input class="btn-nav" type="submit" value="Client operations">
+  </form>
+  <form method="post" action="ap_ao1.php">
+    <input class="btn-nav" type="submit" value="Appointment operations">
+  </form>
 	<form method="post" action="ap_oo3.php">
-        <input class="btn-nav" type="submit" value="View Active Order Forms">
-    </form>
-	<!-- Removed because it can be accessed from the inventory ops page -->
-	<!--
-	<form method="post" action="ap_oo1.php">
-        <input type="submit" value="Order Forms">
-    </form>
-	-->
+    <input class="btn-nav" type="submit" value="View Active Order Forms">
+  </form>
+
 <?php include 'php/footer.php'; ?>

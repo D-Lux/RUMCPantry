@@ -11,6 +11,8 @@ Universal
 
 HTML {
 	background-color: #EEE;
+  position:relative
+  z-index: 10;
 }
 
 body {

@@ -318,3 +318,23 @@ Tooltip
 	word-wrap: break-word;
     word-break: normal;
 }
+
+
+.hoverMsg {
+  position: fixed;
+  z-index: 10;
+  margin-left: -50%;
+  margin-top: -25px;
+  padding-top: 10px;
+  text-align: center;
+  font-size: 1.2em;
+  background-color: white;
+  font-weight:bold;
+  color:#000;
+  background: -webkit-gradient(linear, left top, right top, color-stop(0%, rgba(129,183,26,0)), color-stop(25%, rgba(129,183,26,0.9)), color-stop(75%, rgba(129,183,26,0.9)), color-stop(100%, rgba(129,183,26,0)));
+  background: -webkit-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+  background: -moz-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+  background: -ms-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+  background: -o-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+  background: linear-gradient(to right, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+}

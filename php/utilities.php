@@ -634,4 +634,21 @@ define("WEIGHT_FOODDRIVE", 25);
 // * AJAX defines
 define("AJAX_REDIRECT", "!REDIRECT!");
 
+// **************************************
+// * Permission stuff
+DEFINE("PERM_MAX" , 99);
+DEFINE("PERM_RR"  , 10);
+DEFINE("PERM_BASE", 1);
+function decodePermissionLevel($val) {
+  switch ($val) {
+    case PERM_RR:
+      return "Registration Level";
+    case PERM_MAX:
+      return "Admin Access";
+    case PERM_BASE:
+    default:
+      return "Basic";  
+  }
+}
+
 ?>

@@ -41,6 +41,7 @@ echo "<button id='btn-back' onclick='goBack()'><i style='padding-bottom=\"5px\";
         case (location.pathname.includes("ap_oo3.php")):
         case (location.pathname.includes("ap_ro1.php")):
         case (location.pathname.includes("checkIn.php")):
+        case (location.pathname.includes("adjustLogins.php")):
             window.location.assign("/RUMCPantry/ap1.php");
             break;
 

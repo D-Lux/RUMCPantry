@@ -35,16 +35,16 @@ else {
   closeDB($conn);
   
   while($result = sqlFetch($results)) {
-    if (password_verify(strtoupper($name), $result['login'])) {
+    if (strtoupper($name) == $result['login']) {
       if (password_verify($pw, $result['pw'])) {
         // We found a match, apply my permissions and break out
-        $_SESSION['perms']=$result['permission_level'];
+        $_SESSION['perms']= $result['permission_level'];
         $data['perm']     = $result['permission_level'];
         die(json_encode($data));
       }
       else {
         $data['msg'] = "<p>Incorrect password</p>";
-        $data['err']   = 2;
+        $data['err'] = 2;
         die(json_encode($data));
       }
     }
