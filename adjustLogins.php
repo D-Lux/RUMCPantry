@@ -1,4 +1,4 @@
-<div id="clickOut" class="clickOutMsg" style="display:none;"></div>
+<div id="clickOut" style="display:none;"></div>
 <?php
 $pageRestriction = -1; //99;
 include 'php/header.php';
@@ -19,22 +19,24 @@ include 'php/backButton.php';
   td {
     vertical-align: middle;
   }
-  .editMsg {
+  .ebtn:hover {
+    color: white !important;
+  }
+  #editBox {
+    position: absolute;
+    z-index: 40;
+    padding-top: 3%;
+    margin-top: -15%;
+    background-color: rgb(241, 252, 212);
+    margin-left:150px;
+    width: 400px;
+    height: 300px;
+    border-style: solid;
+    text-align: center;
+  }
+  #clickOut {
     position: absolute;
     z-index: 20;
-    padding-top: 20%;
-    margin-top: -15%;
-    text-align: center;
-    font-size: 1.2em;
-    background-color: rgb(241, 252, 212);
-    font-weight:bold;
-    margin-left:150px;
-    width: 500px;
-    border-style: solid;
-  }
-  .clickOutMsg {
-    position: absolute;
-    z-index: 10;
     width: 100%;
     height: 100%;
     text-align: center;
@@ -49,14 +51,13 @@ include 'php/backButton.php';
   
 	<div class="body-content">
     
-    <div id="editBox" class="editMsg" style="display:none;">Test</div>
+    <div id="editBox" style="display:none;"></div>
 		<div id="loginMsgs" class="hoverMsg" style="display:none;"></div>
     <table class="table" id="loginTable">
       <thead>
         <tr>
           <th>Login</th>
           <th>Permission</th>
-          <th>Edit</th>
           <th></th>
         </tr>
       </thead>
@@ -79,7 +80,9 @@ include 'php/backButton.php';
           <div class="col-sm-4">
             <select name="newPermissions" id="newPermissions" class="newItemField">
               <option value=-1>Select Permissions Level</option>
-              <option value=<?=PERM_BASE?>>Basic</option><option value=<?=PERM_RR?>>Registration Level</option><option value=<?=PERM_MAX?>>Admin Access</option>
+              <option value=<?=PERM_BASE?>>Basic</option>
+              <option value=<?=PERM_RR?>>Registration Level</option>
+              <option value=<?=PERM_MAX?>>Admin Access</option>
             </select>
           </div>
         </div>
@@ -140,19 +143,37 @@ include 'php/backButton.php';
         });
       }
     });
-    $("#loginTable").off("click", ".btn-edit").on("click", ".btn-edit", function() {   
+    $("#loginTable").off("click", ".ebtn").on("click", ".ebtn", function() {  
       permID = $(this).val();
-      if (false) {
-        $.ajax({
-          url      : 'php/ajax/adjustLogin.php?showEdit=1&id=' + permID,
-          dataType : 'json',
-          success  : function(data) {
+      $.ajax({
+        url      : 'php/ajax/adjustLogin.php?showEdit=1&id=' + permID,
+        dataType : 'json',
+        success  : function(data) {
+          if (data.err == 0) {
             $("#editBox").html(data.html);
             $("#clickOut").fadeIn(300);
             $("#editBox").show(300);
-          },
-        });
-      }
+            $("#editBox").off("click", "#BTN_updateLogin").on("click", "#BTN_updateLogin", function(e) {
+            //$("#updateForm").off("submit").on( "submit", function( e ) {
+              e.preventDefault();
+              var updateDetails = $('#updateForm').serializeArray();
+              $.ajax({
+                type     : 'POST',
+                url      : 'php/ajax/adjustLogin.php',
+                dataType : 'json',
+                data     : {
+                  updateDetails,
+                },
+                success  : function(updateData) {
+                  $("#clickOut").click();
+                  $("#loginMsgs").html(updateData.msg).show(250).delay(5000).hide(800);
+                  drawLoginTable();
+                },
+              });
+            });
+          }
+        },
+      });
     });
   }
   $(document).ready(function(){

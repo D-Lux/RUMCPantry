@@ -1,7 +1,7 @@
 <?php 
 include '../utilities.php';
 
-// passwords and logins are generated using the password_has function as follows
+// passwords are generated using the password_hash function as follows
 // password_hash("Test", PASSWORD_BCRYPT, ['cost' => 8]);
 // password_verify("Test", "\$2y\$08\$aNuRvtdzYuk1nPJ1WAczWutZvVoCkA6XNslhVzebJB0X31PxH5SH6");
 
@@ -35,7 +35,7 @@ else {
   closeDB($conn);
   
   while($result = sqlFetch($results)) {
-    if (strtoupper($name) == $result['login']) {
+    if (strtoupper($name) == strtoupper($result['login'])) {
       if (password_verify($pw, $result['pw'])) {
         // We found a match, apply my permissions and break out
         $_SESSION['perms']= $result['permission_level'];

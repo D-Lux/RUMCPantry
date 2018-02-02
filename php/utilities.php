@@ -146,6 +146,10 @@ function displayForTable($item, $length, $cutLength=2) {
 	return stripslashes($item);
 }
 
+function hashPassword($pw) {
+  return password_hash($pw, PASSWORD_BCRYPT, ['cost' => 8]);
+}
+
 function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
 	/*
 	argument explanations:

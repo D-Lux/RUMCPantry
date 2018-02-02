@@ -26,7 +26,7 @@
         $row = [];
 		
 		//Build our links
-		$editBtn = "<button class='btn-table btn-edit' value=" . $result['permission_id'] . ">Edit</button>";
+		$editBtn = "<button class='ebtn btn-icon' value=" . $result['permission_id'] . "><i style='color:rgb(225, 144, 1);' class='fa fa-pencil'></i></button>";
     $delBtn = "";
     if ($result['locked'] == 0) {
       $delBtn .="<button type='submit' class='btn_dlt btn-icon' value=" . $result['permission_id'] . "><i class='fa fa-trash'></i></button>";
@@ -34,8 +34,9 @@
    
 		$row[0] = $result['login'];
 		$row[1] = decodePermissionLevel($result['permission_level']);
-    $row[2] = $editBtn;
-		$row[3] = $delBtn;
+    //$row[2] = $editBtn;
+		//$row[3] = $delBtn;
+    $row[2] = $editBtn . $delBtn;
 		
 		$out[] = $row;
 	}
