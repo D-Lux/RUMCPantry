@@ -1,9 +1,67 @@
 <script src="/RUMCPantry/js/utilities.js"></script>
 
 <?php
+/*
+Submits that pass through here:
+UpdateItem
+updateDonation
+updateDonationPartner
+createDonationPartner
+createDonation
+DeleteItem
+deleteDonation
+deleteDonationPartner
+updateDonationIndividual
+updateDonationPartnerIndividual
 
-/*when the button is pressed on post request*/
-if(isset($_POST['createDonation'])) {
+*/
+include('utilities.php');
+
+if (isset($_GET['UpdateItem'])) {
+	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
+}
+elseif (isset($_GET['updateDonation'])) {
+	header ("location: /RUMCPantry/ap_do4.php?donationID=" . $_GET['donationID']);
+}
+elseif (isset($_GET['updateDonationPartner'])) {
+	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
+}
+elseif(isset($_POST['createDonationPartner'])) {
+    $name        = $_POST['name'];
+    $state       = $_POST['state']; 
+    $zip         = $_POST['zip'];
+    $address     = $_POST['address'];
+    $city        = $_POST['city'];
+    $phoneNumber = $_POST['phoneNumber'];
+    
+    /* Create connection*/
+    $conn = connectDB();
+
+    $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+       VALUES ('$name', '$city', '$state', '$zip', '$address', '$phoneNumber')"; /*standard insert statement using the variables pulled*/
+
+    if ($conn->query($sql) === TRUE) {
+
+        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
+
+        echoDivWithColor("Donation partner created successfully", "green" );
+        echoDivWithColor("Partner name: $name", "green" );
+        echoDivWithColor("City: $city", "green" );
+        echoDivWithColor("State: $state", "green" );
+        echoDivWithColor("Zip: $zip", "green" );
+        echoDivWithColor("Address: $address", "green" );
+        echoDivWithColor("Phone number: $phoneNumber", "green" );
+      
+    } else {
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation partner insert $sql $conn->error", "red" );
+     
+        
+    }
+
+    $conn->close();
+}
+elseif(isset($_POST['createDonation'])) {
 
     $pickupDate = $_POST['pickupDate'];
     $networkPartner = $_POST['networkPartner']; 
@@ -23,39 +81,33 @@ if(isset($_POST['createDonation'])) {
 
     $donorID = null;
 
-    /* previous lines set up the strings for connextion*/
-    include('header.php');
     /* Create connection*/
     $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
 
 
     //check to see if category exists, if not create it.
-        $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
-        if($result->num_rows == 0) {
-        
-         $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
-         VALUES ('$donorName', '$city', '', '', '', '')";
-            if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "New donation partner created: $donorName in $city", "green");
-                
-                
-                $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            $donorID = $row["donationPartnerID"];
-                        }
-                    echoDivWithColor("Donor ID: $donorID", "green" );
-                } 
-          }
-          else{
-            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-            echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
-          }
+    $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
+    if($result->num_rows == 0) {
+    
+     $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+     VALUES ('$donorName', '$city', '', '', '', '')";
+        if ($conn->query($sql) === TRUE) {
+            echoDivWithColor( "New donation partner created: $donorName in $city", "green");
+            
+            
+            $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $donorID = $row["donationPartnerID"];
+                    }
+                echoDivWithColor("Donor ID: $donorID", "green" );
+            } 
+      }
+      else{
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
+      }
 
                   
           
@@ -108,62 +160,6 @@ if(isset($_POST['createDonation'])) {
 
     $conn->close();
 }
-elseif(isset($_POST['createDonationPartner'])) /*when the button is pressed on post request*/
-{
-    
-
-    $name = $_POST['name'];
-    $state = $_POST['state']; 
-    $zip = $_POST['zip'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $phoneNumber = $_POST['phoneNumber'];
-
-
-
-    include('header.php');
-    /* Create connection*/
-    $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-
-  
-
-
-    $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
-       VALUES ('$name', '$city', '$state', '$zip', '$address', '$phoneNumber')"; /*standard insert statement using the variables pulled*/
-
-    if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Donation partner created successfully", "green" );
-        echoDivWithColor("Partner name: $name", "green" );
-        echoDivWithColor("City: $city", "green" );
-        echoDivWithColor("State: $state", "green" );
-        echoDivWithColor("Zip: $zip", "green" );
-        echoDivWithColor("Address: $address", "green" );
-        echoDivWithColor("Phone number: $phoneNumber", "green" );
-      
-
-        
-
-       
-    } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at donation partner insert $sql $conn->error", "red" );
-     
-        
-    }
-
-    $conn->close();
-}
-elseif (isset($_GET['UpdateItem'])) {
-	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
-}
 elseif (isset($_GET['DeleteItem'])) {
   
     $conn = connectDB();
@@ -172,8 +168,6 @@ elseif (isset($_GET['DeleteItem'])) {
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
     } 
-
-
 
     
     $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = '$itemID'");
@@ -190,36 +184,23 @@ elseif (isset($_GET['DeleteItem'])) {
     }
    
 }
-elseif (isset($_GET['updateDonation'])) {
-	header ("location: /RUMCPantry/ap_do4.php?donationID=" . $_GET['donationID']);
-}
 elseif (isset($_GET['deleteDonation'])) {
   
-	$conn = connectDB();
-    $donationID = $_GET['donationID'];
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
+	$conn       = connectDB();
+  $donationID = $_GET['donationID'];
 
+  $result = $conn->query("SELECT DISTINCT donationID FROM Donation WHERE donationID = '$donationID'");
+  if($result->num_rows > 0) {
 
+      $sql = "delete from Donation where donationID=$donationID";
 
-    
-    $result = $conn->query("SELECT DISTINCT donationID FROM Donation WHERE donationID = '$donationID'");
-    if($result->num_rows > 0) {
-
-        $sql = "delete from Donation where donationID=$donationID";
-
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Donation with Donation id $donationID deleted</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Error, failed to connect to database at delete." . $conn->connect_error, "red" );
-          }
-    }
-}
-elseif (isset($_GET['updateDonationPartner'])) {
-	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
+       if ($conn->query($sql) === TRUE) {
+              echoDivWithColor( "<h3>Donation with Donation id $donationID deleted</h3>", "green");
+        }
+        else{
+          echoDivWithColor("Error, failed to connect to database at delete." . $conn->connect_error, "red" );
+        }
+  }
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
    
@@ -247,66 +228,52 @@ elseif (isset($_GET['deleteDonationPartner'])) {
     }
 }
 elseif (isset($_POST['updateDonationIndividual'])) {
-    $donationID = $_POST['donationID'];
-    $pickupDate = $_POST['pickupDate'];
-    $networkPartner = $_POST['networkPartner']; 
-    $agency = $_POST['agency'];
-    $donorName = $_POST['donorName'];
-    $city = $_POST['city'];
+    $donationID       = $_POST['donationID'];
+    $pickupDate       = $_POST['pickupDate'];
+    $networkPartner   = $_POST['networkPartner']; 
+    $agency           = $_POST['agency'];
+    $donorName        = $_POST['donorName'];
+    $city             = $_POST['city'];
 
-    $frozenNonMeat = $_POST['frozenNonMeat'];
-    $frozenMeat = $_POST['frozenMeat'];
-    $frozenPrepared = $_POST['frozenPrepared'];
-    $refBakery = $_POST['refBakery'];
-    $refProduce = $_POST['refProduce'];
-    $refDairyAndDeli = $_POST['refDairyAndDeli'];
-    $dryShelfStable = $_POST['dryShelfStable'];
-    $dryNonFood = $_POST['dryNonFood'];
-    $dryFoodDrive = $_POST['dryFoodDrive'];
+    $frozenNonMeat    = $_POST['frozenNonMeat'];
+    $frozenMeat       = $_POST['frozenMeat'];
+    $frozenPrepared   = $_POST['frozenPrepared'];
+    $refBakery        = $_POST['refBakery'];
+    $refProduce       = $_POST['refProduce'];
+    $refDairyAndDeli  = $_POST['refDairyAndDeli'];
+    $dryShelfStable   = $_POST['dryShelfStable'];
+    $dryNonFood       = $_POST['dryNonFood'];
+    $dryFoodDrive     = $_POST['dryFoodDrive'];
 
+    $donorID          = null;
 
-
-    
-
-    $donorID = null;
-
-
-
-
-    /* previous lines set up the strings for connextion*/
-    include('header.php');
     /* Create connection*/
     $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
 
     //check to see if category exists, if not create it.
-        $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
-        if($result->num_rows == 0) {
-        
-         $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
-         VALUES ('$donorName', '$city', '', '', '', '')";
-            if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "New donation partner created: $donorName in $city", "green");
-                
-                
-                $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
-                $result = $conn->query($sql);
-                if ($result->num_rows > 0) {
-                        while($row = $result->fetch_assoc()) {
-                            $donorID = $row["donationPartnerID"];
-                        }
-                    echoDivWithColor("Donor ID: $donorID", "green" );
-                } 
-                
-          }
-          else{
-            echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-            echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
-          }
+    $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
+    if($result->num_rows == 0) {
+    
+     $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+     VALUES ('$donorName', '$city', '', '', '', '')";
+        if ($conn->query($sql) === TRUE) {
+            echoDivWithColor( "New donation partner created: $donorName in $city", "green");
+            
+            
+            $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
+            $result = $conn->query($sql);
+            if ($result->num_rows > 0) {
+                    while($row = $result->fetch_assoc()) {
+                        $donorID = $row["donationPartnerID"];
+                    }
+                echoDivWithColor("Donor ID: $donorID", "green" );
+            } 
+            
+      }
+      else{
+        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+        echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
+      }
 
                   
           
@@ -370,17 +337,8 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
     $city = $_POST['city'];
     $phoneNumber = $_POST['phoneNumber'];
 
-
-
-    include('header.php');
     /* Create connection*/
     $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-
   
     $sql = "UPDATE DonationPartner SET name = '$name', state = '$state', zip = '$zip', address = '$address', city = '$city', phoneNumber = '$phoneNumber' Where donationPartnerID = $donationPartnerID";
 

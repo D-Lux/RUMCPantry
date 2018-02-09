@@ -534,8 +534,9 @@ function returnTime($time) {
 // ************************************************************
 // * Return all state options, with an optional 'selected' state
 
-function getStateOptions($s = '') {
-	$stateOptions = array('', 'AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
+function getStateOptions($s = 'IL') {
+  
+	$stateOptions = array('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
 						 'KS','LA','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND',
 						 'OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY');
 	foreach ($stateOptions as $option) {

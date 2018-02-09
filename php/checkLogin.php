@@ -10,7 +10,7 @@ if (!isset($pageRestriction)) {
 }
 
 if ($pageRestriction > -1) {
-  if ($_SESSION['perms'] < $pageRestriction) {
+  if ((!isset($_SESSION['perms'] )) || ($_SESSION['perms'] < $pageRestriction)) {
     createCookie("noPermission", 1, 30);
     header ("location: /RUMCPantry/mainpage.php");
   }

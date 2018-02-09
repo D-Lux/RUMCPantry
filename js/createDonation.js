@@ -46,50 +46,50 @@ function validateDonationAdd() {
     }
 
 
-    if (frozenNonMeat < 0 || frozenNonMeat > 100000) {
+    if (frozenNonMeat < 0 || frozenNonMeat > 1000) {
         getElementAndColorIt("frozenNonMeat", "red");
         errors++;
-        response += "frozen Non-Meat field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Non-Meat field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (frozenMeat < 0 || frozenMeat > 100000) {
+    if (frozenMeat < 0 || frozenMeat > 1000) {
         getElementAndColorIt("frozenMeat", "red");
         errors++;
-        response += "frozen Meat field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Meat field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (frozenPrepared < 0 || frozenPrepared > 100000) {
+    if (frozenPrepared < 0 || frozenPrepared > 1000) {
         getElementAndColorIt("frozenPrepared", "red");
         errors++;
-        response += "frozen Prepared field contains a number that is less than 0 or greater than 100000. \n"
+        response += "frozen Prepared field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (refBakery < 0 || refBakery > 100000) {
+    if (refBakery < 0 || refBakery > 1000) {
         getElementAndColorIt("refBakery", "red");
         errors++;
-        response += "ref Bakery field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Bakery field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (refProduce < 0 || refProduce > 100000) {
+    if (refProduce < 0 || refProduce > 1000) {
         getElementAndColorIt("refProduce", "red");
         errors++;
-        response += "ref Produce field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Produce field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (refDairyAndDeli < 0 || refDairyAndDeli > 100000) {
+    if (refDairyAndDeli < 0 || refDairyAndDeli > 1000) {
         getElementAndColorIt("refDairyAndDeli", "red");
         errors++;
-        response += "ref Dairy And Deli field contains a number that is less than 0 or greater than 100000. \n"
+        response += "ref Dairy And Deli field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (dryShelfStable < 0 || dryShelfStable > 100000) {
+    if (dryShelfStable < 0 || dryShelfStable > 1000) {
         getElementAndColorIt("dryShelfStable", "red");
         errors++;
-        response += "dry Shelf Stable field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Shelf Stable field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (dryNonFood < 0 || dryNonFood > 100000) {
+    if (dryNonFood < 0 || dryNonFood > 1000) {
         getElementAndColorIt("dryNonFood", "red");
         errors++;
-        response += "dry Non-Food field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Non-Food field contains a number that is less than 0 or greater than 1000. \n"
     }
-    if (dryFoodDrive < 0 || dryFoodDrive > 100000) {
+    if (dryFoodDrive < 0 || dryFoodDrive > 1000) {
         getElementAndColorIt("dryFoodDrive", "red");
         errors++;
-        response += "dry Food Drive field contains a number that is less than 0 or greater than 100000. \n"
+        response += "dry Food Drive field contains a number that is less than 0 or greater than 1000. \n"
     }
 
 
@@ -103,51 +103,41 @@ function validateDonationAdd() {
 }
 
 function validateDonationPartnerAdd() {
-    var response = "";
-    var name = document.forms["addDonationPartner"]["name"].value;
-    var zip = document.forms["addDonationPartner"]["zip"].value;
-    var address = document.forms["addDonationPartner"]["address"].value;
-    var city = document.forms["addDonationPartner"]["city"].value;
-    var phoneNumber = document.forms["addDonationPartner"]["phoneNumber"].value;
+  $("#warningMsgs").hide();
+  var response    = "";
+  var errors      = 0;
+  var name        = $("#iPartnerName").val();
+  var city        = $("#iCity").val();
+  var zip         = $("#iZip").val();
+  var address     = $("#iAddress").val();
+  var phoneNumber = $("#iPhone").val();
+
+  if (name == "" || name.length == 0 || name == null) {
+      errors++;
+      response += "name field is empty. \n"
+  }
+  if (zip == "" || zip.length == 0 || zip == null) {
+      errors++;
+      response += "zip field is empty. \n"
+  }
+  if (address == "" || address.length == 0 || address == null) {
+      errors++;
+      response += "address field is empty. \n"
+  }
+  if (city == "" || city.length == 0 || city == null) {
+      errors++;
+      response += "city field is empty. \n"
+  }
+  if (phoneNumber == "" || phoneNumber.length == 0 || phoneNumber == null) {
+      errors++;
+      response += "phone number field is empty. \n"
+  }
 
 
-    var errors = 0;
-
-
-    if (name == "" || name.length == 0 || name == null) {
-        getElementAndColorIt("name", "red");
-        errors++;
-        response += "name field is empty. \n"
-    }
-    if (zip == "" || zip.length == 0 || zip == null) {
-        getElementAndColorIt("zip", "red");
-        errors++;
-        response += "zip field is empty. \n"
-    }
-    if (address == "" || address.length == 0 || address == null) {
-        getElementAndColorIt("address", "red");
-        errors++;
-        response += "address field is empty. \n"
-    }
-    if (city == "" || city.length == 0 || city == null) {
-        getElementAndColorIt("city", "red");
-        errors++;
-        response += "city field is empty. \n"
-    }
-    if (phoneNumber == "" || phoneNumber.length == 0 || phoneNumber == null) {
-        getElementAndColorIt("phoneNumber", "red");
-        errors++;
-        response += "phone number field is empty. \n"
-    }
-
-
-
-
-
-    if (errors > 0) {
-        alert("There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response);
-        return false;
-    } else {
-        return true;
-    }
+  if (errors > 0) {
+      $("#").html("<pre>There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response + "</pre>");
+      return false;
+  } else {
+      return true;
+  }
 }

@@ -3,54 +3,42 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
+<style>
+  .msg-warning {
+    display: none;
+  }
+</style>
 <h3>Add Donation Partner</h3>
 <div class="body-content">
 
-<form name="createDonationPartner" action="php/donationOps.php" onSubmit="return validateDonationPartnerAdd()" method="post">
-    <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
-    <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
-
-    <div id="name">
-        Donation partner name:<span style="color:red;">*</span>
-        <?php 
-        createDatalist("","names","DonationPartner","name","name", false);
-        ?>
+  <form name="createDonationPartner" action="php/donationOps.php" onSubmit="return validateDonationPartnerAdd()" method="post">
+    <!-- *************  Name -->
+    <div class="row">
+      <div class="col-sm-4">Donation Partner:</div>
+      <div class="col-sm-8"><input type="text" id="iPartnerName" name="name" maxlength="45"></div>
     </div>
-    <div id="city">
-        City:<span style="color:red;">*</span>
-        <?php 
-        createDatalist("","cities","DonationPartner","city","city", false);
-        ?>
+    <div class="row">
+      <div class="col-sm-4">City:</div>
+      <div class="col-sm-8"><input type="text" id="iCity" name="city" maxlength="45"></div>
     </div>
-    <div id="state">
-        State:<span style="color:red;">*</span>
-        <select name="state">
-          <?=getStateOptions('IL')?>
-        </select>
+    <div class="row">
+      <div class="col-sm-4">State:</div>
+      <div class="col-sm-8"><select id="iState" style="margin-left:10px;" name="state"><?=getStateOptions('IL')?></select></div>
     </div>
-    <div id="zip">
-        Zip:<span style="color:red;">*</span>
-        <?php 
-        
-        createDatalist("","zips","DonationPartner","zip","zip", false);
-        ?>
+    <div class="row">
+      <div class="col-sm-4">zip:</div>
+      <div class="col-sm-8"><input class="addressZipField" type="number" id="iZip" name="zip" maxlength="5"></div>
     </div>
-    <div id="address">
-        Address:<span style="color:red;">*</span>
-        <?php 
-        
-        createDatalist("","addresses","DonationPartner","address","address", false);
-        ?>
+    <div class="row">
+      <div class="col-sm-4">Address:</div>
+      <div class="col-sm-8"><input type="text" id="iAddress" name="address" maxlength="45"></div>
     </div>
-    <div id="phoneNumber">
-        Phone number:<span style="color:red;">*</span>
-        <?php 
-        
-        createDatalist("","phoneNumbers","DonationPartner","phoneNumber","phoneNumber", false);
-        ?>
+    <div class="row">
+      <div class="col-sm-4">Phone Number:</div>
+      <div class="col-sm-8"><input type="tel" id="iPhone" name="phoneNumber" maxlength="10"></div>
     </div>
-
-    <input type="submit" value="Create donation partner" name="createDonationPartner">
+    <div class="msg-warning" id="warningMsgs"></div>
+    <input type="submit" class="btn-nav" value="Create donation partner" name="createDonationPartner">
 </form>
 
 <?php include 'php/footer.php'; ?>
