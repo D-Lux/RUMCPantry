@@ -161,6 +161,11 @@ input[type='tel'] {
 	margin-left: 10px;
 }
 
+.input-phone {
+	width: 80px !important;
+	margin-left: 0px !important;
+}
+
 input[type='number']:not(#addressZipField) {
 	height: 35px;
 	width: 50px;
@@ -190,16 +195,9 @@ td {
 	width: 120px;
 	border-radius: 5px;
 	font-size: 1.1rem;
-	text-indent: 5px;
+  margin-left: 10px !important;
 }
-.addressZipField {
-	height: 35px;
-	width: 120px;
-	border-radius: 5px;
-	font-size: 1.1rem;
-	text-indent: 5px;
-}
-	
+
 /*******************
 Special case buttons
 *******************/

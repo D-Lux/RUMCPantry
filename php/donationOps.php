@@ -1,5 +1,3 @@
-<script src="/RUMCPantry/js/utilities.js"></script>
-
 <?php
 /*
 Submits that pass through here:
@@ -27,39 +25,49 @@ elseif (isset($_GET['updateDonationPartner'])) {
 	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
 }
 elseif(isset($_POST['createDonationPartner'])) {
-    $name        = $_POST['name'];
-    $state       = $_POST['state']; 
-    $zip         = $_POST['zip'];
-    $address     = $_POST['address'];
-    $city        = $_POST['city'];
-    $phoneNumber = $_POST['phoneNumber'];
-    
-    /* Create connection*/
+  header('Content-type: application/json');
+  // TODO: Verify this partner doesn't already exist
+  $error    = '';
+  $name     = $_POST['name'];
+  $state    = $_POST['state']; 
+  $zip      = $_POST['zip'];
+  $address  = $_POST['address'];
+  $city     = $_POST['city'];
+  $areaCode = $_POST['areaCode'];
+  $phone1   = $_POST['phoneNumber1'];
+  $phone2   = $_POST['phoneNumber1'];
+  
+  if (empty($name)) {
+    $error .= "<p>Name is required.</p>";
+  }
+  if (empty($zip)) {
+    $error .= "<p>Zipcode is required.</p>";
+  }
+  if (empty($address)) {
+    $error .= "<p>Address is required.</p>";
+  }
+  if (empty($city)) {
+    $error .= "<p>City is required.</p>";
+  }
+  if (empty($areaCode)) {
+    $error .= "<p>Area code required.</p>";
+  }
+  if (empty($phone1) || empty($phone2) ) {
+    $error .= "<p>Full phone number is required.</p>";
+  }
+
+  if ($error == '') {
     $conn = connectDB();
-
     $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
-       VALUES ('$name', '$city', '$state', '$zip', '$address', '$phoneNumber')"; /*standard insert statement using the variables pulled*/
+       VALUES ('" . $name . "', '" . $city . "', '" . $state . "', " . $zip . ", '" . $address . "', " . $areaCode.$phone1.$phone2 . ")";
 
-    if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Donation partner created successfully", "green" );
-        echoDivWithColor("Partner name: $name", "green" );
-        echoDivWithColor("City: $city", "green" );
-        echoDivWithColor("State: $state", "green" );
-        echoDivWithColor("Zip: $zip", "green" );
-        echoDivWithColor("Address: $address", "green" );
-        echoDivWithColor("Phone number: $phoneNumber", "green" );
-      
-    } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at donation partner insert $sql $conn->error", "red" );
-     
-        
-    }
-
-    $conn->close();
+    //if (queryDB($conn,$sql) === FALSE) {
+     // $error = "There was an error connecting to the database, please try again later.";
+    //}
+    closeDB($conn);
+  }
+  
+  echo json_encode(array("error" => $error));
 }
 elseif(isset($_POST['createDonation'])) {
 

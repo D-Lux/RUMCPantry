@@ -102,8 +102,47 @@ function validateDonationAdd() {
     }
 }
 
-function validateDonationPartnerAdd() {
+
+$("#btn_createDonationPartner").on("click", function(e) {
+  e.preventDefault();
   $("#warningMsgs").hide();
+  var fieldData = $("#createDonationPartner").serialize().trim();
+  $.ajax({
+    url: "php/donationOps.php",
+    data: fieldData,
+    type: "POST",
+    dataType: "json",
+    context: document.body,
+    success: function(msg) {
+      if (msg.error == '') {
+        var clearFields = $('input').not(':input[type=submit], :input[type=hidden]');
+        $("#donationSuccess").html("Donation Partner Added!").show(300).delay(2000).hide(300);
+        $(clearFields).val('');
+        $("select").val('IL');
+      }
+      else {
+        // something happened, show errors
+        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
+      }
+    },
+  });
+});
+
+$(".input-number").keypress(function(key) {
+  var numLength = $(this).val().toString().length;
+  var maxLength = 3;
+  if ($(this).attr("id") == "iPhone2") {
+    maxLength = 4;
+  }
+  if ($(this).attr("id") == "addressZipField") {
+    maxLength = 5;
+  }
+  if (numLength > (maxLength - 1)) {
+    return false;
+  }
+  if(key.charCode < 48 || key.charCode > 57) return false;
+});
+/*
   var response    = "";
   var errors      = 0;
   var name        = $("#iPartnerName").val();
@@ -141,3 +180,4 @@ function validateDonationPartnerAdd() {
       return true;
   }
 }
+*/
