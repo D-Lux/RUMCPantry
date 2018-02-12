@@ -5,13 +5,6 @@
 ?>
 	<h3>Update Reallocation Partner</h3>
 	
-	<script>
-		if (getCookie("newPartner") != "") {
-			window.alert("New Parnter Added!");
-			removeCookie("newPartner");
-		}
-	</script>
-	
 	<div class="body-content">
 	
 	<?php
@@ -124,3 +117,9 @@
 
 <?php include 'php/footer.php'; ?>
 <script src="js/redistOps.js"></script>
+<script type="text/javascript">
+  if (getCookie("newPartner") != "") {
+    window.alert("New Parnter Added!");
+    removeCookie("newPartner");
+  }
+</script>

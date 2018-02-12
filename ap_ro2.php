@@ -3,18 +3,7 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-    <h3>Reallocation Partners</h3>
-
-	<script>
-		if (getCookie("updatePartner") != "") {
-			window.alert("Partner information updated!");
-			removeCookie("updatePartner");
-		}
-		if (getCookie("redistToggled") != "") {
-			window.alert("Partner deactivated!");
-			removeCookie("redistToggled");
-		}
-	</script>
+  <h3>Reallocation Partners</h3>
 	
 	<div class="body-content">
 	
@@ -97,3 +86,15 @@
 	<div id="errorLog"></div>
 	
 <?php include 'php/footer.php'; ?>
+
+
+<script type="text/javascript">
+  if (getCookie("updatePartner") != "") {
+    window.alert("Partner information updated!");
+    removeCookie("updatePartner");
+  }
+  if (getCookie("redistToggled") != "") {
+    window.alert("Partner deactivated!");
+    removeCookie("redistToggled");
+  }
+</script>

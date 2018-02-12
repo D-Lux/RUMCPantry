@@ -102,7 +102,7 @@ function validateDonationAdd() {
     }
 }
 
-
+// For adding a new donation partner
 $("#btn_createDonationPartner").on("click", function(e) {
   e.preventDefault();
   $("#warningMsgs").hide();
@@ -116,12 +116,34 @@ $("#btn_createDonationPartner").on("click", function(e) {
     success: function(msg) {
       if (msg.error == '') {
         var clearFields = $('input').not(':input[type=submit], :input[type=hidden]');
-        $("#donationSuccess").html("Donation Partner Added!").show(300).delay(2000).hide(300);
+        $("#donationSuccess").html("Donation Partner Added!").show(250).delay(5000).hide(800);
         $(clearFields).val('');
         $("select").val('IL');
       }
       else {
         // something happened, show errors
+        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
+      }
+    },
+  });
+});
+
+// For updating a donation partner
+$("#btn_updateDonationPartner").on("click", function(e) {
+  e.preventDefault();
+  $("#warningMsgs").hide();
+  var fieldData = $("#updateDonationPartner").serialize().trim();
+  $.ajax({
+    url: "php/donationOps.php",
+    data: fieldData,
+    type: "POST",
+    dataType: "json",
+    context: document.body,
+    success: function(msg) {
+      if (msg.error == '') {
+        $("#donationSuccess").html("Donation Partner Updated!").show(250).delay(5000).hide(800);
+      }
+      else {
         $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
       }
     },
@@ -138,46 +160,7 @@ $(".input-number").keypress(function(key) {
     maxLength = 5;
   }
   if (numLength > (maxLength - 1)) {
-    return false;
+    return false; // TODO: move this to be in post check
   }
   if(key.charCode < 48 || key.charCode > 57) return false;
 });
-/*
-  var response    = "";
-  var errors      = 0;
-  var name        = $("#iPartnerName").val();
-  var city        = $("#iCity").val();
-  var zip         = $("#iZip").val();
-  var address     = $("#iAddress").val();
-  var phoneNumber = $("#iPhone").val();
-
-  if (name == "" || name.length == 0 || name == null) {
-      errors++;
-      response += "name field is empty. \n"
-  }
-  if (zip == "" || zip.length == 0 || zip == null) {
-      errors++;
-      response += "zip field is empty. \n"
-  }
-  if (address == "" || address.length == 0 || address == null) {
-      errors++;
-      response += "address field is empty. \n"
-  }
-  if (city == "" || city.length == 0 || city == null) {
-      errors++;
-      response += "city field is empty. \n"
-  }
-  if (phoneNumber == "" || phoneNumber.length == 0 || phoneNumber == null) {
-      errors++;
-      response += "phone number field is empty. \n"
-  }
-
-
-  if (errors > 0) {
-      $("#").html("<pre>There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response + "</pre>");
-      return false;
-  } else {
-      return true;
-  }
-}
-*/

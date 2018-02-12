@@ -68,15 +68,16 @@
         $row = [];
 		
 		//Build our link
-		$viewLink = "/RUMCPantry/ap_do3.php?donationPartnerID=" . $results[$i]['donationPartnerID'];
+		$viewLink = "/RUMCPantry/ap_do5.php?donationPartnerID=" . $results[$i]['donationPartnerID'];
 		
-		$viewLink = "<button type='submit' class='btn-table btn-edit' 
-                    value='" . viewLink . "'><i class='fa fa-eye'> View</i></button>";
+		$viewButton = "<button type='submit' class='btn-table btn-edit' 
+                    value='" . $viewLink . "'><i class='fa fa-eye'> View</i></button>";
  
-    $row[0] = $viewLink;
+    $row[0] = $viewButton;
 		$row[1] = $results[$i]['name'];
 		$row[2] = $results[$i]['city'];
 		$row[3] = displayPhoneNo($results[$i]['phoneNumber']);
+    //$row[4] = //todo deactivate buton
 		
 		$out[] = $row;
 	}	

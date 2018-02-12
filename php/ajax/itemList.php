@@ -1,5 +1,5 @@
 <?php
-
+  header('Content-type: application/json');
   include '../utilities.php';
   $deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
 

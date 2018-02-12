@@ -3,16 +3,9 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-    <h3>Reallocation Items (inactive)</h3>
+  <h3>Reallocation Items (inactive)</h3>	
 	
-	<script>
-		if (getCookie("redistToggled") != "") {
-			window.alert("Redistribution item reactivated!");
-			removeCookie("redistToggled");
-		}
-	</script>
-	
-	<div class="body-content">
+  <div class="body-content">
 	
 	<?php
 		// Set up server connection
@@ -76,3 +69,10 @@
     </form>
 
 <?php include 'php/footer.php'; ?>
+
+<script type="text/javascript">
+  if (getCookie("redistToggled") != "") {
+    window.alert("Redistribution item reactivated!");
+    removeCookie("redistToggled");
+  }
+</script>

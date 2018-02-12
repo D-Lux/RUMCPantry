@@ -4,12 +4,6 @@
   include 'php/backButton.php'; 
 ?>
     <meta http-equiv="refresh" content="15" >
-	<script>
-		if (getCookie("processError") != "") {
-			window.alert("There was an error setting this order to processed.");
-			removeCookie("processError");
-		}
-	</script>
    
 	<h3>View Active Orders</h3>
 	
@@ -71,3 +65,10 @@
 	?>
 	
 <?php include 'php/footer.php'; ?>
+
+<script type="text/javascript">
+  if (getCookie("processError") != "") {
+    window.alert("There was an error setting this order to processed.");
+    removeCookie("processError");
+  }
+</script>

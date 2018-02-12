@@ -4,13 +4,6 @@
 	include 'php/backButton.php';
 ?>
 
-	<script>
-		if (getCookie("SpecialsSaved") != "") {
-			window.alert("Specials Updated!");
-			removeCookie("SpecialsSaved");
-		}		
-	</script>
-    
     <h3>Order Forms</h3>
 	
 	<div class="body-content">
@@ -35,3 +28,11 @@
 		
 		
 <?php include 'php/footer.php'; ?>
+
+<script type="text/javascript">
+  if (getCookie("SpecialsSaved") != "") {
+    window.alert("Specials Updated!");
+    removeCookie("SpecialsSaved");
+  }		
+</script>
+    

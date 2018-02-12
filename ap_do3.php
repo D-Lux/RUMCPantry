@@ -12,6 +12,12 @@
     padding: 0px !important;
     color: red;
   }
+  #donationSuccess {
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    height: 40px;
+  }
 </style>
 <h3>Add Donation Partner</h3>
 <div class="body-content">

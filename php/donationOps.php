@@ -24,24 +24,26 @@ elseif (isset($_GET['updateDonation'])) {
 elseif (isset($_GET['updateDonationPartner'])) {
 	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
 }
+
+// ****************************
+// Adding a new donation partner
 elseif(isset($_POST['createDonationPartner'])) {
   header('Content-type: application/json');
-  // TODO: Verify this partner doesn't already exist
   $error    = '';
-  $name     = $_POST['name'];
+  $name     = fixInput($_POST['name']);
   $state    = $_POST['state']; 
   $zip      = $_POST['zip'];
-  $address  = $_POST['address'];
-  $city     = $_POST['city'];
+  $address  = fixInput($_POST['address']);
+  $city     = fixInput($_POST['city']);
   $areaCode = $_POST['areaCode'];
   $phone1   = $_POST['phoneNumber1'];
-  $phone2   = $_POST['phoneNumber1'];
+  $phone2   = $_POST['phoneNumber2'];
   
   if (empty($name)) {
     $error .= "<p>Name is required.</p>";
   }
   if (empty($zip)) {
-    $error .= "<p>Zipcode is required.</p>";
+    $error .= "<p>Zip Code is required.</p>";
   }
   if (empty($address)) {
     $error .= "<p>Address is required.</p>";
@@ -61,14 +63,62 @@ elseif(isset($_POST['createDonationPartner'])) {
     $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
        VALUES ('" . $name . "', '" . $city . "', '" . $state . "', " . $zip . ", '" . $address . "', " . $areaCode.$phone1.$phone2 . ")";
 
-    //if (queryDB($conn,$sql) === FALSE) {
-     // $error = "There was an error connecting to the database, please try again later.";
-    //}
+    if (queryDB($conn,$sql) === FALSE) {
+      $error = "There was an error connecting to the database, please try again later.";
+    }
     closeDB($conn);
   }
   
   echo json_encode(array("error" => $error));
 }
+elseif (isset($_POST['updateDonationPartnerIndividual'])) {
+  header('Content-type: application/json');
+  $error    = '';
+  $name     = fixInput($_POST['name']);
+  $state    = $_POST['state']; 
+  $zip      = $_POST['zip'];
+  $address  = fixInput($_POST['address']);
+  $city     = fixInput($_POST['city']);
+  $areaCode = $_POST['areaCode'];
+  $phone1   = $_POST['phoneNumber1'];
+  $phone2   = $_POST['phoneNumber2'];
+  $pid      = $_POST['donationPartnerID'];
+  
+  if (empty($name)) {
+    $error .= "<p>Name is required.</p>";
+  }
+  if (empty($zip)) {
+    $error .= "<p>Zip Code is required.</p>";
+  }
+  if (empty($address)) {
+    $error .= "<p>Address is required.</p>";
+  }
+  if (empty($city)) {
+    $error .= "<p>City is required.</p>";
+  }
+  if (empty($areaCode)) {
+    $error .= "<p>Area code required.</p>";
+  }
+  if (empty($phone1) || empty($phone2) ) {
+    $error .= "<p>Full phone number is required.</p>";
+  }
+  $phoneNumber = $areaCode.$phone1.$phone2;
+
+  if ($error == '') {
+    $conn = connectDB();
+    $sql = "UPDATE DonationPartner 
+            SET name = '" . $name . "', state = '" . $state . "', zip = " . $zip . ", address = '" . $address . "', city = '" . $city . "', phoneNumber = " . $phoneNumber . "
+            WHERE donationPartnerID = $pid";
+
+    if (queryDB($conn,$sql) === FALSE) {
+      $error = "There was an error connecting to the database, please try again later.";
+      //$error = sqlError($conn);
+    }
+  }
+  closeDB($conn);
+  echo json_encode(array("error" => $error));
+}
+
 elseif(isset($_POST['createDonation'])) {
 
     $pickupDate = $_POST['pickupDate'];
@@ -210,31 +260,6 @@ elseif (isset($_GET['deleteDonation'])) {
         }
   }
 }
-elseif (isset($_GET['deleteDonationPartner'])) {
-   
-	$conn = connectDB();
-    $donationPartnerID = $_GET['donationPartnerID'];
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-
-
-    
-    $result = $conn->query("SELECT DISTINCT donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'");
-    if($result->num_rows > 0) {
-
-        $sql = "delete from DonationPartner where donationPartnerID=$donationPartnerID";
-
-         if ($conn->query($sql) === TRUE) {
-                echoDivWithColor( "<h3>Donation Partner with donationPartnerID id $donationPartnerID deleted</h3>", "green");
-          }
-          else{
-            echoDivWithColor("Error, this donation partner is in use" . $conn->connect_error, "red" );
-          }
-    }
-}
 elseif (isset($_POST['updateDonationIndividual'])) {
     $donationID       = $_POST['donationID'];
     $pickupDate       = $_POST['pickupDate'];
@@ -336,45 +361,27 @@ elseif (isset($_POST['updateDonationIndividual'])) {
 
     $conn->close();
 }
-elseif (isset($_POST['updateDonationPartnerIndividual'])) {
-    $donationPartnerID = $_POST['donationPartnerID'];
-    $name = $_POST['name'];
-    $state = $_POST['state']; 
-    $zip = $_POST['zip'];
-    $address = $_POST['address'];
-    $city = $_POST['city'];
-    $phoneNumber = $_POST['phoneNumber'];
+elseif (isset($_GET['deleteDonationPartner'])) {
+   
+	$conn = connectDB();
+    $donationPartnerID = $_GET['donationPartnerID'];
+    /* Check connection*/
+    if ($conn->connect_error) {
+        die("Connection failed: " . $conn->connect_error);
+    } 
 
-    /* Create connection*/
-    $conn = connectDB();
-  
-    $sql = "UPDATE DonationPartner SET name = '$name', state = '$state', zip = '$zip', address = '$address', city = '$city', phoneNumber = '$phoneNumber' Where donationPartnerID = $donationPartnerID";
+    $result = $conn->query("SELECT DISTINCT donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'");
+    if($result->num_rows > 0) {
 
+        $sql = "delete from DonationPartner where donationPartnerID=$donationPartnerID";
 
-    if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Donation partner updated successfully", "green" );
-        echoDivWithColor("Partner name: $name", "green" );
-        echoDivWithColor("City: $city", "green" );
-        echoDivWithColor("State: $state", "green" );
-        echoDivWithColor("Zip: $zip", "green" );
-        echoDivWithColor("Address: $address", "green" );
-        echoDivWithColor("Phone number: $phoneNumber", "green" );
-      
-
-        
-
-       
-    } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at donation partner update $sql $conn->error", "red" );
-     
-        
+         if ($conn->query($sql) === TRUE) {
+                echoDivWithColor( "<h3>Donation Partner with donationPartnerID id $donationPartnerID deleted</h3>", "green");
+          }
+          else{
+            echoDivWithColor("Error, this donation partner is in use" . $conn->connect_error, "red" );
+          }
     }
-
-    $conn->close();
 }
 
 ?>

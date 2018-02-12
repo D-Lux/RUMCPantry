@@ -90,7 +90,7 @@
 						AND Category.name<>'redistribution'
 						AND Item." . $familyType . ">0
 						AND Category." . $familyType . ">0 
-						ORDER BY Category.name, Item.displayName";
+						ORDER BY CID, Item.displayName";
 
 				$itemList = queryDB($conn, $sql);
 				

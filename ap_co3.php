@@ -5,22 +5,6 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
-	<script>
-		if (getCookie("newClient") != "") {
-			window.alert("New Client Added!");
-			removeCookie("newClient");
-		}
-		if (getCookie("DelFam") != "") {
-			window.alert("Family Member Removed!");
-			removeCookie("DelFam");
-		}
-		if (getCookie("Err_DelFam") != "") {
-			window.alert("Cannot Remove The Head of Household!");
-			removeCookie("Err_DelFam");
-		}
-		
-	</script>
 	
 	<div class="body-content">
 	
@@ -286,11 +270,6 @@
 				</thead>
 				<tbody>
 				</tbody>
-			</table>
-			<table id="">
-				<tr>
-					
-				</tr>
 			</table>				
 			<?php
 		} 
@@ -303,6 +282,19 @@
 <script src="js/clientOps.js"></script>
 <script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
+  if (getCookie("newClient") != "") {
+    window.alert("New Client Added!");
+    removeCookie("newClient");
+  }
+  if (getCookie("DelFam") != "") {
+    window.alert("Family Member Removed!");
+    removeCookie("DelFam");
+  }
+  if (getCookie("Err_DelFam") != "") {
+    window.alert("Cannot Remove The Head of Household!");
+    removeCookie("Err_DelFam");
+  }
+    
 	<?php
 		echo "var Params = '?cid=" . $_GET['id'] . "';";
 	?>

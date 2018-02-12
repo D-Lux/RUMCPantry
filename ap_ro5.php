@@ -3,23 +3,7 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-    <h3>Reallocation Items</h3>
-
-	<script>
-		if (getCookie("redistItemUpdated") != "") {
-			window.alert("Redistribution item updated!");
-			removeCookie("redistItemUpdated");
-		}
-		if (getCookie("newRedistItem") != "") {
-			window.alert("New Item Added!");
-			removeCookie("newRedistItem");
-		}
-		if (getCookie("redistToggled") != "") {
-			window.alert("Redistribution item deactivated!");
-			removeCookie("redistToggled");
-		}
-	</script>
-	
+    <h3>Reallocation Items</h3>	
 	<div class="body-content">
 	
 	<?php
@@ -92,3 +76,18 @@
     </form>
 
 <?php include 'php/footer.php'; ?>
+
+<script type="text/javascript">
+  if (getCookie("redistItemUpdated") != "") {
+    window.alert("Redistribution item updated!");
+    removeCookie("redistItemUpdated");
+  }
+  if (getCookie("newRedistItem") != "") {
+    window.alert("New Item Added!");
+    removeCookie("newRedistItem");
+  }
+  if (getCookie("redistToggled") != "") {
+    window.alert("Redistribution item deactivated!");
+    removeCookie("redistToggled");
+  }
+</script>

@@ -16,10 +16,9 @@
         <tr>
           <th width='5%'></th>
           <th width='27%'>Name</th>
-          <th width='5%'>Size</th>
-          <th width='15%'>Email</th>
+          <th width='15%'>City</th>
           <th width='23%'>Phone Number</th>
-          <th width='5%'></th>
+          <!--<th width='5%'></th>-->
         </tr>
       </thead>
       <tbody>
@@ -57,5 +56,15 @@
       },
 	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
+  $('#datatableContainer').on('click', '.btn-icon, .btn-edit', function () {
+    if ($(this).hasClass('btn-icon')) {
+      if (confirm("Are you sure you want to deactivate this partner?")) {
+        window.location.assign($(this).attr('value'));
+      }
+    }
+    else {
+      window.location.assign($(this).attr('value'));
+    }
+  });
 		
 </script>

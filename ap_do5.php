@@ -2,147 +2,120 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
-?>
+  
+  $pID      = 0;
+  $badLoad  = false;
+  if (!isset($_GET['donationPartnerID'])) {
+    $badLoad = true;
+  }
+  else {
+    $pID = $_GET['donationPartnerID'];
+    $sql = "SELECT name, city, state, zip, address, phoneNumber FROM DonationPartner WHERE donationPartnerID =" . $pID ;
     
-    <div class="body-content">
-    <?php  
-    //echo "<h3> Update donation partner number: ". $_GET['donationPartnerID'] . "</h3>";
-   
- 
-    $donationPartnerID = $_GET['donationPartnerID'];
-    $name ="";
-    $city ="";
-    $state="";
-    $zip="";
-    $address="";
-    $phoneNumber="";
-
-    
-
-     /* Create connection*/
     $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
-
-    $sql = "SELECT donationPartnerID, name, city, state, zip, address, phoneNumber FROM DonationPartner WHERE donationPartnerID =". $_GET['donationPartnerID'] ;
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-
-                $donationPartnerID = $row["donationPartnerID"];
-                
-                $name= $row["name"];
-                $city= $row["city"];
-                $state= $row["state"];
-                $zip= $row["zip"];
-                $address= $row["address"];
-                $phoneNumber= $row["phoneNumber"];
-              
-
-        }
+    $result = runQueryForOne($conn, $sql);
+    if ( $result === false ) {
+      $badLoad = true;
     }
-    else
-    {
-      
-      // TODO: Remove this
-        echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
-    }
+  }
+?>
+<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
+<style>
+  .msg-warning {
+    display: none;
+  }
+  p {
+    margin: 5px !important;
+    padding: 0px !important;
+    color: red;
+  }
+  #donationSuccess {
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    height: 40px;
+  }
+</style>
+<h3>Update Donation Partner</h3>
+<div class="body-content">   
+<div class="body-content">
+  <div id="donationSuccess" class="hoverMsg" style="display:none;"></div>
+  <form id="updateDonationPartner" action="" method="post">
+    <input type="hidden" value=1 name="updateDonationPartnerIndividual">
+    <input type="hidden" value=<?=$pID?> name="donationPartnerID">
+    <!-- *************  Name -->
+    <div class="row">
+      <div class="col-sm-4">Donation Partner:</div>
+      <div class="col-sm-8"><input type="text" name="name" maxlength="45" value="<?=$result['name']?>"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">City:</div>
+      <div class="col-sm-8"><input type="text" name="city" maxlength="45" value="<?=$result['city']?>"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">State:</div>
+      <div class="col-sm-8"><select style="margin-left:10px;" name="state"><?=getStateOptions($result['state'])?></select></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Zip Code:</div>
+      <div class="col-sm-8"><input class="input-number" type="number" id="addressZipField" name="zip" maxlength="5" value="<?=$result['zip']?>"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Address:</div>
+      <div class="col-sm-8"><input type="text" name="address" maxlength="45" value="<?=$result['address']?>"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Phone Number:</div>
+      <div class="col-sm-8">
+        (<input class="input-phone input-number" type="number" id="iAreaCode" name="areaCode"  value="<?=substr($result['phoneNumber'], 0, 3)?>">)
+        <input class="input-phone input-number" type="number" id="iPhone1" name="phoneNumber1" value="<?=substr($result['phoneNumber'], 3, 3)?>"> -
+        <input class="input-phone input-number" type="number" id="iPhone2" name="phoneNumber2" value="<?=substr($result['phoneNumber'], 6, 4)?>"></div>
+    </div>
+    <div class="msg-warning" id="warningMsgs"></div>
+    <input type="submit" class="btn-nav" id="btn_updateDonationPartner" value="Update Donation Partner" name="updateDonationPartner">
+  </form>
 
-    echo'<form name="addDonationPartner" action="php/donationOps.php" onSubmit="return validateDonationPartnerAdd()" method="post">
-        <input type="hidden" name="donationPartnerID" value=' . $donationPartnerID . '>
-        <div id="name">
-            Donation partner name:<span style="color:red;">*</span>';
-     
-            createDatalist("$name","names","DonationPartner","name","name", false);
-        
-        echo'</div>
-        <div id="city">
-            City:<span style="color:red;">*</span>';
-            
-            createDatalist("$city","cities","DonationPartner","city","city", false);
-        
-        echo "</div>";
-        echo "<div id='state'>State:<select name='state'>";
-        getStateOptions($state);
-        echo'</select></div>
-        
-        <div id="zip">
-            Zip:<span style="color:red;">*</span>';
-            
-            
-            createDatalist("$zip","zips","DonationPartner","zip","zip", false);
-            
-        echo'</div>
-        <div id="address">
-            Address:<span style="color:red;">*</span>';
-            
-            
-            createDatalist("$address","addresses","DonationPartner","address","address", false);
-        
-        echo'</div>
-        <div id="phoneNumber">
-            Phone number:<span style="color:red;">*</span>';
-            
-            
-            createDatalist("$phoneNumber","phoneNumbers","DonationPartner","phoneNumber","phoneNumber", false);
-        
-        echo'</div>
-
-        <input type="submit" value="Update" name="updateDonationPartnerIndividual">
-        </form>';
-
-        $sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM Donation WHERE donationPartnerID = '$donationPartnerID' ";
-        $result = $conn->query($sql);
-        $hasReal =0;
-        if ($result->num_rows > 0) {
-            
-            // output data of each row
-          
-           
-        
-            
-            echo "<table>";
-            echo "<tr><th>Edit</th><th>Donation Partner Name</th><th>Date of Pickup</th><th>Network Partner</th><th>Agency</th><th>Delete</th></tr>";
-            while($row = $result->fetch_assoc()) {
-                $donationParnterName ="";
-        
-                $sql1 = "SELECT DISTINCT name, donationPartnerID 
-						  FROM DonationPartner WHERE donationPartnerID = ". $row['donationPartnerID'];
-                $result1 = $conn->query($sql1);
-                if ($result1->num_rows > 0) {
-                    while($row1 = $result1->fetch_assoc()) {
-                        $donationParnterName = $row1["name"];
-                    }
-                }
-                echo "<tr>";
-                //grab donation id
-                echo "<form action='' method='get'>";
-                $donationID=$row["donationID"];
-                echo "<input type='hidden' name='donationID' value='$donationID'>";
-				echo "<input type='hiddne' name='donationPartnerID' value='$donationPartnerID'>";
-                echo "<td><input type='submit' name='updateDonation' value='Edit'></td>";
-                echo "<td>$donationParnterName</td><td>". $row["dateOfPickup"]. "</td><td>" . $row["networkPartner"] . "</td><td>" . $row["agency"] . "</td>";
-                echo "<td><input type='submit' name='deleteDonation' class = 'btn_trash' value=' '></td>";
-                echo "</form>";
-                echo "</tr>";
-                $hasReal++;
-                }
-               
-                    
-            }
-           echo "</table>";
-        
-           if($hasReal == 0)
-           {
-                echo "<div>There is currently nothing in the donations table</div>";
-           }
-           
-           
-        $conn->close();
-        ?>
+  <!-- Donations recieved from this partner -->
+  <hr><br><h3>Donations</h3>
+  <table width='95%' id="donationTable" class="display">
+    <thead>
+      <tr>
+        <th width='5%'></th>
+        <th>Date</th>
+      </tr>
+    </thead>
+    <tbody>
+    </tbody>
+  </table>
 
 <?php include 'php/footer.php'; ?>
-<script src="js/createDonation.js"></script>
+<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
+<script type="text/javascript">
+  if (<?=(int)$badLoad?>) {
+    window.location.href = '/RUMCPantry/ap_do1.php';
+  }
+  $('#donationTable').DataTable({
+    "info"          : true,
+    "paging"        : true,
+    "destroy"       : true,
+    "searching"     : false,
+    "processing"    : true,
+    "serverSide"    : true,
+    "orderClasses"  : false,
+    "autoWidth"     : false,
+    "ordering"      : false,
+    "pagingType"    : "full_numbers",
+    "language"	    : {
+    "emptyTable"    : "No donations in database."
+                      },
+    "ajax"	        : {
+        "url"       : "/RUMCPantry/php/ajax/donationList.php?pid=<?=$pID?>",
+                      },
+    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+  });
+  $('#donationTable').on('click', '.btn-edit', function () {
+    window.location.assign($(this).attr('value'));
+  });
+</script>
+<script src="js/createDonation.js">
+

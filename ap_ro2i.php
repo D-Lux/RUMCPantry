@@ -3,13 +3,7 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-    <h3>Reallocation Partners (inactive)</h3>
-	<script>
-		if (getCookie("redistToggled") != "") {
-			window.alert("Partner reactivated!");
-			removeCookie("redistToggled");
-		}
-	</script>
+  <h3>Reallocation Partners (inactive)</h3>
 	
 	<div class="body-content">
 	
@@ -85,3 +79,10 @@
     </form>
 
 <?php include 'php/footer.php'; ?>
+
+<script type="text/javascript">
+  if (getCookie("redistToggled") != "") {
+    window.alert("Partner reactivated!");
+    removeCookie("redistToggled");
+  }
+</script>

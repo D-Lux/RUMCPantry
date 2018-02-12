@@ -26,7 +26,31 @@ function debugEchoVar($v) {
 	var_dump($v);
 	echo '</pre>';
 }
-
+function decodeJsonError() {
+  switch (json_last_error()) {
+    case JSON_ERROR_NONE:
+        echo ' - No errors';
+    break;
+    case JSON_ERROR_DEPTH:
+        echo ' - Maximum stack depth exceeded';
+    break;
+    case JSON_ERROR_STATE_MISMATCH:
+        echo ' - Underflow or the modes mismatch';
+    break;
+    case JSON_ERROR_CTRL_CHAR:
+        echo ' - Unexpected control character found';
+    break;
+    case JSON_ERROR_SYNTAX:
+        echo ' - Syntax error, malformed JSON';
+    break;
+    case JSON_ERROR_UTF8:
+        echo ' - Malformed UTF-8 characters, possibly incorrectly encoded';
+    break;
+    default:
+        echo ' - Unknown error';
+    break;
+}
+}
 // ************************************************************
 // ** Setting default timezone
 date_default_timezone_set('America/Chicago');
@@ -84,6 +108,10 @@ function runQuery($conn, $query) {
 
 function runQueryForOne($conn, $query) {
   return current(returnAssocArray(queryDB($conn, $query)));
+}
+
+function sqlError($conn) {
+  return ( mysqli_error($conn) );
 }
 
 // *****************************************************************
