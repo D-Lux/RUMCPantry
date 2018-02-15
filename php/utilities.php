@@ -64,10 +64,16 @@ date_default_timezone_set('America/Chicago');
 $connectionActive = false;
 function connectDB() {
 	// Set up server connection
+	// $servername = "127.0.0.1";
+	// $username   = "root";
+	// $password   = "";
+	// $dbname     = "foodpantry";
+
 	$servername = "127.0.0.1";
 	$username   = "root";
 	$password   = "";
 	$dbname     = "foodpantry";
+
 
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
@@ -123,7 +129,7 @@ function fixInput($data) {
 	$data = stripslashes($data);
 	$data = htmlspecialchars($data);
 	// Escape any single-quotes we find for sql queries
-	$data = str_replace ( "'", "''", $data);	
+	$data = str_replace ( "'", "''", $data);
 	return $data;
 }
 
@@ -132,7 +138,7 @@ function displaySingleQuote($data) {
 	return str_replace("'", "&#39", $data);
 }
 function revertSingleQuote($data) {
-	return str_replace("'", "''", $data);	
+	return str_replace("'", "''", $data);
 }
 
 // Made this function to turn data into a single-quote string for storing and viewing
@@ -181,7 +187,7 @@ function hashPassword($pw) {
 function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
 	/*
 	argument explanations:
-	$defaultVal - default value you would like to appear in the datalist 
+	$defaultVal - default value you would like to appear in the datalist
 	$listName - Name of the list make plural (ex categories or itemNames)
 	$tableName - table you wish to pull the attribute from (ex item)
 	$attributeName - name of the attribute (ex displayName)
@@ -189,7 +195,7 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
 		out all that has been deleted.
 	*/
-	
+
     $conn = connectDB();
 	//standard DB stuff up to here
 	$sql = "SELECT DISTINCT " . $attributeName .
@@ -203,19 +209,19 @@ function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inp
 	echo "<input type='text' list=$listName name=$inputName value='$defaultVal' autocomplete='off'>";
 
 	echo "<datalist id=$listName>"; //this id must be the same as the list = above
-	
+
 	while ($row = mysql_fetch_array($result)) {
 		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
 	}
 	echo "</datalist>";
 	closeDB($conn);
-	
+
 }
 
 function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
 	/*
 	argument explanations:
-	$defaultVal - default value you would like to appear in the datalist 
+	$defaultVal - default value you would like to appear in the datalist
 	$listName - Name of the list make plural (ex categories or itemNames)
 	$tableName - table you wish to pull the attribute from (ex item)
 	$attributeName - name of the attribute (ex displayName)
@@ -223,30 +229,30 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
 		out all that has been deleted.
 	*/
-	
+
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
 	$sql = "SELECT DISTINCT " . $attributeName . "
 			FROM " . $tableName;
-	
+
 	if ($hasDeletedAttribute) {
 		$sql .= " WHERE isDeleted=0";
 	}
-	
+
 	$sqlQuery = queryDB($conn, $sql);
 
-	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "' 
+	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "'
 			value='" . $defaultVal . "' name='" . $inputName . "'>";
-	
+
 	echo "<datalist id='" . $listName . "'>";
 	while($row = sqlFetch($sqlQuery)) {
 		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
 	}
 	echo "</datalist>";
 	closeDB($conn);
-	
+
 }
 
 // Requires passing an open database connection and an SQL query
@@ -284,16 +290,16 @@ function getAvailableClient() {
 		die("Connection failed: " . $conn->connect_error);
 	}
 	$clientName = makeString("Available");
-	
+
 	// Find the 'available' client
 	$sql = "SELECT FamilyMember.clientID as id
 			FROM FamilyMember
-			WHERE FamilyMember.firstName = " . $clientName . " 
+			WHERE FamilyMember.firstName = " . $clientName . "
 			AND FamilyMember.lastName = " . $clientName;
-	
+
 	$availableClient = queryDB($conn, $sql);
 	closeDB($conn);
-	
+
 	// If we didn't get a match, we need to create the 'Available' client
 	if ( $availableClient==null || $availableClient->num_rows <= 0 ) {
 		return createAvailableClient();
@@ -313,13 +319,13 @@ function createAvailableClient(){
 	// Create insertion string
 	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, isDeleted, redistribution)
 			VALUES ('0','0',now(), FALSE, FALSE)";
-	
+
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
 		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember 
+		$sql = "INSERT INTO FamilyMember
 				(firstName, lastName, isHeadOfHousehold, clientID, timestamp, isDeleted)
 				VALUES ('Available', 'Available', TRUE, $clientID, now(), FALSE)";
 		if (queryDB($conn, $sql) === TRUE) {
@@ -334,14 +340,14 @@ function createAvailableClient(){
 			closeDB($conn);
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create family member.", "red" );	
+			echoDivWithColor("Error, failed to create family member.", "red" );
 		}
-	} 
+	}
 	else {
 		closeDB($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to connect to database.", "red" );	
+		echoDivWithColor("Error, failed to connect to database.", "red" );
 	}
 }
 
@@ -382,17 +388,17 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to print';
 		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
 		case ($visitStatus == SV_COMPLETED): return 'Completed';
-		
+
 		// special cases
 		case ($visitStatus == SV_PARTIAL_COMPLETION): return 'Partial completion';
 		case ($visitStatus == SV_BAD_DOCUMENTATION): return 'Bad documentation';
 		case ($visitStatus == SV_CANCELED): return 'Client canceled';
 		case ($visitStatus == SV_NO_SHOW): return 'Client did not show';
-		
+
 		case ($visitStatus == SV_REDISTRIBUTION): return 'Reallocation order';
-		
+
 		default: return 'Status not recognized';
-	}		
+	}
 }
 
 // *****
@@ -532,13 +538,13 @@ function runFamilyDecoder($famSize, $valS, $valM, $valL){
 		case ($famSize >= FAMILY_SIZE_SM_LOW && $famSize <= FAMILY_SIZE_SM_HIGH): return $valS;
 		case ($famSize >= FAMILY_SIZE_MED_LOW && $famSize <= FAMILY_SIZE_MED_HIGH): return  $valM;
 		case ($famSize >= FAMILY_SIZE_HIGH_THRESHOLD): return $valL;
-		
+
 		default: return 'Small';
-	}		
+	}
 }
 
 function familySizeDecoder($famSize){
-	return (runFamilyDecoder($famSize, 'Small', 'Medium', 'Large'));	
+	return (runFamilyDecoder($famSize, 'Small', 'Medium', 'Large'));
 }
 
 function orderFormNameTagLength($familySize) {
@@ -563,14 +569,14 @@ function returnTime($time) {
 // * Return all state options, with an optional 'selected' state
 
 function getStateOptions($s = 'IL') {
-  
+
 	$stateOptions = array('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
 						 'KS','LA','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND',
 						 'OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY');
 	foreach ($stateOptions as $option) {
 		echo "<option value='" . $option . "' " . (($option == $s) ? ' selected ' : ' ' ) . ">" . $option . "</option>";
 	}
-	
+
 }
 
 // ************************************************************
@@ -587,9 +593,9 @@ function clientTypeDecoder($clientType){
 		case ($clientType == CLIENT_TYPE_CONSTIT): return 'Constituent';
 		case ($clientType == CLIENT_TYPE_MEMBER): return 'Member';
 		case ($clientType == CLIENT_TYPE_RESIDENT): return 'Resident';
-		
+
 		default: return 'Unknown';
-	}		
+	}
 }
 
 // ************************************************************
@@ -604,18 +610,18 @@ function genderDecoder($gender){
 		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'Male';
 		case ($gender == GENDER_FEMALE): return 'Female';
-		
+
 		default: return '-';
-	}		
+	}
 }
 function genderDecoderShort($gender){
 	switch(true) {
 		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'M';
 		case ($gender == GENDER_FEMALE): return 'F';
-		
+
 		default: return '-';
-	}		
+	}
 }
 
 // ************************************************************
@@ -680,7 +686,7 @@ function decodePermissionLevel($val) {
       return "Admin Access";
     case PERM_BASE:
     default:
-      return "Basic";  
+      return "Basic";
   }
 }
 
