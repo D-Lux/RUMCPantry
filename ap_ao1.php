@@ -27,7 +27,7 @@
 	<!-- NEW Date -->
   <?php if ($_SESSION['perms'] >= 99) { ?>
 	<form action="ap_ao2.php">
-		<input id="NewDate" type="submit" name="NewDate" value="New Appointment Date">
+		<input id="NewDate" type="submit" class="btn-nav" name="NewDate" value="New Appointment Date">
     </form>
   <?php } ?>
 

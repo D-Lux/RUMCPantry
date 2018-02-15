@@ -39,7 +39,7 @@
     </div>
     <div class="row">
       <div class="col-sm-4">Zip Code:</div>
-      <div class="col-sm-8"><input class="input-number" type="number" id="addressZipField" name="zip" maxlength="5"></div>
+      <div class="col-sm-8"><input class="input-number" type="text" id="addressZipField" name="zip" maxlength="5"></div>
     </div>
     <div class="row">
       <div class="col-sm-4">Address:</div>
@@ -48,9 +48,9 @@
     <div class="row">
       <div class="col-sm-4">Phone Number:</div>
       <div class="col-sm-8">
-        (<input class="input-phone input-number" type="number" id="iAreaCode" name="areaCode">)
-        <input class="input-phone input-number" type="number" id="iPhone1" name="phoneNumber1"> -
-        <input class="input-phone input-number" type="number" id="iPhone2" name="phoneNumber2"></div>
+        (<input class="input-phone input-number" type="text" id="iAreaCode" name="areaCode" maxlength="3">)
+        <input class="input-phone input-number" type="text" id="iPhone1" name="phoneNumber1" maxlength="3"> -
+        <input class="input-phone input-number" type="text" id="iPhone2" name="phoneNumber2" maxlength="4"></div>
     </div>
     <div class="msg-warning" id="warningMsgs"></div>
     <input type="submit" class="btn-nav" id="btn_createDonationPartner" value="Create donation partner" name="createDonationPartner">

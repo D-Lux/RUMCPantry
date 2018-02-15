@@ -31,14 +31,14 @@ elseif(isset($_POST['createDonationPartner'])) {
   header('Content-type: application/json');
   $error    = '';
   $name     = fixInput($_POST['name']);
-  $state    = $_POST['state']; 
+  $state    = $_POST['state'];
   $zip      = $_POST['zip'];
   $address  = fixInput($_POST['address']);
   $city     = fixInput($_POST['city']);
   $areaCode = $_POST['areaCode'];
   $phone1   = $_POST['phoneNumber1'];
   $phone2   = $_POST['phoneNumber2'];
-  
+
   if (empty($name)) {
     $error .= "<p>Name is required.</p>";
   }
@@ -68,14 +68,14 @@ elseif(isset($_POST['createDonationPartner'])) {
     }
     closeDB($conn);
   }
-  
+
   echo json_encode(array("error" => $error));
 }
 elseif (isset($_POST['updateDonationPartnerIndividual'])) {
   header('Content-type: application/json');
   $error    = '';
   $name     = fixInput($_POST['name']);
-  $state    = $_POST['state']; 
+  $state    = $_POST['state'];
   $zip      = $_POST['zip'];
   $address  = fixInput($_POST['address']);
   $city     = fixInput($_POST['city']);
@@ -83,7 +83,7 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
   $phone1   = $_POST['phoneNumber1'];
   $phone2   = $_POST['phoneNumber2'];
   $pid      = $_POST['donationPartnerID'];
-  
+
   if (empty($name)) {
     $error .= "<p>Name is required.</p>";
   }
@@ -106,7 +106,7 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
 
   if ($error == '') {
     $conn = connectDB();
-    $sql = "UPDATE DonationPartner 
+    $sql = "UPDATE DonationPartner
             SET name = '" . $name . "', state = '" . $state . "', zip = " . $zip . ", address = '" . $address . "', city = '" . $city . "', phoneNumber = " . $phoneNumber . "
             WHERE donationPartnerID = $pid";
 
@@ -114,120 +114,77 @@ elseif (isset($_POST['updateDonationPartnerIndividual'])) {
       $error = "There was an error connecting to the database, please try again later.";
       //$error = sqlError($conn);
     }
+    closeDB($conn);
   }
-  closeDB($conn);
   echo json_encode(array("error" => $error));
 }
 
-elseif(isset($_POST['createDonation'])) {
+elseif(isset($_POST["createDonation"])) {
+  header('Content-type: application/json');
+  $pickupDate       = $_POST["pickupDate"];
+  $networkPartner   = fixInput($_POST["networkPartner"]);
+  $agency           = fixInput($_POST["agency"]);
+  $donorID          = $_POST["donorName"];
+  $frozenNonMeat    = isset($_POST["frozenNonMeat"])    ? (int)$_POST["frozenNonMeat"]   : (int)0;
+  $frozenMeat       = isset($_POST["frozenMeat"])       ? (int)$_POST["frozenMeat"]      : (int)0;
+  $frozenPrepared   = isset($_POST["frozenPrepared"])   ? (int)$_POST["frozenPrepared"]  : (int)0;
+  $refBakery        = isset($_POST["refBakery"])        ? (int)$_POST["refBakery"]       : (int)0;
+  $refProduce       = isset($_POST["refProduce"])       ? (int)$_POST["refProduce"]      : (int)0;
+  $refDairyAndDeli  = isset($_POST["refDairyAndDeli"])  ? (int)$_POST["refDairyAndDeli"] : (int)0;
+  $dryShelfStable   = isset($_POST["dryShelfStable"])   ? (int)$_POST["dryShelfStable"]  : (int)0;
+  $dryNonFood       = isset($_POST["dryNonFood"])       ? (int)$_POST["dryNonFood"]      : (int)0;
+  $dryFoodDrive     = isset($_POST["dryFoodDrive"])     ? (int)$_POST["dryFoodDrive"]    : (int)0;
 
-    $pickupDate = $_POST['pickupDate'];
-    $networkPartner = $_POST['networkPartner']; 
-    $agency = $_POST['agency'];
-    $donorName = $_POST['donorName'];
-    $city = $_POST['city'];
+  $totalDonatedItems = $frozenNonMeat + $frozenMeat + $frozenPrepared + $refBakery + $refProduce + $refDairyAndDeli + $dryShelfStable + $dryNonFood + $dryFoodDrive;
 
-    $frozenNonMeat = $_POST['frozenNonMeat'];
-    $frozenMeat = $_POST['frozenMeat'];
-    $frozenPrepared = $_POST['frozenPrepared'];
-    $refBakery = $_POST['refBakery'];
-    $refProduce = $_POST['refProduce'];
-    $refDairyAndDeli = $_POST['refDairyAndDeli'];
-    $dryShelfStable = $_POST['dryShelfStable'];
-    $dryNonFood = $_POST['dryNonFood'];
-    $dryFoodDrive = $_POST['dryFoodDrive'];
+  $error = '';
 
-    $donorID = null;
+  //Verify input
+  if (empty($pickupDate)) {
+    $error .= "<p>Date required.</p>";
+  }
+  if (empty($networkPartner)) {
+    $error .= "<p>Network partner required.</p>";
+  }
+  if (empty($agency)) {
+    $error .= "<p>Agency required.</p>";
+  }
+  if ($donorID == 0) {
+    $error .= "<p>Must select a donor.</p>";
+  }
+  if ($totalDonatedItems == 0) {
+    $error .= "<p>Must have at least one item donated.</p>";
+  }
 
-    /* Create connection*/
+  if ($error == '') {
     $conn = connectDB();
+    $sql = "INSERT INTO Donation
+                        (donationPartnerID, dateOfPickup, networkPartner, agency,
+                          frozenNonMeat, frozenMeat, frozenPrepared,
+                          refBakery, refProduce, refDairyAndDeli,
+                          dryShelfStable, dryNonFood, dryFoodDrive)
+            VALUES (" . $donorID . ", '" . $pickupDate . "', '" . $networkPartner . "', '" . $agency . "',
+                    " . $frozenNonMeat . ", " . $frozenMeat . ", " . $frozenPrepared . ",
+                    " . $refBakery . ", " . $refProduce . ", " . $refDairyAndDeli . ",
+                    " . $dryShelfStable . ", " . $dryNonFood . ", " . $dryFoodDrive . ")";
 
-
-    //check to see if category exists, if not create it.
-    $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
-    if($result->num_rows == 0) {
-    
-     $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
-     VALUES ('$donorName', '$city', '', '', '', '')";
-        if ($conn->query($sql) === TRUE) {
-            echoDivWithColor( "New donation partner created: $donorName in $city", "green");
-            
-            
-            $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                    while($row = $result->fetch_assoc()) {
-                        $donorID = $row["donationPartnerID"];
-                    }
-                echoDivWithColor("Donor ID: $donorID", "green" );
-            } 
-      }
-      else{
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
-      }
-
-                  
-          
-
-    } else {
-        $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
-            $result = $conn->query($sql);
-            if ($result->num_rows > 0) {
-                while($row = $result->fetch_assoc()) {
-                    $donorID = $row["donationPartnerID"];
-                }
-                
-            }
-       echoDivWithColor( "$donorName in $city already in database", "green");
-       echoDivWithColor("Category ID: $donorID", "green" );
+    if (queryDB($conn,$sql) === FALSE) {
+      $error .= "There was an error connecting to the database, please try again later.";
     }
-
-
-    $sql = "INSERT INTO Donation (donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive)
-       VALUES ('$donorID', '$pickupDate', '$networkPartner', '$agency', '$frozenNonMeat', '$frozenMeat', '$frozenPrepared', '$refBakery', '$refProduce', '$refDairyAndDeli', '$dryShelfStable', '$dryNonFood', '$dryFoodDrive')"; /*standard insert statement using the variables pulled*/
-
-    if ($conn->query($sql) === TRUE) {
-
-        echoDivWithColor( '<button onclick="goBack()">Go Back</button>', "green");
-
-        echoDivWithColor("Donation created successfully", "green" );
-        echoDivWithColor("Date of pickup: $pickupDate", "green" );
-        echoDivWithColor("Network partner: $networkPartner", "green" );
-        echoDivWithColor("Agency: $agency", "green" );
-        echoDivWithColor("Box quantites of the following:", "black" );
-        echoDivWithColor("Frozen assorted food (Non meat): $frozenNonMeat", "green" );
-        echoDivWithColor("Frozen assorted meat and seafood: $frozenMeat", "green" );
-        echoDivWithColor("Frozen assorted prepared foods: $frozenPrepared", "green" );
-        echoDivWithColor("Refridgerated assorted bakery and pastries: $refBakery", "green" );
-        echoDivWithColor("Refridgerated assorted produce: $refProduce", "green" );
-        echoDivWithColor("Refridgerated assorted dairy and deli foods: $refDairyAndDeli", "green" );
-        echoDivWithColor("Assorted foods (Shelf-stable): $dryShelfStable", "green" );
-        echoDivWithColor("Assorted non-food products: $dryNonFood", "green" );
-        echoDivWithColor("Assorted food drive foods: $dryFoodDrive", "green" );
-
-        
-
-       
-    } else {
-        echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-        echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
-     
-        
-    }
-
-    $conn->close();
+    closeDB($conn);
+  }
+  echo json_encode(array("error" => $error));
 }
 elseif (isset($_GET['DeleteItem'])) {
-  
+
     $conn = connectDB();
     $itemID = $_GET['itemID'];
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    } 
+    }
 
-    
+
     $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = '$itemID'");
     if($result->num_rows > 0) {
 
@@ -240,10 +197,10 @@ elseif (isset($_GET['DeleteItem'])) {
             echoDivWithColor("Error, failed to connect to database at delete." . $conn->connect_error, "red" );
           }
     }
-   
+
 }
 elseif (isset($_GET['deleteDonation'])) {
-  
+
 	$conn       = connectDB();
   $donationID = $_GET['donationID'];
 
@@ -263,7 +220,7 @@ elseif (isset($_GET['deleteDonation'])) {
 elseif (isset($_POST['updateDonationIndividual'])) {
     $donationID       = $_POST['donationID'];
     $pickupDate       = $_POST['pickupDate'];
-    $networkPartner   = $_POST['networkPartner']; 
+    $networkPartner   = $_POST['networkPartner'];
     $agency           = $_POST['agency'];
     $donorName        = $_POST['donorName'];
     $city             = $_POST['city'];
@@ -286,13 +243,13 @@ elseif (isset($_POST['updateDonationIndividual'])) {
     //check to see if category exists, if not create it.
     $result = $conn->query("SELECT DISTINCT name, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'");
     if($result->num_rows == 0) {
-    
+
      $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
      VALUES ('$donorName', '$city', '', '', '', '')";
         if ($conn->query($sql) === TRUE) {
             echoDivWithColor( "New donation partner created: $donorName in $city", "green");
-            
-            
+
+
             $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
             $result = $conn->query($sql);
             if ($result->num_rows > 0) {
@@ -300,16 +257,16 @@ elseif (isset($_POST['updateDonationIndividual'])) {
                         $donorID = $row["donationPartnerID"];
                     }
                 echoDivWithColor("Donor ID: $donorID", "green" );
-            } 
-            
+            }
+
       }
       else{
         echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at donation insert $sql $conn->error", "red" );
       }
 
-                  
-          
+
+
 
     } else {
         $sql = "SELECT DISTINCT name, donationPartnerID, city FROM DonationPartner WHERE name = '$donorName' && city = '$city'";
@@ -318,9 +275,9 @@ elseif (isset($_POST['updateDonationIndividual'])) {
                 while($row = $result->fetch_assoc()) {
                     $donorID = $row["donationPartnerID"];
                 }
-                
+
             }
-            
+
        echoDivWithColor( "$donorName in $city already in database", "green");
        echoDivWithColor("donor ID: $donorID", "green" );
     }
@@ -349,26 +306,26 @@ elseif (isset($_POST['updateDonationIndividual'])) {
         echoDivWithColor("Assorted non-food products: $dryNonFood", "green" );
         echoDivWithColor("Assorted food drive foods: $dryFoodDrive", "green" );
 
-        
 
-       
+
+
     } else {
         echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
         echoDivWithColor("Error, failed to connect to database at donation update: $sql $conn->error", "red" );
-     
-        
+
+
     }
 
     $conn->close();
 }
 elseif (isset($_GET['deleteDonationPartner'])) {
-   
+
 	$conn = connectDB();
     $donationPartnerID = $_GET['donationPartnerID'];
     /* Check connection*/
     if ($conn->connect_error) {
         die("Connection failed: " . $conn->connect_error);
-    } 
+    }
 
     $result = $conn->query("SELECT DISTINCT donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'");
     if($result->num_rows > 0) {

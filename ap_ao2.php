@@ -29,7 +29,7 @@
 		
 		<div >
 			<!-- Button to add a new time slot -->
-			<input type="button" id="addTimeSlot" value="New Time Slot" onclick="addTimeSlot()">
+			<input type="button" class="btn-table" id="addTimeSlot" value="New Time Slot" onclick="addTimeSlot()">
 		</div>
 		
 		<!-- Start the form for creating a new date -->
@@ -81,7 +81,7 @@
 					while ( $timeSlot <= $endTime ) {
 						echo "<tr><td><input type='time' name='time[]' value='"
 								. $timeSlot . "' step='900'></td>";
-						echo "<td><input type='number' name='qty[]' value='" . $numSlots . "' min='1'></td>";
+						echo "<td><input type='text' style='width:90px;' class='input-number' maxlength=3 name='qty[]' value='" . $numSlots . "' ></td>";
 						echo "<td><a class='rm_row btn-icon' href='#' ><i class='fa fa-trash'></i></a></td>";
 						echo "</tr>";
 					
@@ -91,7 +91,7 @@
 			</table>
 			
 			<br><br>
-			<input type="submit" name="CreateInvoiceDate" value="Create Appointments">
+			<input type="submit" class="btn-nav" name="CreateInvoiceDate" value="Create Appointments">
 		</form>
 		
 <?php include 'php/footer.php'; ?>

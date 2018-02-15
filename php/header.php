@@ -11,6 +11,7 @@ echo "<!DOCTYPE html>
             <link href='css/style.css' rel='stylesheet'>
             <link href='includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
             <link href='includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >
+            <link href='includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
           </head>
           <body>
             <header>

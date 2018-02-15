@@ -1,67 +1,120 @@
+<link href='/RUMCPantry/includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
 <?php
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
+
+  $sql = "SELECT donationPartnerID as dpid, name, city
+          FROM DonationPartner"; // Eventually check for isDeleted
+  $conn = connectDB();
+
+  $donationOptions = runQuery($conn, $sql);
 ?>
-    <h3>Donation Operations: Add a donation</h3>
-    <div class="body-content">
+<style>
+  .msg-warning {
+    display: none;
+  }
+  p {
+    margin: 5px !important;
+    padding: 0px !important;
+    color: red;
+  }
+  #donationSuccess {
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    height: 40px;
+  }
+</style>
 
-    <form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">
-        <!-- the function in the onsubmit is run when the form is submitted, if it returns false the form will not submit. -->
-        <!--  action is where this will go after. for this I don't think we need to move to a different screen. The post method will feed to the php whatever variables are listed as post in the php-->
-        
-		<div id="pickupDate">
-            Pickup date<span style="color:red;">*</span>
-            <input type="date" name="pickupDate" <?php echo "value='" . (date('Y-m-d')) . "'" ?> >
-        </div>
-		
-		<div id="networkPartner">
-            Network partner:<span style="color:red;">*</span>
-            <?php 
-            createDatalist("RUMC","networkPartners","Donation","networkPartner","networkPartner", false);
-            ?>
-        </div>
-		<div id="agency">
-            Agency:<span style="color:red;">*</span>
-            <?php 
-            
-            createDatalist("1039a","agencies","Donation","agency","agency", false);
-            ?>
-        </div>
-	
-		<div id="City">
-            City:<span style="color:red;">*</span>
-            <?php
-            createDatalist_i("","cities","donationpartner","city","city", false);
-            ?>
-        </div>
-		<div id="donorName">
-            Donor name:<span style="color:red;">*</span>
-            <?php 
-            
-            createDatalist_i("","donorNames","DonationPartner","name","donorName", false);
-            ?>
-        </div>
-	
-		
-		
-		
-        <h3>
-            Box Quantities of the following:
-        </h3>
-        <div id="frozenNonMeat">Frozen assorted food (Non meat): <input type="number" min="0" max="100000" value="0" step="1" name="frozenNonMeat" ></div>
-        <div id="frozenMeat">Frozen assorted meat and seafood: <input type="number" min="0" max="100000" value="0" step="1" name="frozenMeat" ></div>
-        <div id="frozenPrepared">Frozen assorted prepared foods: <input type="number" min="0" max="100000" value="0" step="1" name="frozenPrepared" ></div>
-        <div id="refBakery">Refridgerated assorted bakery and pastries: <input type="number" min="0" max="100000" value="0" step="1" name="refBakery" ></div>
-        <div id="refProduce">Refridgerated assorted produce: <input type="number" min="0" max="100000" value="0" step="1" name="refProduce" ></div>
-        <div id="refDairyAndDeli">Refridgerated assorted dairy and deli foods: <input type="number" min="0" max="100000" value="0" step="1" name="refDairyAndDeli" ></div>
-        <div id="dryShelfStable">Assorted foods (Shelf-stable): <input type="number" min="0" max="100000" value="0" step="1" name="dryShelfStable" ></div>
-        <div id="dryNonFood">Assorted non-food products: <input type="number" min="0" max="100000" value="0" step="1" name="dryNonFood" ></div>
-        <div id="dryFoodDrive">Assorted food drive foods: <input type="number" min="0" max="100000" value="0" step="1" name="dryFoodDrive" ></div>
-        </br>
-        <input type="submit" value="Create" name="createDonation">
-    </form>
+<h3>Add a Donation</h3>
+<div class="body-content">
 
-    
+  <div id="donationSuccess" class="hoverMsg" style="display:none;"></div>
+  <form id="addDonation" action="" method="post">
+    <input type="hidden" value=1 name="createDonation">
+    <!-- *************  Name -->
+    <div class="row">
+      <div class="col-sm-4">Pickup date:</div>
+      <div class="col-sm-8">
+        <input type="date" id="iPickupDate" name="pickupDate" value="<?=(date('Y-m-d'))?>">
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Network Partner:</div>
+      <div class="col-sm-8"><input type="text" id="iNetworkPartner" name="networkPartner" value="RUMC"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Agency:</div>
+      <div class="col-sm-8"><input type="text" id="iAgency" name="agency" value="1039a"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Donor:</div>
+      <div class="col-sm-8">
+        <select data-placeholder="Choose a donor..." class="chosen-select" name="donorName">
+          <option value=0></option>
+          <?php
+            foreach ($donationOptions as $option) {
+              echo "<option value=" . $option['dpid'] . " >" . $option['name'] . " - " . $option['city'] . "</option>";
+            }
+          ?>
+        </select>
+      </div>
+    </div>
+
+    <!-- Frozen foods -->
+    <div style="border: 2px solid darkblue;margin-top:20px;padding:10px;"><h4 class="text-center">Frozen</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Non Meat:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenNonMeat" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Meat and Seafood:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenMeat" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Prepared Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenPrepared" placeholder=0></div>
+      </div>
+    </div>
+
+    <!-- Refridgerated Foods -->
+    <div style="border: 2px solid green;margin-top:20px;padding:10px;"><h4 class="text-center">Refridgerated</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Bakery and Pastries</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refBakery" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Produce:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refProduce" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Dairy and Deli Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refDairyAndDeli" placeholder=0></div>
+      </div>
+    </div>
+
+    <!-- Assorted stuff -->
+    <div style="border: 2px solid brown;margin-top:20px;padding:10px;"><h4 class="text-center">Assorted</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Shelf-Stable:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryShelfStable" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Non-Food Products:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryNonFood" placeholder=0></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Food Drive Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryFoodDrive" placeholder=0></div>
+      </div>
+    </div>
+
+    <div class="msg-warning" id="warningMsgs"></div>
+    <input type="submit" class="btn-nav" id="btn_newDonation" value="Create Donation">
+  </form>
+
+
 <?php include 'php/footer.php'; ?>
+<script type='text/javascript' src='/RUMCPantry/includes/chosen/chosen.jquery.min.js'></script>
 <script src="js/createDonation.js"></script>

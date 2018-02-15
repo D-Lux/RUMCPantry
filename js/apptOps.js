@@ -56,7 +56,7 @@ function addTimeSlot() {
 
 	// Add default information to these cells:
 	cell1.innerHTML = "<input type='time' name='time[]' value='10:00' step='900'>";
-	cell2.innerHTML = "<input type='number' name='qty[]' value='5' min='1' >";
+	cell2.innerHTML = "<input type='text' style='width:90px;' maxlength=3 name='qty[]' value='5' min='1' >";
 	cell3.innerHTML = "<a class='rm_row btn-icon' href='#' ><i class='fa fa-trash'></i></a>";
 	
 	// Re-add the click events

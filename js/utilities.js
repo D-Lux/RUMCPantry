@@ -79,23 +79,16 @@ function isHiddenElement(e) {
     return (e.offsetHeight === 0 && e.offsetWidth === 0);
 }
 
-// ********************************************
-// * For viewing tabs 
-function viewTab(evt, tabID) {
-    // Declare all variables
-    var i, tabcontent, tablinks;
 
-    // Get all elements with class="tabcontent" and hide them
-    tabcontent = document.getElementsByClassName("tabcontent");
-    for (i = 0; i < tabcontent.length; i++) {
-        tabcontent[i].style.display = "none";
-    }
-    // Get all elements with class="tablinks" and remove the class "active"
-    tablinks = document.getElementsByClassName("tablinks");
-    for (i = 0; i < tablinks.length; i++) {
-        tablinks[i].className = tablinks[i].className.replace(" active", "");
-    }
-    // Show the current tab, and add an "active" class to the button that opened the tab
-    document.getElementById(tabID.id).style.display = "block";
-    evt.currentTarget.className += " active";
-}
+// ********************************************
+// * For dealing with number inputs
+$(".input-number").keypress(function(key) {
+  // Allow for tab/backspace/delete
+  if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
+
+  // Allow for arrow keys 37-40 arrow keys
+  if (key.keyCode >= 37 && key.keyCode <= 40) return true;
+
+  // Only allow numeric values
+  if(key.charCode < 48 || key.charCode > 57) return false;
+});

@@ -56,18 +56,21 @@
 		$clientInfo = queryDB($conn, $sql);
 
 		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
-			echo "Error, bad SQL Query";
-      // TODO remove this
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
+			echo "No clients available";
 		}
 		
+    // TODO: Change this to a chosen-select
+    //$clientDataList = "<select class='chosen-select' id='Clients'>";
 		$clientDataList = "<datalist id='Clients'>";
 		while($client = sqlFetch($clientInfo)) {
 			$clientLName = displaySingleQuote($client['lName']);
 			$clientFName = displaySingleQuote($client['fName']);
 			$clientDataList .= "<option value='" . $clientLName .
 								($clientLName=="Available" ? "" : ", " . $clientFName) . "'></option>";
+     // $clientDataList .= "<option value=" . $client['clientID'] . ">";
+      //$clientDataList .= ($clientLName=="Available" ? "Available" : $clientLName . ", " . $clientFName);
 		}
+    //$clientDataList = "</select>";
 		$clientDataList .= "</datalist>";
 		
 		// Close the connection as we've gotten all the information we should need
@@ -172,7 +175,7 @@
     if ($_SESSION['perms'] >= 99) {
       echo "<br><form action='ap_ao4.php' method='post'>";
       echo "<input type='hidden' name='date' value=" . $_GET['date'] . ">";	// Send the date we're adding to
-      echo "<button id='newSlots' type='submit' name='newSlots' ><i class='fa fa-clock'></i> New Time Slots</button>";	
+      echo "<button id='newSlots' class='btn-nav' type='submit' name='newSlots' ><i class='fa fa-clock'></i> New Time Slots</button>";	
       echo "</form>";
     }
 	?>
@@ -181,6 +184,7 @@
 
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
+  //$(".chosen-select").chosen();
   if (getCookie("newAppt") != "") {
 		window.alert("New Date Added!");
 		removeCookie("newAppt");

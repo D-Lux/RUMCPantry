@@ -29,9 +29,20 @@ if ($name == null || $name == "" ) {
 }
 else {
   $conn = connectDB();
+  if ($conn == false) {
+    $data['msg'] = "<p>Error connecting to database</p>";
+    $data['err']= 1;
+    die(json_encode($data));
+  }
+  
   $sql = "SELECT login, pw, permission_level
           FROM permissions";
   $results = queryDB($conn, $sql);
+  if ($results === false) {
+    $data['msg'] = "<p>Error connecting to database</p>";
+    $data['err']= 1;
+    die(json_encode($data));
+  }
   closeDB($conn);
   
   while($result = sqlFetch($results)) {
@@ -50,7 +61,7 @@ else {
     }
   }
   // Login not found
-  $data['msg'] .= "<p>This is not a valid login</p>";
+  $data['msg'] = "<p>This is not a valid login</p>";
   $data['err']  = 1;
   die(json_encode($data));
 }

@@ -96,7 +96,7 @@ Body Elements
 
 .btn-table:disabled {
 	background-color: grey;
-  cursor: not-allowed;; 
+  cursor: not-allowed;;
 }
 
 .btn-edit {
@@ -140,7 +140,7 @@ Body Elements
 	margin-top: 30px;
 }
 
-input[type='text']:not(.notes), input[type='password'], input[type='email'], 
+input[type='text']:not(.notes), input[type='password'], input[type='email'],
 form>select, input[type='date'], select, input[type='time'] {
 	height: 35px;
 	font-size: 1.1rem;
@@ -342,4 +342,11 @@ Tooltip
   background: -ms-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
   background: -o-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
   background: linear-gradient(to right, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+}
+.chosen-container {
+  height: 35px !important;
+  font-size: 1.1rem !important;
+  margin-left: 10px !important;
+  border-radius: 5px !important;
+  padding: 5px !important;
 }
