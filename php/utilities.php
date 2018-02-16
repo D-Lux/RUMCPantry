@@ -49,7 +49,7 @@ function decodeJsonError() {
     default:
         echo ' - Unknown error';
     break;
-}
+  }
 }
 // ************************************************************
 // ** Setting default timezone
@@ -102,10 +102,13 @@ function sqlFetch($queryResult) {
 }
 function returnAssocArray($queryResult) {
 	$returnArr = [];
-	while( $row = sqlFetch($queryResult) ) {
-		$returnArr[] = $row;
-	}
-	return $returnArr;
+  if (count($queryResult) > 0) {
+    while( $row = sqlFetch($queryResult) ) {
+      $returnArr[] = $row;
+    }
+    return $returnArr;
+  }
+  return false;
 }
 
 function runQuery($conn, $query) {

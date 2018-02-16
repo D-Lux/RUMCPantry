@@ -2,132 +2,127 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
+
+  $donationID = $_GET['donationID'];  
+  $conn = connectDB();
+  // Get donation partner names
+  $sql = "SELECT donationPartnerID as dpid, name, city
+          FROM DonationPartner
+          ORDER BY name ASC";
+  $donationOptions = runQuery($conn, $sql);
+
+  // Get donation details
+  $donation = [];
+  $sql = "SELECT donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refDairyAndDeli, refProduce, dryFoodDrive, dryNonFood, dryShelfStable FROM Donation WHERE donationID = ". $donationID;
+  
+  $result = runQueryForOne($conn, $sql);
 ?>
-    
-    <?php
-    echo "<h3> Update donation number: ". $_GET['donationID'] . "</h3>";
-    echo "<div class='body-content'>";
- 
-    $donationID = $_GET['donationID'];
-    $donationPartnerID ="";
-    $donationPartnerName ="";
-    $city="";
-    $dateOfPickup="";
-    $networkPartner="";
-    $agency="";
-    $frozenNonMeat=0;
-    $frozenMeat=0;
-    $frozenPrepared=0;
-    $refBakery=0;
-    $refProduce=0;
-    $refDairyAndDeli=0;
-    $dryShelfStable=0;
-    $dryNonFood=0;
-    $dryFoodDrive=0;
-    
 
-     /* Create connection*/
- 	$conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
+<style>
+  .msg-warning {
+    display: none;
+  }
+  p {
+    margin: 5px !important;
+    padding: 0px !important;
+    color: red;
+  }
+  #donationSuccess {
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    height: 40px;
+  }
+</style>
 
-    $sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refDairyAndDeli, refProduce, dryFoodDrive, dryNonFood, dryShelfStable FROM Donation WHERE donationID =". $_GET['donationID'] ;
-    $result = $conn->query($sql);
-
-    if ($result->num_rows > 0) {
-            while($row = $result->fetch_assoc()) {
-
-                $donationPartnerID = $row["donationPartnerID"];
-                $donationID = $row["donationID"];
-                $dateOfPickup= $row["dateOfPickup"];
-                $networkPartner= $row["networkPartner"];
-                $agency= $row["agency"];
-                $frozenNonMeat= $row["frozenNonMeat"];
-                $frozenMeat= $row["frozenMeat"];
-                $frozenPrepared= $row["frozenPrepared"];
-                $refBakery= $row["refBakery"];
-                $refProduce= $row["refProduce"];
-                $refDairyAndDeli= $row["refDairyAndDeli"];
-                $dryShelfStable= $row["dryShelfStable"];
-                $dryNonFood= $row["dryNonFood"];
-                $dryFoodDrive= $row["dryFoodDrive"];
-                     
-                            
-                    $sql = "SELECT DISTINCT city, name, donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'";
-                    $result = $conn->query($sql);
-                    if ($result->num_rows > 0) {
-                            while($row = $result->fetch_assoc()) {
-                                $donationPartnerName = $row["name"];
-                                $city = $row["city"];
-                            }
-                    } 
-
-
-        }
-    }
-    else
-    {
-      // TODO remove this
-        echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
-    }
-
-    echo'<form name="addDonation" action="php/donationOps.php" onSubmit="return validateDonationAdd()" method="post">';
-
-   
-
-
-
-    echo'<div id="pickupDate">Pickup date:<span style="color:red;">*</span>
-    <input type="date" name="pickupDate" value=' . $dateOfPickup . '>
+<h3>View/Update Donation</h3>
+<div class="body-content">
+  <div id="donationSuccess" class="hoverMsg" style="display:none;"></div>
+  <form id="updateDonation" action="" method="post">
+    <input type="hidden" value=1 name="updateDonation">
+    <input type="hidden" value=<?=$donationID?> name="donationID">
+    <!-- *************  Name -->
+    <div class="row">
+      <div class="col-sm-4">Pickup date:</div>
+      <div class="col-sm-8">
+        <input type="date" id="iPickupDate" name="pickupDate" value="<?=$result['dateOfPickup']?>">
+      </div>
     </div>
-    <div id ="donationID">
-        <input type="hidden" name="donationID" value=' . $donationID . '>
+    <div class="row">
+      <div class="col-sm-4">Network Partner:</div>
+      <div class="col-sm-8"><input type="text" id="iNetworkPartner" name="networkPartner" value="<?=$result['networkPartner']?>"></div>
     </div>
-    <div id="networkPartner">
-        Network partner:<span style="color:red;">*</span>';
-        
-        createDatalist("$networkPartner","networkPartners","Donation","networkPartner","networkPartner", false);
-        
-    echo'</div>
-    <div id="agency">
-        Agency:<span style="color:red;">*</span>';
-            
-        
-        createDatalist("$agency","agencies","Donation","agency","agency", false);
+    <div class="row">
+      <div class="col-sm-4">Agency:</div>
+      <div class="col-sm-8"><input type="text" id="iAgency" name="agency" value="<?=$result['agency']?>"></div>
+    </div>
+    <div class="row">
+      <div class="col-sm-4">Donor:</div>
+      <div class="col-sm-8">
+        <select data-placeholder="Choose a donor..." class="chosen-select" name="donorName">
+          <option value=0></option>
+          <?php
+            foreach ($donationOptions as $option) {
+              $selected = ($option['dpid'] == $result['donationPartnerID']) ? ' selected ' : '' ;
+              echo "<option value=" . $option['dpid'] . " " . $selected . ">" . $option['name'] . " - " . $option['city'] . "</option>";
+            }
+          ?>
+        </select>
+      </div>
+    </div>
     
-    echo'</div>
-    <div id="donorName">
-        Donor name:<span style="color:red;">*</span>';
-        
+    <!-- Frozen foods -->
+    <div style="border: 2px solid darkblue;margin-top:20px;padding:10px;"><h4 class="text-center">Frozen</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Non Meat:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenNonMeat" value=<?=$result['frozenNonMeat']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Meat and Seafood:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenMeat" value=<?=$result['frozenMeat']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Prepared Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenPrepared" value=<?=$result['frozenPrepared']?>></div>
+      </div>
+    </div>
     
-        createDatalist("$donationPartnerName","donorNames","DonationPartner","name","donorName", false);
+    <!-- Refridgerated Foods -->
+    <div style="border: 2px solid green;margin-top:20px;padding:10px;"><h4 class="text-center">Refridgerated</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Bakery and Pastries</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refBakery" value=<?=$result['refBakery']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Produce:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refProduce" value=<?=$result['refProduce']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Dairy and Deli Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refDairyAndDeli" value=<?=$result['refDairyAndDeli']?>></div>
+      </div>
+    </div>
 
-        echo'</div>
-        <div id="city">
-            City:<span style="color:red;">*</span>';
-            
-    
-        createDatalist("$city","cities","DonationPartner","city","city", false);
+    <!-- Assorted stuff -->
+    <div style="border: 2px solid brown;margin-top:20px;padding:10px;"><h4 class="text-center">Assorted</h4>
+      <div class="row">
+        <div class="col-sm-6 text-right">Shelf-Stable:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryShelfStable" value=<?=$result['dryShelfStable']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Non-Food Products:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryNonFood" value=<?=$result['dryNonFood']?>></div>
+      </div>
+      <div class="row">
+        <div class="col-sm-6 text-right">Food Drive Foods:</div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryFoodDrive" value=<?=$result['dryFoodDrive']?>></div>
+      </div>
+    </div>
 
-        echo'</div>
-        <h3>
-            Box Quantities of the following:
-        </h3>
-        <div id="frozenNonMeat">Frozen assorted food (Non meat): <input type="number" min="0" max="100000" value=' . $frozenNonMeat . ' step="1" name="frozenNonMeat" /></div>
-        <div id="frozenMeat">Frozen assorted meat and seafood: <input type="number" min="0" max="100000" value=' . $frozenMeat . ' step="1" name="frozenMeat" /></div>
-        <div id="frozenPrepared">Frozen assorted prepared foods: <input type="number" min="0" max="100000" value=' . $frozenPrepared . ' step="1" name="frozenPrepared" /></div>
-        <div id="refBakery">Refridgerated assorted bakery and pastries: <input type="number" min="0" max="100000" value=' . $refBakery . ' step="1" name="refBakery" /></div>
-        <div id="refProduce">Refridgerated assorted produce: <input type="number" min="0" max="100000" value=' . $refProduce . ' step="1" name="refProduce" /></div>
-        <div id="refDairyAndDeli">Refridgerated assorted dairy and deli foods: <input type="number" min="0" max="100000" value=' . $refDairyAndDeli . ' step="1" name="refDairyAndDeli" /></div>
-        <div id="dryShelfStable">Assorted foods (Shelf-stable): <input type="number" min="0" max="100000" value=' . $dryShelfStable . ' step="1" name="dryShelfStable" /></div>
-        <div id="dryNonFood">Assorted non-food products: <input type="number" min="0" max="100000" value=' . $dryNonFood . ' step="1" name="dryNonFood" /></div>
-        <div id="dryFoodDrive">Assorted food drive foods: <input type="number" min="0" max="100000" value=' . $dryFoodDrive . ' step="1" name="dryFoodDrive" /></div>
-        </br>
-
-        <input type="submit" value="Update" name="updateDonationIndividual"> 
-        </form>'; ?>
+    <div class="msg-warning" id="warningMsgs"></div>
+    <input type="submit" class="btn-nav" id="btn_updateDonation" value="Update Donation">
+  </form>
+ </div>
         
 <?php include 'php/footer.php'; ?>        
 <script src="js/createDonation.js"></script>

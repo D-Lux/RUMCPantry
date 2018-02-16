@@ -1,8 +1,9 @@
 
-// For adding a new donation partner
+// For adding a new donation
 $("#btn_newDonation").on("click", function(e) {
   e.preventDefault();
-  $("#warningMsgs").hide();
+  $("#warningMsgs").stop().hide();
+  $("#donationSuccess").stop().hide();
   var fieldData = $("#addDonation").serialize().trim();
   $.ajax({
     url: "php/donationOps.php",
@@ -15,6 +16,30 @@ $("#btn_newDonation").on("click", function(e) {
         var clearFields = $('input').not('#iPickupDate, #iNetworkPartner, #iAgency');
         $("#donationSuccess").html("Donation Added!").show(250).delay(5000).hide(800);
         $(clearFields).val('');
+      }
+      else {
+        // something happened, show errors
+        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
+      }
+    },
+  });
+});
+
+// For updating a donation
+$("#btn_updateDonation").on("click", function(e) {
+  e.preventDefault();
+  $("#warningMsgs").stop().hide();
+  $("#donationSuccess").stop(true, true).hide();
+  var fieldData = $("#updateDonation").serialize().trim();
+  $.ajax({
+    url: "php/donationOps.php",
+    data: fieldData,
+    type: "POST",
+    dataType: "json",
+    context: document.body,
+    success: function(msg) {
+      if (msg.error == '') {
+        $("#donationSuccess").html("Donation Updated!").show(250).delay(3000).hide(800);
       }
       else {
         // something happened, show errors
