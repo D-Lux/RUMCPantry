@@ -29,8 +29,9 @@ include 'php/header.php';
 		  <button id="submitLogin" class='btn-nav' type="submit"><i class="fa fa-sign-in"></i> Log In</button>
 		</form>
     
+    
 	
-<?php include 'php/footer.php'; ?>
+<?php echo phpversion(); include 'php/footer.php'; ?>
 
 <script type="text/javascript">
   $(document).ready(function(){
