@@ -20,52 +20,55 @@
     $categoryID     = 0;
     $categoryName   = "";
 
-     /* Create connection*/
+     // Connect to the database
     $conn = connectDB();
-    /* Check connection*/
-    if ($conn->connect_error) {
-        die("Connection failed: " . $conn->connect_error);
-    } 
+
+    
+    $badLoad = false;
 
     $sql = "SELECT isDeleted, itemID, itemName, displayName, price, small, medium, large, categoryID, aisle, rack, shelf FROM item WHERE itemID =". $_GET['itemID'] ;
     $result = $conn->query($sql);
 
+     
     if ($result->num_rows > 0) {
-		$row = sqlFetch($result);
-		if($row["isDeleted"] == false  )  {
-			$itemID      = $row["itemID"];
-			$itemName    = $row["itemName"];
-			$displayName = $row["displayName"];
-			$price       = $row["price"];
-			$small 	     = $row["small"];
-			$medium      = $row["medium"];
-			$large       = $row["large"];
-			$aisle       = $row["aisle"];;
-			$rack        = $row["rack"];;
-			$shelf       = $row["shelf"];;
+      $row = sqlFetch($result);
+      if($row["isDeleted"] == false  )  {
+        $itemID      = $row["itemID"];
+        $itemName    = $row["itemName"];
+        $displayName = $row["displayName"];
+        $price       = $row["price"];
+        $small 	     = $row["small"];
+        $medium      = $row["medium"];
+        $large       = $row["large"];
+        $aisle       = $row["aisle"];;
+        $rack        = $row["rack"];;
+        $shelf       = $row["shelf"];;
 
-		   
-			$categoryID = $row["categoryID"];            
-					
-			$sql = "SELECT DISTINCT name, categoryID FROM Category WHERE categoryID = '$categoryID'";
-			$result = $conn->query($sql);
-			if ($result->num_rows > 0) {
-				$row = $result->fetch_assoc();
-				$categoryName = $row["name"];
-			} 
+         
+        $categoryID = $row["categoryID"];            
+            
+        $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE categoryID = '$categoryID'";
+        $result = $conn->query($sql);
+        if ($result->num_rows > 0) {
+          $row = $result->fetch_assoc();
+          $categoryName = $row["name"];
+        } 
 
-		}
-		else  {
-      
-      // TODO: Remove echo div with color
-		  echoDivWithColor("<h1><b><i>This item is deactivated.<br>Please reactivate it to edit it</i></b></h1>","purple");
-		}
+      }
+      else  {
+        $badLoad = true;
+      }
     }
     else {
-        echoDivWithColor("<h1><b><i>Item does not exist!</h1></b></i>","red");
+        $badLoad = true;
     }
 	closeDB($conn);
 	?>
+  <script type="text/javascript">
+  if (<?=(int)$badLoad?>) {
+    window.location.href = '/RUMCPantry/ap_io7.php';
+  }
+  </script>
 	<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
 	<input type="hidden" name="itemID" value="<?= $itemID ?>">
 	<div class="row">

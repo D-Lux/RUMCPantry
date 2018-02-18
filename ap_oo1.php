@@ -21,10 +21,14 @@
 			<input class='btn-nav' type="submit" name="3to4" value="Edit Form: 3-4">
 			<input class='btn-nav' type="submit" name="5Plus" value="Edit Form: 5+">
 		</form>
+    <form method="post" action="ap_oo6.php">
+			<input class='btn-nav' type="submit" name="CategoryOrder" value="Edit Category Ordering">
+		</form>
+    <!--
 		<form method="post" action="ap_oo5.php">
 			<input class='btn-nav' type="submit" name="Specials" value="Edit Form: Specials">
 		</form>
-		
+		-->
 		
 		
 <?php include 'php/footer.php'; ?>

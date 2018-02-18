@@ -3,24 +3,22 @@
 include('utilities.php');
 
 if(isset($_POST['createItem'])) {
-  $category 	 = $_POST['category'];
-  $itemName 	 = $_POST['itemName']; /*grab the name textbox*/
-  $displayName = $_POST['displayName'];
-  $price 		 = $_POST['price'];
-  $small 		 = $_POST['small'];
-  $medium 	 = $_POST['medium'];
-  $large 		 = $_POST['large'];
-  $aisle 		 = aisleEncoder($_POST['aisle']);
-  $rack 		 = rackEncoder($_POST['rack']);
-  $shelf 		 = shelfEncoder($_POST['shelf']);
-  $categoryID  = null;
-	$newCategory = FALSE;
+  $category 	  = $_POST['category'];
+  $itemName 	  = $_POST['itemName'];
+  $displayName  = $_POST['displayName'];
+  $price 		    = $_POST['price'];
+  $small 		    = $_POST['small'];
+  $medium 	    = $_POST['medium'];
+  $large 		    = $_POST['large'];
+  $aisle 		    = aisleEncoder($_POST['aisle']);
+  $rack 		    = rackEncoder($_POST['rack']);
+  $shelf 		    = shelfEncoder($_POST['shelf']);
+  $categoryID   = null;
+	$newCategory  = FALSE;
 	
 
-  /* previous lines set up the strings for connextion*/
-  /* Create connection*/
+  // Connect to the DB and test
   $conn = connectDB();
-  /* Check connection*/
   if ($conn->connect_error) {
     createCookie("errConnection", 1, 30);
     header("location: /RUMCPantry/ap_io7.php");
@@ -30,31 +28,31 @@ if(isset($_POST['createItem'])) {
 	$result = queryDB($conn, "SELECT DISTINCT categoryID FROM Category WHERE name = '" . $category . "'");
 	if($result->num_rows == 0) {
 		$sql = "INSERT INTO category (name, small, medium, large, isDeleted)
-				VALUES ('" . $category . "', 0, 0, 0, 0)";
+            VALUES ('" . $category . "', " . $small . ", " . $medium . ", " . $large . ", 0)";
 		if (queryDB($conn, $sql) === TRUE) {
 			$newCategory = TRUE;
 			$categoryID = $conn->insert_id;
-        }
+    }
 		else {
 			closeDB($conn);
 			createCookie("errCreate", 1, 30);
 			header("location: /RUMCPantry/ap_io7.php");
 		}
-    } 
+  } 
 	else {
 		$row = sqlFetch($result);
-        $categoryID = $row["categoryID"];
-    }
+    $categoryID = $row["categoryID"];
+  }
 
 
-    $sql = "INSERT INTO item (itemName, displayName, price, timestamp, isDeleted, small, medium, large, categoryID, aisle, rack, shelf)
-    VALUES ('$itemName', '$displayName', '$price', now(), 0, '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')";
+    $sql = "INSERT INTO item (itemName, displayName, price, isDeleted, small, medium, large, categoryID, aisle, rack, shelf)
+    VALUES ('$itemName', '$displayName', '$price', 0, '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')";
 
-    if (queryDB($conn, $sql) === TRUE) {
+  if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		createCookie("newItem", 1, 30);
 		header("location: /RUMCPantry/ap_io7.php");  
-} 
+  } 
 	else {
 		if ($newCategory) {
 			queryDB($conn, "DELETE FROM Category WHERE categoryID = " . $categoryID);
