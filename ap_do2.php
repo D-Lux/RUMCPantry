@@ -1,4 +1,3 @@
-<link href='/RUMCPantry/includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
 <?php
   $pageRestriction = 99;
   include 'php/header.php';
@@ -9,6 +8,8 @@
   $conn = connectDB();
 
   $donationOptions = runQuery($conn, $sql);
+  
+  $dpid = isset($_GET['dpid']) ? $_GET['dpid'] : 0;
 ?>
 <style>
   .msg-warning {
@@ -55,7 +56,8 @@
           <option value=0></option>
           <?php
             foreach ($donationOptions as $option) {
-              echo "<option value=" . $option['dpid'] . " >" . $option['name'] . " - " . $option['city'] . "</option>";
+              $selected = ($option['dpid'] == $dpid) ? " selected " : "";
+              echo "<option value=" . $option['dpid'] . " " . $selected . ">" . $option['name'] . " - " . $option['city'] . "</option>";
             }
           ?>
         </select>

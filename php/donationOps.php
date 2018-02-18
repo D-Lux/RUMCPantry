@@ -71,7 +71,7 @@ elseif(isset($_POST['createDonationPartner'])) {
 
   echo json_encode(array("error" => $error));
 }
-elseif (isset($_POST['updateDonationPartnerIndividual'])) {
+elseif (isset($_POST['updateDonationPartner'])) {
   header('Content-type: application/json');
   $error    = '';
   $name     = fixInput($_POST['name']);
@@ -240,6 +240,14 @@ elseif (isset($_POST['updateDonation'])) {
   }
   echo json_encode(array("error" => $error));
 }
+
+
+
+
+
+// ***********************************************************************************************
+
+// *************************************************************************************************
 elseif (isset($_GET['DeleteItem'])) {
 
     $conn = connectDB();

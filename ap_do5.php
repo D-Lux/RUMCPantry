@@ -41,7 +41,7 @@
 <div class="body-content">
   <div id="donationSuccess" class="hoverMsg" style="display:none;"></div>
   <form id="updateDonationPartner" action="" method="post">
-    <input type="hidden" value=1 name="updateDonationPartnerIndividual">
+    <input type="hidden" value=1 name="updateDonationPartner">
     <input type="hidden" value=<?=$pID?> name="donationPartnerID">
     <!-- *************  Name -->
     <div class="row">
@@ -86,10 +86,19 @@
     </thead>
     <tbody>
     </tbody>
+    <tfoot>
+      <th colspan=2>
+        <form action="ap_do2.php">
+           <input type="hidden" name="dpid" value=<?=$pID?>>
+          <input type="submit" class="btn-nav" value="Add a new Donation">
+        </form>
+      </th>
+    </tfoot>
   </table>
 
 <?php include 'php/footer.php'; ?>
 <script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
+<script src="js/createDonation.js"></script>
 <script type="text/javascript">
   if (<?=(int)$badLoad?>) {
     window.location.href = '/RUMCPantry/ap_do1.php';
@@ -117,5 +126,5 @@
     window.location.assign($(this).attr('value'));
   });
 </script>
-<script src="js/createDonation.js">
+
 

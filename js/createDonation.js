@@ -1,9 +1,8 @@
-
 // For adding a new donation
 $("#btn_newDonation").on("click", function(e) {
   e.preventDefault();
   $("#warningMsgs").stop().hide();
-  $("#donationSuccess").stop().hide();
+  $("#donationSuccess").stop(true, true).hide();
   var fieldData = $("#addDonation").serialize().trim();
   $.ajax({
     url: "php/donationOps.php",
@@ -52,7 +51,7 @@ $("#btn_updateDonation").on("click", function(e) {
 // For adding a new donation partner
 $("#btn_createDonationPartner").on("click", function(e) {
   e.preventDefault();
-  $("#warningMsgs").hide();
+  $("#warningMsgs").stop(true, true).hide();
   var fieldData = $("#createDonationPartner").serialize().trim();
   $.ajax({
     url: "php/donationOps.php",
@@ -78,7 +77,8 @@ $("#btn_createDonationPartner").on("click", function(e) {
 // For updating a donation partner
 $("#btn_updateDonationPartner").on("click", function(e) {
   e.preventDefault();
-  $("#warningMsgs").hide();
+  $("#warningMsgs").stop(true, true).hide();
+  $("#donationSuccess").stop(true, true).hide();
   var fieldData = $("#updateDonationPartner").serialize().trim();
   $.ajax({
     url: "php/donationOps.php",
