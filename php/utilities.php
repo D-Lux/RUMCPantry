@@ -102,7 +102,7 @@ function sqlFetch($queryResult) {
 }
 function returnAssocArray($queryResult) {
 	$returnArr = [];
-  if (count($queryResult) > 0) {
+  if (mysqli_num_rows($queryResult) > 0) {
     while( $row = sqlFetch($queryResult) ) {
       $returnArr[] = $row;
     }

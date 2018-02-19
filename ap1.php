@@ -3,6 +3,11 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
+<style>
+body {
+	height: 750px;
+}
+</style>
     <h3>Main Navigation</h3>
 	<div class="body-content">
 	

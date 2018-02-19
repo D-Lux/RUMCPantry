@@ -57,11 +57,18 @@
 				AND	Client.redistribution=0 ";
 	
 	// Get our total record count
-	$totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
+  $totalResults = returnAssocArray(queryDB($conn, $sql));
+  $totalRecordCount = 0;
+  if (is_array($totalResults)) {
+    $totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
+  }
 	
 	// Run our query with search and order conditions
-    $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
-	$recordCount = count($results);
+  $results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
+  $recordCount = 0;
+  if (is_array($results)) {
+    $recordCount = count($results);
+  }
 	$returnData = [];
 	$out = [];
 	// Run our paging function using a for loop
