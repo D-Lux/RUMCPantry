@@ -1,5 +1,6 @@
 <?php 
   $pageRestriction = 10;
+  include 'php/orderFormMessageBox.php';
   include 'php/header.php';
   include 'php/beanOps.php';
   include 'php/backButton.php';

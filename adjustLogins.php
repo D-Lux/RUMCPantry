@@ -135,7 +135,7 @@ include 'php/backButton.php';
           url      : 'php/ajax/adjustLogin.php?dellogin=1&id=' + permID,
           dataType : 'json',
           success  : function(data) {
-            $("#loginMsgs").html(data.msg).show(250).delay(5000).hide(800);
+            $("#loginMsgs").stop(true,true).hide().html(data.msg).show(250).delay(5000).hide(800);
             if (data.err == 0) {
               drawLoginTable()
             }
@@ -166,7 +166,7 @@ include 'php/backButton.php';
                 },
                 success  : function(updateData) {
                   $("#clickOut").click();
-                  $("#loginMsgs").html(updateData.msg).show(250).delay(5000).hide(800);
+                  $("#loginMsgs").stop(true,true).hide().html(updateData.msg).show(250).delay(5000).hide(800);
                   drawLoginTable();
                 },
               });
@@ -215,8 +215,11 @@ include 'php/backButton.php';
           url      : 'php/ajax/adjustLogin.php?create=1&n=' + newName + '&pw=' + newPW + '&perm=' + newPerm,
           dataType : 'json',
           success  : function(data) {
-            $("#loginMsgs").html(data.msg).show(250).delay(5000).hide(800);
+            $("#loginMsgs").stop(true,true).hide().html(data.msg).show(250).delay(5000).hide(800);
             if (data.err == 0) {
+              $("#newPermissions").val(-1);
+              $("#newPassword").val('');
+              $("#newLogin").val('');
               drawLoginTable()
             }
           },

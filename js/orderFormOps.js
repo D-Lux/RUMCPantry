@@ -218,7 +218,9 @@ function countOrder(callingSlot)	{
 			// If we exceed our max count, don't let the box be checked and display a warning
 			if (runningTotal >= MaxCount) {
 				callingSlot.checked = false;
-				window.alert("Cannot select more in this category");
+				//window.alert("Cannot select more in this category");
+        $("#clickOut").fadeIn(300);
+        $("#noMoreBox").show(300);
 				// Break out, since we know we're done here
 				return;
 			}
@@ -237,6 +239,12 @@ function countOrder(callingSlot)	{
 		e.style.color = "Black";
 	}
 }
+// To close the modal warning box
+$("#clickOut, #noMoreBox").on("click", function() {
+  $("#clickOut").fadeOut(300);
+  $("#noMoreBox").hide(300);
+});
+
 
 // * For the client order specifically to track beans (bagged vs canned)
 function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counterName, Selection) {
@@ -267,7 +275,9 @@ function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counte
 			// If we exceed our max count, don't let the box be checked and display a warning
 			if (runningTotal >= MaxCount) {
 				callingSlot.checked = false;
-				window.alert("Cannot select more in this category");
+				//window.alert("Cannot select more in this category");
+        $("#clickOut").fadeIn(300);
+        $("#noMoreBox").show(300);
 				// Break out, since we know we're done here
 				return;
 			}

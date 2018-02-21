@@ -29,8 +29,8 @@ if ($name == null || $name == "" ) {
 }
 else {
   $conn = connectDB();
-  if ($conn == false) {
-    $data['msg'] = "<p>Error connecting to database</p>";
+  if ($conn -> connect_errno ) {
+    $data['msg'] = "<p>Database Error: " . $conn->connect_errno . "</p>";
     $data['err']= 1;
     die(json_encode($data));
   }

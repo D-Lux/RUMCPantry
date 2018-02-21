@@ -1,5 +1,6 @@
 <?php
   $pageRestriction = 1;
+  include 'php/orderFormMessageBox.php';
   include 'php/header.php';
   include 'php/beanOps.php'; 
   include 'php/backButton.php'
@@ -20,6 +21,7 @@
 		?>
 		<div class="body-content">
 			<?php
+        
 				// *******************************************************
 				// * Run our SQL Queries
 				// * 1.) Family size information
