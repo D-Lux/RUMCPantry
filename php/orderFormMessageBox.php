@@ -32,7 +32,6 @@
       content: "\00a0";  
   }
 	</style>
-  <!--     width: 800px; -->
 <div id="clickOut" style="display:none;"></div>
 <div id="noMoreBox" style="display:none;">
   <p style="margin-bottom:50px;">Cannot select more in this category</p>

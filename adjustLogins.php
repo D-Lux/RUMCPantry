@@ -15,6 +15,7 @@ include 'php/backButton.php';
     left: 50%;
     width: 100%;
     height: 40px;
+    pointer-events: none;
   }
   td {
     vertical-align: middle;

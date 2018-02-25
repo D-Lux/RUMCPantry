@@ -3,12 +3,9 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-<style>
-body {
-	height: 750px;
-}
-</style>
-    <h3>Main Navigation</h3>
+
+  
+  <h3>Main Navigation</h3>
 	<div class="body-content">
 	
 	<?php if ($_SESSION['perms'] >= 99) { ?>
@@ -43,5 +40,6 @@ body {
 	<form method="post" action="ap_oo3.php">
     <input class="btn-nav" type="submit" value="View Active Order Forms">
   </form>
+  <div class="clearfix"></div>
 
 <?php include 'php/footer.php'; ?>
