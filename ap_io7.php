@@ -9,8 +9,6 @@
   }
 ?>
 
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
 <h3>Item Inventory</h3>
   
 <?php
@@ -55,24 +53,13 @@ if ($showDeleted) {
   <?php } ?>
   
 <?php include 'php/footer.php'; ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 
 	$('#iItemTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
-      "searching"     : true,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
       "ajax": {
           "url"       : "php/ajax/itemList.php?deleted=<?=$showDeleted?>",
       },
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 
 	$(document).ready(function(){

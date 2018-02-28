@@ -92,3 +92,21 @@ $(".input-number").keypress(function(key) {
   // Only allow numeric values
   if(key.charCode < 48 || key.charCode > 57) return false;
 });
+
+// *************************
+// * Data table defaults
+$.extend( $.fn.dataTable.defaults, {
+  "info"          : true,
+  "paging"        : true,
+  "destroy"       : true,
+  "searching"     : true,
+  "processing"    : true,
+  "serverSide"    : true,
+  "ordering"      : true,
+  "stateSave"     : true,
+  "orderClasses"  : false,
+  "autoWidth"     : false,
+  "pagingType"    : "full_numbers",
+	"lengthMenu"    : [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
+
+} );

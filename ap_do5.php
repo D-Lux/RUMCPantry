@@ -19,7 +19,6 @@
     }
   }
 ?>
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 <style>
   .msg-warning {
     display: none;
@@ -97,30 +96,20 @@
   </table>
 
 <?php include 'php/footer.php'; ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script src="js/createDonation.js"></script>
 <script type="text/javascript">
   if (<?=(int)$badLoad?>) {
     window.location.href = '/RUMCPantry/ap_do1.php';
   }
   $('#donationTable').DataTable({
-    "info"          : true,
-    "paging"        : true,
-    "destroy"       : true,
     "searching"     : false,
-    "processing"    : true,
-    "serverSide"    : true,
-    "orderClasses"  : false,
-    "autoWidth"     : false,
     "ordering"      : false,
-    "pagingType"    : "full_numbers",
     "language"	    : {
     "emptyTable"    : "No donations in database."
                       },
     "ajax"	        : {
         "url"       : "/RUMCPantry/php/ajax/donationList.php?pid=<?=$pID?>",
                       },
-    "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
   });
   $('#donationTable').on('click', '.btn-edit', function () {
     window.location.assign($(this).attr('value'));

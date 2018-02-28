@@ -19,7 +19,7 @@ if (isset($_POST['createCategory'])) {
     $sql = "SELECT isDeleted FROM Category WHERE name='" . $name . "'";
     
     $results = runQuery($conn, $sql);
-    if (count($results) > 0 ) {
+    if (is_array($results) && count($results) > 0) {
       if (current($results)['isDeleted']) {
         $sql = "UPDATE Category SET isDeleted = false WHERE name = '" . $name . "'";
         createCookie("categoryReactivated", 1, 30);
@@ -30,8 +30,10 @@ if (isset($_POST['createCategory'])) {
     }
     
     else {
-      $sql = "INSERT INTO Category (name, small, medium, large, isDeleted)
-              VALUES ('" . $name . "', " . $small . ", " . $medium . ", " . $large . ", 0)";
+      $sql = "SELECT Max(formOrder) as M FROM Category";
+      $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
+      $sql = "INSERT INTO Category (name, small, medium, large, isDeleted, formOrder)
+              VALUES ('" . $name . "', " . $small . ", " . $medium . ", " . $large . ", 0, " . $nextOrder . ")";
 
       if (queryDB($conn, $sql) === TRUE) {
         createCookie("newCategory", 1, 30);      
@@ -45,10 +47,10 @@ if (isset($_POST['createCategory'])) {
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];
-    $name 	 	= $_POST['category'];
-    $small 		= $_POST['small']; 
-    $medium 	= $_POST['medium'];
-    $large 		= $_POST['large'];
+    $name 	 	  = $_POST['category'];
+    $small 		  = $_POST['small']; 
+    $medium 	  = $_POST['medium'];
+    $large 		  = $_POST['large'];
 
     /* Create connection*/
     $conn = connectDB();
@@ -61,7 +63,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     //check to see if category exists, if not create it.
     $sql = "UPDATE Category
             SET categoryID = "  . $categoryID . ", 
-                name 	   = '" . $name       . "', 
+                name 	     = '" . $name       . "', 
                 small      = "  . $small      . ", 
                 medium     = "  . $medium     . ", 
                 large      = "  . $large      . " 

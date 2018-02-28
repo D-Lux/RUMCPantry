@@ -4,8 +4,6 @@
   include 'php/backButton.php';
 ?>
 
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
 <h3>Appointment Operations</h3><br>	
 	<div class="body-content">
 		<div id="datatableContainer">
@@ -33,24 +31,13 @@
 
 <?php include 'php/footer.php'; ?>
 <script src="js/clientOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 
 	$('#apptTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
-      "searching"     : true,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
       "ajax": {
           "url"       : "php/ajax/apptList.php",
       },
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 	$(document).ready(function(){
 		$('#apptTable').on('click', '.btn-edit', function () {

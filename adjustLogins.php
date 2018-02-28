@@ -5,7 +5,7 @@ include 'php/header.php';
 include 'php/backButton.php';
 ?>
 
-  <link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
+  
 	<style>
 	p {
 		color : red;
@@ -100,7 +100,6 @@ include 'php/backButton.php';
 
 
 <?php include 'php/footer.php'; ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 
   (function($){
@@ -111,14 +110,7 @@ include 'php/backButton.php';
   
   function drawLoginTable() {
     $('#loginTable').DataTable({
-      "info"          : false,
-      "paging"        : false,
-      "destroy"       : true,
       "searching"     : false,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
       "ajax": {
           "url"       : "php/ajax/loginList.php",

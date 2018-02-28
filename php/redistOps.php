@@ -430,8 +430,8 @@ function createRedistributionCategory(){
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Create insertion string
-	$sql = "INSERT INTO Category (name, small, medium, large, isDeleted)
-			VALUES ('Redistribution',0,0,0,0)";
+	$sql = "INSERT INTO Category (name, small, medium, large, isDeleted, formOrder)
+			VALUES ('Redistribution',0,0,0,0, -1)";
 	
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {

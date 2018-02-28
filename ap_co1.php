@@ -3,13 +3,10 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 	
 <h3>Active Clients</h3>
 	
 	<div class="body-content">
-	
 	
 		<div id="datatableContainer">
 			<table width='95%' id="iClientTable" class="display">
@@ -28,11 +25,11 @@
 			</table>
 		</div>
 	
-	<!-- NEW Client -->
+
+			<!-- NEW Client -->
 	<form action="ap_co2.php">
 		<input id="CreateNew" class="btn-nav" type="submit" name="GoNewClient" value="New Client">
-    </form>
-	
+  </form>
 	<!-- View Inactive Clients -->
 	<form action="ap_co1i.php">
 		<input type="submit" class="btn-nav" name="ShowInactive" value="View Inactive Clients">
@@ -41,27 +38,16 @@
 <?php include 'php/footer.php'; ?>
 
 <script src="js/clientOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
   if (getCookie("clientUpdated") != "") {
 			window.alert("Client data updated!");
 			removeCookie("clientUpdated");
 	}	
 	$('#iClientTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
-      "searching"     : true,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
       "ajax": {
           "url"       : "php/ajax/clientList.php",
       },
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 
 	$(document).ready(function(){

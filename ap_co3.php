@@ -3,8 +3,6 @@
 	include 'php/header.php';
 	include 'php/backButton.php';
 ?>
-
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
 	
 	<div class="body-content">
 	
@@ -280,7 +278,6 @@
 	
 <?php include 'php/footer.php'; ?>
 <script src="js/clientOps.js"></script>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
   if (getCookie("newClient") != "") {
     window.alert("New Client Added!");
@@ -299,23 +296,14 @@
 		echo "var Params = '?cid=" . $_GET['id'] . "';";
 	?>
 	$('#invoiceTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
       "searching"     : false,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
 	  "language"	  : {
 		"emptyTable"  : "No Appointments in Database."
 					    },
       "ajax"	      : {
           "url"       : "php/ajax/clientApptList.php" + Params,
 						},
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 	$(document).ready(function(){
 		$('#invoiceTable').on('click', '.btn-edit', function () {

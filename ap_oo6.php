@@ -27,24 +27,14 @@
 <?php include 'php/footer.php'; ?>
 
 
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 	function buildCatTable() {
     $('#iCatOrderTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
-      "searching"     : false,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
+      "searching"     : false,
       "ajax": {
           "url"       : "php/ajax/categoryOrderList.php",
       },
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
     });
   }
 

@@ -27,8 +27,10 @@ if(isset($_POST['createItem'])) {
     //check to see if category exists, if not create it.
 	$result = queryDB($conn, "SELECT DISTINCT categoryID FROM Category WHERE name = '" . $category . "'");
 	if($result->num_rows == 0) {
-		$sql = "INSERT INTO category (name, small, medium, large, isDeleted)
-            VALUES ('" . $category . "', " . $small . ", " . $medium . ", " . $large . ", 0)";
+    $sql = "SELECT Max(formOrder) as M FROM Category";
+    $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
+		$sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
+            VALUES ('" . $category . "', " . $small . ", " . $medium . ", " . $large . ", 0, " . $nextOrder . ")";
 		if (queryDB($conn, $sql) === TRUE) {
 			$newCategory = TRUE;
 			$categoryID = $conn->insert_id;
@@ -114,8 +116,10 @@ elseif (isset($_POST['updateItemIndividual'])) {
     //check to see if category ecists, if not create it.
     $result = queryDB($conn, "SELECT DISTINCT name FROM Category WHERE name = '$category'");
 	if($result->num_rows == 0) {
-		$sql = "INSERT INTO category (name, small, medium, large)
-				VALUES ('$category', 0, 0, 0, 0)";
+    $sql = "SELECT Max(formOrder) as M FROM Category";
+    $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
+		$sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
+				VALUES ('$category', 0, 0, 0, 0, 0, " . $nextOrder . ")";
 		if (queryDB($conn, $sql) === TRUE) {
 			$sql = "SELECT DISTINCT name, categoryID FROM Category WHERE name = '$category'";
 			$result = queryDB($conn, $sql);

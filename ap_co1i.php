@@ -4,8 +4,6 @@
   include 'php/backButton.php';
 ?>
 
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
   <h3>Inactive Clients</h3>
 	
 	<div class="body-content">		
@@ -34,27 +32,16 @@
 	<div id="errorLog"></div>
 	
 <?php include 'php/footer.php'; ?>
-<script type="text/javascript" charset="utf8" src="includes/jquery.dataTables.min.js"></script>
 <script type="text/javascript">
 	if (getCookie("clientUpdated") != "") {
 		window.alert("Client data updated!");
 		removeCookie("clientUpdated");
 	}
 	$('#iClientTable').DataTable({
-      "info"          : true,
-      "paging"        : true,
-      "destroy"       : true,
-      "searching"     : true,
-      "processing"    : true,
-      "serverSide"    : true,
-      "orderClasses"  : false,
-      "autoWidth"     : false,
       "ordering"      : false,
-      "pagingType"    : "full_numbers",
       "ajax": {
           "url"       : "php/ajax/clientList.php?deleted=1",
       },
-	  "lengthMenu": [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 	});
 
 	$(document).ready(function(){
