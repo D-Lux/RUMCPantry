@@ -117,7 +117,11 @@ function runQuery($conn, $query) {
 }
 
 function runQueryForOne($conn, $query) {
-  return current(returnAssocArray(queryDB($conn, $query)));
+  $queryResult = returnAssocArray(queryDB($conn, $query));
+  if (is_array($queryResult)) { 
+    return current($queryResult);
+  }
+  return false;
 }
 
 function sqlError($conn) {

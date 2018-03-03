@@ -5,8 +5,8 @@ include 'utilities.php';
 // Go to specific client/member pages based on buttons pressed
 
 
-if (isset($_POST['updateRedistItem'])) {
-	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_POST['id']);
+if (isset($_GET['updateRedistItem'])) {
+	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_GET['id']);
 }
 elseif (isset($_POST['newRedistInvoice'])) {
 	header ("location: /RUMCPantry/ap_ro9.php");
@@ -226,73 +226,83 @@ elseif(isset($_POST['submitUpdateRedist'])) {
 // ************************************
 // Submitting a new redistribution item
 elseif(isset($_POST['submitNewRedistItem'])) {
-	echo "<h1>Attempting to create a new redistribution item</h1>";
+	$iName    = fixInput($_POST['itemName']);
+	$price    = empty($_POST['price'])  ? (int)0 : $_POST['price'];
+	$weight   = empty($_POST['weight']) ? (int)0 : $_POST['weight'];
+  $category = getRedistributionCategory();
+  $error    = "";
+  $conn     = connectDB();
+	// ***************
+  // Validation:
+  
+  // Check if there is a name, and if it already exists
+  if (empty($iName)) {
+    $error = "<p>Name cannot be empty.</p>";
+  }
+  else {
+    $sql = "SELECT itemID from item WHERE itemName = '{$iName}' AND categoryID = {$category}";
+    if (runQueryForOne($conn, $sql)) {
+      $error = "<p>That name already exists in the redistribution item list.</p>";
+    }
+  }
+  
+  if ($error == "") {
+    $sql = "INSERT INTO Item
+            (itemName, price, aisle, categoryID, rack, isDeleted, small, medium, large, shelf )
+            VALUES
+            ('{$iName}', {$price}, {$weight}, {$category}, -1, 0, 0, 0, 0, 0)";
 
-	$iName = makeString(fixInput($_POST['itemName']));
-	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
-	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
-
-	$category = getRedistributionCategory();
-	echo "RedistID = " . $category . "<br>";
-
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-
-	// Create insertion string (set the weight to aisle and -1 to the rack to distinguish from normal items)
-	$sql = "INSERT INTO Item
-			(itemName, price, aisle, categoryID, timestamp, rack, isDeleted, small, medium, large, shelf )
-			VALUES
-			($iName, $price, $weight, $category, now(), -1, 0, 0, 0, 0, 0)";
-	echo "query: " . $sql . "<br>";
-	// Perform and test insertion
-	if (queryDB($conn, $sql) === TRUE) {
-		closeDB($conn);
-		createCookie("newRedistItem", 1, 30);
-		header("location: /RUMCPantry/ap_ro5.php");
-	}
-	else {
-		closeDB($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to add new item.", "red" );
-	}
+    // Perform and test insertion
+    if (queryDB($conn, $sql) === FALSE) {
+      $error = "<p>There was an error attempting to insert the new item.<br>Query: " . $sql . "<br>Error: " . sqlError($conn);
+    }
+  }
+  
+  closeDB($conn);
+  echo json_encode(array("error" => $error));
 }
 
 
 // ***********************************
 // Updating a redistribution item
 elseif(isset($_POST['submitUpdateRedistItem'])) {
-	$iName = makeString(fixInput($_POST['itemName']));
-	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
-	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
-	$itemID =$_POST['id'];
+	$iName    = fixInput($_POST['itemName']);
+  $itemID   = $_POST['submitUpdateRedistItem'];
+	$price    = empty($_POST['price'])  ? (int)0 : $_POST['price'];
+	$weight   = empty($_POST['weight']) ? (int)0 : $_POST['weight'];
+  $category = getRedistributionCategory();
+  $error    = "";
+  $conn     = connectDB();
+	// ***************
+  // Validation:
+  
+  // Check if there is a name, and if it already exists
+  if (empty($iName)) {
+    $error = "<p>Name cannot be empty.</p>";
+  }
+  else {
+    $sql = "SELECT itemID from item 
+            WHERE itemName = '{$iName}' 
+            AND categoryID = {$category}
+            AND itemID <> {$itemID}";
+    if (runQueryForOne($conn, $sql)) {
+      $error = "<p>That name already exists in the redistribution item list.</p>";
+    }
+  }
+  
+  if ($error == "") {
+    $sql = "UPDATE Item 		
+            SET itemName='{$iName}', price = {$price}, aisle = {$weight}
+            WHERE itemID = {$itemID}";
 
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-
-	// Create update string for basic data
-	$dataUpdate =  "UPDATE Item
-					SET	itemName=$iName, price=$price, timestamp=now(), small=$weight
-					WHERE itemID = $itemID";
-
-	// Perform and test updates
-	if (queryDB($conn, $dataUpdate) === TRUE) {
-		closeDB($conn);
-		createCookie("redistItemUpdated", 1, 30);
-		header("location: /RUMCPantry/ap_ro5.php");
-	}
-	else {
-		closeDB($conn);
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to update.", "red" );
-	}
+    // Perform and test insertion
+    if (queryDB($conn, $sql) === FALSE) {
+      $error = "<p>There was an error attempting to update the item.<br>Query: " . $sql . "<br>Error: " . sqlError($conn);
+    }
+  }
+  
+  closeDB($conn);
+  echo json_encode(array("error" => $error));
 }
 
 // ************************************************************************

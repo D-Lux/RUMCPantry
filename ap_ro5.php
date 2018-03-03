@@ -34,7 +34,7 @@
 
 	<!-- NEW Redistribution Item -->
 	<form action="/RUMCPantry/ap_ro6.php" method="get">
-		<input type="submit" class="btn-nav" name="newRedistItem" value="New Redistribution Item">
+		<input type="submit" class="btn-nav" name="newRedistItem" value="New Reallocation Item">
     </form>
 
 	<!-- View Deactivated Items -->
@@ -45,10 +45,6 @@
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
-  if (getCookie("redistItemUpdated") != "") {
-    window.alert("Redistribution item updated!");
-    removeCookie("redistItemUpdated");
-  }
   if (getCookie("newRedistItem") != "") {
     window.alert("New Item Added!");
     removeCookie("newRedistItem");
@@ -73,7 +69,7 @@
       },
   });
 
-  $('#iReallocationTable').on('click', '.btn-icon, .btn-edit', function () {
+  $('#iReallocItemTable').on('click', '.btn-icon, .btn-edit', function () {
     if ($(this).hasClass('btn-icon')) {
       if (confirm("Are you sure you want to <?=$tblBtnFnct?> this client?")) {
         window.location.assign($(this).attr('value'));

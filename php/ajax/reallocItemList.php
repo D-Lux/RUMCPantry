@@ -11,8 +11,8 @@
   // ***********************
   // * Build our column list
   // List all of the columns we want
-  $columns = array("itemID", "itemName", "price", "Item.small as weight");
-  $searchableColumns = array("itemName", "price", "Item.small");
+  $columns = array("itemID", "itemName", "price", "Item.aisle as weight");
+  $searchableColumns = array("itemName", "price", "Item.aisle");
 
   // *********************************
   // * Generate our user search query

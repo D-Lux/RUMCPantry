@@ -100,6 +100,19 @@ $(".input-number").keypress(function(key) {
   if(key.charCode < 48 || key.charCode > 57) return false;
 });
 
+// ********************************************
+// * For dealing with number inputs
+$(".input-number-price").keypress(function(key) {
+  // Allow for tab/backspace/delete/period
+  if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
+
+  // Allow for arrow keys 37-40 arrow keys
+  if (key.keyCode >= 37 && key.keyCode <= 40) return true;
+
+  // Only allow numeric values
+  if(key.charCode < 48 || key.charCode > 57) return false;
+});
+
 // *************************
 // * Data table defaults
 $.extend( $.fn.dataTable.defaults, {
