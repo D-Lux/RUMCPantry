@@ -60,7 +60,7 @@
   $totalResults = returnAssocArray(queryDB($conn, $sql));
   $totalRecordCount = 0;
   if (is_array($totalResults)) {
-    $totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
+    $totalRecordCount = count($totalResults);//count(returnAssocArray(queryDB($conn, $sql)));
   }
 	
 	// Run our query with search and order conditions

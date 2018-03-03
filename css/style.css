@@ -86,6 +86,11 @@ Body Elements
 	outline: 0;
 }
 
+.btn-nav:disabled {
+	cursor: not-allowed;
+  background-color: SlateGrey;
+}
+
 .btn-table {
 	width: 125px;
 	height: 33px;
@@ -342,6 +347,12 @@ Tooltip
   background: -ms-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
   background: -o-linear-gradient(left, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
   background: linear-gradient(to right, rgba(129,183,26,0) 0%, rgba(129,183,26,0.9) 25%, rgba(129,183,26,0.9) 75%, rgba(129,183,26,0) 100%);
+}
+.hoverSuccess {
+  top: 25%;
+  left: 50%;
+  width: 100%;
+  height: 40px;
 }
 .chosen-container {
   height: 35px !important;

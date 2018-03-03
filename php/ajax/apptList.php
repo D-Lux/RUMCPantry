@@ -39,11 +39,25 @@ $sql = "SELECT  visitDate,
 		WHERE 1=1 ";
 		
 // Get our total record count
-$totalRecordCount = count(returnAssocArray(queryDB($conn, ($sql . $tail))));
+$noSearchResults = runQuery($conn, ($sql . $tail));
+if (!is_array($noSearchResults)) {
+  $noResults = array("draw" => $_GET['draw'], "data" => 0, "recordsTotal" => 0, "recordsFiltered" => 0);
+  die(json_encode($noResults));
+}
+$totalRecordCount = count($noSearchResults);
 
 // Run our query with search and order conditions
-$results = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $tail)));
+$results = runQuery($conn, ($sql . $searchConditions . $tail));
+closeDB($conn);
+
+
+if (!is_array($results)) {
+  $noResults = array("draw" => $_GET['draw'], "data" => 0, "recordsTotal" => 0, "recordsFiltered" => 0);
+  die(json_encode($noResults));
+}
+
 $recordCount = count($results);
+
 $returnData = [];
 $out = [];
 
@@ -74,7 +88,6 @@ $returnData['draw'] 			= $_GET['draw'];
 $returnData['data']  		    = $out;
 $returnData['recordsTotal'] 	= $totalRecordCount;
 $returnData['recordsFiltered']  = $recordCount;
-closeDB($conn);
 
 echo json_encode($returnData);
 

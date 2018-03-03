@@ -32,18 +32,11 @@
 	// Close the connection as we've gotten all the information we should need
 	closeDB($conn);
 ?>
-<style>
-  #redistSuccess {
-    top: 25%;
-    left: 50%;
-    width: 100%;
-    height: 40px;
-  }
-</style>
+
 	<h3>Update Reallocation Partner</h3>
 
 	<div class="body-content">
-		<div id="redistSuccess" class="hoverMsg" style="display:none;"></div>
+		<div id="redistSuccess" class="hoverMsg hoverSuccess" style="display:none;"></div>
 		<form id="updateRedistPartner">
 			<input type="hidden" value=<?=$_GET['id']?> name="submitUpdateRedist">
 			<div class="row">

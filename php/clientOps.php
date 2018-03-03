@@ -1,9 +1,7 @@
-<script src="/RUMCPantry/js/utilities.js"></script>
-
 <?php
 
 include 'utilities.php';
-debugEchoPOST();debugEchoGET();
+//debugEchoPOST();debugEchoGET();
 
 // **************************************
 // ** Function for toggling isDeleted flag for clients
@@ -13,13 +11,13 @@ function toggleClientActive($isDeleted=0) {
 	}
 	// Set up server connection
 	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
+
+  $loc = "location: /RUMCPantry/ap_co1.php";
+	$loc .= ($isDeleted==0 ? "?ShowInactive=1" : ""); 
 	// Create our update query, setting the flag appropriate
 	$sql = "UPDATE Client 
-			SET isDeleted=" . $isDeleted . "
-			WHERE clientID=" . $_GET['id'];
+          SET isDeleted=" . $isDeleted . "
+          WHERE clientID=" . $_GET['id'];
 
 	// Perform and test update
 	if (queryDB($conn, $sql) === TRUE) {
@@ -29,25 +27,16 @@ function toggleClientActive($isDeleted=0) {
 				WHERE clientID=" . $_GET['id'];
 
 		// Perform and test update
-		if (queryDB($conn, $sql) === TRUE) {
-			closeDB($conn);
-			$loc = "location: /RUMCPantry/ap_co1";
-			$loc .= ($isDeleted==1 ? ".php" : "i.php"); 
-			header ($loc);
-		}
-		else {
-			echo "sql error: " . mysqli_error($conn);
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error, failed to set family members inactive.", "red" );
+		if (queryDB($conn, $sql) === FALSE) {
+			createCookie("clientDeleteFailBAD", 1, 30);
 		}
 	}
 	else {
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to set client inactive.", "red" );	
+		createCookie("clientDeleteFail", 1, 30);
 	}
-	
+
 	closeDB($conn);
+  header ($loc);
 }
 
 // Go to specific client/member pages based on buttons pressed
@@ -78,146 +67,138 @@ elseif(isset($_GET['ActiveClient'])) {
 
 // ************************************
 // Submitting a new client
-elseif(isset($_POST['submitClient']))
-{
-	echo "<h1>Attempting to create a new client</h1>";
-	// Address fields
-	$address = makeString(fixInput($_POST['addressStreet']));
-	$city = makeString(fixInput($_POST['addressCity']));
-	$state = makeString($_POST['addressState']);
-	$zip = makeString($_POST['addressZip']);
+elseif(isset($_POST['submitClient'])) {
+  $error    = '';
+  $clientID = 0;
+  // Address fields
+	$address  = fixInput($_POST['addressStreet']);
+	$city     = fixInput($_POST['addressCity']);
+	$state    = $_POST['addressState'];
+	$zip      = fixInput($_POST['addressZip']);
 	
 	// Standard information
-	$numAdults = $_POST['numAdults'];
-	$numKids = $_POST['numKids'];
-	$email = makeString($_POST['email']);
-	$phoneNo = storePhoneNo($_POST['phoneNo']);
+	$numAdults  = $_POST['numAdults'];
+	$numKids    = $_POST['numKids'];
+	$email      = fixInput($_POST['email']);
+	$phoneNo    = $_POST['phone1'].$_POST['phone2'].$_POST['phone3'];
 	$foodStamps = $_POST['foodStamps'];
 	$clientType = $_POST['clientType'];
 	
 	// Family Member Fields
-	$clientFirstName = makeString(fixInput($_POST['clientFirstName']));
-	$clientLastName = makeString(fixInput($_POST['clientLastName']));
-	$birthDate = makeString($_POST['birthDate']);
-	$gender = $_POST['gender'];
+	$clientFirstName  = fixInput($_POST['clientFirstName']);
+	$clientLastName   = fixInput($_POST['clientLastName']);
+	$birthDate        = $_POST['birthDate'];
+	$gender           = $_POST['gender'];
 
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
+  $pets = "";
+  if (isset($_POST['pets'])) {
+    $pets = implode("", $_POST['pets']);
+  }
 
-	// Create insertion string
-	$sql = "INSERT INTO Client 
-			(numOfAdults, NumOfKids, timestamp, email, phoneNumber, 
-				address, city, state, zip, foodStamps, clientType,
-				isDeleted, redistribution)
-			VALUES 
-			($numAdults,$numKids,now(),$email,$phoneNo,
-				$address,$city,$state,$zip,$foodStamps,$clientType,
-				FALSE, FALSE)";
-	
-	// Perform and test insertion
-	if (queryDB($conn, $sql) === TRUE) {
-		// Get the ID Key of the client we just created (we will need it to create the family member)
-		$clientID = $conn->insert_id;
-		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember 
-				(firstName, lastName, isHeadOfHousehold, birthDate, clientID, gender, timestamp, isDeleted)
-				VALUES ($clientFirstName, $clientLastName, TRUE, $birthDate, $clientID, $gender, now(), FALSE)";
-		if (queryDB($conn, $sql) === TRUE) {
-			closeDB($conn);
-			// Successfully added client and family member (head of household)
-			
-			// If we came here from adding a walk-in, go back to the apptOps.php to make the invoice
-			if (isset($_POST['newWalkIn'])) {
-				header("location: /RUMCPantry/php/apptOps.php?clientID=$clientID&newWalkIn=1");
-			}
-			// Otherwise go to update page with the client ID
-			else {
-				// Set a cookie so we can display a 'new' message
-				createCookie("newClient", 1, 30);
-				header("location: /RUMCPantry/ap_co3.php?id=$clientID");
-			}
-		}
-		else {
-			// delete the blank client we just made
-			$sql = "DELETE FROM Client
-					WHERE clientID = $clientID";
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create family member.", "red" );
-			
-			if (queryDB($conn, $sql) === FALSE) {
-				// This is a very bad error (created a blank client and couldn't remove it)
-				echoDivWithColor("<h1>VERY BAD ERROR</h1>Check with developer.", "red" );
-			}	
-		}
-	} 
-	else {
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to connect to database.", "red" );	
-	}
-	closeDB($conn);
+	// *************************
+	// * Validate form
+	if ((empty($numAdults)) || ($numAdults <= 0)) {
+    $error .= "<p>Clients must have at least one adult.</p>";
+  }
+  if ((empty($clientFirstName)) || (empty($clientLastName))) {
+    $error .= "<p>Clients must have a full name.</p>";
+  }
+  if ((empty($birthDate)) || (empty($clientLastName))) {
+    $error .= "<p>Birthdate is required.</p>";
+  }
+
+  // If there were no form errors, create the client
+  if ($error == '') {
+    // Set up server connection
+    $conn = connectDB();
+
+    // Create insertion string
+    $sql = "INSERT INTO Client 
+        (numOfAdults, NumOfKids, email, phoneNumber, 
+          address, city, state, zip, foodStamps, clientType, pets,
+          isDeleted, redistribution)
+        VALUES 
+        ({$numAdults}, {$numKids}, '{$email}', '{$phoneNo}',
+          '{$address}', '{$city}', '{$state}', '{$zip}', {$foodStamps}, {$clientType}, '{$pets}',
+          FALSE, FALSE)";
+    
+    // Perform and test insertion
+    if (queryDB($conn, $sql) === TRUE) {
+      // Get the ID Key of the client to create the family member
+      $clientID = $conn->insert_id;
+      // Create the insert string and perform the insertion
+      $sql = "INSERT INTO FamilyMember 
+          (firstName, lastName, isHeadOfHousehold, birthDate, clientID, gender, isDeleted)
+          VALUES ('{$clientFirstName}', '{$clientLastName}', TRUE, '{$birthDate}', {$clientID}, {$gender}, FALSE)";
+      if (queryDB($conn, $sql) === FALSE) {
+        $error = "There was an error adding the family member to the database (check with the programmer)<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
+        $sql = "DELETE FROM Client
+                WHERE clientID = $clientID";
+        queryDB($conn, $sql);
+      }
+    } 
+    else {
+      $error = "There was an error adding the client to the database (Check with the programmer)<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
+    }
+    closeDB($conn);
+  }
+  die( json_encode(array("error" => $error, "id" => $clientID)));
 }
 
 
 // ***********************************
 // Updating a client
-elseif(isset($_POST['UpdateClient']))
-{
-	// Address fields
-	$address = makeString(fixInput($_POST['addressStreet']));
-	$city = makeString(fixInput($_POST['addressCity']));
-	$state = makeString($_POST['addressState']);
-	$zip = makeString($_POST['addressZip']);
+elseif(isset($_POST['UpdateClient'])) {
+  $error    = '';
+  $clientID = $_POST['UpdateClient'];
+  // Address fields
+	$address  = fixInput($_POST['addressStreet']);
+	$city     = fixInput($_POST['addressCity']);
+	$state    = $_POST['addressState'];
+	$zip      = fixInput($_POST['addressZip']);
 	
 	// Standard information
-	$clientID = $_POST['id'];
-	$numAdults = $_POST['numAdults'];
-	$numKids = $_POST['numKids'];
-	$phoneNo = storePhoneNo($_POST['phoneNo']);
+	$numAdults  = $_POST['numAdults'];
+	$numKids    = $_POST['numKids'];
+	$email      = fixInput($_POST['email']);
+	$phoneNo    = $_POST['phone1'].$_POST['phone2'].$_POST['phone3'];
 	$foodStamps = $_POST['foodStamps'];
 	$clientType = $_POST['clientType'];
-	
-	// Problem children
-	// A few issues to note, Updating to a Null value breaks SQL
-	// Also, storing an email address without converting it to a string (as done below)
-	// causes sql to break as well
-	$email = makeString($_POST['email']);
-	$notes = makeString($_POST['notes']);
-		
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
+  $notes      = empty($_POST['notes']) ? " " : fixInput($_POST['notes']);
 
-	// Create insertion string
-	$sql = "UPDATE Client SET
-			numOfAdults = $numAdults, numOfKids = $numKids, phoneNumber = $phoneNo,
-			foodStamps = $foodStamps, email = $email, notes = $notes, timestamp = now(),
-			zip = $zip, state = $state, address = $address, city = $city, clientType = $clientType
-			WHERE clientID = $clientID";
-	
-	// Perform and test update
-	if (queryDB($conn, $sql) === TRUE) {
-		// Update successful, create a cookie to track this fact
-		createCookie("clientUpdated", 1, 30);
-		
-		// Close the Database
-		closeDB($conn);
-		
-		// Go back to main admin client ops page
-		header ("location: /RUMCPantry/ap_co1.php");
-	}
-	else {
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to update.", "red" );	
-	}
-	closeDB($conn);
+  $pets = "";
+  if (isset($_POST['pets'])) {
+    $pets = implode("", $_POST['pets']);
+  }
+
+	// *************************
+	// * Validate form
+	if ((empty($numAdults)) || ($numAdults <= 0)) {
+    $error .= "<p>Clients must have at least one adult.</p>";
+  }
+
+  // If there were no form errors, create the client
+  if ($error == '') {
+    // Set up server connection
+    $conn = connectDB();
+    if ($conn->connect_error) {
+      die("Connection failed: " . $conn->connect_error);
+    } 
+
+    // Create insertion string
+    $sql = "UPDATE Client SET
+        numOfAdults = {$numAdults}, numOfKids = {$numKids}, phoneNumber = '{$phoneNo}',
+        foodStamps = {$foodStamps}, email = '{$email}', notes = '{$notes}', timestamp = now(), pets = '{$pets}',
+        zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}
+        WHERE clientID = {$clientID}";
+    
+    // Perform and test update
+    if (queryDB($conn, $sql) === FALSE) {
+      $error = "There was an error updating<br>Query: " . $sql . "<br>Error: " . sqlError($conn);
+    }
+    closeDB($conn);
+  }
+  die( json_encode(array("error" => $error)));
 }
 
 // *******************************************************

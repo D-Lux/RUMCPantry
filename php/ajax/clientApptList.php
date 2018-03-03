@@ -29,7 +29,14 @@ $results = returnAssocArray(queryDB($conn, $sql ));
 closeDB($conn);
 
 // Run our query with search and order conditions
+
+if (!is_array($results)) {
+  $noResults = array("draw" => $_GET['draw'], "data" => 0, "recordsTotal" => 0, "recordsFiltered" => 0);
+  die(json_encode($noResults));
+}
+
 $recordCount = count($results);
+
 $returnData = [];
 $out = [];
 
@@ -52,9 +59,9 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 	$out[]  = $row;
 }	
 
-$returnData['draw'] 			= $_GET['draw'];
-$returnData['data']  		    = $out;
-$returnData['recordsTotal'] 	= $recordCount;
+$returnData['draw'] 			      = $_GET['draw'];
+$returnData['data']  		        = $out;
+$returnData['recordsTotal'] 	  = $recordCount;
 $returnData['recordsFiltered']  = $recordCount;
 
 

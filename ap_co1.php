@@ -54,10 +54,10 @@
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
-  if (getCookie("clientUpdated") != "") {
-			window.alert("Client data updated!");
-			removeCookie("clientUpdated");
-	}
+  checkCookie("clientUpdated", "Client data updated!");
+  checkCookie("clientDeleteFailBAD", "A very bad error occurred attempting to set the active flag on this client!");
+  checkCookie("clientDeleteFail", "An error has occurred attempting to set the active flag!");
+
   var Params = "";
   <?php if ($inactive) { ?>
     Params = "?deleted=1";

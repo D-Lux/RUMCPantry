@@ -20,15 +20,23 @@
       </div>
       <div class="row">
         <div class="col-sm-4">Number of Adults:</div>
-        <div class="col-sm-2"><input style="width=20px;" class="input-number" type="text" name="numAdults" maxlength="2" value="1"></div>
+        <div class="col-sm-2"><input style="width:50px;" class="input-number" type="text" name="numAdults" maxlength="2" value="1"></div>
       </div>
       <div class="row">
         <div class="col-sm-4">Number of Children:</div>
-        <div class="col-sm-2"><input class="input-number" type="text" name="numKids" maxlength="2" value="0"></div>
+        <div class="col-sm-2"><input style="width:50px;" class="input-number" type="text" name="numKids" maxlength="2" value="0"></div>
+      </div>
+      <div class="row" id="iPetRow">
+        <div class="col-sm-4">Pets:</div>
+        <div class="col-sm-8">
+          <select id="iPetSelect" name="pets[]" multiple>
+            <?=getPetOptions()?>
+          </select>
+        </div>
       </div>
       <div class="row">
         <div class="col-sm-4">Date of Birth:</div>
-        <div class="col-sm-4"><input type="date" id="birthDateField" name="birthDate" min="1900-01-01"></div>
+        <div class="col-sm-4"><input type="date" name="birthDate" min="1900-01-01"></div>
       </div>
       <div class="row">
         <div class="col-sm-4">Gender:</div>
@@ -68,8 +76,8 @@
       <div class="row">
         <div class="col-sm-4">Phone Number:</div>
         <div class="col-sm-2">(<input class="input-number input-phone" type="text" maxlength=3 name="phone1">)</div>
-        <div class="col-sm-2"><input class="input-number input-phone" type="text" maxlength=3 name="phone2">-</div>
-        <div class="col-sm-2"><input class="input-number input-phone" type="text" maxlength=3 name="phone3"></div>
+        <div class="col-sm-2"><input class="input-number input-phone" type="text" maxlength=3 name="phone2"> - </div>
+        <div class="col-sm-2"><input class="input-number input-phone" type="text" maxlength=4 name="phone3"></div>
       </div>
       <div class="row">
         <div class="col-sm-4">Street Address:</div>
@@ -101,16 +109,23 @@
 <script src="js/clientOps.js"></script>
 
 <script type="text/javascript">
-  $("select").chosen();
+  $("select").chosen({
+    placeholder_text_multiple: "Select Pet Options",
+  }); 
   
+  // Handle increasing the size of the div for the multi select
+  $("#iPetSelect").on("change", function() {
+    var count = $("#iPetSelect :selected").length;
+    $("#iPetRow").height((Math.floor(count / 3) * 35) + 35);
+  });
   
   // For adding a new donation partner
-	$(".btn-nav").on("click", function(e) {
-	  e.preventDefault();
+	$("input[type='submit']").on("click", function(e) {
+    e.preventDefault();
 	  $("#warningMsgs").stop(true, true).hide();
-	  var fieldData = $("#createRedistPartner").serialize().trim();
+	  var fieldData = $("#addClientForm").serialize();
 	  $.ajax({
-	    url: "php/redistOps.php",
+	    url: "php/clientOps.php",
 	    data: fieldData,
 	    type: "POST",
 	    dataType: "json",
@@ -118,7 +133,7 @@
 	    success: function(msg) {
 	      if (msg.error == '') {
 	        setCookie("newPartner", 1, 30);
-	        window.location.assign("/RUMCPantry/ap_ro4.php?id=" + msg.id);
+	        window.location.assign("/RUMCPantry/ap_co3.php?id=" + msg.id);
 	      }
 	      else {
 	        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
@@ -127,41 +142,5 @@
 		});
 	});
   
-  function validateNewClient() {
 
-    var response = "";
-	var clientFirstName =  document.getElementById("clientFNameField").value;
-    var clientLastName = document.getElementById("clientLNameField").value;
-    var numAdults = document.getElementById("numAdultsField").value;
-	var DOB = document.getElementById("birthDateField").value;
-    var errors = 0;
-
-	if (clientFirstName == "" || clientFirstName.length == 0 || clientFirstName == null) {
-        getElementAndColorIt("clientFirstName", "red");
-        errors++;
-        response += "First Name field is empty. \n"
-    }
-    if (clientLastName == "" || clientLastName.length == 0 || clientLastName == null) {
-        getElementAndColorIt("clientLastName", "red");
-        errors++;
-        response += "Last Name field is empty. \n"
-    }
-    if (numAdults == "" || numAdults.length == 0 || numAdults == null || numAdults == "0") {
-        getElementAndColorIt("numAdults", "red");
-        errors++;
-        response += "Clients must have at least one adult. \n"
-    }
-	if(!Date.parse(DOB)){
-		getElementAndColorIt("birthDate", "red");
-        errors++;
-        response += "Date of Birth is not set. \n"
-	}
-	
-    if (errors > 0) {
-        alert("There are " + errors + " errors in the form. \nPlease fix and resubmit. \nThe errors are: \n" + response);
-        return false;
-    } else {
-        return true;
-    }
-}
 </script>

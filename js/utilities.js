@@ -56,6 +56,13 @@ function getCookie(cname) {
     return "";
 }
 
+function checkCookie(cname, ctext) {
+  if (getCookie(cname) != "") {
+			window.alert(ctext);
+			removeCookie(cname);
+	}
+}
+
 // To color an element by ID
 function getElementAndColorIt(elementID, color) {
     var element = document.getElementById(elementID);

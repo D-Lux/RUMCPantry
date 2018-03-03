@@ -583,6 +583,14 @@ function getStateOptions($s = 'IL') {
 
 }
 
+function getPetOptions($s = '') {
+  $petOptions = array('A' => 'Small Dog', 'B' => 'Medium Dog', 'C' => 'Large Dog', 'D' => 'Cat');
+  foreach ($petOptions as $letter => $option) {
+    $selected = is_numeric(strpos($s, $letter)) ? " selected " : "" ;
+    echo "<option value='" . $letter . "' " . $selected . ">" . $option . "</option>";
+  }
+}
+
 // ************************************************************
 // ** Decoder for client type
 
