@@ -2,9 +2,23 @@
   $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
+  
+  $inactive = isset($_GET['ShowInactive']);
+
+  $pageTitle = "Client List";
+  $pageBtnName = "ShowInactive";
+  $pageBtnText = "View Inactive Clients";
+  $tblBtnFnct  = "deactivate";
+
+  if ($inactive) {
+  	$pageTitle .= " - Inactive";
+  	$pageBtnName = "ShowActive";
+  	$pageBtnText = "View Active Clients";
+  	$tblBtnFnct  = "reactivate";
+  }
 ?>
 	
-<h3>Active Clients</h3>
+<h3><?=$pageTitle?></h3>
 	
 	<div class="body-content">
 	
@@ -12,7 +26,9 @@
 			<table width='95%' id="iClientTable" class="display">
 				<thead>
 					<tr>
-						<th width='5%'></th>
+            <?php if (!$inactive) { ?>
+              <th width='5%'></th>
+            <?php } ?>
 						<th width='27%'>Name</th>
 						<th width='5%'>Size</th>
 						<th width='15%'>Email</th>
@@ -30,30 +46,33 @@
 	<form action="ap_co2.php">
 		<input id="CreateNew" class="btn-nav" type="submit" name="GoNewClient" value="New Client">
   </form>
-	<!-- View Inactive Clients -->
-	<form action="ap_co1i.php">
-		<input type="submit" class="btn-nav" name="ShowInactive" value="View Inactive Clients">
-    </form>
+	<!-- Swap between active and inactive -->
+	<form type="get">
+		<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
+   </form>
     
 <?php include 'php/footer.php'; ?>
 
-<script src="js/clientOps.js"></script>
 <script type="text/javascript">
   if (getCookie("clientUpdated") != "") {
 			window.alert("Client data updated!");
 			removeCookie("clientUpdated");
-	}	
+	}
+  var Params = "";
+  <?php if ($inactive) { ?>
+    Params = "?deleted=1";
+  <?php } ?>
 	$('#iClientTable').DataTable({
       "ordering"      : false,
       "ajax": {
-          "url"       : "php/ajax/clientList.php",
+          "url"       : "php/ajax/clientList.php" + Params,
       },
 	});
 
 	$(document).ready(function(){
 		$('#iClientTable').on('click', '.btn-icon, .btn-edit', function () {
 			if ($(this).hasClass('btn-icon')) {
-				if (confirm("Are you sure you want to deactivate this client?")) {
+				if (confirm("Are you sure you want to <?=$tblBtnFnct?> this client?")) {
 					window.location.assign($(this).attr('value'));
 				}
 			}

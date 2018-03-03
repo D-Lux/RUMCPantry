@@ -2,124 +2,147 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
+
+  // Set up server connection
+	$conn = connectDB();
+
+	// *************************************************
+	// Query the database
+
+	$sql = "SELECT email, phoneNumber, address, city, state, zip, Client.notes, FamilyMember.lastName as name
+					FROM Client
+					JOIN FamilyMember
+					ON FamilyMember.clientID=Client.clientID
+					WHERE Client.clientID=" . $_GET['id'];
+	$partnerInfo = runQueryForOne($conn, $sql);
+
+	$phone1 = $phone2 = $phone3 = '';
+
+	if (strlen($partnerInfo['phoneNumber']) == 10) {
+		$phone1 = substr($partnerInfo['phoneNumber'], 0, 3);
+		$phone2 = substr($partnerInfo['phoneNumber'], 3, 3);
+		$phone3 = substr($partnerInfo['phoneNumber'], 6, 4);
+	}
+	else {
+		$phone2 = substr($partnerInfo['phoneNumber'], 0, 3);
+		$phone3 = substr($partnerInfo['phoneNumber'], 3, 4);
+	}
+
+
+	// Close the connection as we've gotten all the information we should need
+	closeDB($conn);
 ?>
+<style>
+  #redistSuccess {
+    top: 25%;
+    left: 50%;
+    width: 100%;
+    height: 40px;
+  }
+</style>
 	<h3>Update Reallocation Partner</h3>
-	
+
 	<div class="body-content">
-	
-	<?php
-		// Set up server connection
-		$conn = connectDB();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		
-		// *************************************************
-		// Query the database
+		<div id="redistSuccess" class="hoverMsg" style="display:none;"></div>
+		<form id="updateRedistPartner">
+			<input type="hidden" value=<?=$_GET['id']?> name="submitUpdateRedist">
+			<div class="row">
+				<div class="col-sm-3">Partner Name:</div>
+				<div class="col-sm-4"><input type="text" name="partnerName" maxlength="45" value="<?=$partnerInfo['name']?>"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">Email:</div>
+				<div class="col-sm-4"><input type="email" name="email" value="<?=$partnerInfo['email']?>"></div>
+			</div>
 
-		$sql = "SELECT email, phoneNumber, address, city, state, zip, Client.notes, FamilyMember.lastName as name
-				FROM Client
-				JOIN FamilyMember
-				ON FamilyMember.clientID=Client.clientID
-				WHERE Client.clientID=" . $_GET['id'];
-		$partnerInfo = queryDB($conn, $sql);
-		
-		// Grab invoice information
-		$sql = "SELECT invoiceID, visitDate, clientID
-				FROM Invoice
-				WHERE clientID=" . $_GET['id'];
-		$invoiceInfo = queryDB($conn, $sql);
-		
-		// Close the connection as we've gotten all the information we should need
-		closeDB($conn);
-	
-		// 
-		// ***********************************************************************
-		// DISPLAY CLIENT INFORMATION
-		// Fill in all fields with values from the database
-		
-		if ($partnerInfo->num_rows > 0) {
-			$partnerRow = sqlFetch($partnerInfo);
-			
-			echo "<form name='updateClient' action='php/redistOps.php' onSubmit='return validateNewPartner()' method='post' >";
-			
-			// Start inputDiv
-			echo "<div class='inputDiv'>";
-			
-			echo "<div id='partnerName' class='required'><label for='partnerNameInput'>Partner Name:</label>
-					<input id='partnerNameInput' type='text' name='partnerName' value='" . displaySingleQuote($partnerRow['name']) . "'><br>";
-			echo "<input type='hidden' name='partnerID' value='" . $_GET['id'] . "'>";
+			<div class="row">
+				<div class="col-sm-3">Phone Number:</div>
+				<div class="col-sm-8">(<input class="input-phone input-number" maxlength="3" type="text" name="phone1" value="<?=$phone1?>">)
+				<input class="input-phone input-number" maxlength="3" type="text" name="phone2" value="<?=$phone2?>">-
+				<input class="input-phone input-number" maxlength="4" type="text" name="phone3" value="<?=$phone3?>"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">Street Address:</div>
+				<div class="col-sm-4"><input type="text" name="addressStreet" value="<?=$partnerInfo['address']?>"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">City:</div>
+				<div class="col-sm-4"><input type="text" name="addressCity" value="<?=$partnerInfo['city']?>"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">Zip Code:</div>
+				<div class="col-sm-4"><input class="input-number"  type="text" maxlength="5" name="addressZip" value="<?=$partnerInfo['zip']?>"></div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">State:</div>
+				<div class="col-sm-4">
+					<select name="addressState">
+						<?php getStateOptions($partnerInfo['state']); ?>
+					</select>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-sm-3">Notes:</div>
+				<div class="col-sm-4"><textarea id='notesInput' class='notes' type='text' maxlength='256' name='notes'><?=$partnerInfo['notes']?></textarea></div>
+			</div>
+			<div class="clearfix"></div>
+			<div class="msg-warning" id="warningMsgs"></div>
+	    <input type="submit" class="btn-nav" value="Update" >
+	  </form>
 
-			echo "<label for='emailInput'>Email:</label>
-					<input id='emailInput' type='email' name='email' value='" . $partnerRow['email'] . "'><br>";
-			echo "<label for='phoneNoInput'>Phone Number:</label>
-					<input id='phoneNoInput' type='tel' name='phoneNo' value=" . displayPhoneNo($partnerRow['phoneNumber']) . "><br>";
-			echo "<label for='addressStreetInput'>Street Address:</label>
-					<input id='addressStreetInput' type='text' name='addressStreet' value='" . $partnerRow['address'] . "' ><br>";
-			echo "<label for='addressCityInput'>City:</label>
-					<input id='addressCityInput' type='text' name='addressCity' value='" . $partnerRow['city'] . "'><br>";
-			// Dropdown for state
-			echo "<label for='addressStateInput'>State:</label>
-				<select id='addressStateInput' name='addressState'> <option value=" . $partnerRow['state'] . ">" . $partnerRow['state'] . "</option>
-				<option value='AL'>AL</option> <option value='AK'>AK</option> <option value='AZ'>AZ</option> <option value='AR'>AR</option>
-				<option value='CA'>CA</option> <option value='CO'>CO</option> <option value='CT'>CT</option> <option value='DE'>DE</option>
-				<option value='DC'>DC</option> <option value='FL'>FL</option> <option value='GA'>GA</option> <option value='HI'>HI</option>
-				<option value='ID'>ID</option> <option value='IL'>IL</option> <option value='IN'>IN</option> <option value='IA'>IA</option>
-				<option value='KS'>KS</option> <option value='KY'>KY</option> <option value='LA'>LA</option> <option value='ME'>ME</option>
-				<option value='MD'>MD</option> <option value='MA'>MA</option> <option value='MI'>MI</option> <option value='MN'>MN</option>
-				<option value='MS'>MS</option> <option value='MO'>MO</option> <option value='MT'>MT</option> <option value='NE'>NE</option>
-				<option value='NV'>NV</option> <option value='NH'>NH</option> <option value='NJ'>NJ</option> <option value='NM'>NM</option>
-				<option value='NY'>NY</option> <option value='NC'>NC</option> <option value='ND'>ND</option> <option value='OH'>OH</option>
-				<option value='OK'>OK</option> <option value='OR'>OR</option> <option value='PA'>PA</option> <option value='RI'>RI</option>
-				<option value='SC'>SC</option> <option value='SD'>SD</option> <option value='TN'>TN</option> <option value='TX'>TX</option>
-				<option value='UT'>UT</option> <option value='VT'>VT</option> <option value='VA'>VA</option> <option value='WA'>WA</option>
-				<option value='WV'>WV</option> <option value='WI'>WI</option> <option value='WY'>WY</option> 
-			</select><br>";
-			echo "<label for='addressZipField'>Zip Code:</label>
-					<input id='addressZipField' type='number' name='addressZip' value=" . $partnerRow['zip'] . ">";
-			
-			//Notes
-			echo "<br><label for='notesInput'>Notes:</label>
-					<textarea id='notesInput' class='notes' type='text' maxlength='256' name='notes'>" . $partnerRow['notes'] . "</textarea><br>";
-			
-			// </inputDiv>
-			echo "</div><br>";
-			
-			echo "<input type='submit' name='submitUpdateRedist' value='Update'>";
-			echo "</form>";
-		
-			
-			// ***********************************************************************
-			// SHOW Invoices
-			
-			echo "<h4>Redistributions</h4>";
-			$firstDist = true;
-			if ($invoiceInfo!=null && $invoiceInfo->num_rows > 0) {
-				while($row = sqlFetch($invoiceInfo)) {
-					// Add a new line if we are not the first redistribution
-					if (!$firstDist) {
-						echo "<br>";
-					}
-					$firstDist = FALSE;
-					$invoiceLink = "/RUMCPantry/ap_ro10.php?id=" . $row["invoiceID"];;
-					$date = $row["visitDate"];
-					echo "<a href='" . $invoiceLink . "'>" . $date . "</a>";
-				}
-			} 
-			else {
-				echo "No Redistributions in Database.";
-			}
-		} 
-		else {
-			echo "Partner was not found.";
-		}	
-	?>
+		<!-- Invoices -->
+		<hr>
+		<h4>Reallocations</h4>
+	  <div id="datatableContainer">
+			<table width='55%' id="iReallocationInvoicesTable" class="display">
+				<thead>
+					<tr>
+						<th width='27%'>Date</th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
 
 <?php include 'php/footer.php'; ?>
+
 <script src="js/redistOps.js"></script>
 <script type="text/javascript">
+	// Set up select box
+	$("select").chosen();
+
+	// Call table function
+	$('#iReallocationInvoicesTable').DataTable({
+      "ordering"      : false,
+      "ajax": {
+          "url"       : "php/ajax/reallocInvoiceList.php?id=<?=$_GET['id']?>",
+      },
+	});
+
   if (getCookie("newPartner") != "") {
     window.alert("New Parnter Added!");
     removeCookie("newPartner");
   }
+
+  $(".btn-nav").on("click", function(e) {
+	  e.preventDefault();
+	  $("#warningMsgs").stop(true, true).hide();
+	  var fieldData = $("#updateRedistPartner").serialize().trim();
+	  $.ajax({
+	    url: "php/redistOps.php",
+	    data: fieldData,
+	    type: "POST",
+	    dataType: "json",
+	    context: document.body,
+	    success: function(msg) {
+	      if (msg.error == '') {
+	      	$("#redistSuccess").stop(true,true).hide().html("Update Successful!").show(250).delay(2000).hide(300);
+	      }
+	      else {
+	        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);
+	      }
+	    },
+	  });
+	});
 </script>

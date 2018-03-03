@@ -1,20 +1,11 @@
-<script src="/RUMCPantry/js/utilities.js"></script>
-
 <?php
 
 include 'utilities.php';
-debugEchoPOST();debugEchoGET();
+//debugEchoPOST();debugEchoGET();
 // Go to specific client/member pages based on buttons pressed
-if (isset($_POST['newRedist'])) {
-	header ("location: /RUMCPantry/ap_ro3.php");
-}
-elseif (isset($_POST['updateRedist'])) {
-	header ("location: /RUMCPantry/ap_ro4.php?id=" . $_POST['id']);
-}
-elseif (isset($_POST['newRedistItem'])) {
-	header ("location: /RUMCPantry/ap_ro6.php");
-}
-elseif (isset($_POST['updateRedistItem'])) {
+
+
+if (isset($_POST['updateRedistItem'])) {
 	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_POST['id']);
 }
 elseif (isset($_POST['newRedistInvoice'])) {
@@ -33,13 +24,13 @@ elseif(isset($_POST['submitRedistribution'])) {
 	// POST: date | partnerID | itemID[] | qty[]
 	// Debug text
 	echo "<h1>Attempting to create a new redistribution invoice</h1>";
-	foreach ( $_POST["itemID"] as $i=>$itemID ) { 
+	foreach ( $_POST["itemID"] as $i=>$itemID ) {
 		echo "ITEM ID: " . $itemID . " Count: " . $_POST["qty"][$i] . "<br>";
 	}
-	
+
 	// *********************************************
 	// * --== Create our item ID / Price array ==--
-	
+
 	// Connect to the database and grab Item ID and Price information
 	$conn = connectDB();
 	if ($conn->connect_error) {
@@ -50,46 +41,46 @@ elseif(isset($_POST['submitRedistribution'])) {
 			FROM Item
 			WHERE Item.isDeleted=0";
 	$itemPriceQuery = queryDB($conn, $sql);
-	
+
 	$PriceID_Array = array();
 	while( $itemRow = sqlFetch($itemPriceQuery) ) {
 		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
 	}
-	
+
 	// ******************************
 	// * --== Create our Invoice ==--
-	
+
 	$redistDate = makeString($_POST['date']);
 	$sql = "INSERT INTO Invoice (clientID, visitDate, status)
 			VALUES (" . $_POST['partnerID'] . ", " . $redistDate . ", " . GetRedistributionStatus() . ")";
-	
-	
+
+
 	if (queryDB($conn, $sql) === TRUE) {
 		// Get our Invoice ID Key to use for the invoice descriptions
 		$invoiceID = $conn->insert_id;
-		
+
 		// ***************************************
 		// * --== Create invoice descriptions ==--
-		
+
 		// Start our query string
 		$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
 		$firstInsert = TRUE;
-		
+
 		$itemIDs = $_POST['itemID'];
 		$itemQtys = $_POST['qty'];
-		
+
 		for ($i=0; $i < count($itemIDs); $i++) {
 			// Get my values (makes the insertion query string cleaner)
 			$currItem = $itemIDs[$i];
 			$currQty = $itemQtys[$i];
 			$totalPrice = $currQty * (isset($PriceID_Array[$currItem]) ? $PriceID_Array[$currItem] : 0);
-			
+
 			// Append to the insertion query string
-			$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+			$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion
 			$insertionSql .= "( $invoiceID, $currItem, $currQty, $totalPrice, 0 )";
-			$firstInsert = FALSE;				
+			$firstInsert = FALSE;
 		}
-		
+
 		// Perform insertion
 		if (queryDB($conn, $insertionSql) === TRUE) {
 			createCookie("newRedistribution", 1, 30);
@@ -98,13 +89,13 @@ elseif(isset($_POST['submitRedistribution'])) {
 		else {
 			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create Invoice Descriptions.", "red" );	
+			echoDivWithColor("Error, failed to create Invoice Descriptions.", "red" );
 		}
 	}
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to create Invoice.", "red" );	
+		echoDivWithColor("Error, failed to create Invoice.", "red" );
 	}
 }
 
@@ -126,7 +117,7 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, unable to delete invoice.", "red" );	
+		echoDivWithColor("Error, unable to delete invoice.", "red" );
 	}
 }
 // *******************************************************
@@ -135,117 +126,97 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 // ************************************
 // Submitting a new partner
 elseif(isset($_POST['submitNewRedistPartner'])) {
-	echo "<h1>Attempting to create a new partner</h1>";
+	// Get form data
+	$redistName   = "REDISTRIBUTION";
+	$partnerName  = fixInput($_POST['partnerName']);
+	$email 				= fixInput($_POST['email']);
+	$address 			= $_POST['addressStreet'];
+	$phoneNo 			= $_POST['phone1'].$_POST['phone2'].$_POST['phone3'];
+	$city 				= fixInput($_POST['addressCity']);
+	$state 				= $_POST['addressState'];
+	$zip 					= $_POST['addressZip'];
+	$error        = "";
+	$redistID     = 0;
+	// *************************
+	// * Validate form
+	if (empty($partnerName)) {
+    $error .= "<p>Name is required.</p>";
+  }
+  if (empty($phoneNo) && empty($email)) {
+    $error .= "<p>Need either a phone number or an email.</p>";
+  }
 
-	$address = makeString(fixInput($_POST['addressStreet']));
-	$city = makeString(fixInput($_POST['addressCity']));
-	$state = makeString($_POST['addressState']);
-	$zip = makeString($_POST['addressZip']);
-	$email = makeString($_POST['email']);
-	$phoneNo = storePhoneNo($_POST['phoneNo']);
-	
-	// Family Member Fields
-	$clientFirstName = makeString("REDISTRIBUTION");
-	$clientLastName = makeString(fixInput($_POST['partnerName']));
+  // ************************
+  // Continue if we're good
+  if ($error == '') {
+    $conn = connectDB();
+    $sql = "INSERT INTO Client (numOfAdults, NumOfKids, email, phoneNumber,	address, city, state, zip, foodStamps, isDeleted, redistribution)
+						VALUES (0,0, '{$email}', '{$phoneNo}', '{$address}', '{$city}', '{$state}', '{$zip}', FALSE, FALSE, TRUE)";
 
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
-
-	// Create insertion string
-	$sql = "INSERT INTO Client 
-			(numOfAdults, NumOfKids, timestamp, email, phoneNumber, 
-				address, city, state, zip, foodStamps, isDeleted, redistribution)
-			VALUES 
-			(0,0,now(),$email,$phoneNo,
-				$address,$city,$state,$zip, FALSE, FALSE, TRUE)";
-	
-	// Perform and test insertion
-	if (queryDB($conn, $sql) === TRUE) {
-		// Get the ID Key of the client we just created (we will need it to create the family member)
-		$clientID = $conn->insert_id;
-		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, clientID, timestamp, isDeleted)
-				VALUES ($clientFirstName, $clientLastName, TRUE, $clientID, now(), FALSE)";
-		if (queryDB($conn, $sql) === TRUE) {
-			closeDB($conn);
-			createCookie("newPartner", 1, 30);
-			header("location: /RUMCPantry/ap_ro4.php?id=$clientID");
-		}
-		else {
-			// delete the blank client we just made
-			$sql = "DELETE FROM Client
-					WHERE clientID = $clientID";
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create family member.", "red" );
-			
+    if (queryDB($conn,$sql) === FALSE) {
+      $error = "There was an error connecting to the database, please try again later.<br>" . $sql . "<br>" . sqlError($conn);
+    }
+    else {
+    	// Get the ID of the partner we just created (we will need it to create the name)
+    	$redistID = $conn->insert_id;
+    	// Create the insert string and perform the insertion
+			$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, clientID, isDeleted)
+					VALUES ('{$redistName}', '{$partnerName}', TRUE, {$redistID}, FALSE)";
 			if (queryDB($conn, $sql) === FALSE) {
-				// This is a very bad error (created a blank client and couldn't remove it)
-				echoDivWithColor("<h1>VERY BAD ERROR</h1>Check with developer. - ID: " . $clientID, "red" );
-			}	
-		}
-	} 
-	else {
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to connect to database.", "red" );	
-	}
-	closeDB($conn);
+				queryDB($conn, "DELETE FROM Client WHERE clientID = {$redistID}");
+				$error = "There was an error connecting to the database, please try again later.<br>" . $sql . "<br>" . sqlError($conn);
+			}
+    }
+    closeDB($conn);
+  }
+  die( json_encode(array("error" => $error, "id" => $redistID)));
 }
 
 
 // ***********************************
 // Updating a partner
 elseif(isset($_POST['submitUpdateRedist'])) {
-	// grab and fix post data
-	$address = makeString(fixInput($_POST['addressStreet']));
-	$city = makeString(fixInput($_POST['addressCity']));
-	$state = makeString($_POST['addressState']);
-	$zip = makeString($_POST['addressZip']);
-	$partnerID = $_POST['partnerID'];
-	$phoneNo = storePhoneNo($_POST['phoneNo']);
-	$email = makeString($_POST['email']);
-	$notes = makeString($_POST['notes']);
-	$partnerName = makeString(fixInput($_POST['partnerName']));
-		
-	// Set up server connection
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	} 
+	// Get form data
+	$partnerName  = fixInput($_POST['partnerName']);
+	$email 				= fixInput($_POST['email']);
+	$address 			= $_POST['addressStreet'];
+	$phoneNo 			= $_POST['phone1'].$_POST['phone2'].$_POST['phone3'];
+	$city 				= fixInput($_POST['addressCity']);
+	$state 				= $_POST['addressState'];
+	$zip 					= $_POST['addressZip'];
+	$redistID     = $_POST['submitUpdateRedist'];
+	$notes				= fixInput($_POST['notes']);
+	$error        = "";
 
-	// Create update string for basic data
-	$dataUpdate =  "UPDATE Client 
-					SET	phoneNumber=$phoneNo, email=$email, notes=$notes, timestamp=now(),
-						zip=$zip, state=$state, address=$address, city=$city
-					WHERE clientID = $partnerID";
-	// Create update string for name data
-	$nameUpdate =  "UPDATE FamilyMember
-					SET FamilyMember.lastName=$partnerName, timestamp=now()
-					WHERE clientID=$partnerID";
-	
-	// Perform and test updates
-	if (queryDB($conn, $dataUpdate) === TRUE) {
-		if (queryDB($conn, $nameUpdate) === TRUE) {
-			closeDB($conn);
-			createCookie("updatePartner", 1, 30);
-			header("location: /RUMCPantry/ap_ro2.php");
-		}
-		else {
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to update.", "red" );	
-		}		
-	}
-	else {
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to update.", "red" );	
-	}
-	closeDB($conn);
+	// *************************
+	// * Validate form
+	if (empty($partnerName)) {
+    $error .= "<p>Name is required.</p>";
+  }
+  if (empty($phoneNo) && empty($email)) {
+    $error .= "<p>Need either a phone number or an email.</p>";
+  }
+
+	// ************************
+  // Continue if we're good
+  if ($error == '') {
+		// Create update string for basic data
+		$dataUpdate =  "UPDATE Client
+				SET	phoneNumber='{$phoneNo}', email='{$email}', notes='{$notes}', zip='{$zip}', state='{$state}', address='{$address}', city='{$city}'
+				WHERE clientID = {$redistID}";
+		// Create update string for name data
+		$nameUpdate =  "UPDATE FamilyMember
+				SET FamilyMember.lastName='{$partnerName}'
+				WHERE clientID={$redistID}";
+
+		$conn = connectDB();
+		if ((queryDB($conn,$dataUpdate) === FALSE) || (queryDB($conn,$nameUpdate) === FALSE)) {
+      $error = "There was an error connecting to the database, please try again later.<br>" . $sql . "<br>" . sqlError($conn);
+    }
+    closeDB($conn);
+  }
+  echo json_encode(array("error" => $error));
+  //die( json_encode(array("error" => $error)));
 }
 
 // *******************************************************
@@ -260,20 +231,20 @@ elseif(isset($_POST['submitNewRedistItem'])) {
 	$iName = makeString(fixInput($_POST['itemName']));
 	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
 	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
-	
+
 	$category = getRedistributionCategory();
 	echo "RedistID = " . $category . "<br>";
-	
+
 	// Set up server connection
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
-	} 
-	
+	}
+
 	// Create insertion string (set the weight to aisle and -1 to the rack to distinguish from normal items)
-	$sql = "INSERT INTO Item 
+	$sql = "INSERT INTO Item
 			(itemName, price, aisle, categoryID, timestamp, rack, isDeleted, small, medium, large, shelf )
-			VALUES 
+			VALUES
 			($iName, $price, $weight, $category, now(), -1, 0, 0, 0, 0, 0)";
 	echo "query: " . $sql . "<br>";
 	// Perform and test insertion
@@ -281,12 +252,12 @@ elseif(isset($_POST['submitNewRedistItem'])) {
 		closeDB($conn);
 		createCookie("newRedistItem", 1, 30);
 		header("location: /RUMCPantry/ap_ro5.php");
-	} 
+	}
 	else {
 		closeDB($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to add new item.", "red" );	
+		echoDivWithColor("Error, failed to add new item.", "red" );
 	}
 }
 
@@ -298,29 +269,29 @@ elseif(isset($_POST['submitUpdateRedistItem'])) {
 	$price = ($_POST['price']!= "" ? $_POST['price'] : 0);
 	$weight = ($_POST['weight']!= "" ? $_POST['weight'] : 0);
 	$itemID =$_POST['id'];
-		
+
 	// Set up server connection
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
-	} 
+	}
 
 	// Create update string for basic data
-	$dataUpdate =  "UPDATE Item 
+	$dataUpdate =  "UPDATE Item
 					SET	itemName=$iName, price=$price, timestamp=now(), small=$weight
 					WHERE itemID = $itemID";
-	
+
 	// Perform and test updates
 	if (queryDB($conn, $dataUpdate) === TRUE) {
 		closeDB($conn);
 		createCookie("redistItemUpdated", 1, 30);
-		header("location: /RUMCPantry/ap_ro5.php");		
+		header("location: /RUMCPantry/ap_ro5.php");
 	}
 	else {
 		closeDB($conn);
 		echo "sql error: " . mysqli_error($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to update.", "red" );	
+		echoDivWithColor("Error, failed to update.", "red" );
 	}
 }
 
@@ -328,29 +299,23 @@ elseif(isset($_POST['submitUpdateRedistItem'])) {
 // ** START TOGGLE OPTIONS ************************************************
 // ***********************************
 // Setting a partner to 'isDeleted'
-elseif(isset($_POST['deleteRedist'])) {
+elseif(isset($_GET['deleteRedist'])) {
 	toggleRedistributionClient(1);
 }
 // ***********************************
 // Setting a partner to 'isDeleted' FALSE (reactivating)
-elseif(isset($_POST['activateRedist'])) {
+elseif(isset($_GET['activateRedist'])) {
 	toggleRedistributionClient(0);
 }
 // ***********************************
 // Setting a redistribution item to 'isDeleted'
-elseif(isset($_POST['deleteRedistItem'])) {
+elseif(isset($_GET['deleteRedistItem'])) {
 	toggleRedistributionItem(1);
 }
 // ***********************************
 // Setting a redistribution item to 'isDeleted' FALSE (reactivating)
-elseif(isset($_POST['activateRedistItem'])) {
+elseif(isset($_GET['activateRedistItem'])) {
 	toggleRedistributionItem(0);
-}
-
-else {
-	echo "<h1>Nothing was set</h1><br>";
-	debugEchoPOST();debugEchoGET();
-	//header("location: /RUMCPantry/mainpage.php");
 }
 
 // **************************************
@@ -359,38 +324,36 @@ else {
 function toggleRedistributionItem($isDeleted) { toggleRedistribution("Item", "itemID", $isDeleted); }
 function toggleRedistributionClient($isDeleted) { toggleRedistribution("Client", "clientID", $isDeleted); }
 
-function toggleRedistribution($db, $field, $isDeleted) {
-	debugEchoPOST();
+function toggleRedistribution($table, $field, $isDeleted) {
+	//debugEchoPOST();
 	// Set up server connection
 	$conn = connectDB();
 	if ($conn->connect_error) {
+		// TODO: gracefully fail this
 		die("Connection failed: " . $conn->connect_error);
 	}
-	
-	$sql =  "UPDATE " . $db . "
-			SET	isDeleted=" . $isDeleted . "
-			WHERE " . $field . "="	. $_POST['id'];
+
+	$sql =  "UPDATE " . $table . "
+					SET	isDeleted=" . $isDeleted . "
+					WHERE " . $field . "="	. $_GET['id'];
+
+	// Create the return page string
+	$loc = "location: /RUMCPantry/ap_ro";
+	$loc .= ($table=="Client" ? "2" : "5");
+	$loc .= ($isDeleted==1 ?  ".php" : ".php?ShowInactive=1");
 
 	// Perform and isDeleted setting
 	if (queryDB($conn, $sql) === TRUE) {
-		closeDB($conn);
 		// Set the cookie appropriate for this function
 		createCookie("redistToggled", 1, 30);
-		
-		// Create the return page string
-		$loc = "location: /RUMCPantry/ap_ro";
-		$loc .= ($db=="Client" ? "2" : "5");
-		$loc .= ($isDeleted==1 ? ".php" : "i.php");
-		
-		// Return to the correct page
-		header ($loc);
 	}
 	else {
-		echo "sql error: " . mysqli_error($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error, failed to set redistribution state.", "red" );
-		closeDB($conn);
+		// TODO: Error message
+		echo "error " . sqlError($conn);
 	}
+	closeDB($conn);
+
+	header($loc);
 }
 
 
@@ -404,15 +367,15 @@ function getRedistributionCategory() {
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	
+
 	// Find the 'redistribution' category
 	$sql = "SELECT categoryID
-			FROM Category
-			WHERE name ='Redistribution'";
-	
+					FROM Category
+					WHERE name ='Redistribution'";
+
 	$redistCategory = queryDB($conn, $sql);
 	closeDB($conn);
-	
+
 	// If we didn't get a match, we need to create the 'Redistribution' category
 	if ( $redistCategory==null || $redistCategory->num_rows <= 0 ) {
 		return createRedistributionCategory();
@@ -427,24 +390,24 @@ function getRedistributionCategory() {
 function createRedistributionCategory(){
 	$conn = connectDB();
 	if ($conn->connect_error) {
+		// TODO: Fail this gracefully
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Create insertion string
 	$sql = "INSERT INTO Category (name, small, medium, large, isDeleted, formOrder)
 			VALUES ('Redistribution',0,0,0,0, -1)";
-	
+
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		$retID = $conn->insert_id;
 		closeDB($conn);
 		// Return Get the ID Key of the category we just created
 		return $retID;
-	} 
+	}
 	else {
 		closeDB($conn);
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to create Redistribution category.", "red" );	
+		// TODO Fail this gracefully
+		return null;
 	}
 }
 ?>

@@ -2,89 +2,55 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
+
+  $inactive = isset($_GET['ShowInactive']);
+
+  $pageTitle = "Reallocation Partners";
+  $pageBtnName = "ShowInactive";
+  $pageBtnText = "View Inactive Partners";
+  $tblBtnFnct  = "deactivate";
+
+  if ($inactive) {
+  	$pageTitle .= " - Inactive";
+  	$pageBtnName = "ShowActive";
+  	$pageBtnText = "View Active Partners";
+  	$tblBtnFnct  = "reactivate";
+  }
 ?>
-  <h3>Reallocation Partners</h3>
-	
+  <h3><?=$pageTitle?></h3>
+
 	<div class="body-content">
-	
-	<?php
-		// Set up server connection
-		$conn = connectDB();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		
-		// Create our query string
-		$sql = "SELECT Client.clientID, Client.email, Client.phoneNumber, Client.address,
-				Client.city, Client.state, Client.zip, Client.notes, FamilyMember.lastName as Name
-				FROM FamilyMember
-				JOIN Client 
-				ON Client.clientID=FamilyMember.clientID
-				WHERE Client.isDeleted=0
-				AND redistribution=1
-				ORDER BY FamilyMember.lastName";
-		$result = queryDB($conn, $sql);
-		
-		// loop through the query results
-		if ($result!=null && $result->num_rows > 0) {
-			echo "<table> <tr> <th></th>";
-			echo "<th>Partner</th><th>email</th><th>phone number</th>";
-			echo "<th></th></tr>";
-			
-			while($row = sqlFetch($result)) {
-				// Start the form for this row (so buttons act correctly based on client)
-				echo "<form action='php/redistOps.php' method='post'>";
-				
-				// Get the client ID so we can properly do the update and delete operations
-				$id = $row["clientID"];
-				echo "<input type='hidden' name='id' value='$id'>";
-				
-				// Start Table row
-				echo "<tr>";
+		<div id="datatableContainer">
+			<table width='95%' id="iReallocationTable" class="display">
+				<thead>
+					<tr>
+						<?php if (!$inactive) { ?>
+							<th width='5%'></th>
+					 	<?php } ?>
+						<th width='27%'>Partner</th>
+						<th width='5%'>Email</th>
+						<th width='15%'>Phone Number</th>
+						<th width='5%'></th>
+					</tr>
+				</thead>
+				<tbody>
+				</tbody>
+			</table>
+		</div>
 
-				// Update button				
-				echo "<td><input type='submit' name='updateRedist' value='Update'></td>";
-				
-				// Information Fields
-				echo "<td>" . $row['Name'] . "</td>";
-				
-				// Display the email or '-' if not set
-				echo "<td>" . (($row['email'] == NULL) ? "-" : $row['email']) . "</td>";
-
-				// Display the phone number or '-' if not set
-				echo "<td>" . (($row['phoneNumber'] == NULL) ? "-" : 
-								displayPhoneNo($row['phoneNumber'])) . "</td>";
-
-				// Set inactive button
-				?>
-				<td><input type="submit" class="btn_trash" name="deleteRedist" value=" "
-				onclick="return confirm('Are you sure you want to set this partner to inactive?')"></td>
-				<?php
-				// Close off the row and form
-				echo "</form>";
-			}
-			// Close off the table
-			echo "</table>";
-		} 
-		else {
-			echo "No clients in database.";
-		}
-		
-		$conn->close();
-	?>
-	
 	<!-- NEW Client -->
-	<form action="php/redistOps.php" method="post">
-		<input type="submit" name="newRedist" value="New Partner">
-    </form>
+	<form action="/RUMCPantry/ap_ro3.php" method="get">
+		<input type="submit" class="btn-nav" name="newRedist" value="New Partner">
+  </form>
 
-	<!-- View Inactive Clients -->
-	<form action="ap_ro2i.php" method="post">
-		<input type="submit" name="ShowInactive" value="View Inactive Partners">
-    </form>
+	<!-- View In/Active Clients -->
+	<form method="get">
+		<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
+  </form>
+
 
 	<div id="errorLog"></div>
-	
+
 <?php include 'php/footer.php'; ?>
 
 
@@ -97,4 +63,30 @@
     window.alert("Partner deactivated!");
     removeCookie("redistToggled");
   }
+
+  var Params = "";
+  <?php if ($inactive) { ?>
+  	Params += "?deleted=1";
+  <?php } ?>
+
+
+  $('#iReallocationTable').DataTable({
+      "ordering"      : false,
+      "ajax": {
+          "url"       : "php/ajax/reallocClientList.php" + Params,
+      },
+	});
+
+	$(document).ready(function(){
+		$('#iReallocationTable').on('click', '.btn-icon, .btn-edit', function () {
+			if ($(this).hasClass('btn-icon')) {
+				if (confirm("Are you sure you want to <?=$tblBtnFnct?> this client?")) {
+					window.location.assign($(this).attr('value'));
+				}
+			}
+			else {
+				window.location.assign($(this).attr('value'));
+			}
+		});
+	});
 </script>

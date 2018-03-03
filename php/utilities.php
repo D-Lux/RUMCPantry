@@ -63,10 +63,10 @@ date_default_timezone_set('America/Chicago');
 // it's all in one place
 $connectionActive = false;
 function connectDB() {
-	// Set up server connection
-	// $servername = "127.0.0.1";
+	//Set up server connection
+	// $servername = "192.168.0.23";
 	// $username   = "root";
-	// $password   = "";
+	// $password   = "lgh598usa15";
 	// $dbname     = "foodpantry";
 
 	$servername = "127.0.0.1";
@@ -102,7 +102,8 @@ function sqlFetch($queryResult) {
 }
 function returnAssocArray($queryResult) {
 	$returnArr = [];
-  if (mysqli_num_rows($queryResult) > 0) {
+  //if (mysqli_num_rows($queryResult) > 0) {
+	if (($queryResult) && (mysqli_num_rows($queryResult) > 0)) {
     while( $row = sqlFetch($queryResult) ) {
       $returnArr[] = $row;
     }

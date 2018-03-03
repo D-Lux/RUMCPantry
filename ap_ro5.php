@@ -2,77 +2,44 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
-?>
-    <h3>Reallocation Items</h3>	
-	<div class="body-content">
-	
-	<?php
-		// Set up server connection
-		$conn = connectDB();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		
-		// Create our query string
-		$sql = "SELECT itemName, itemID, price, Item.small as weight
-				FROM Item
-				JOIN Category
-				ON Item.categoryID=Category.categoryID
-				WHERE Category.name='REDISTRIBUTION'
-				AND Item.isDeleted=0";
-		$items = queryDB($conn, $sql);
-		
-		// loop through the query results
-		if ($items!=null && $items->num_rows > 0) {
-			echo "<table> <tr> <th></th>";
-			echo "<th>Item</th><th>Price</th><th>Weight</th><th></th></tr>";
-			
-			while($row = sqlFetch($items)) {
-				// Start Table row
-				echo "<tr>";
-				
-				// Start the form for this row (so buttons act correctly based on client)
-				echo "<form action='php/redistOps.php' method='post'>";
-				
-				// Get the client ID so we can properly do the update and delete operations
-				$id = $row["itemID"];
-				echo "<input type='hidden' name='id' value='$id'>";
 
-				// Update button				
-				echo "<td><input type='submit' name='updateRedistItem' value='Update'></td>";
-				
-				// Information Fields
-				echo "<td>" . $row['itemName'] . "</td>";
-				echo "<td>" . $row['price'] . "</td>";
-				echo "<td>" . $row['weight'] . "</td>";
-				
-				// Set inactive button
-				?>
-				<td><input type="submit" class="btn_trash" name="deleteRedistItem" value=" "
-				onclick="return confirm('Are you sure you want to deactivate this item?')"></td>
-				<?php
-				// Close off the row and form
-				echo "</form>";
-			}
-			// Close off the table
-			echo "</table><br>";
-		} 
-		else {
-			echo "No items in the redistribution category.";
-		}
-		
-		closeDB($conn);
-	?>
-	<br><br>
-	
+  $inactive = isset($_GET['ShowInactive']);
+
+  $pageTitle = "Reallocation Items";
+  $pageBtnName = "ShowInactive";
+  $pageBtnText = "View Inactive Items";
+  $tblBtnFnct  = "deactivate";
+
+  if ($inactive) {
+    $pageTitle .= " - Inactive";
+    $pageBtnName = "ShowActive";
+    $pageBtnText = "View Active Items";
+    $tblBtnFnct  = "reactivate";
+  }
+?>
+    <h3><?=$pageTitle?></h3>
+	<div class="body-content">
+
+	<table class="table" id="iReallocItemTable">
+    <thead>
+      <tr>
+        <th></th>
+			  <th>Item</th>
+        <th>Price</th>
+        <th>Weight</th>
+        <th></th>
+      </tr>
+    </thead>
+  </table>
+
 	<!-- NEW Redistribution Item -->
-	<form action="php/redistOps.php" method="post">
-		<input type="submit" name="newRedistItem" value="New Redistribution Item">
+	<form action="/RUMCPantry/ap_ro6.php" method="get">
+		<input type="submit" class="btn-nav" name="newRedistItem" value="New Redistribution Item">
     </form>
-	
+
 	<!-- View Deactivated Items -->
-	<form action="ap_ro5i.php" method="post">
-		<input type="submit" name="ShowInactive" value="View Deactivated Items">
+	<form method="get">
+		<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
     </form>
 
 <?php include 'php/footer.php'; ?>
@@ -90,4 +57,30 @@
     window.alert("Redistribution item deactivated!");
     removeCookie("redistToggled");
   }
+
+  var Params = "";
+  <?php if ($inactive) { ?>
+    Params += "?deleted=1";
+  <?php } ?>
+
+  $('#iReallocItemTable').DataTable({
+      "columnDefs"    : [
+                      {"orderable" : false, "targets": [0,4]},
+                    ],
+      "order"         : [ 1, 'DESC' ],
+      "ajax": {
+          "url"       : "php/ajax/reallocItemList.php" + Params,
+      },
+  });
+
+  $('#iReallocationTable').on('click', '.btn-icon, .btn-edit', function () {
+    if ($(this).hasClass('btn-icon')) {
+      if (confirm("Are you sure you want to <?=$tblBtnFnct?> this client?")) {
+        window.location.assign($(this).attr('value'));
+      }
+    }
+    else {
+      window.location.assign($(this).attr('value'));
+    }
+  });
 </script>
