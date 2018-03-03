@@ -8,9 +8,6 @@ include 'utilities.php';
 if (isset($_GET['updateRedistItem'])) {
 	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_GET['id']);
 }
-elseif (isset($_POST['newRedistInvoice'])) {
-	header ("location: /RUMCPantry/ap_ro9.php");
-}
 elseif (isset($_POST['viewRedistribution'])) {
 	header ("location: /RUMCPantry/ap_ro10.php?id=" . $_POST['id']);
 }

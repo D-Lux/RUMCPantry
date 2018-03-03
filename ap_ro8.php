@@ -4,9 +4,7 @@
   include 'php/backButton.php';
 ?>
 
-    <h3>Reallocations</h3>
-
-
+  <h3>Reallocations</h3>
 
 	<div class="body-content">
 
@@ -24,9 +22,7 @@
 		</div>
 
 		<!-- NEW Redistribution Invoice -->
-		<form action="php/redistOps.php" method="post" >
-			<input type="submit" name="newRedistInvoice" value="New Reallocation">
-	  </form>
+    <a href="/RUMCPantry/ap_ro9.php" class="button">New Reallocation</a>
 
 	  <form method="get">
 			<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
