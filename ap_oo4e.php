@@ -5,7 +5,11 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-
+<style>
+th {
+  padding:3px 5px 3px 5px;
+}
+</style>
 	<h3>Edit Order</h3>
 	
 	<div class="body-content">

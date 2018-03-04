@@ -5,19 +5,19 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-
-<!-- <h3>View Order</h3> -->
+<style>
+th {
+  padding:3px 5px 3px 5px;
+}
+</style>
 	
 	<?php
 	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
 	
 	// Post Vars: invoiceID | name | visitTime | familySize
 	$invoiceID = (isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0;
 	
-	$sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, 
+	$sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.status,
 				(Client.numOfKids + numOfAdults) AS familySize 
 			FROM Invoice 
 			JOIN Client 
@@ -27,13 +27,12 @@
 			WHERE Invoice.invoiceID = " . $invoiceID . " 
 			AND FamilyMember.isHeadOfHousehold = true";
 	
-	$results    = returnAssocArray(queryDB($conn, $sql));
-	$name       = current($results)['firstName'] . " " . current($results)['lastName'];
-	$printName	= current($results)['lastName'];
-	$visitTime  = current($results)['visitTime'];
-	$familySize = current($results)['familySize'];
-	
-	
+	$results    = runQueryForOne($conn, $sql);
+	$name       = $results['firstName'] . " " . $results['lastName'];
+	$printName	= $results['lastName'];
+	$visitTime  = $results['visitTime'];
+	$familySize = $results['familySize'];
+  $LeanneNum  = ($results['status'] % 100) + 1;
 	
 	
 	if ( ($name != null) && ($invoiceID != 0) ){
@@ -59,8 +58,8 @@
 		closeDB($conn);
 		
 		// Show basic client information
-		echo "<table><tr><th>Client</th><th>Time</th><th>Size</th></tr>";
-		echo "<tr><td>" . $name . "</td><td>" . returnTime($visitTime);
+		echo "<table><tr><th>Client</th><th>Time</th><th>Number</th><th>Size</th></tr>";
+		echo "<tr><td>" . $name . "</td><td>" . returnTime($visitTime) . "</td><td>" . $LeanneNum;
 		echo "</td><td>" . familySizeDecoder($familySize) . "</td></tr></table><br>";
 		
 		// Print button

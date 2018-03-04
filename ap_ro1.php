@@ -7,17 +7,9 @@
 
 	<div class="body-content">
 
-  <form method="get" action="ap_ro2.php">
-    <input class="btn-nav" type="submit" value="View Reallocation Partners">
-  </form>
-
-	<form method="get" action="ap_ro5.php">
-    <input class="btn-nav" type="submit" value="View Reallocation Items">
-  </form>
-
-	<form method="get" action="ap_ro8.php">
-    <input class="btn-nav" type="submit" value="View Reallocations">
-  </form>
+  <a href="/RUMCPantry/ap_ro2.php" class="button">View Reallocation Partners</a>
+  <a href="/RUMCPantry/ap_ro5.php" class="button">View Reallocation Items</a>
+  <a href="/RUMCPantry/ap_ro8.php" class="button">View Reallocations</a>
 
 
 <?php include 'php/footer.php'; ?>

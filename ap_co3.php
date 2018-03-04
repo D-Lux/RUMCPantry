@@ -206,7 +206,7 @@
             <?php if ($showDeleteColumn) {
               echo "<td>";
               echo "<button id='InactiveMember' name='DeleteMember' class='btn-icon' ";
-              if (!$row['isHeadOfHousehold']) {
+              if (!$member['isHeadOfHousehold']) {
                 echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'>";	
               }
               else {

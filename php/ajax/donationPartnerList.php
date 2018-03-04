@@ -52,11 +52,13 @@
 	$sql .= " WHERE 1=1 ";
   
 	// Get our total record count
-	$totalRecordCount = count(returnAssocArray(queryDB($conn, $sql)));
+  $fullResults = runQuery($conn, $sql);
+
+	$totalRecordCount = is_array($fullResults) ? count($fullResults) : 0;
 	
 	// Run our query with search and order conditions
   $results     = returnAssocArray(queryDB($conn, ($sql . $searchConditions . $orderQuery)));
-	$recordCount = count($results);
+	$recordCount = is_array($results) ? count($results) : 0;
 	$returnData  = [];
 	$out         = [];
 	// Run our paging function using a for loop

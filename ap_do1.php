@@ -24,14 +24,8 @@
     </table>
   </div>
 
-  <form method="get" action="ap_do2.php">
-    <input class="btn-nav" type="submit" value="Add a donation">
-  </form>
-
-  <form method="get" action="ap_do3.php">
-    <input class="btn-nav" type="submit" value="Add a donation partner">
-  </form>
-
+  <a href="/RUMCPantry/ap_do2.php" class="button">Add a donation</a>
+  <a href="/RUMCPantry/ap_do3.php" class="button">Add a donation partner</a>
     
 <?php include 'php/footer.php'; ?>
 

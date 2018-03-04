@@ -13,7 +13,7 @@
   //echo "</pre>";
   //die();
 
-  $sql = "SELECT MAX(formOrder) as maxOrder FROM Category";
+  $sql = "SELECT MAX(formOrder) as maxOrder FROM Category WHERE isDeleted=0";
   $maxO = current(runQuery($conn, $sql))['maxOrder'];
 
   $limit = '';
@@ -58,9 +58,10 @@
                 ?  "<a href='#' class='btn-down' id='dn" . $ord . "_" . $id . "'><i class='fa fa-arrow-down'></i></a>" 
                 : '';
     
-    $row[0] = $result['formOrder'] . " " . $result['name'];
-    $row[1] = $result['itemQty'];
-    $row[2] = $upArrow . $downArrow;
+    $row[0] = $result['formOrder'];
+    $row[1] = $result['name'];
+    $row[2] = $result['itemQty'];
+    $row[3] = $upArrow . $downArrow;
     
     $out[] = $row;
     

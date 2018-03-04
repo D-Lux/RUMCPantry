@@ -31,7 +31,8 @@ $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime,
         ORDER BY  Invoice.visitTime ASC, FamilyMember.LastName ASC";
 
 $results = returnAssocArray(queryDB($conn, $sql));
-if (count($results) > 0) {
+$resultCount = is_array($results) ? count($results) : 0;
+if ($resultCount > 0) {
   echo"<h3>Incomplete Clients</h3>";
   $rowTitle = null;
   foreach ($results as $result) {

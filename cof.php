@@ -55,9 +55,7 @@
 					
 					$famQuery = queryDB($conn, $famSql);
 					if ($famQuery === FALSE) {
-            // TODO: Fix this
-						echo "sql error: " . mysqli_error($conn);
-						echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
+						echo "There was an error, please go by and try again";
 					}
 					else {
 						$famData = sqlFetch($famQuery);
@@ -178,7 +176,7 @@
 							}
 							// Display the Item name
               echo "<div class='row'>";
-              echo "<div class='col-sm text-right'>";
+              echo "<div class='col-sm text-right' style='margin:auto;'>";
 							echo $item['displayName'];
               echo "</div>";
 							
@@ -266,9 +264,9 @@
 					
 					// ***********************************
 					// * Run a javascript function to show specials if there are any
-					if ($specialItemNum > 1) {
-						echo "<script type='text/javascript'> showSpecials(); </script>";
-					}
+					//if ($specialItemNum > 1) {
+					//	echo "<script type='text/javascript'> showSpecials(); </script>";
+					// }
 				}
 				// Close the form if we're not in the view mode
 				if (!$ViewMode) {
@@ -277,15 +275,6 @@
 					echo "</form>";
 				}
 			?>
-      <style>
-        input[type="checkbox"], label {
-          float: left;
-          line-height: 1.6em;
-          height: 1.6em;
-          margin: 0px;
-          padding: 0px;
-          font-size: inherit;
-        }
-      </style>
+
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>

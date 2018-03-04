@@ -10,9 +10,9 @@
   
   
   // Grab the invoice ID, then perform whichever action is necessary based on the invoice status
-  // If invoice status is ACTIVE -> advance to order stage, update to Ordering Min + number of people above ACTIVE on same day
+  // If invoice status is ACTIVE -> advance to order stage, update to Ordering Min + number of people above ACTIVE on the same time slot on same day
   // Might want to check for NOT redist.
-  // If invoice status is in ORDER -> leave it be, this shouldn't ever happen
+  // If invoice status is in ORDER -> leave it be, this script shouldn't ever run
   // If invoice status is in Review -> open review screen with this invoice ID
   // If invoice status is in print -> open print screen with this invoice ID
   // If invoice status is in waiting -> Advance to completed
@@ -43,13 +43,14 @@
   function advanceToOrdering($ID, $date) {
     $conn = connectDB();
     if ($conn->connect_error) {
-		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
+      return json_encode(array("Message" => "Connection failed: " . sqlError($conn)));
     }
     // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
     $sql = " SELECT COUNT(*) as ct
               FROM Invoice
               WHERE visitDate = '" . $date . "'
               AND invoiceID <> " . $ID . "
+              AND visitTime = (SELECT visitTime FROM Invoice WHERE invoiceID = " . $ID . ")
               AND status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
     $results = returnAssocArray(queryDB($conn, $sql));
     $currCount = current($results)['ct'];

@@ -43,13 +43,11 @@
 	
 
 			<!-- NEW Client -->
-	<form action="ap_co2.php">
-		<input id="CreateNew" class="btn-nav" type="submit" name="GoNewClient" value="New Client">
-  </form>
+    <a href="/RUMCPantry/ap_co2.php" class="button">New Client</a>
 	<!-- Swap between active and inactive -->
-	<form type="get">
-		<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
-   </form>
+    <form type="get">
+      <input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
+    </form>
     
 <?php include 'php/footer.php'; ?>
 

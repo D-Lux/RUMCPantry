@@ -39,9 +39,7 @@
 		</div>
 
 	<!-- NEW Client -->
-	<form action="/RUMCPantry/ap_ro3.php" method="get">
-		<input type="submit" class="btn-nav" name="newRedist" value="New Partner">
-  </form>
+  <a href="/RUMCPantry/ap_ro3.php" class="button">New Partner</a>
 
 	<!-- View In/Active Clients -->
 	<form method="get">

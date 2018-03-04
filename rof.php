@@ -163,10 +163,9 @@
 				}
 		
 
-				// Display the Item name
         // Display the Item name
         echo "<div class='row'>";
-        echo "<div class='col-sm text-right'>";
+        echo "<div class='col-sm text-right' style='margin:auto;'>";
         echo $item['displayName'];
         echo "</div>";
 				echo "<div class='selectionBoxes col-sm'>";
@@ -267,30 +266,20 @@
 		}
 		echo "</div>"; // Closing specials div
 					
-		// ***********************************
-		// * Run a javascript function to show specials if there are any
-		if ($specialItemNum > 1) {
-			echo "<script type='text/javascript'> showSpecials(); </script>";
-		}
+		
 	}
-	
-	// ***********************************
-	// * Run a javascript function to update selection quantity strings
-	echo "<script type='text/javascript'> updateCheckedQuantities(); </script>";
-	
 ?>
-      <style>
-        input[type="checkbox"], label {
-          float: left;
-          line-height: 1.6em;
-          height: 1.6em;
-          margin: 0px;
-          padding: 0px;
-          font-size: inherit;
-        }
-      </style>
       
 			<button type="submit" class='btn-nav' name="CreateReviewedInvoiceDescriptions">Verify Order</button>
 		</form>
+    
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>
+
+<script type='text/javascript'>
+  <?php if ($specialItemNum > 1) { ?>
+    //showSpecials(); // THIS DOESN'T WORK HERE because we've already closed the form
+  <?php } ?>
+  updateCheckedQuantities(); 
+</script>
+

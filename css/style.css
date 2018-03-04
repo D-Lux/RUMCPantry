@@ -277,9 +277,9 @@ input[type="checkbox"] + label, input[type='radio'] + label:before {
   margin: 0 5px 0 0;
   padding: 0;
   vertical-align: middle;
-  height: 25px;
-  width: 25px;
-  border-radius: 5px;
+  height: 35px;
+  width: 35px;
+  border-radius: 4px;
 }
 
 input[type='radio'] + label:before {
@@ -296,7 +296,7 @@ input[type="checkbox"]:checked + label, input[type="radio"]:checked + label:afte
 
 .selectionBoxes {
 	display: inline-block;
-	margin: 5px 0 5px 15px;
+	margin: 5px 0 5px 0px;
 }
 
 input[type='radio'] + label:before {

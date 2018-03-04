@@ -47,8 +47,16 @@
   <div id="CompleteContent" class="tabcontent"></div>
 
   <div class="clearfix"></div>
-	<button class='btn_walkIn btn-nav' onclick="location.href = 'endOfDay.php';">End of day</button>
-  <button class='btn_walkIn btn-nav' onclick="location.href = 'awc.php';">Add Walk-In</button>
+  <div class="row">
+    <div class="col-sm-4">
+      <a href="/RUMCPantry/endOfDay.php" class="button">End of day</a>
+    </div>
+    <div class="col-sm-1">
+    <div class="col-sm-4">
+      <!-- <a href="/RUMCPantry/awc.php" class="button">Add Walk-In</a> -->
+    </div>
+  </div>
+  
   
 <?php include 'php/footer.php'; ?>
 

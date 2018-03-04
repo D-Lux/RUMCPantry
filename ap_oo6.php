@@ -15,6 +15,7 @@
 
     <table class="table table-inverse" id="iCatOrderTable">
       <thead>
+        <th>Order</th>
         <th>Category Name</th>
         <th>Active Items</th>
         <th></th>
