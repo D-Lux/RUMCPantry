@@ -1,6 +1,6 @@
 <?php
-	include('../utilities.php');
-	
+	include('../utilities.php'); 
+  
 	// AJAX call to update item quantity
 	if (isset($_GET['newQty'])) {
 		// Grab our GET Data
@@ -10,17 +10,19 @@
 
 		$conn = connectDB();
 		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-			echo "ERROR";
+			die("There was an error attempting to update");
 		}
 		$updateItem = 	"UPDATE Item
-						 SET " . $familyType . "=" . $newQty . "
-						 WHERE itemID=" . $itemID;
-		if (queryDB($conn, $updateItem) === FALSE) {
-			echo "sql error: " . mysqli_error($conn);
-		}
-		//debugEchoGET();
-		echo "Query: " . $updateItem;
+                     SET " . $familyType . "=" . $newQty . "
+                     WHERE itemID=" . $itemID;
+                     
+    if (queryDB($conn, $updateItem)) {
+      $itemInfo = runQueryForOne($conn, "SELECT itemName FROM Item WHERE itemID = {$itemID}");
+      echo $itemInfo['itemName'] . " quantity updated to " . $newQty . ".";
+    }
+    else {
+      echo "There was an error attempting to update";
+    }
 	}
 	
 	// AJAX Call to update item factor
@@ -32,7 +34,7 @@
 
 		$conn = connectDB();
 		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
+			die("There was an error attempting to update");
 		}
 		$updateItem = 	"UPDATE Item
 						 SET factor=" . $newFX . "
@@ -52,7 +54,7 @@
 
 		$conn = connectDB();
 		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
+			die("There was an error attempting to update");
 		}
 		$updateCategory = 	"UPDATE Category
 							SET " . $familyType . "=" . $cQty . "
@@ -60,6 +62,16 @@
 		if (queryDB($conn, $updateCategory) === FALSE) {
 			echo "sql error: " . mysqli_error($conn);
 		}
+    
+    if (queryDB($conn, $updateCategory)) {
+      $catInfo = runQueryForOne($conn, "SELECT name FROM category WHERE categoryID = {$CID}");
+      echo $catInfo['name'] . " selection quantity updated to " . $cQty . ".";
+    }
+    else {
+      echo "There was an error attempting to update";
+    }
+    
+    
 		//echo "Query: " . $updateCategory;		
 	}
 	

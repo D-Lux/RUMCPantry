@@ -8,27 +8,36 @@
 	
 	<div class="body-content">
 	<!-- View order forms -->
-		<div style="float: right;">
-			<form method="get" action="cof.php">
-				<input class='btn-nav' type="submit" name="Small" value="View Form: 1-2 / Walk-In"><br>
-				<input class='btn-nav' type="submit" name="Medium" value="View Form: 3-4"><br>
-				<input class='btn-nav' type="submit" name="Large" value="View Form: 5+">
-			</form>
-		</div>
-		<!-- Setup order forms -->
-		<form method="get" action="ap_oo2.php">
-			<input class='btn-nav' type="submit" name="1to2" value="Edit Form: 1-2 / Walk-In">
-			<input class='btn-nav' type="submit" name="3to4" value="Edit Form: 3-4">
-			<input class='btn-nav' type="submit" name="5Plus" value="Edit Form: 5+">
-		</form>
-    <form method="post" action="ap_oo6.php">
-			<input class='btn-nav' type="submit" name="CategoryOrder" value="Edit Category Ordering">
-		</form>
-    <!--
-		<form method="post" action="ap_oo5.php">
-			<input class='btn-nav' type="submit" name="Specials" value="Edit Form: Specials">
-		</form>
-		-->
+  	<div class="row">
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/cof.php?Small=1" class="button pull-left">View Form: 1-2 / Walk-In</a>
+      </div>
+      <div class="col-sm-2"></div>
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/ap_oo2.php?1to2=1" class="button pull-right">Edit Form: 1-2 / Walk-In</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/cof.php?Medium=1" class="button pull-left">View Form: 3-4</a>
+      </div>
+      <div class="col-sm-2"></div>
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/ap_oo2.php?3to4=1" class="button pull-right">Edit Form: 3-4</a>
+      </div>
+    </div>
+    <div class="row">
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/cof.php?Large=1" class="button pull-left">View Form: 5+</a>
+      </div>
+      <div class="col-sm-2"></div>
+      <div class="col-sm-5">
+        <a href="/RUMCPantry/ap_oo2.php?5Plus=1" class="button pull-right">Edit Form: 5+</a>
+      </div>
+    </div>
+  
+  <div class="clearfix"></div>
+  <a href="/RUMCPantry/ap_oo6.php?CategoryOrder=1" class="button">Edit Category Ordering</a>
 		
 		
 <?php include 'php/footer.php'; ?>

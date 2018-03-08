@@ -16,7 +16,7 @@ HTML {
 body {
 	background-color: #CCC !important;
 	font-family: Arial, sans-serif !important;
-	width: 800px !important;
+	width: 80% !important; 
 	margin: 0px auto !important;
 	font-size: 1.1rem !important;
 }

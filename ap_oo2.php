@@ -3,7 +3,7 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-<link rel="stylesheet" type="text/css" href="css/tabs.css" />
+
 
 	<?php
 		echo "<h3>Order Form: ";
@@ -18,13 +18,12 @@
 		echo "</h3>";
 		
 		echo "<div id='errMsgs' style='display:none;color:red;'></div>";
+    echo "<div id='msgLog' class='hoverSuccess hoverMsg' style='display:none;'></div>";
 		if ($familyType === ""){
 			header("location: /RUMCPantry/ap_oo1.php");
 		}
 		
 		$familyToken = substr($familyType,0,1);
-		
-		echo "<div id='ErrorLog'></div>";
 		
 		echo "<div class='body-content'>";
 		
@@ -90,22 +89,22 @@
 					echo "</div>";
 				}
 				// Print out the category name, followed by the selection qty and start a new table
-				echo "<div id='itemList" . $item['categoryID'] . "' class='tabcontent'>";
+				echo "<div id='itemList" . $item['categoryID'] . "' class='tabcontent' style='display:none;text-align:center;'>";
 				echo "Selection Quantity: ";
-				/*	// Text field version
-				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='number' min=0 
-						value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)'><br>";
-				*/
-				echo "<select class='CQty' id='cid" . $familyToken . $item['categoryID'] . 
-						"' onchange='AJAX_UpdateCQty(this)'>";
-				for ($i = 0; $i < 11; $i++) {
-					echo "<option value=$i " . ($i == $item['CQty'] ? "Selected" : "") . ">$i</option>";
-				}
-				echo "</select><br><br>";
+					// Text field version
+				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='text' maxlength=2 class='CQty input-number'
+						value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)' style='width:40px;'><br>";
+				
+				//echo "<select class='CQty' id='cid" . $familyToken . $item['categoryID'] . 
+				//		"' onchange='AJAX_UpdateCQty(this)'>";
+				//for ($i = 0; $i < 11; $i++) {
+				//	echo "<option value=$i " . ($i == $item['CQty'] ? "Selected" : "") . ">$i</option>";
+				//}
+				//echo "</select><br><br>";
 				
 				$currCategory = $item['CName'];
 				// Table headers
-				echo "<table><tr><th>Item Name</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th>Qty</th></tr>";
+				echo "<table class='table'><tr><th>Item Name</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th>Qty</th></tr>";
 			}
 			// Print this item's name and show it's location
 			echo "<tr><td>" . $item['itemName'] . "</td>";
@@ -115,18 +114,18 @@
 			
 			// *****************************************
 			// This is the dropdown selection list
-			echo "<td><select class='IQty' id='iqty" . $familyToken . $item['itemID'] . 
-					"' onchange='AJAX_UpdateQty(this)'>";
+			//echo "<td><select class='IQty' id='iqty" . $familyToken . $item['itemID'] . 
+			//		"' onchange='AJAX_UpdateQty(this)'>";
 			
-			for ($i = 0; $i < 11; $i++) {
-				echo "<option value=$i " . ($i == $item['IQty'] ? "Selected" : "") . ">$i</option>";
-			}
-			echo "</select></td>";
+			//for ($i = 0; $i < 11; $i++) {
+			//	echo "<option value=$i " . ($i == $item['IQty'] ? "Selected" : "") . ">$i</option>";
+			//}
+			//echo "</select></td>";
 			
-			/*	// Text field version
-			echo "<td><input id='iqty" . $familyToken . $item['itemID'] . "' type='number' min=0 
-						value=" . $item['IQty'] . " onchange='AJAX_UpdateQty(this)'></td>";
-			*/
+				// Text field version
+			echo "<td><input id='iqty" . $familyToken . $item['itemID'] . "' type='text' maxlength=2  class='IQty input-number' 
+						value=" . $item['IQty'] . " onchange='AJAX_UpdateQty(this)' style='width:40px;'></td>";
+			
 		}
 		echo "</table>";
 		echo "</div>";

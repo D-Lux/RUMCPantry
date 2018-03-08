@@ -89,7 +89,6 @@ function deleteSavedSpecials(ele)	{
 // *****************************************************************
 // ** AJAX FUNCTIONS
 // **
-
 // Updates item quantities
 function AJAX_UpdateQty(callingSlot) {
 	// Get the item ID and the new quantity from the page
@@ -97,20 +96,16 @@ function AJAX_UpdateQty(callingSlot) {
 	var newQty = callingSlot.value;
 	var familyType = familyTypeExtractor(callingSlot.id.substring(4,5));
 	var itemID = callingSlot.id.substring(5);
-
-	xmlhttp = newAJAXObj();
-	
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			//document.getElementById("ErrorLog").innerHTML = this.responseText;
-			checkQuantitySelections();			
-		}
-	};
-	xmlhttp.open("GET","/RUMCPantry/php/ajax/setOrderForm.php?" +
-				 "itemID=" + itemID + "&" +
-				 "newQty=" + newQty + "&" +
-				 "familyType=" + familyType, true);
-	xmlhttp.send();
+  
+  var Params = "?itemID=" + itemID + "&newQty=" + newQty + "&familyType=" + familyType;
+  $.ajax({
+    url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+    success: function(response) {
+      $("#msgLog").html(response);
+      $("#msgLog").stop(true,true).show().delay(3000).hide(300);
+      checkQuantitySelections();
+    },
+  });
 }
 
 // **
@@ -152,19 +147,16 @@ function AJAX_UpdateCQty(callingSlot) {
 	var categoryID = callingSlot.id.substring(4);
 	var familyType = familyTypeExtractor(callingSlot.id.substring(3,4));
 
-	xmlhttp = newAJAXObj();
-	
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			//document.getElementById("ErrorLog").innerHTML = this.responseText;
-			checkQuantitySelections();
-		}
-	};
-	xmlhttp.open("GET","/RUMCPantry/php/ajax/setOrderForm.php?" +
-				 "CID=" + categoryID + "&" +
-				 "cQty=" + newQty + "&" +
-				 "familyType=" + familyType, true);
-	xmlhttp.send();
+  var Params = "?CID=" + categoryID + "&cQty=" + newQty + "&familyType=" + familyType;
+  
+  $.ajax({
+    url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+    success: function(response) {
+      $("#msgLog").html(response);
+      $("#msgLog").stop(true,true).show().delay(3000).hide(300);
+      checkQuantitySelections();
+    },
+  });
 }
 
 // *********************************
@@ -180,7 +172,7 @@ function checkQuantitySelections() {
 			currCategoryCount = parseInt(elem.value);
 		}
 	}
-	
+	var clearError = true;
 	var categoryOptions = document.querySelectorAll(".IQty");
 	var totalItemCount = 0;
 	for (i = 0; i < categoryOptions.length; i++) {
@@ -188,6 +180,7 @@ function checkQuantitySelections() {
 		if (!isHiddenElement(elem)) {
 			var currItemCount = parseInt(elem.value);
 			if (currItemCount > currCategoryCount) {
+        clearError = false;
         $("#errMsgs").html("An item's allowed quantity should not be greater than the category quantity.").show(300);
 			}
 			totalItemCount += currItemCount;
@@ -195,8 +188,13 @@ function checkQuantitySelections() {
 	}
 	
 	if (totalItemCount < currCategoryCount) {
+    clearError = false;
     $("#errMsgs").html("There are not enough items in this category to match the selection quantity.").show(300);
 	}
+  
+  if (clearError) {
+    $("#errMsgs").hide(300);
+  }
 }
 
 // *********************************************
