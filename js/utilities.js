@@ -89,7 +89,7 @@ function isHiddenElement(e) {
 
 // ********************************************
 // * For dealing with number inputs
-$(".input-number").keypress(function(key) {
+$(document).keypress(".input-number", function(key) {
   // Allow for tab/backspace/delete
   if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
 
@@ -102,7 +102,7 @@ $(".input-number").keypress(function(key) {
 
 // ********************************************
 // * For dealing with number inputs
-$(".input-number-price").keypress(function(key) {
+$(document).keypress(".input-number-price", function(key) {
   // Allow for tab/backspace/delete/period
   if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
 
@@ -130,3 +130,20 @@ $.extend( $.fn.dataTable.defaults, {
 	"lengthMenu"    : [[10, 20, 50, 100, -1], [10, 20, 50, 100, "All"]]
 
 } );
+
+//This is done this way since the family size string is longer or shorter depending on which one it is
+//So we only pass the first letter, then restore the string
+function familyTypeExtractor(famType) {
+	switch(famType) {
+		case 's':
+			return "small";
+		case 'm':
+			return "medium";
+		case 'l':
+			return "large";
+		case 'w':
+			return "walkin";
+		default:
+			return "walkin";
+	}
+}

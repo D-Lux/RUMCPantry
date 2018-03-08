@@ -2,153 +2,165 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
+  
+  $conn     = connectDB();
+  
+  // Create our query from the Item and Category tables
+	// Item Name, $familyType, category name, category family type, itemid
+  $sql = "SELECT name, categoryID as id	
+          FROM Category
+          WHERE isDeleted=0
+          AND Category.name<>'Specials'
+          AND Category.name<>'redistribution'
+          ORDER BY Category.name";
+
+  $categories = runQuery($conn, $sql);
+  if (empty($categories)) {
+    echo "No categories were in the database.";
+    die();
+  }
+  $firstCat = current($categories)['id'];
 ?>
 
+<h3>Edit Order Forms</h3>
+<div id="errMsgs" style="display:none;color:red;"></div>
+<div id="msgLog" class="hoverSuccess hoverMsg" style="display:none;"></div>
+	
+<div class="body-content">
 
-	<?php
-		echo "<h3>Order Form: ";
-		$familyType = "";
-		// Family Size 1-2 and Walk-Ins
-		if (isset($_GET["1to2"])) { echo "One to Two / Walk-In"; $familyType = "small"; }
-		// Family Size 3-4
-		if (isset($_GET["3to4"])) { echo "Three to Four"; $familyType = "medium"; }
-		// Family Size 5+
-		if (isset($_GET["5Plus"])) { echo "Five+"; $familyType = "large"; }
-		
-		echo "</h3>";
-		
-		echo "<div id='errMsgs' style='display:none;color:red;'></div>";
-    echo "<div id='msgLog' class='hoverSuccess hoverMsg' style='display:none;'></div>";
-		if ($familyType === ""){
-			header("location: /RUMCPantry/ap_oo1.php");
-		}
-		
-		$familyToken = substr($familyType,0,1);
-		
-		echo "<div class='body-content'>";
-		
-		$conn = connectDB();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-		
-		// *************************************************
-		// * Query the database
-		
-		// Create our query from the Item and Category tables
-		// Item Name, $familyType, category name, category family type, itemid
-		$sql = "SELECT itemID, rack, shelf, aisle, itemName, Item." . $familyType . " as IQty, 
-            Category.name as CName, Category." . $familyType . " as CQty, Item.categoryID			
-            FROM Item
-            LEFT JOIN Category
-            ON Item.categoryID=Category.categoryID
-            WHERE item.isDeleted=0
-            AND Category.isDeleted=0
-            AND Category.name<>'Specials'
-            AND Category.name<>'redistribution'
-            ORDER BY Category.name, aisle, rack, shelf, itemName";
+<select id="catSelector">
+  <?php foreach ($categories as $category) { ?>
+    <option value=<?=$category['id']?>><?=$category['name']?></option>
+  <?php } ?>
+</select>
+    
 
-		$items = returnAssocArray(queryDB($conn, $sql));
-		
-		if ( count($items) <= 0 ) {
-			echo "No Items were in the database.";
-      die();
-		}
-    
-    $categoryList = [];
-    foreach ($items as $item) {
-      if (! in_array($item['CName'], $categoryList)) {
-        $categoryList[$item['categoryID']] = $item['CName'];
-      }
-    }
-    
-		// *********************************************
-		// * Show our Dropdown
-    $firstCat = null;
-    echo "<select id='catSelector'>";
-    foreach ($categoryList as $cid => $category) {
-			echo "<option value='itemList" . $cid . "'>" . $category . "</option>";
-      if ($firstCat == null ) {
-        $firstCat = '#itemList' . $cid;
-      }
-    }
-    echo "</select>";
-    
-		
-		// ******************************************************
-		// ** Create our table of information
+<div id="categoryHolder"></div>
 
-		$currCategory = "";
-		//while ($item = sqlFetch($itemList)) {
-    foreach ($items as $item) {
-			// if this is a new category
-			if ($currCategory != $item['CName']) {
-				// If we were in a different category, close off that category's table
-				if ($currCategory != "") {
-					echo "</table>";
-					echo "</div>";
-				}
-				// Print out the category name, followed by the selection qty and start a new table
-				echo "<div id='itemList" . $item['categoryID'] . "' class='tabcontent' style='display:none;text-align:center;'>";
-				echo "Selection Quantity: ";
-					// Text field version
-				echo "<input id='cid" . $familyToken . $item['categoryID'] . "' type='text' maxlength=2 class='CQty input-number'
-						value=" . $item['CQty'] . " onchange='AJAX_UpdateCQty(this)' style='width:40px;'><br>";
-				
-				//echo "<select class='CQty' id='cid" . $familyToken . $item['categoryID'] . 
-				//		"' onchange='AJAX_UpdateCQty(this)'>";
-				//for ($i = 0; $i < 11; $i++) {
-				//	echo "<option value=$i " . ($i == $item['CQty'] ? "Selected" : "") . ">$i</option>";
-				//}
-				//echo "</select><br><br>";
-				
-				$currCategory = $item['CName'];
-				// Table headers
-				echo "<table class='table'><tr><th>Item Name</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th>Qty</th></tr>";
-			}
-			// Print this item's name and show it's location
-			echo "<tr><td>" . $item['itemName'] . "</td>";
-			echo "<td>" . aisleDecoder($item['aisle']) . "</td>";
-			echo "<td>" . rackDecoder($item['rack']) . "</td>";
-			echo "<td>" . shelfDecoder($item['shelf']) . "</td>";
-			
-			// *****************************************
-			// This is the dropdown selection list
-			//echo "<td><select class='IQty' id='iqty" . $familyToken . $item['itemID'] . 
-			//		"' onchange='AJAX_UpdateQty(this)'>";
-			
-			//for ($i = 0; $i < 11; $i++) {
-			//	echo "<option value=$i " . ($i == $item['IQty'] ? "Selected" : "") . ">$i</option>";
-			//}
-			//echo "</select></td>";
-			
-				// Text field version
-			echo "<td><input id='iqty" . $familyToken . $item['itemID'] . "' type='text' maxlength=2  class='IQty input-number' 
-						value=" . $item['IQty'] . " onchange='AJAX_UpdateQty(this)' style='width:40px;'></td>";
-			
-		}
-		echo "</table>";
-		echo "</div>";
-	?>
 	
   
 <?php include 'php/footer.php'; ?>
-<script src="js/orderFormOps.js"></script>
-<script>
-  // Open the default tab (if tabs exist)
-  //document.getElementById("defaultOpen").click();
-  $( document ).ready(function() {
-    $("select").on("change", function() {
-      $("#errMsgs").hide(200);
-    });
-    $(".tablinks").on("click", function() {
-      $("#errMsgs").hide(200);
-    });
-    $("<?=$firstCat?>").css({ "display": "block"});
-    $("#catSelector").on("change", function(e) {
-      var showTab = "#" + $(this).val();
-      $(".tabcontent").css({ "display": "none"});
-      $(showTab).css({ "display": "block"});
+<script type="text/javascript">
+  $("select").on("change", function() {
+    $("#errMsgs").hide(200);
+  });
+  $(".tablinks").on("click", function() {
+    $("#errMsgs").hide(200);
+  });
+  
+  $("#catSelector").chosen();
+ 
+  // Load the first tab
+  $.ajax({
+    url: "/RUMCPantry/php/ajax/editOrderForm.php?catid=" + $("#catSelector").val(),
+    success: function(response) {
+      $("#categoryHolder").html(response);
+      checkQuantitySelectionsNew();
+    },
+  });
+  
+  $("#catSelector").on("change", function(e) {
+    var Params = "?catid=" + $("#catSelector").val();
+    $.ajax({
+      url: "/RUMCPantry/php/ajax/editOrderForm.php" + Params,
+      success: function(response) {
+        $("#categoryHolder").html(response);
+        checkQuantitySelectionsNew();
+      },
     });
   });
+  
+  // Handle category amount updates
+  $("#categoryHolder").on("change", ".CQty", function() {
+    var Params  = "?CID=" + $("#catSelector").val();
+        Params += "&familyType=" + $(this).attr("id");
+        Params += "&cQty=" + $(this).val();
+    $.ajax({
+      url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+      success: function(response) {
+        $("#msgLog").html(response);
+        $("#msgLog").stop(true,true).show().delay(3000).hide(300);
+        checkQuantitySelectionsNew();
+      },
+    });
+  });
+  
+  // Handle item quantity updates
+  $("#categoryHolder").on("change", ".IQty", function() {
+    var Params  = "?itemID=" + $(this).attr("id").substring(1);
+        Params += "&familyType=" + familyTypeExtractor($(this).attr("id").substring(0,1));
+        Params += "&newQty=" + $(this).val();
+    $.ajax({
+      url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+      success: function(response) {
+        $("#msgLog").html(response);
+        $("#msgLog").stop(true,true).show().delay(3000).hide(300);
+        checkQuantitySelectionsNew();
+      },
+    });
+  });
+  
+  function appendError(err, append) {
+    if (err != '') {
+      return( err + "<br>" + append)
+    }
+    return (append);
+  }
+  
+  function checkQuantitySelectionsNew() {
+    var maxLarge  = Number($("#large").val());
+    var maxMedium = Number($("#medium").val());
+    var maxSmall  = Number($("#small").val());
+    var errorMsg  = '';
+    // Get the count of each category
+    // Large items
+    var largeItems = $(".IQty[id^=l]");
+    var largeCount = 0;
+    for (i = 0; i < largeItems.length; i++) {
+      var currVal = Number($(largeItems[i]).val());
+      if (currVal > maxLarge) {
+        errorMsg = appendError(errorMsg, "An item's quantity in the large family selection is greater than the large category quantity.");
+      }
+      largeCount += currVal;
+    }
+    if ( largeCount < maxLarge ) {
+      errorMsg = appendError(errorMsg, "There are not enough items to match the large selection quantity.");
+    }
+    // Medium items
+    var medItems = $(".IQty[id^=m]");
+    var medCount = 0;
+    for (i = 0; i < medItems.length; i++) {
+      var currVal = Number($(medItems[i]).val());
+      if (currVal > maxMedium) {
+        errorMsg = appendError(errorMsg, "An item's quantity in the medium family selection is greater than the medium category quantity.");
+      }
+      medCount += currVal;
+    }
+    if ( medCount < maxMedium ) {
+      errorMsg = appendError(errorMsg, "There are not enough items to match the medium selection quantity.");
+    }
+    // Small items
+    var smallItems = $(".IQty[id^=s]");
+    var smallCount = 0;
+    for (i = 0; i < smallItems.length; i++) {
+      var currVal = Number($(smallItems[i]).val());
+      if (currVal > maxSmall) {
+        //$(this);
+        errorMsg = appendError(errorMsg, "An item's quantity in the small family selection is greater than the small category quantity.");
+      }
+      smallCount += currVal;
+    }
+    if ( smallCount < maxSmall ) {
+      errorMsg = appendError(errorMsg, "There are not enough items to match the small selection quantity.");
+    }
+
+    if (errorMsg != '') {
+      $("#errMsgs").html(errorMsg).show(300);
+    }
+    else {
+      $("#errMsgs").hide();
+    }
+  }
+
+  
 </script>

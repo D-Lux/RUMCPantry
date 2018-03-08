@@ -18,7 +18,7 @@
                      
     if (queryDB($conn, $updateItem)) {
       $itemInfo = runQueryForOne($conn, "SELECT itemName FROM Item WHERE itemID = {$itemID}");
-      echo $itemInfo['itemName'] . " quantity updated to " . $newQty . ".";
+      echo $itemInfo['itemName'] . " " . $familyType . " quantity updated to " . $newQty . ".";
     }
     else {
       echo "There was an error attempting to update";
@@ -65,7 +65,7 @@
     
     if (queryDB($conn, $updateCategory)) {
       $catInfo = runQueryForOne($conn, "SELECT name FROM category WHERE categoryID = {$CID}");
-      echo $catInfo['name'] . " selection quantity updated to " . $cQty . ".";
+      echo $catInfo['name'] . " " . $familyType . " selection quantity updated to " . $cQty . ".";
     }
     else {
       echo "There was an error attempting to update";
