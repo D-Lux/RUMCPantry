@@ -1,3 +1,0 @@
-Must be able to view donation partners and set to inactive.
-
-Bonus points to be able to view inactive donors

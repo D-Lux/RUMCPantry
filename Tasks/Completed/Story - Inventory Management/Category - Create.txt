@@ -1,9 +1,0 @@
-Must be able to create new categories for items including all of the appropriate data:
-
-name
-
-These can probably be saved for the ordering form:
-small
-medium
-large
-walkin

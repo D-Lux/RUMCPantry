@@ -1,3 +1,0 @@
-Individual order forms (1-2, 3-4, 5+, Walk-In) should be viewable and editable.
-
-Saving an order form should access the database and save the item information where appropriate

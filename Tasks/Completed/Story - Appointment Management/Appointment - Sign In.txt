@@ -1,7 +1,0 @@
-Custom view showing all appointments for today
-
-Admins need to be able to sign-in clients
-
-Admins need to be able to distinguish clients that have completed their visit
-
-Admins need to be able to view and edit client notes from here

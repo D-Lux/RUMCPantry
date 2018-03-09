@@ -6,14 +6,10 @@
 		/* Check connection*/
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
-	} 
+	}
 
-  //echo "<pre>";
-  //print_r($_GET);
-  //echo "</pre>";
-  //die();
 
-  $sql = "SELECT MAX(formOrder) as maxOrder FROM Category WHERE isDeleted=0";
+  $sql = "SELECT MAX(formOrder) as maxOrder FROM category WHERE isDeleted=0";
   $maxO = current(runQuery($conn, $sql))['maxOrder'];
 
   $limit = '';
@@ -24,13 +20,13 @@
 	// *******************************************************************************
 	// * Build our column list
   $sql = "SELECT category.categoryID, category.name, formOrder, COUNT(*) as itemQty
-          FROM category 
+          FROM category
           JOIN item
-            ON category.categoryid=item.categoryid 
-          WHERE category.isDeleted = 0 
-          AND item.isDeleted=0 
-          AND category.name != 'Redistribution' 
-          GROUP BY category.categoryID 
+            ON category.categoryid=item.categoryid
+          WHERE category.isDeleted = 0
+          AND item.isDeleted=0
+          AND category.name != 'Redistribution'
+          GROUP BY category.categoryID
           ORDER BY formOrder ASC";
 
   // Run our query
@@ -44,29 +40,29 @@
 
 	$returnData = [];
 	$out = [];
-	
+
   foreach($results as $result) {
     $row = [];
-    
+
     $ord = $result['formOrder'];
     $id = $result['categoryID'];
-    $upArrow = $result['formOrder'] != 1 
-                ? "<a href='#' class='btn-up' id='up" . $ord . "_" . $id . "'><i class='fa fa-arrow-up'></i></a>" 
+    $upArrow = $result['formOrder'] != 1
+                ? "<a href='#' class='btn-up' id='up" . $ord . "_" . $id . "'><i class='fa fa-arrow-up'></i></a>"
                 : '';
-    
+
     $downArrow = $result['formOrder'] < $maxO
-                ?  "<a href='#' class='btn-down' id='dn" . $ord . "_" . $id . "'><i class='fa fa-arrow-down'></i></a>" 
+                ?  "<a href='#' class='btn-down' id='dn" . $ord . "_" . $id . "'><i class='fa fa-arrow-down'></i></a>"
                 : '';
-    
+
     $row[0] = $result['formOrder'];
     $row[1] = $result['name'];
     $row[2] = $result['itemQty'];
     $row[3] = $upArrow . $downArrow;
-    
+
     $out[] = $row;
-    
-  }	
-	
+
+  }
+
 	$returnData['draw'] 			      = $_GET['draw'];
   $returnData['data']  		        = $out;
   $returnData['recordsTotal'] 	  = $recordCount;

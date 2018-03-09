@@ -1,17 +1,17 @@
-<?php 
+<?php
 $pageRestriction = -1;
 include 'php/header.php';
 ?>
-	
+
 	<style>
 	p {
 		color : red;
 	}
-	
+
 	</style>
 	<h3>Welcome</h3>
-	
-	<div class="body-content">		
+
+	<div class="body-content">
 		<form action="php/mainpage.php">
       <div id="permissionMsgs" style="display:none;"></div>
       <div class="form-row">
@@ -28,10 +28,10 @@ include 'php/header.php';
       </div>
 		  <button id="submitLogin" class='btn-nav' type="submit"><i class="fa fa-sign-in"></i> Log In</button>
 		</form>
-    
-    
-	
-<?php echo phpversion(); include 'php/footer.php'; ?>
+
+
+
+<?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
   $(document).ready(function(){
@@ -57,7 +57,7 @@ include 'php/header.php';
             $("#passwordTextBox").val("");
           }
           else {
-            switch(parseInt(data.perm)) { 
+            switch(parseInt(data.perm)) {
               case 99:
               case 10:
                 window.location.assign("ap1.php");
@@ -66,7 +66,7 @@ include 'php/header.php';
               default:
                 window.location.assign("cp1.php");
             }
-            
+
           }
         },
       });

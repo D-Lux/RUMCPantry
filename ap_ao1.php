@@ -4,7 +4,7 @@
   include 'php/backButton.php';
 ?>
 
-<h3>Appointment Operations</h3><br>	
+<h3>Appointment Operations</h3><br>
 	<div class="body-content">
 		<div id="datatableContainer">
 			<table width='95%' id="apptTable" class="display">
@@ -20,13 +20,11 @@
 				</tbody>
 			</table>
 		</div>
-	
+
 	<br>
 	<!-- NEW Date -->
   <?php if ($_SESSION['perms'] >= 99) { ?>
-	<form action="ap_ao2.php">
-		<input id="NewDate" type="submit" class="btn-nav" name="NewDate" value="New Appointment Date">
-    </form>
+    <a href="/RUMCPantry/ap_ao2.php" class="button">New Appointment Date</a>
   <?php } ?>
 
 <?php include 'php/footer.php'; ?>

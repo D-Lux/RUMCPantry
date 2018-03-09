@@ -1,1 +1,0 @@
-It stands to reason that we will want the admin to have a way to view and edit redistribution clients.

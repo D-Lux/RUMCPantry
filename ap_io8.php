@@ -10,14 +10,14 @@
 ?>
 
 <h3>Inventory Categories</h3>
-	  
+
 <?php
 if ($showDeleted) {
     echo "<h4>Deactivated Items</h4>";
 }
 ?>
 	<div class="body-content">
-	
+
 		<div id="datatableContainer">
 			<table width='90%' id="iCategoryTable" class="display">
 				<thead>
@@ -34,13 +34,11 @@ if ($showDeleted) {
 				</tbody>
 			</table>
 		</div>
-	
-	<!-- New Item -->
-	<form method="get" action="ap_io4.php">
-    <input class='btn-nav' type="submit" value="Add a category">
-  </form>
-	
-    <!-- Show Deleted Items -->
+
+	<!-- New Category -->
+  <a href="/RUMCPantry/ap_io4.php" class="button">Add a category</a>
+
+    <!-- Show Deleted Categories -->
   <?php if ($showDeleted) { ?>
     <form method="post" action="ap_io8.php">
       <button type="submit" class="btn-nav" name="showNormal" value=1>Show Categories</button>
@@ -50,7 +48,7 @@ if ($showDeleted) {
       <button type="submit" class="btn-nav" name="showDeleted" value=1>Show Deactivated Categories</button>
     </form>
   <?php } ?>
-  
+
 <?php include 'php/footer.php'; ?>
 <script type="text/javascript">
 
@@ -119,10 +117,9 @@ if ($showDeleted) {
       window.alert("That category already exists.");
 			removeCookie("CatExists");
     }
-    
-    
+
+
 
 	});
-		
+
 	</script>
-    

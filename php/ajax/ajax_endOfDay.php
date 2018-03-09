@@ -4,20 +4,20 @@
 
 	$conn = connectDB();
 
-  $date = date("Y-m-d");  
+  $date = date("Y-m-d");
 
   // Build a table of people who did not complete the day properly
-  $sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.invoiceID
-        FROM Invoice 
-        JOIN Client 
-          ON Invoice.clientID=Client.clientID 
-        JOIN FamilyMember 
-          On Client.clientID=FamilyMember.clientID 
-        WHERE Invoice.visitDate = '$date'
-        AND FamilyMember.isHeadOfHousehold = true 
-        AND Invoice.status != " . GetCompletedStatus() . "
-        AND Invoice.status < " . GetCompletedStatus() . " 
-        ORDER BY  Invoice.visitTime ASC, FamilyMember.LastName ASC";
+  $sql = "SELECT fm.firstName, fm.lastName, i.visitTime, i.invoiceID
+        FROM invoice i
+        JOIN client c
+          ON i.clientID=c.clientID
+        JOIN familymember fm
+          On c.clientID=fm.clientID
+        WHERE i.visitDate = '$date'
+        AND fm.isHeadOfHousehold = true
+        AND i.status != " . GetCompletedStatus() . "
+        AND i.status < " . GetCompletedStatus() . "
+        ORDER BY  i.visitTime ASC, fm.LastName ASC";
 
 $results = runQuery($conn, $sql);
 closeDB($conn);
@@ -29,9 +29,9 @@ if ($resultCount > 0) {
     $invoiceID=$result["invoiceID"];
     if($rowTitle != $result["visitTime"]) {
       if ($rowTitle != null) {
-        echo "</table>"; 
+        echo "</table>";
       }
-      $rowTitle = $result["visitTime"];           
+      $rowTitle = $result["visitTime"];
       echo "<b>" . returnTime($rowTitle). "</b>";
       echo "<table>";
       echo "<tr><th>First name</th><th>Last name</th><th>Actions</th></tr>";
@@ -44,13 +44,13 @@ if ($resultCount > 0) {
         <button class="btn-edit btn-documentation" value=<?=$invoiceID?>><i class='fa fa-file'></i> Bad Documentation</button>
         <button class="btn-edit btn-cancelled" value=<?=$invoiceID?>><i class='fa fa-ban'></i> Cancelled </button>
       </td>
-    </tr>   
-    <?php               
+    </tr>
+    <?php
   }
    echo "</table>";
-}    
+}
 else {
   echo "End of Day Successful!";
-}     
+}
 
 ?>

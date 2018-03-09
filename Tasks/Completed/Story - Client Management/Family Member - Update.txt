@@ -1,3 +1,0 @@
-Must be able to view a family member and update as needed.
-
-Adjusting head of household should move it to the new person.

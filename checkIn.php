@@ -1,18 +1,18 @@
-<?php 
+<?php
   $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
-	
+
 	$date = date("M j, Y");
 	$dbDate = date("Y-m-d", strtotime($date));
-	
+
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		echo "Connection failed: " . $conn->connect_error;
 		die();
 	}
-	$sql = "UPDATE Invoice 
-			SET status = " . GetActiveStatus() . " 
+	$sql = "UPDATE invoice
+			SET status = " . GetActiveStatus() . "
 			WHERE visitDate = '" . $dbDate . "'
 			AND status = " . GetAssignedStatus() . "";
 	if ($conn->query($sql) === FALSE) {
@@ -56,8 +56,8 @@
       <!-- <a href="/RUMCPantry/awc.php" class="button">Add Walk-In</a> -->
     </div>
   </div>
-  
-  
+
+
 <?php include 'php/footer.php'; ?>
 
 <script>
@@ -68,7 +68,7 @@
     $(openTab).addClass("active");
     $(this).addClass("activeButton");
   });
-  
+
   $("#Arrive").click();
 
   function ajax_PerformAction(obj) {
@@ -81,7 +81,7 @@
         // If we're getting redirected to a new page, go there
         if (typeof data.link !== 'undefined') {
           var pageToLoad = data.link.substring(10);
-          window.location.assign(pageToLoad);   
+          window.location.assign(pageToLoad);
         }
         else {
           // $("#msgField").html(data.Message);
@@ -105,16 +105,16 @@
               $('#printCount').html(data.printCount);
               $('#waitCount').html(data.waitCount);
               $('#completeCount').html(data.completedCount);
-              
+
               $('.btn_Action').off('click').on('click', function() {
                 ajax_PerformAction(this);
               });
-          
+
               $('#msgField').html(data.error);
             }
           });
         }
-       
+
       },
     });
   }
@@ -140,11 +140,11 @@
         $('#printCount').html(data.printCount);
         $('#waitCount').html(data.waitCount);
         $('#completeCount').html(data.completedCount);
-        
+
         $('.btn_Action').off('click').on('click', function() {
           ajax_PerformAction(this);
         });
-    
+
         $('#msgField').html(data.error);
       },
       complete  : function() {

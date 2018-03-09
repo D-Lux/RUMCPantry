@@ -10,14 +10,14 @@
 ?>
 
 <h3>Item Inventory</h3>
-  
+
 <?php
 if ($showDeleted) {
     echo "<h4>Deactivated Items</h4>";
 }
 ?>
 	<div class="body-content">
-	
+
 		<div id="datatableContainer">
 			<table width='95%' id="iItemTable" class="display">
 				<thead>
@@ -35,12 +35,10 @@ if ($showDeleted) {
 				</tbody>
 			</table>
 		</div>
-	
+
 	<!-- New Item -->
-	<form method="get" action="ap_io2.php">
-		<input class='btn-nav' type="submit" value="Add an item">
-	</form>
-  
+  <a href="/RUMCPantry/ap_io2.php" class="button">Add an item</a>
+
   <!-- Show Deleted Items -->
   <?php if ($showDeleted) { ?>
     <form method="post" action="ap_io7.php">
@@ -51,7 +49,7 @@ if ($showDeleted) {
       <button type="submit" class="btn-nav" name="showDeleted" value=1>Show Deactivated Items</button>
     </form>
   <?php } ?>
-  
+
 <?php include 'php/footer.php'; ?>
 <script type="text/javascript">
 
@@ -68,12 +66,12 @@ if ($showDeleted) {
 			if ($(this).hasClass('btn-icon')) {
         var mod = "d";
         if (deleteMode == 1) { mod = "r"; }
-        
+
         if (confirm("Are you sure you want to " + mod + "eactivate this item?")) {
           window.location.assign($(this).attr('value'));
 
         }
-				
+
 			}
 			else {
 				window.location.assign($(this).attr('value'));
@@ -117,7 +115,7 @@ if ($showDeleted) {
 			removeCookie("err_itemReactivated1");
 		}
 
-		
+
 	});
-		
+
 	</script>

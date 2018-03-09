@@ -64,15 +64,15 @@ date_default_timezone_set('America/Chicago');
 $connectionActive = false;
 function connectDB() {
 	//Set up server connection
-	// $servername = "192.168.0.23";
-	// $username   = "root";
-	// $password   = "lgh598usa15";
-	// $dbname     = "foodpantry";
+	 $servername = "192.168.0.23";
+	 $username   = "root";
+	 $password   = "lgh598usa15";
+	 $dbname     = "foodpantry";
 
-	$servername = "127.0.0.1";
-	$username   = "root";
-	$password   = "";
-	$dbname     = "foodpantry";
+	//$servername = "127.0.0.1";
+	//$username   = "root";
+	//$password   = "";
+	//$dbname     = "foodpantry";
 
 
 	// Create and check connection
@@ -118,7 +118,7 @@ function runQuery($conn, $query) {
 
 function runQueryForOne($conn, $query) {
   $queryResult = returnAssocArray(queryDB($conn, $query));
-  if (is_array($queryResult)) { 
+  if (is_array($queryResult)) {
     return current($queryResult);
   }
   return false;
@@ -294,16 +294,14 @@ function removeCookie($cookieName) {
 // Returns the appropriate clientID
 function getAvailableClient() {
 	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
+
 	$clientName = makeString("Available");
 
-	// Find the 'available' client
-	$sql = "SELECT FamilyMember.clientID as id
-			FROM FamilyMember
-			WHERE FamilyMember.firstName = " . $clientName . "
-			AND FamilyMember.lastName = " . $clientName;
+	// Find the 'available' client FROM FamilyMember fm
+	$sql = "SELECT fm.clientID as id
+			FROM familymember fm
+			WHERE fm.firstName = " . $clientName . "
+			AND fm.lastName = " . $clientName;
 
 	$availableClient = queryDB($conn, $sql);
 	closeDB($conn);

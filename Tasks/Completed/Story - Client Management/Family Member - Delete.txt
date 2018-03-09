@@ -1,5 +1,0 @@
-Must be able to delete family members from a family
-
-If the member is the current head, the head must move to the next possible family member
-
-If no member exists, the client should become inactive

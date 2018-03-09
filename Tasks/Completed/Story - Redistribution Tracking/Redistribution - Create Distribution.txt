@@ -1,3 +1,0 @@
-When the food pantry donates to these new special clients, we will want to track it
-
-This may be able to be done using the current invoice database for regular clients

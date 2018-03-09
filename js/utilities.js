@@ -89,7 +89,7 @@ function isHiddenElement(e) {
 
 // ********************************************
 // * For dealing with number inputs
-$(document).keypress(".input-number", function(key) {
+$(document).on("keypress", ".input-number", function(key) {
   // Allow for tab/backspace/delete
   if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
 
@@ -102,7 +102,7 @@ $(document).keypress(".input-number", function(key) {
 
 // ********************************************
 // * For dealing with number inputs
-$(document).keypress(".input-number-price", function(key) {
+$(document).on("keypress", ".input-number-price", function(key) {
   // Allow for tab/backspace/delete/period
   if (key.keyCode === 9 || key.keyCode === 8 || key.keyCode === 46) return true;
 

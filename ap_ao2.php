@@ -14,6 +14,9 @@
 			border: solid 2px #AAA;
 			margin-right: 30px;
 		}
+		#addTimeSlot:hover {
+			cursor:pointer;
+		}
 		#addTimeSlot:active {
 			border: solid 2px #888;
 			background-color: #AAA;
@@ -21,19 +24,19 @@
 		.rm_row {
 			color: black !important;
 		}
-	
+
 	</style>
-	
+
 	<h3>Create Appointment Date</h3>
 	<div class="body-content">
-		
+
 		<div >
 			<!-- Button to add a new time slot -->
 			<input type="button" class="btn-table" id="addTimeSlot" value="New Time Slot" onclick="addTimeSlot()">
 		</div>
-		
+
 		<!-- Start the form for creating a new date -->
-		<form id="AppointmentForm" name="AppointmentForm" 
+		<form id="AppointmentForm" name="AppointmentForm"
 				action="php/apptOps.php" method="post" onSubmit="return validateNewAppts()">
 			<!-- Get the Date for this set of invoices -->
 			<?php
@@ -42,7 +45,7 @@
 				if ($conn->connect_error) {
 					die("Connection failed: " . $conn->connect_error);
 				}
-					
+
 				// Get the last appointment date in the database
 				$sql = "SELECT visitDate
 						FROM Invoice
@@ -51,10 +54,10 @@
 				$result = queryDB($conn, $sql);
 				// Close the database connection
 				closeDB($conn);
-					
+
 				// Set the date to this coming saturday or the next saturday after the last appointment
 				$defaultDate = date('Y-m-d', strtotime("next Saturday"));
-				
+
 				//Set the date to a week after the newest appointment time
 				if ($result!=null && $result->num_rows > 0) {
 					$row = $result->fetch_assoc();
@@ -63,11 +66,11 @@
 						$defaultDate = $checkDate;
 					}
 				}
-				
+
 				// Date box
 				echo "<h4>Date: <input type='date' name='appDate' id='appDate' value=$defaultDate></h4><br>";
 			?>
-			
+
 			<!-- Show the appointment times and number for each time slot -->
 			<table id="timeTable" name="timeTable" >
 				<!-- Set up headers -->
@@ -84,16 +87,16 @@
 						echo "<td><input type='text' style='width:90px;' class='input-number' maxlength=3 name='qty[]' value='" . $numSlots . "' ></td>";
 						echo "<td><a class='rm_row btn-icon' href='#' ><i class='fa fa-trash'></i></a></td>";
 						echo "</tr>";
-					
+
 						$timeSlot =  date('H:i', strtotime($timeSlot) + (60*30));
 					}
 				?>
 			</table>
-			
+
 			<br><br>
 			<input type="submit" class="btn-nav" name="CreateInvoiceDate" value="Create Appointments">
 		</form>
-		
+
 <?php include 'php/footer.php'; ?>
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
@@ -102,7 +105,7 @@
     window.alert("Date already exists in database");
     removeCookie("badAppDate");
   }
-    
+
 	$('.rm_row').on("click", function(e) {
 		e.stopPropagation();
 		e.preventDefault();

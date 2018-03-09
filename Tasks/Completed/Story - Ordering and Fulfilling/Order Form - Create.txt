@@ -1,4 +1,0 @@
-Order Forms should be dynamically created by filling in all details of items and categories.
-
-Order form should have sections for every category in the database.
-Default values should be filled in based on item small, med, etc. values

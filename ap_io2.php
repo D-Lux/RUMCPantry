@@ -1,7 +1,7 @@
 <?php
   $pageRestriction = 99;
 	include 'php/header.php';
-	include 'php/backButton.php'; 
+	include 'php/backButton.php';
 ?>
 
 <h3>Add Item</h3>
@@ -17,7 +17,7 @@
 			?>
 		</div>
 	</div>
-	
+
 	<div class="row">
 		<div class="col-sm-4"><label class="required itemField">Item Name: </label></div>
 		<div class="col-sm-8">
@@ -81,7 +81,7 @@
 		<div class="col-sm-4">Price:</div>
 		<div class="col-sm-8">
 			<span>$</span>
-			<input  style="width: 8em;" type="number" min="0" value="0" step="0.01" name="price">
+			<input  style="width: 8em;" type="text" class="input-number" maxlength=6 value="0" name="price">
 		</div>
 	</div>
 	<br>
@@ -94,19 +94,19 @@
 		<div class="row">
 			<div class="col-sm-1">Small:</div>
 			<div class="col-sm-2">
-				<input type="number" min="0" max="20" value="0" step="1" name="small" />
+				<input  style="width: 2em;" type="text" class="input-number" maxlength=2 value="0" name="small">
 			</div>
 			<div class="col-sm-1">Medium:</div>
 			<div class="col-sm-2">
-				<input type="number" min="0" max="20" value="0" step="1" name="medium" />
+				<input  style="width: 2em;" type="text" class="input-number" maxlength=2 value="0" name="medium">
 			</div>
 			<div class="col-sm-1">Large:</div>
 			<div class="col-sm-2">
-				<input type="number" min="0" max="20" value="0" step="1" name="large" />
+				<input  style="width: 2em;" type="text" class="input-number" maxlength=2 value="0" name="large">
 			</div>
 		</div>
 	</div>
- 
+
 	</br>
 	<input type="submit" class='btn-nav' value="Create" name="createItem">
 </form>
