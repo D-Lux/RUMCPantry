@@ -9,7 +9,7 @@ include('checkLogin.php');
       <title>Roselle UMC</title>
 
       <link href='includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
-      <link href='includes/bootstrap.min.css' rel='stylesheet' type='text/css' >
+      <link href='includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >
       <link href='includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
       <link href='includes/jquery.dataTables.min.css' rel='stylesheet' type='text/css' >
       <link href='css/style.css' rel='stylesheet'>

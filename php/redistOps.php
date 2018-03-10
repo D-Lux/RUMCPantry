@@ -35,8 +35,8 @@ elseif(isset($_POST['submitRedistribution'])) {
 	}
 	// Query String
 	$sql = "SELECT itemID, price
-			FROM Item
-			WHERE Item.isDeleted=0";
+			FROM item
+			WHERE item.isDeleted=0";
 	$itemPriceQuery = queryDB($conn, $sql);
 
 	$PriceID_Array = array();
@@ -48,7 +48,7 @@ elseif(isset($_POST['submitRedistribution'])) {
 	// * --== Create our Invoice ==--
 
 	$redistDate = makeString($_POST['date']);
-	$sql = "INSERT INTO Invoice (clientID, visitDate, status)
+	$sql = "INSERT INTO invoice (clientID, visitDate, status)
 			VALUES (" . $_POST['partnerID'] . ", " . $redistDate . ", " . GetRedistributionStatus() . ")";
 
 
@@ -60,7 +60,7 @@ elseif(isset($_POST['submitRedistribution'])) {
 		// * --== Create invoice descriptions ==--
 
 		// Start our query string
-		$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
+		$insertionSql = "INSERT INTO invoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
 		$firstInsert = TRUE;
 
 		$itemIDs = $_POST['itemID'];
@@ -104,7 +104,7 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Query String
-	$sql = "DELETE FROM Invoice
+	$sql = "DELETE FROM invoice
 			WHERE invoiceID=" . $_POST['id'];
 
 	if (queryDB($conn, $sql) === TRUE) {
@@ -118,7 +118,7 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 	}
 }
 // *******************************************************
-// Start Redistribution Client operations
+// Start Redistribution client operations
 // *******************************************************
 // ************************************
 // Submitting a new partner
@@ -147,7 +147,7 @@ elseif(isset($_POST['submitNewRedistPartner'])) {
   // Continue if we're good
   if ($error == '') {
     $conn = connectDB();
-    $sql = "INSERT INTO Client (numOfAdults, NumOfKids, email, phoneNumber,	address, city, state, zip, foodStamps, isDeleted, redistribution)
+    $sql = "INSERT INTO client (numOfAdults, NumOfKids, email, phoneNumber,	address, city, state, zip, foodStamps, isDeleted, redistribution)
 						VALUES (0,0, '{$email}', '{$phoneNo}', '{$address}', '{$city}', '{$state}', '{$zip}', FALSE, FALSE, TRUE)";
 
     if (queryDB($conn,$sql) === FALSE) {
@@ -157,10 +157,10 @@ elseif(isset($_POST['submitNewRedistPartner'])) {
     	// Get the ID of the partner we just created (we will need it to create the name)
     	$redistID = $conn->insert_id;
     	// Create the insert string and perform the insertion
-			$sql = "INSERT INTO FamilyMember (firstName, lastName, isHeadOfHousehold, clientID, isDeleted)
+			$sql = "INSERT INTO familymember (firstName, lastName, isHeadOfHousehold, clientID, isDeleted)
 					VALUES ('{$redistName}', '{$partnerName}', TRUE, {$redistID}, FALSE)";
 			if (queryDB($conn, $sql) === FALSE) {
-				queryDB($conn, "DELETE FROM Client WHERE clientID = {$redistID}");
+				queryDB($conn, "DELETE FROM client WHERE clientID = {$redistID}");
 				$error = "There was an error connecting to the database, please try again later.<br>" . $sql . "<br>" . sqlError($conn);
 			}
     }
@@ -198,12 +198,12 @@ elseif(isset($_POST['submitUpdateRedist'])) {
   // Continue if we're good
   if ($error == '') {
 		// Create update string for basic data
-		$dataUpdate =  "UPDATE Client
+		$dataUpdate =  "UPDATE client
 				SET	phoneNumber='{$phoneNo}', email='{$email}', notes='{$notes}', zip='{$zip}', state='{$state}', address='{$address}', city='{$city}'
 				WHERE clientID = {$redistID}";
 		// Create update string for name data
-		$nameUpdate =  "UPDATE FamilyMember
-				SET FamilyMember.lastName='{$partnerName}'
+		$nameUpdate =  "UPDATE familymember
+				SET familymember.lastName='{$partnerName}'
 				WHERE clientID={$redistID}";
 
 		$conn = connectDB();
@@ -231,7 +231,7 @@ elseif(isset($_POST['submitNewRedistItem'])) {
   $conn     = connectDB();
 	// ***************
   // Validation:
-  
+
   // Check if there is a name, and if it already exists
   if (empty($iName)) {
     $error = "<p>Name cannot be empty.</p>";
@@ -242,9 +242,9 @@ elseif(isset($_POST['submitNewRedistItem'])) {
       $error = "<p>That name already exists in the redistribution item list.</p>";
     }
   }
-  
+
   if ($error == "") {
-    $sql = "INSERT INTO Item
+    $sql = "INSERT INTO item
             (itemName, price, aisle, categoryID, rack, isDeleted, small, medium, large, shelf )
             VALUES
             ('{$iName}', {$price}, {$weight}, {$category}, -1, 0, 0, 0, 0, 0)";
@@ -254,7 +254,7 @@ elseif(isset($_POST['submitNewRedistItem'])) {
       $error = "<p>There was an error attempting to insert the new item.<br>Query: " . $sql . "<br>Error: " . sqlError($conn);
     }
   }
-  
+
   closeDB($conn);
   echo json_encode(array("error" => $error));
 }
@@ -272,23 +272,23 @@ elseif(isset($_POST['submitUpdateRedistItem'])) {
   $conn     = connectDB();
 	// ***************
   // Validation:
-  
+
   // Check if there is a name, and if it already exists
   if (empty($iName)) {
     $error = "<p>Name cannot be empty.</p>";
   }
   else {
-    $sql = "SELECT itemID from item 
-            WHERE itemName = '{$iName}' 
+    $sql = "SELECT itemID from item
+            WHERE itemName = '{$iName}'
             AND categoryID = {$category}
             AND itemID <> {$itemID}";
     if (runQueryForOne($conn, $sql)) {
       $error = "<p>That name already exists in the redistribution item list.</p>";
     }
   }
-  
+
   if ($error == "") {
-    $sql = "UPDATE Item 		
+    $sql = "UPDATE item
             SET itemName='{$iName}', price = {$price}, aisle = {$weight}
             WHERE itemID = {$itemID}";
 
@@ -297,7 +297,7 @@ elseif(isset($_POST['submitUpdateRedistItem'])) {
       $error = "<p>There was an error attempting to update the item.<br>Query: " . $sql . "<br>Error: " . sqlError($conn);
     }
   }
-  
+
   closeDB($conn);
   echo json_encode(array("error" => $error));
 }
@@ -328,8 +328,8 @@ elseif(isset($_GET['activateRedistItem'])) {
 // **************************************
 // * Function for toggling redistribution isDeleted flags
 
-function toggleRedistributionItem($isDeleted) { toggleRedistribution("Item", "itemID", $isDeleted); }
-function toggleRedistributionClient($isDeleted) { toggleRedistribution("Client", "clientID", $isDeleted); }
+function toggleRedistributionItem($isDeleted) { toggleRedistribution("item", "itemID", $isDeleted); }
+function toggleRedistributionClient($isDeleted) { toggleRedistribution("client", "clientID", $isDeleted); }
 
 function toggleRedistribution($table, $field, $isDeleted) {
 	//debugEchoPOST();
@@ -346,7 +346,7 @@ function toggleRedistribution($table, $field, $isDeleted) {
 
 	// Create the return page string
 	$loc = "location: /RUMCPantry/ap_ro";
-	$loc .= ($table=="Client" ? "2" : "5");
+	$loc .= ($table=="client" ? "2" : "5");
 	$loc .= ($isDeleted==1 ?  ".php" : ".php?ShowInactive=1");
 
 	// Perform and isDeleted setting
@@ -377,7 +377,7 @@ function getRedistributionCategory() {
 
 	// Find the 'redistribution' category
 	$sql = "SELECT categoryID
-					FROM Category
+					FROM category
 					WHERE name ='Redistribution'";
 
 	$redistCategory = queryDB($conn, $sql);
@@ -401,7 +401,7 @@ function createRedistributionCategory(){
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Create insertion string
-	$sql = "INSERT INTO Category (name, small, medium, large, isDeleted, formOrder)
+	$sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
 			VALUES ('Redistribution',0,0,0,0, -1)";
 
 	// Perform and test insertion

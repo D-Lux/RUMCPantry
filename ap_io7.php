@@ -19,8 +19,8 @@ if ($showDeleted) {
 	<div class="body-content">
 
 		<div id="datatableContainer">
-			<table width='95%' id="iItemTable" class="display">
-				<thead>
+			<table width='95%' id="iItemTable" class="table table-striped">
+				<thead class="thead-dark">
 					<tr>
 						<th width='5%'></th>
 						<th width='30%'>Item</th>

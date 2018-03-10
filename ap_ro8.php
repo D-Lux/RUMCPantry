@@ -9,8 +9,8 @@
 	<div class="body-content">
 
 		<div id="datatableContainer">
-			<table width='55%' id="iReallocationInvoicesTable" class="display">
-				<thead>
+			<table width='55%' id="iReallocationInvoicesTable" class="table table-striped">
+				<thead class="thead-dark">
 					<tr>
 						<th>Date</th>
 						<th>Partner</th>
@@ -23,10 +23,6 @@
 
 		<!-- NEW Redistribution Invoice -->
     <a href="/RUMCPantry/ap_ro9.php" class="button">New Reallocation</a>
-
-	  <form method="get">
-			<input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
-  	</form>
 
 <?php include 'php/footer.php'; ?>
 

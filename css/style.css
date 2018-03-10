@@ -16,7 +16,7 @@ HTML {
 body {
 	background-color: #CCC !important;
 	font-family: Arial, sans-serif !important;
-	width: 80% !important; 
+	width: 80% !important;
 	margin: 0px auto !important;
 	font-size: 1.1rem !important;
 }
@@ -68,8 +68,8 @@ Body Elements
 	margin-top: 20px;
 	font-size: 1.15rem;
 	border-radius: 50px;
-	background-color: #57B9FF; //#27B867;
-	border: solid 2px #499BD6; //#099C4A;
+	background-color: #57B9FF;
+	border: solid 2px #499BD6;
 	color: #000;
 	cursor: pointer;
 }
@@ -97,8 +97,8 @@ a.button{
   color: #000;
 }
 .btn-nav:active, .btn-table:active, a.button:active {
-	background-color: #499BD6; //#1C854A;
-	border: solid 2px #3D83B5; //#066630;
+	background-color: #499BD6;
+	border: solid 2px #3D83B5;
 }
 
 .btn-nav:focus, .btn-table:focus, .btn-icon:focus, a.button:focus  {
@@ -113,9 +113,7 @@ a.button{
 .btn-table {
 	width: 125px;
 	height: 33px;
-	margin: 0px;
 	font-size: 1rem;
-  vertical-align: middle;
 }
 
 .btn-table:disabled {
@@ -236,7 +234,11 @@ Special case buttons
 }
 
 .btn-icon:hover {
-	color: silver;
+  text-shadow:
+    -2px -2px 30px  #57B9FF,
+    1px  -1px 0     #57B9FF,
+    -1px  1px 0     #57B9FF,
+    1px   1px 50px  #57B9FF;
 }
 
 .btn-icon:active {
@@ -244,7 +246,7 @@ Special case buttons
 }
 
 .btn-reactivate {
-		color:green !important;
+	color:green !important;
 }
 
 

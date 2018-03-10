@@ -8,7 +8,7 @@
   $pID        = isset($_GET['id'])   ? $_GET['id']          : '';
   $ePW        = hashPassword($password);
 
-  
+
   // Set up server connection
   $conn = connectDB();
   $returnArr = [];
@@ -16,13 +16,13 @@
     $returnArr['msg'] = "Database connection error, Login creation failed.";
     $returnArr['err'] = 1;
     die(json_encode($returnArr));
-	} 
-  
+	}
+
   if (isset($_GET['create'])) {
     // Create insertion string
-    $sql = "INSERT INTO Permissions 
+    $sql = "INSERT INTO permissions
           (login, permission_level, pw, locked)
-          VALUES 
+          VALUES
           ('" . $name . "', " . $permission . ", '" . $ePW . "', 0)";
 
     // Perform and test insertion
@@ -39,7 +39,7 @@
   }
   else if (isset($_GET['dellogin'])) {
     // Create insertion string
-    $sql = "DELETE FROM Permissions 
+    $sql = "DELETE FROM permissions
             WHERE permission_id = " . $pID;
     // Perform and test insertion
     if (queryDB($conn, $sql) === TRUE) {
@@ -53,25 +53,25 @@
     closeDB($conn);
     die(json_encode($returnArr));
   }
-  
+
   else if (isset($_GET['showEdit'])) {
     // Create insertion string
     $loginID = fixInput($_GET['id']);
-    
+
     $sql = "SELECT login, locked
             FROM permissions
             WHERE permission_id = " . $loginID;
 
-    
+
     $loginInfo = runQueryForOne($conn, $sql);
-    
-    
+
+
     $html = "<div>Edit Login: " . $loginInfo['login'] . "</div>
             <form id='updateForm' action=''>
               <input type='hidden' name='updateID' value=" . $loginID . ">
 
               <input name='updateLogin' id='updateLogin' class='newItemField' type='text' placeholder='Update Login'>
-              
+
               <input name='updatePassword' id='updatePassword' class='newItemField' type='password' placeholder='Update Password'>" .
 
               ($loginInfo['locked'] == 1 ? '' : "
@@ -79,24 +79,24 @@
                 <option value=-1>Select Permissions Level</option>
                 <option value=" . PERM_BASE . ">Basic</option>
                 <option value=" . PERM_RR   . ">Registration Level</option>
-                <option value=" . PERM_MAX  . ">Admin Access</option>   
+                <option value=" . PERM_MAX  . ">Admin Access</option>
               </select>") . "
               <button id='BTN_updateLogin' class='btn-nav' type='submit'><i class='fa fa-check'></i> Update Login</button>
             </form>";
-      
+
     $data['html'] = $html;
     $data['err'] = 0;
     closeDB($conn);
     die(json_encode($data));
   }
-  
+
   else if (isset($_POST['updateDetails'])) {
     $formData   = $_POST['updateDetails'];
     $loginID    = $formData[0]['value'];
     $newName    = fixInput($formData[1]['value']);
     $newPW      = hashPassword($formData[2]['value']);
     $newPerm    = isset($formData[3]) ? $formData[3]['value'] : -1;
-    
+
     if (empty($newName) && empty($newPW) && $newPerm == -1) {
       $data['msg'] = "No changes were set.";
       $data['err']=1;
@@ -111,7 +111,7 @@
     }
     if (!($newPerm == -1)) {
       $sets[] = " permission_level = " . $newPerm;
-    }      
+    }
 
     $sql = "UPDATE permissions
             SET " . implode(", ", $sets) . "
@@ -126,9 +126,9 @@
       $data['err'] = 2;
     }
     die(json_encode($data));
-    
+
   }
- 
-	
+
+
 
 ?>

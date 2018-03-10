@@ -21,8 +21,8 @@
 
 	<div class="body-content">
 		<div id="datatableContainer">
-			<table width='95%' id="iReallocationTable" class="display">
-				<thead>
+			<table width='95%' id="iReallocationTable" class="table table-striped">
+				<thead class="thead-dark">
 					<tr>
 						<?php if (!$inactive) { ?>
 							<th width='5%'></th>
@@ -58,7 +58,7 @@
     removeCookie("updatePartner");
   }
   if (getCookie("redistToggled") != "") {
-    window.alert("Partner deactivated!");
+    window.alert("Partner <?=$tblBtnFnct?>d!");
     removeCookie("redistToggled");
   }
 

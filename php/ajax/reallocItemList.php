@@ -11,8 +11,8 @@
   // ***********************
   // * Build our column list
   // List all of the columns we want
-  $columns = array("itemID", "itemName", "price", "Item.aisle as weight");
-  $searchableColumns = array("itemName", "price", "Item.aisle");
+  $columns = array("itemID", "itemName", "price", "item.aisle as weight");
+  $searchableColumns = array("itemName", "price", "item.aisle");
 
   // *********************************
   // * Generate our user search query
@@ -47,15 +47,15 @@
   $sql = "SELECT " . implode(", ", $columns);
 
   // FROM main table
-  $sql .= " FROM Item ";
+  $sql .= " FROM item ";
 
   // JOINs
-  $sql .= " JOIN Category
-            ON Item.categoryID=Category.categoryID ";
+  $sql .= " JOIN category
+            ON item.categoryID=category.categoryID ";
 
   // WHERE and ORDER clauses
-  $sql .= " WHERE Category.name='REDISTRIBUTION'
-            AND Item.isDeleted=" . $deleted;
+  $sql .= " WHERE category.name='REDISTRIBUTION'
+            AND item.isDeleted=" . $deleted;
 
   // Get our total record count
   $totalResults = runQuery($conn, $sql);

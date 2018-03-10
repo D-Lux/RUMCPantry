@@ -1,15 +1,15 @@
 <div id="pantryNavBar">
   <ul>
-    <li><a href="ap1.php">Main<i class="fa fa-caret"></i></a></li>
+    <li><a href="ap1.php">Main</a></li>
     <li>
-      <a href="#">Registration<i class="fa fa-caret"></i></a>
+      <a href="#">Registration</a>
       <ul>
           <li><a href="checkIn.php">Check In Page</a></li>
           <li><a href="ap_oo3.php">View Active Order Forms</a></li>
       </ul>
     </li>
     <li>
-      <a href="#">Items<i class="fa fa-caret"></i></a>
+      <a href="#">Items</a>
       <ul>
           <li><a href="ap_io2.php">New Item</a></li>
           <li><a href="ap_io7.php">View Items</a></li>
@@ -20,25 +20,36 @@
       </ul>
     </li>
     <li>
-      <a href="#">Appointments<i class="fa fa-caret"></i></a>
+      <a href="#">Appointments</a>
       <ul>
           <li><a href="ap_ao1.php">View Appointments</a></li>
           <li><a href="ap_ao2.php">New Date</a></li>
       </ul>
     </li>
     <li>
-      <a href="#">Clients<i class="fa fa-caret"></i></a>
+      <a href="#">Clients</a>
       <ul>
           <li><a href="ap_co2.php">New Client</a></li>
           <li><a href="ap_co1.php">View Clients</a></li>
       </ul>
     </li>
     <li>
-      <a href="#">Donations<i class="fa fa-caret"></i></a>
+      <a href="#">Donations</a>
       <ul>
           <li><a href="ap_do1.php">View Donation Partners</a></li>
           <li><a href="ap_do2.php">New Donation</a></li>
           <li><a href="ap_do3.php">New Donaiton Partner</a></li>
+      </ul>
+    </li>
+    <li>
+      <a href="#">Reallocations</a>
+      <ul>
+          <li><a href="ap_ro2.php">View Reallocation Partners</a></li>
+          <li><a href="ap_ro3.php">New Reallocation Partner</a></li>
+          <li><a href="ap_ro5.php">View Reallocation Items</a></li>
+          <li><a href="ap_ro6.php">New Reallocation Item</a></li>
+          <li><a href="ap_ro8.php">View Reallocations</a></li>
+          <li><a href="ap_ro9.php">New Reallocation</a></li>
       </ul>
     </li>
     <li>

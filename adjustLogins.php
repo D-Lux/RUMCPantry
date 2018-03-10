@@ -1,11 +1,11 @@
 <div id="clickOut" style="display:none;"></div>
 <?php
-$pageRestriction = -1; //99;
+$pageRestriction = 99;
 include 'php/header.php';
 include 'php/backButton.php';
 ?>
 
-  
+
 	<style>
 	p {
 		color : red;
@@ -27,31 +27,27 @@ include 'php/backButton.php';
     position: absolute;
     z-index: 40;
     padding-top: 3%;
-    margin-top: -15%;
     background-color: rgb(241, 252, 212);
-    margin-left:150px;
-    width: 400px;
+    margin-left:30%;
+    width: 350px;
     height: 300px;
     border-style: solid;
     text-align: center;
   }
   #clickOut {
-    position: absolute;
+    position: fixed;
+    top: 0;
+    left: 0;
     z-index: 20;
     width: 100%;
     height: 100%;
-    text-align: center;
-    font-size: 1.2em;
     background-color: rgba(38, 12, 12, 0.50);
-    font-weight:bold;
-    
-    width: 800px;
   }
 	</style>
 	<h3>Adjust Logins</h3>
-  
+
 	<div class="body-content">
-    
+
     <div id="editBox" style="display:none;"></div>
 		<div id="loginMsgs" class="hoverMsg" style="display:none;"></div>
     <table class="table" id="loginTable">
@@ -107,7 +103,7 @@ include 'php/backButton.php';
       return(!obj || $.trim(obj) === "");
     };
   })(jQuery);
-  
+
   function drawLoginTable() {
     $('#loginTable').DataTable({
       "searching"     : false,
@@ -136,7 +132,7 @@ include 'php/backButton.php';
         });
       }
     });
-    $("#loginTable").off("click", ".ebtn").on("click", ".ebtn", function() {  
+    $("#loginTable").off("click", ".ebtn").on("click", ".ebtn", function() {
       permID = $(this).val();
       $.ajax({
         url      : 'php/ajax/adjustLogin.php?showEdit=1&id=' + permID,
@@ -203,7 +199,7 @@ include 'php/backButton.php';
       if (errors <= 0) {
         $("#BTN_newLogin").show(250);
         $("#newFields").hide(350);
-        
+
         $.ajax({
           url      : 'php/ajax/adjustLogin.php?create=1&n=' + newName + '&pw=' + newPW + '&perm=' + newPerm,
           dataType : 'json',
@@ -225,7 +221,7 @@ include 'php/backButton.php';
       $("#editBox").hide(300);
     });
     drawLoginTable();
-      
+
 	});
   if (getCookie("badRestrictions") != "") {
     $("#permissionMsgs").html("<p>The page you attempted to access had bad permissions</p>").show();
@@ -235,5 +231,5 @@ include 'php/backButton.php';
 		$("#permissionMsgs").html("<p>You do not have permission to view that page, please log in again</p>").show();
 		removeCookie("noPermission");
 	}
-  
+
 </script>

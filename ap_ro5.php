@@ -20,8 +20,8 @@
     <h3><?=$pageTitle?></h3>
 	<div class="body-content">
 
-	<table class="table" id="iReallocItemTable">
-    <thead>
+	<table class="table table-striped" id="iReallocItemTable">
+    <thead class="thead-dark">
       <tr>
         <th></th>
 			  <th>Item</th>
@@ -50,7 +50,7 @@
     removeCookie("newRedistItem");
   }
   if (getCookie("redistToggled") != "") {
-    window.alert("Redistribution item deactivated!");
+    window.alert("Redistribution item <?=$tblBtnFnct?>d!");
     removeCookie("redistToggled");
   }
 

@@ -47,12 +47,12 @@
 	$sql = "SELECT " . implode(", ", $columns);
 
 	// FROM main table
-	$sql .= " FROM Invoice I ";
+	$sql .= " FROM invoice I ";
 
 	// JOINs
-	$sql .= " JOIN Client c
+	$sql .= " JOIN client c
             ON c.clientID=fm.clientID
-            JOIN FamilyMember fm
+            JOIN familymember fm
             ON fm.clientID=I.clientID ";
 
 	// WHERE and ORDER clauses

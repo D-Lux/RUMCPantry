@@ -9,11 +9,11 @@
 	// *************************************************
 	// Query the database
 
-	$sql = "SELECT email, phoneNumber, address, city, state, zip, Client.notes, FamilyMember.lastName as name
-					FROM Client
-					JOIN FamilyMember
-					ON FamilyMember.clientID=Client.clientID
-					WHERE Client.clientID=" . $_GET['id'];
+	$sql = "SELECT email, phoneNumber, address, city, state, zip, client.notes, familymember.lastName as name
+					FROM client
+					JOIN familymember
+					ON familymember.clientID=client.clientID
+					WHERE client.clientID=" . $_GET['id'];
 	$partnerInfo = runQueryForOne($conn, $sql);
 
 	$phone1 = $phone2 = $phone3 = '';

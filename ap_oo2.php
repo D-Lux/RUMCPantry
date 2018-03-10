@@ -2,17 +2,17 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
-  
+
   $conn     = connectDB();
-  
+
   // Create our query from the Item and Category tables
 	// Item Name, $familyType, category name, category family type, itemid
-  $sql = "SELECT name, categoryID as id	
-          FROM Category
+  $sql = "SELECT name, categoryID as id
+          FROM category
           WHERE isDeleted=0
-          AND Category.name<>'Specials'
-          AND Category.name<>'redistribution'
-          ORDER BY Category.name";
+          AND name<>'Specials'
+          AND name<>'redistribution'
+          ORDER BY name";
 
   $categories = runQuery($conn, $sql);
   if (empty($categories)) {
@@ -25,7 +25,7 @@
 <h3>Edit Order Forms</h3>
 <div id="errMsgs" style="display:none;color:red;"></div>
 <div id="msgLog" class="hoverSuccess hoverMsg" style="display:none;"></div>
-	
+
 <div class="body-content">
 
 <select id="catSelector">
@@ -33,12 +33,12 @@
     <option value=<?=$category['id']?>><?=$category['name']?></option>
   <?php } ?>
 </select>
-    
+
 
 <div id="categoryHolder"></div>
 
-	
-  
+
+
 <?php include 'php/footer.php'; ?>
 <script type="text/javascript">
   $("select").on("change", function() {
@@ -47,9 +47,9 @@
   $(".tablinks").on("click", function() {
     $("#errMsgs").hide(200);
   });
-  
+
   $("#catSelector").chosen();
- 
+
   // Load the first tab
   $.ajax({
     url: "/RUMCPantry/php/ajax/editOrderForm.php?catid=" + $("#catSelector").val(),
@@ -58,7 +58,7 @@
       checkQuantitySelectionsNew();
     },
   });
-  
+
   $("#catSelector").on("change", function(e) {
     var Params = "?catid=" + $("#catSelector").val();
     $.ajax({
@@ -69,7 +69,7 @@
       },
     });
   });
-  
+
   // Handle category amount updates
   $("#categoryHolder").on("change", ".CQty", function() {
     var Params  = "?CID=" + $("#catSelector").val();
@@ -84,7 +84,7 @@
       },
     });
   });
-  
+
   // Handle item quantity updates
   $("#categoryHolder").on("change", ".IQty", function() {
     var Params  = "?itemID=" + $(this).attr("id").substring(1);
@@ -99,14 +99,14 @@
       },
     });
   });
-  
+
   function appendError(err, append) {
     if (err != '') {
       return( err + "<br>" + append)
     }
     return (append);
   }
-  
+
   function checkQuantitySelectionsNew() {
     var maxLarge  = Number($("#large").val());
     var maxMedium = Number($("#medium").val());
@@ -162,5 +162,5 @@
     }
   }
 
-  
+
 </script>

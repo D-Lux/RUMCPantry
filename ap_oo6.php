@@ -9,12 +9,12 @@
 
 	<h3>Order Form: Category Ordering</h3>
 
- 
-	
+
+
 	<div class="body-content">
 
-    <table class="table table-inverse" id="iCatOrderTable">
-      <thead>
+    <table class="table table-striped" id="iCatOrderTable">
+      <thead class="thead-dark">
         <th>Order</th>
         <th>Category Name</th>
         <th>Active Items</th>
@@ -23,8 +23,8 @@
       <tbody></tbody>
     </table>
   </div>
-	
-	
+
+
 <?php include 'php/footer.php'; ?>
 
 

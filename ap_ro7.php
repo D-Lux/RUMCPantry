@@ -2,10 +2,10 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
-  
+
   $conn = connectDB();
   $sql = "SELECT itemName, price, aisle as weight
-          FROM Item
+          FROM item
           WHERE itemID=" . $_GET['id'];
   $itemInfo = runQueryForOne($conn, $sql);
   closeDB($conn);
@@ -14,7 +14,7 @@
 	}
 ?>
 	<h3>Update Reallocation Item</h3>
-	
+
 	<div class="body-content">
     <div id="redistSuccess" class="hoverMsg hoverSuccess" style="display:none;"></div>
 		<form id="submitUpdateRedistItem" >
@@ -35,7 +35,7 @@
       <div class="msg-warning" id="warningMsgs"></div>
       <input type="submit" class="btn-nav" name="submitUpdateRedistItem" value="Update">
     </form>
-	
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">

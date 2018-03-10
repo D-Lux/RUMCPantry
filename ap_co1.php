@@ -2,7 +2,7 @@
   $pageRestriction = 10;
 	include 'php/header.php';
 	include 'php/backButton.php';
-  
+
   $inactive = isset($_GET['ShowInactive']);
 
   $pageTitle = "Client List";
@@ -17,14 +17,14 @@
   	$tblBtnFnct  = "reactivate";
   }
 ?>
-	
+
 <h3><?=$pageTitle?></h3>
-	
+
 	<div class="body-content">
-	
+
 		<div id="datatableContainer">
-			<table width='95%' id="iClientTable" class="display">
-				<thead>
+			<table width='95%' id="iClientTable" class="table table-striped">
+				<thead class="thead-dark">
 					<tr>
             <?php if (!$inactive) { ?>
               <th width='5%'></th>
@@ -40,7 +40,7 @@
 				</tbody>
 			</table>
 		</div>
-	
+
 
 			<!-- NEW Client -->
     <a href="/RUMCPantry/ap_co2.php" class="button">New Client</a>
@@ -48,7 +48,7 @@
     <form type="get">
       <input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">
     </form>
-    
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
@@ -79,5 +79,5 @@
 			}
 		});
 	});
-		
+
 </script>

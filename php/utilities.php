@@ -64,15 +64,15 @@ date_default_timezone_set('America/Chicago');
 $connectionActive = false;
 function connectDB() {
 	//Set up server connection
-	 $servername = "192.168.0.23";
-	 $username   = "root";
-	 $password   = "lgh598usa15";
-	 $dbname     = "foodpantry";
+	 //$servername = "192.168.0.23";
+	 //$username   = "root";
+	 //$password   = "lgh598usa15";
+	 //$dbname     = "foodpantry";
 
-	//$servername = "127.0.0.1";
-	//$username   = "root";
-	//$password   = "";
-	//$dbname     = "foodpantry";
+	$servername = "127.0.0.1";
+	$username   = "root";
+	$password   = "";
+	$dbname     = "foodpantry";
 
 
 	// Create and check connection

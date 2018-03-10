@@ -9,8 +9,11 @@
 	}
 
 
-  $sql = "SELECT MAX(formOrder) as maxOrder FROM category WHERE isDeleted=0";
-  $maxO = current(runQuery($conn, $sql))['maxOrder'];
+  $sql = "SELECT MAX(formOrder) as maxOrder, MIN(formOrder) as minOrder FROM category WHERE isDeleted=0";
+  $range = runQueryForOne($conn, $sql);
+  $maxO = $range['maxOrder'];
+  $minO = $range['minOrder'];
+
 
   $limit = '';
   if ($_GET['length'] != -1) {
@@ -19,13 +22,14 @@
 
 	// *******************************************************************************
 	// * Build our column list
-  $sql = "SELECT category.categoryID, category.name, formOrder, COUNT(*) as itemQty
+  $sql = "SELECT category.categoryID, category.name, formOrder, COUNT(item.itemID) as itemQty
           FROM category
-          JOIN item
+          LEFT JOIN item
             ON category.categoryid=item.categoryid
+            AND item.isDeleted = 0
           WHERE category.isDeleted = 0
-          AND item.isDeleted=0
           AND category.name != 'Redistribution'
+          AND category.formOrder > 0
           GROUP BY category.categoryID
           ORDER BY formOrder ASC";
 
@@ -46,7 +50,7 @@
 
     $ord = $result['formOrder'];
     $id = $result['categoryID'];
-    $upArrow = $result['formOrder'] != 1
+    $upArrow = $result['formOrder'] > $minO
                 ? "<a href='#' class='btn-up' id='up" . $ord . "_" . $id . "'><i class='fa fa-arrow-up'></i></a>"
                 : '';
 
