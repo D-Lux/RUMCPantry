@@ -57,104 +57,98 @@
 		//$clientInfo = queryDB($conn, $sql);
 		$clients = runQuery($conn, $sql);
 
+    closeDB($conn);
+    
+    // Die if we aren't here properly
 		if (!is_array($clients)) {
 			die( "No clients available" );
 		}
     if (!is_array($invoices)) {
       die("Invalid Date");
     }
-
-    // Close the connection as we've gotten all the information we should need
-		closeDB($conn);
-
-		$timeSlot = 0;
-		// ***********************************************************************
+		
+    // ***********************************************************************
 		// Invoices in time slots
 		//                 [TIME]
-		// Name | Family Size | Phone Number | Status | Delete
-		if (($visitInfo != NULL) AND ($visitInfo->num_rows > 0)) { ?>
-			<table>
-				<thead>
-					<tr>
-						<th>Client Name</th>
-						<th>Family Size</th>
-						<th>Phone Number</th>
-						<th>Status</th>
-					</tr>
-				</thead>
+		// Name | Family Size | Phone Number | Status | Remove
+    ?>
+    <table id="apptTable">
+      <thead>
+        <tr>
+          <th>Client Name</th>
+          <th>Family Size</th>
+          <th>Phone Number</th>
+          <th>Status</th>
+        </tr>
+      </thead>
 
-			<?php
+    <?php
 
-			// Loop through all of the invoices for this date
-			//while($invoice = sqlFetch($visitInfo)) {
-      foreach ($invoices as $invoice) {
-				$IIDTag = "InvoiceID" . $invoice['invoiceID'];
-				echo "<input hidden id='" . $IIDTag . "' value=" . $invoice['invoiceID'] . ">";
+    // Loop through all of the invoices for this date
+    //while($invoice = sqlFetch($visitInfo)) {
+    $timeSlot = 0;
+    foreach ($invoices as $invoice) {
+      // If we're looking at a new time slot, put in a header row
+      if ($timeSlot != $invoice['visitTime']) {
+        $timeSlot = $invoice['visitTime'];
+        echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
+      }
+      
+      // Start the new row
+      echo "<tr><td>";
 
-				// Set up the row and drop in appropriate information
-				if ($timeSlot != $invoice['visitTime']) {
-					$timeSlot = $invoice['visitTime'];
-					echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
-				}
-        
-        // Start the new row
-				echo "<tr><td>";
-
-        $clientIDTag = "Clients" . $invoice['invoiceID'];
-        echo "<select class='chosen-select' onchange='AJAX_SetAppointment(this)' id='" . $clientIDTag . "' >";
-        $selected = ($invoice['lName'] == 'Available' || empty($invoice['lName'])) ? ' selected ' : '';
-        echo "<option value=" . getAvailableClient() . " " . $selected . "></option>";
-        foreach ($clients as $client) {
-          if(!$client['lName'] == "Available") {
-            $selected = ($invoice['lName'] == $client['lName'] && $invoice['fName'] == $client['fName']) ? ' selected ' : '';
-            echo "<option value=" . $client['clientID'] . " " . $selected . ">" . $client['lName'] . ", " . $client['fName'] . "</option>";
-          }
+      $clientIDTag = "Client" . $invoice['invoiceID'];
+      echo "<select class='chosen-select' id='" . $clientIDTag . "' >";
+      $selected = ($invoice['lName'] == 'Available' || empty($invoice['lName'])) ? ' selected ' : '';
+      echo "<option value=" . getAvailableClient() . " " . $selected . "></option>";
+      foreach ($clients as $client) {
+        if(!($client['lName'] == "Available")) {
+          $selected = ($invoice['lName'] == $client['lName'] && $invoice['fName'] == $client['fName']) ? ' selected ' : '';
+          echo "<option value=" . $client['clientID'] . " " . $selected . ">" . $client['lName'] . ", " . $client['fName'] . "</option>";
         }
-        echo "</select>";
+      }
+      echo "</select>";
 
-				echo "</td>";
+      echo "</td>";
 
-				// These details change with the AJAX call so we need custom tags to locate them
-				$familySizeIDTag = "famSize". $invoice['invoiceID'];
-				echo "<td id='" . $familySizeIDTag . "'>" . $invoice['familySize'] . "</td>";
+      // These details change with the AJAX call so we need custom tags to locate them
+      $familySizeIDTag = "famSize". $invoice['invoiceID'];
+      echo "<td id='" . $familySizeIDTag . "'>" . $invoice['familySize'] . "</td>";
 
-				$phoneNoIDTag = "phoneNo" . $invoice['invoiceID'];
-				echo "<td id='" . $phoneNoIDTag . "'>" . displayPhoneNo($invoice['PhoneNo']) . "</td>";
+      $phoneNoIDTag = "phoneNo" . $invoice['invoiceID'];
+      echo "<td id='" . $phoneNoIDTag . "'>" . displayPhoneNo($invoice['PhoneNo']) . "</td>";
 
-				$statusIDTag = "status" . $invoice['invoiceID'];
-				$status = visitStatusDecoder($invoice['status']);
-				echo "<td id='" . $statusIDTag . "'>" . $status . "</td>";
+      $statusIDTag = "status" . $invoice['invoiceID'];
+      $status = visitStatusDecoder($invoice['status']);
+      echo "<td id='" . $statusIDTag . "'>" . $status . "</td>";
 
-				// --==[*DELETE*]==-- Button start
-				echo "<form action='php/apptOps.php' method='post'>";
-				// Add the hidden invoice ID for easy deletion
-				echo "<input type='hidden' name='invoiceID' value=" . $invoice['invoiceID'] . ">";
-				// Add the date to return properly
-				echo "<input type='hidden' name='returnDate' value=" . $_GET['date'] . ">";
-
-
-				if ($invoice['status'] < GetActiveStatus()) {
-					// --==[*DELETE*]==-- Button
-					echo "<td><button type='submit' id='deleteInvoice' class='btn-icon' name='DeleteInvoice' ";
-					echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'>";
-					echo "<i class='fa fa-trash'></i></button></td>";
-
-					// --==[*Lock*]==-- Button
-					echo "<td><button id='lock" . $invoice['invoiceID'] . "' type='submit' class='btn_lock btn-icon'><i class='fa fa-lock'></i></button></td>";
-				}
-				echo "</form>";
+      // --==[*DELETE*]==-- Button start
+      echo "<form action='php/apptOps.php' method='post'>";
+      // Add the hidden invoice ID for easy deletion
+      echo "<input type='hidden' name='invoiceID' value=" . $invoice['invoiceID'] . ">";
+      // Add the date to return properly
+      echo "<input type='hidden' name='returnDate' value=" . $_GET['date'] . ">";
 
 
-				// close off the row
-				echo "</tr>";
-			}
-			// Close off our table
-			echo "</table>";
+      if ($invoice['status'] < GetActiveStatus()) {
+        // --==[*DELETE*]==-- Button
+        echo "<td><button type='submit' id='deleteInvoice' class='btn-icon' name='DeleteInvoice' ";
+        echo "onclick=\"javascript: return confirm('Are you sure you want to delete this time slot?');\")'>";
+        echo "<i class='fa fa-trash'></i></button></td>";
 
-		}
-		else {
-			echo "Invoice date not found.<br><br>";
-		}
+        // --==[*Lock*]==-- Button
+        echo "<td><button id='lock" . $invoice['invoiceID'] . "' type='submit' class='btn_lock btn-icon'><i class='fa fa-lock'></i></button></td>";
+      }
+      echo "</form>";
+
+
+      // close off the row
+      echo "</tr>";
+    }
+    // Close off our table
+    echo "</table>";
+
+		
 
 		echo "<div id='ErrorLog'></div>";
 		// --==[*NEW TIME SLOT*]==--
@@ -171,6 +165,28 @@
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
   $(".chosen-select").chosen();
+  
+  //onchange='AJAX_SetAppointment(this)' 
+  
+  $("#apptTable").on("change", "select", function(e) {
+    var invoiceID = $(this).attr("id").substring(6);
+    var clientID  = $(this).val();
+    var Params = "?invoice=" + invoiceID + "&client=" + clientID;
+    $.ajax({
+      url      : 'php/ajax/setAppointmentClient.php' + Params,
+      dataType : 'json',
+      success  : function(data) {
+        //$("#loginMsgs").stop(true,true).hide().html(data.msg).show(250).delay(5000).hide(800);
+        if (data.err == 0) {
+          $("#famSize" + invoiceID).html(data.familySize);
+          $("#phoneNo" + invoiceID).html(data.phone);
+          $("#status" + invoiceID).html(data.status);
+        }
+      }, 
+    });
+  });
+  
+  
   
   if (getCookie("newAppt") != "") {
 		window.alert("New Date Added!");

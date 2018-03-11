@@ -41,81 +41,39 @@
 	}
 	else {
 		// Grab our GET Data
-		$clientFirstName = revertSingleQuote($_GET['fName']);
-		$clientLastName = revertSingleQuote($_GET['lName']);
-		$invoiceID = intval($_GET['invoiceID']);
+		$clientID = intval($_GET['client']);
+		$invoiceID = intval($_GET['invoice']);
+    $availClient = getAvailableClient();
+    
+    $newStatus = ($availClient == $clientID) ? GetAvailableStatus() : GetAssignedStatus();
 
-		if ( ($clientFirstName == "Available") && ($clientLastName == "Available") ) {
-			$clientID = getAvailableClient();
-			// Assign invoice to this client id
-			$conn = connectDB();
-			if ($conn->connect_error) {
-				die("Connection failed: " . $conn->connect_error);
-			}
-			$newStatus =  GetAvailableStatus();
-			$updateInvoice = "UPDATE invoice
-							  SET clientID=" . $clientID . ",
-							  status=" . $newStatus . "
-							  WHERE invoiceID=" . $invoiceID;
-			if (queryDB($conn, $updateInvoice) === FALSE) {
-				echoDivWithColor("Error!", "red" );
-			}
+    
+		$sql = "UPDATE invoice
+						SET clientID=" . $clientID . ",
+						status=" . $newStatus . "
+            WHERE invoiceID=" . $invoiceID;
+    
+    // TODO: Make sure this client doesn't have another appointment this month
+    // TODO: Make sure no other clients on this day have the same address
+    $conn = connectDB();
+		if (queryDB($conn, $sql)) {
+      $sql = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber
+              FROM client
+              WHERE clientID=" . $clientID;
+      $info = runQueryForOne($conn, $sql);
+      closeDB($conn);
+      $returnArr['phone']      = displayPhoneNo($info['phoneNumber']);
+      $returnArr['familySize'] = $info['familySize'];
+      $returnArr['status']     = visitStatusDecoder($newStatus);
+      $returnArr['err']        = (int)0;
+      die(json_encode($returnArr));
+			// Do updates
 		}
 		else {
-			// open a connection to the database
-			$conn = connectDB();
-			if ($conn->connect_error) {
-				die("Connection failed: " . $conn->connect_error);
-			}
-
-			// Find the client ID using the first and last name
-			$findClientQuery = "SELECT clientID
-								FROM familymember
-								WHERE firstName='" . $clientFirstName . "'
-								AND lastName='" . $clientLastName . "'";
-
-			$fetchedID = getSingleDataPoint($findClientQuery, $conn, "clientID");
-
-			if (!$fetchedID) {
-				// Data replacement output
-				echo "<td> 0 </td>";
-				echo "!PHONENO!";
-				echo "<td> Invalid </td>";
-				echo "!STATUS!";
-				echo "<td> Invalid </td>";
-			}
-			else {
-				// Update the invoice with the new client ID
-				// TODO: A warning if the client already has an appointment in this month
-				// TODO: A warning if another client has the same address this day
-				// Assigned Status
-				$newStatus = GetAssignedStatus();
-				$updateInvoice = "UPDATE invoice
-								  SET clientID=" . $fetchedID . ",
-								  status=" . $newStatus . "
-								  WHERE invoiceID=" . $invoiceID;
-				if (queryDB($conn, $updateInvoice) === FALSE) {
-          // TODO: Remove this
-					echoDivWithColor("Error!", "red" );
-				}
-
-				// Get the appropriate family size
-				$famSizeSQL = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber
-							   FROM client
-							   WHERE clientID=" . $fetchedID;
-				$sizeResult = queryDB($conn, $famSizeSQL);
-				$famData = sqlFetch($sizeResult);
-
-				// Data replacement output
-				echo "<td>" . $famData['familySize'] . "</td>";
-				echo "!PHONENO!";
-				echo "<td>" . displayPhoneNo($famData['phoneNumber']) . "</td>";
-				echo "!STATUS!";
-				$status = visitStatusDecoder($newStatus);
-				echo "<td>" . $status . "</td>";
-			}
-
-			closeDB($conn);
-		}
+      closeDB($conn);
+      $returnArr['msg'] = "Failed to set appointment.";
+      $returnArr['err'] = 1;
+      die(json_encode($returnArr));
+    }
 	}
 ?>

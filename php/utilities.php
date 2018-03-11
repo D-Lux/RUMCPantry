@@ -84,10 +84,8 @@ function connectDB() {
 // This takes a database connection variable and closes it only if it is open still
 function closeDB($conn){
 	if ($GLOBALS['connectionActive']) {
+    $conn->close();
 		$GLOBALS['connectionActive'] = false;
-		if ($conn->ping()) {
-			$conn->close();
-		}
 	}
 }
 // This is just for uniformity, as there is an OO way to query a database and a function call way
@@ -655,7 +653,7 @@ function shelfEncoder($shelf){ return $shelf; }
 function rackEncoder($rack){	return $rack; }
 
 function rackDecoder($rack){
-	return chr($rack);
+	return (($rack > 0) ? chr($rack) : "-");
 }
 
 // ************************************************************

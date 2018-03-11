@@ -29,7 +29,7 @@
 			echo "<input type='hidden' name='appDate' value=" . $_POST['date'] . ">";
 		?>
 		<br><br>
-		<input type="submit" name="CreateInvoiceTimeSlot" value="Create Time Slots">
+		<input type="submit" class="btn-nav" name="CreateInvoiceTimeSlot" value="Create Time Slots">
 	</form>
 	
 <?php include 'php/footer.php'; ?>
