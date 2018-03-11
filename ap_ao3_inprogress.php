@@ -40,7 +40,7 @@
 				AND status NOT IN (" . implode ( ",", GetRedistributionStatuses()) . ")
 				ORDER BY visitTime, invoiceID";
 
-		$visitInfo = queryDB($conn, $sql);
+		$invoices = runQuery($conn, $sql);
 
 		// *******************************************
 		// ** Generate the datalist for client drop down
@@ -51,32 +51,22 @@
 				ON client.clientID=familymember.clientID
 				WHERE familymember.isHeadOfHousehold=1
 				AND familymember.isDeleted=0
-				AND client.redistribution=0";
+				AND client.redistribution=0
+        ORDER BY lName";
 
 		//$clientInfo = queryDB($conn, $sql);
-		$clientInfo = runQuery($conn, $sql);
+		$clients = runQuery($conn, $sql);
 
-		if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
-			echo "No clients available";
+		if (!is_array($clients)) {
+			die( "No clients available" );
 		}
+    if (!is_array($invoices)) {
+      die("Invalid Date");
+    }
 
-
-    // TODO: Change this to a chosen-select
-    //$clientDataList = "<select class='chosen-select' id='Clients'>";
-		$clientDataList = "<datalist id='Clients'>";
-		while($client = sqlFetch($clientInfo)) {
-			$clientLName = displaySingleQuote($client['lName']);
-			$clientFName = displaySingleQuote($client['fName']);
-			$clientDataList .= "<option value='" . $clientLName .
-								($clientLName=="Available" ? "" : ", " . $clientFName) . "'></option>";
-     // $clientDataList .= "<option value=" . $client['clientID'] . ">";
-      //$clientDataList .= ($clientLName=="Available" ? "Available" : $clientLName . ", " . $clientFName);
-		}
-    //$clientDataList = "</select>";
-		$clientDataList .= "</datalist>";
-
-		// Close the connection as we've gotten all the information we should need
+    // Close the connection as we've gotten all the information we should need
 		closeDB($conn);
+
 		$timeSlot = 0;
 		// ***********************************************************************
 		// Invoices in time slots
@@ -94,55 +84,44 @@
 				</thead>
 
 			<?php
-			// To generate a unique ID for each invoice in the list, use a counter
-			$setID = 0;
 
 			// Loop through all of the invoices for this date
-			while($invoice = sqlFetch($visitInfo)) {
-				$IIDTag = "InvoiceID" . $setID;
-				echo "<input hidden id=" . $IIDTag . " value=" . $invoice['invoiceID'] . ">";
+			//while($invoice = sqlFetch($visitInfo)) {
+      foreach ($invoices as $invoice) {
+				$IIDTag = "InvoiceID" . $invoice['invoiceID'];
+				echo "<input hidden id='" . $IIDTag . "' value=" . $invoice['invoiceID'] . ">";
 
 				// Set up the row and drop in appropriate information
 				if ($timeSlot != $invoice['visitTime']) {
 					$timeSlot = $invoice['visitTime'];
 					echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
 				}
+        
+        // Start the new row
 				echo "<tr><td>";
 
-				// List appointments as Last Name, First Name if they are set
-				$clientName = displaySingleQuote(($invoice['lName']=="Available" ? $invoice['lName']
-							 : ($invoice['lName'] . ", " . $invoice['fName']) ));
-
-				$clientIDTag = "Clients" . $setID;
-
-				if ($invoice['status'] > GetActiveStatus()) {
-					echo $clientName;
-				}
-				else {
-					if ($clientName == "Available") {
-						echo "<input type='text' list='Clients' id=" . $clientIDTag;
-					}
-					else {
-						echo "<input type='text' list='Clients'  id=" . $clientIDTag . "
-								value='" . $clientName . "'";
-					}
-					// AJAX Call
-					echo " onchange='AJAX_SetAppointment(this)' >";
-
-					// Dump out the client list we created on page load
-					echo $clientDataList;
-				}
+        $clientIDTag = "Clients" . $invoice['invoiceID'];
+        echo "<select class='chosen-select' onchange='AJAX_SetAppointment(this)' id='" . $clientIDTag . "' >";
+        $selected = ($invoice['lName'] == 'Available' || empty($invoice['lName'])) ? ' selected ' : '';
+        echo "<option value=" . getAvailableClient() . " " . $selected . "></option>";
+        foreach ($clients as $client) {
+          if(!$client['lName'] == "Available") {
+            $selected = ($invoice['lName'] == $client['lName'] && $invoice['fName'] == $client['fName']) ? ' selected ' : '';
+            echo "<option value=" . $client['clientID'] . " " . $selected . ">" . $client['lName'] . ", " . $client['fName'] . "</option>";
+          }
+        }
+        echo "</select>";
 
 				echo "</td>";
 
 				// These details change with the AJAX call so we need custom tags to locate them
-				$familySizeIDTag = "famSize" . $setID;
+				$familySizeIDTag = "famSize". $invoice['invoiceID'];
 				echo "<td id='" . $familySizeIDTag . "'>" . $invoice['familySize'] . "</td>";
 
-				$phoneNoIDTag = "phoneNo" . $setID;
+				$phoneNoIDTag = "phoneNo" . $invoice['invoiceID'];
 				echo "<td id='" . $phoneNoIDTag . "'>" . displayPhoneNo($invoice['PhoneNo']) . "</td>";
 
-				$statusIDTag = "status" . $setID;
+				$statusIDTag = "status" . $invoice['invoiceID'];
 				$status = visitStatusDecoder($invoice['status']);
 				echo "<td id='" . $statusIDTag . "'>" . $status . "</td>";
 
@@ -161,16 +140,13 @@
 					echo "<i class='fa fa-trash'></i></button></td>";
 
 					// --==[*Lock*]==-- Button
-					echo "<td><button id='lock" . $setID . "' type='submit' class='btn_lock btn-icon'><i class='fa fa-lock'></i></button></td>";
+					echo "<td><button id='lock" . $invoice['invoiceID'] . "' type='submit' class='btn_lock btn-icon'><i class='fa fa-lock'></i></button></td>";
 				}
 				echo "</form>";
 
 
 				// close off the row
 				echo "</tr>";
-
-				// Increment our slot ID
-				$setID++;
 			}
 			// Close off our table
 			echo "</table>";
@@ -194,7 +170,8 @@
 
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
-  //$(".chosen-select").chosen();
+  $(".chosen-select").chosen();
+  
   if (getCookie("newAppt") != "") {
 		window.alert("New Date Added!");
 		removeCookie("newAppt");
