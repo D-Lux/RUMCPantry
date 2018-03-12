@@ -33,9 +33,7 @@
   </table>
 
 	<!-- NEW Redistribution Item -->
-	<form action="/RUMCPantry/ap_ro6.php" method="get">
-		<input type="submit" class="btn-nav" name="newRedistItem" value="New Reallocation Item">
-    </form>
+  <a href="/RUMCPantry/ap_ro6.php" class="button">New Reallocation Item</a>
 
 	<!-- View Deactivated Items -->
 	<form method="get">
