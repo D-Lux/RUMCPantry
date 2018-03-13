@@ -1,84 +1,63 @@
 <?php
 $pageRestriction = 99;
 include 'php/header.php';
-include 'php/backButton.php'
+include 'php/backButton.php';
+
+$conn = connectDB();
+
+// Create our queries
+$sql = "SELECT itemName, quantity, totalItemsPrice
+				FROM invoicedescription
+				JOIN item
+				ON item.itemID=invoicedescription.itemId
+				WHERE invoicedescription.invoiceID=" . fixInput($_GET['id']);
+$items = runQuery($conn, $sql);
+
+$sql = "SELECT lastName as Name, visitDate
+				FROM invoice
+				JOIN client
+				ON client.clientID = invoice.clientID
+				JOIN familymember
+				ON familymember.clientID = invoice.clientID
+				WHERE invoice.invoiceID=" . $_GET['id'];
+$partner = runQueryForOne($conn, $sql);
+
+if ($items === false) {
+	die("No items in this invoice");
+}
+if ($partner === false) {
+	die("Invalid partner");
+}
+
+closeDB($conn);
 ?>
-
   <h3>View Reallocation</h3>
-	
+
 	<div class="body-content">
-	
-	<?php
-		// Set up server connection
-		$conn = connectDB();
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
+		<div class="row">
+			<div class="col-sm-2 text-right">Partner:</div>
+			<div class="col-sm-6"><?=$partner['Name']?></div>
+		</div>
+		<div class="row">
+			<div class="col-sm-2 text-right">Date:</div>
+			<div class="col-sm-6"><?=date('F jS, Y', strtotime($partner['visitDate']))?></div>
+		</div>
+		<div class="clearfix"></div>
+		<table class="table table-hover">
+			<thead class="thead-dark">
+				<tr>
+					<th>Item</th>
+					<th>Quantity</th>
+					<th>Price of Items</th>
+				</tr>
+			</thead>
+			<?php foreach($items as $item) { ?>
+				<tr>
+					<td><?=$item['itemName']?></td>
+					<td><?=$item['quantity']?></td>
+					<td><?=$item['totalItemsPrice']?></td>
+				</tr>
+			<?php } ?>
+		</table>
 
-		// Create our queries
-		$invoiceSql = "SELECT itemName, quantity, totalItemsPrice
-						FROM InvoiceDescription
-						JOIN Item
-						ON Item.itemID=InvoiceDescription.itemId
-						WHERE InvoiceDescription.invoiceID=" . $_GET['id'];
-		$invoiceQuery = queryDB($conn, $invoiceSql);
-		if ($invoiceQuery === FALSE) {
-      // TODO: remove this (replace with loading previous page and warning message)
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to locate invoice descriptions.", "red" );	
-		}
-	
-		$nameSql = "SELECT pi.lastName as Name, pi.city as city, visitDate
-					FROM Invoice
-					JOIN (SELECT Client.clientID as ID, lastName, city
-						  FROM Client
-						  JOIN FamilyMember
-						  ON FamilyMember.clientID=Client.clientID) as pi
-					ON pi.ID=Invoice.clientID
-					WHERE Invoice.invoiceID=" . $_GET['id'];
-		$partnerQuery = queryDB($conn, $nameSql);
-		
-		if ($partnerQuery === FALSE) {
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to get partner data.", "red" );	
-		}
-		$conn->close();
-		
-		
-		if ($partnerQuery != null && $partnerQuery->num_rows > 0) {
-			$partnerData = sqlFetch($partnerQuery);
-			echo "Partner Name: " . $partnerData['Name'] . "<br>";
-			echo "Partner City: " . $partnerData['city'] . "<br>";
-			echo "Date: " . $partnerData['visitDate'] . "<br>";
-		}
-		echo "<br><br>";
-
-		// loop through the query results
-		if ($invoiceQuery!=null && $invoiceQuery->num_rows > 0) {
-			echo "<table> <tr>";
-			echo "<th>Item</th><th>Quantity</th><th>Price</th></tr>";
-			
-			while($row = sqlFetch($invoiceQuery)) {
-				// Start Table row
-				echo "<tr>";
-
-				// Information Fields
-				echo "<td>" . $row['itemName'] . "</td>";
-				echo "<td>" . $row['quantity'] . "</td>";
-				echo "<td>" . $row['totalItemsPrice'] . "</td>";
-				
-				// Close off the row and form
-				echo "</tr>";
-			}
-			// Close off the table
-			echo "</table><br>";
-		} 
-		else {
-			echo "No redistribution invoices in database.";
-		}
-		
-	?>
-	
 <?php include 'php/footer.php'; ?>

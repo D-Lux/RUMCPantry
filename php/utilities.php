@@ -64,10 +64,10 @@ date_default_timezone_set('America/Chicago');
 $connectionActive = false;
 function connectDB() {
 	//Set up server connection
-	 //$servername = "192.168.0.23";
-	 //$username   = "root";
-	 //$password   = "lgh598usa15";
-	 //$dbname     = "foodpantry";
+	 // $servername = "192.168.0.23";
+	 // $username   = "root";
+	 // $password   = "lgh598usa15";
+	 // $dbname     = "foodpantry";
 
 	$servername = "127.0.0.1";
 	$username   = "root";
@@ -656,6 +656,27 @@ function rackDecoder($rack){
 	return (($rack > 0) ? chr($rack) : "-");
 }
 
+// ************************************************************
+// ** Get price information for items by ID
+function getItemPrices($conn = null) {
+	$closeOnExit = false;
+	if ($conn == null) {
+		$conn = connectDB();
+		$closeOnExit = true;
+	}
+	$sql = "SELECT itemID, price
+					FROM Item
+					WHERE Item.isDeleted=0";
+	$results = runQuery($conn, $sql);
+	$itemPrices = [];
+	if (is_array($results)) {
+		foreach ($results as $result) {
+			$itemPrices[$result['itemID']] = $result['price'];
+		}
+	}
+	if ($closeOnExit) { closeDB($conn); }
+	return array();
+}
 // ************************************************************
 // ** Disabled categories for walkIns
 

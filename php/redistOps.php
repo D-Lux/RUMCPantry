@@ -19,81 +19,87 @@ elseif (isset($_POST['viewRedistribution'])) {
 // --== Add new redistribution ==--
 elseif(isset($_POST['submitRedistribution'])) {
 	// POST: date | partnerID | itemID[] | qty[]
-	// Debug text
-	echo "<h1>Attempting to create a new redistribution invoice</h1>";
-	foreach ( $_POST["itemID"] as $i=>$itemID ) {
-		echo "ITEM ID: " . $itemID . " Count: " . $_POST["qty"][$i] . "<br>";
-	}
+  $date     = isset($_POST['date'])      ? $_POST['date']      : -1;
+  $partner  = isset($_POST['partnerID']) ? $_POST['partnerID'] : -1;
+  $items    = isset($_POST['items'])     ? $_POST['items']     : -1;
+  $qtys     = isset($_POST['qty'])       ? $_POST['qty']       : -1;
+  $itemInfo = [];
 
-	// *********************************************
-	// * --== Create our item ID / Price array ==--
+  // If anything is not set, error message update
+  $error = '';
+  // Validate our input
+  if ($date == -1) { $error .= "<p>Date is invalid.</p>"; }
+  if ($partner <= 0) { $error .= "<p>Must have a reallocation client.</p>"; }
+  if ($items == -1) { $error .= "<p>Must select at least one item.</p>"; }
+  if ($qtys == -1) { $error .= "<p>Must add item quantities.</p>"; }
+  if (is_array($qtys) && is_array($items)) {
+    if (count($qtys) != count($items)) {
+      $error .= "<p>All item fields must have a matching quantity.</p>";
+    }
+    foreach($qtys as $qty) {
+      if (empty($qty)) {
+        $error .= "<p>Item quantities cannot be empty or zero.</p>";
+        break;
+      }
+    }
+    foreach($items as $item) {
+      if (empty($item)) {
+        $error .= "<p>Items cannot be blank.</p>";
+        break;
+      }
+    }
+    if ($error == '') {
+      foreach($items as $key => $itemID) {
+        $itemInfo[$itemID] = $qtys[$key];
+      }
+    }
+  }
 
-	// Connect to the database and grab Item ID and Price information
-	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	// Query String
-	$sql = "SELECT itemID, price
-			FROM item
-			WHERE item.isDeleted=0";
-	$itemPriceQuery = queryDB($conn, $sql);
-
-	$PriceID_Array = array();
-	while( $itemRow = sqlFetch($itemPriceQuery) ) {
-		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
-	}
-
-	// ******************************
-	// * --== Create our Invoice ==--
-
-	$redistDate = makeString($_POST['date']);
-	$sql = "INSERT INTO invoice (clientID, visitDate, status)
-			VALUES (" . $_POST['partnerID'] . ", " . $redistDate . ", " . GetRedistributionStatus() . ")";
 
 
-	if (queryDB($conn, $sql) === TRUE) {
-		// Get our Invoice ID Key to use for the invoice descriptions
-		$invoiceID = $conn->insert_id;
+  // Perform insertions and completion if we're good to go
+  if ($error == '') {
+    $conn = connectDB();
 
-		// ***************************************
-		// * --== Create invoice descriptions ==--
+    $sql = "INSERT INTO invoice (clientID, visitDate, status)
+      VALUES ({$partner}, '{$date}', " . GetRedistributionStatus() . ")";
 
-		// Start our query string
-		$insertionSql = "INSERT INTO invoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
-		$firstInsert = TRUE;
+    if (queryDB($conn, $sql) === FALSE) {
+      $error .= "<p>There was an error attempting to insert the invoice.</p>";
+      $error .= "<p>Query: " . $sql . "</p>";
+      $error .= "<p>Error: " . sqlError($conn) . "</p>";
+    }
+    else {
+      // Get our Invoice ID Key to use for the invoice descriptions
+      $invoiceID = $conn->insert_id;
+      $PriceID_Array = getItemPrices($conn);
 
-		$itemIDs = $_POST['itemID'];
-		$itemQtys = $_POST['qty'];
+      // ***************************************
+      // * --== Create invoice descriptions ==--
 
-		for ($i=0; $i < count($itemIDs); $i++) {
-			// Get my values (makes the insertion query string cleaner)
-			$currItem = $itemIDs[$i];
-			$currQty = $itemQtys[$i];
-			$totalPrice = $currQty * (isset($PriceID_Array[$currItem]) ? $PriceID_Array[$currItem] : 0);
+      // Start our query string
+      $insertionSql = "INSERT INTO invoicedescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
+      $firstInsert = TRUE;
+      foreach($itemInfo as $itemID => $qty) {
+        $totalPrice = $qty * (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0);
 
-			// Append to the insertion query string
-			$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion
-			$insertionSql .= "( $invoiceID, $currItem, $currQty, $totalPrice, 0 )";
-			$firstInsert = FALSE;
-		}
+        // Append to the insertion query string
+        $insertionSql .= (!$firstInsert ? "," : "");  // Add a comma if we aren't the first insertion
+        $insertionSql .= "( " . $invoiceID . ", " . $itemID . ", " . $qty . ", " . $totalPrice . ", 0 )";
+        $firstInsert = FALSE;
+      }
 
-		// Perform insertion
-		if (queryDB($conn, $insertionSql) === TRUE) {
-			createCookie("newRedistribution", 1, 30);
-			header("location: /RUMCPantry/ap_ro8.php");
-		}
-		else {
-			echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to create Invoice Descriptions.", "red" );
-		}
-	}
-	else {
-		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to create Invoice.", "red" );
-	}
+      // Perform insertion
+      if (queryDB($conn, $insertionSql) === FALSE) {
+        $error .= "<p>There was an error attempting to add items to the invoice.</p>";
+        $error .= "<p>Query: " . $insertionSql . "</p>";
+        $error .= "<p>Error: " . sqlError($conn) . "</p>";
+      }
+    }
+    closeDB($conn);
+  }
+
+  die(json_encode(array("error" => $error)));
 }
 
 // --== Delete invoice ==--

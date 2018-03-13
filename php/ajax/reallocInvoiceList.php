@@ -32,7 +32,7 @@
 
 	// *************************************
 	// * ORDER clause
-	$orderQuery = " ORDER BY I.visitDate ";
+	$orderQuery = " ORDER BY I.visitDate DESC";
 
   // *************************************
   // * LIMIT clause
@@ -51,7 +51,7 @@
 
 	// JOINs
 	$sql .= " JOIN client c
-            ON c.clientID=fm.clientID
+            ON c.clientID=I.clientID
             JOIN familymember fm
             ON fm.clientID=I.clientID ";
 
@@ -80,8 +80,7 @@
     foreach ($results as $result) {
       //Build our link
       $date = DATE("F d, Y", strtotime($result['visitDate']));
-      $editLink   = "<button type='submit' class='btn-table btn-edit'
-               value='/RUMCPantry/ap_ro10.php?id=" . $result['invoiceID'] . "'><i class='fa fa-eye'> " . $date . "</i></button>";
+      $editLink   = "<a href='/RUMCPantry/ap_ro10.php?id=" . $result['invoiceID'] . "'>" . $date . "</a>";
 
       $col = 0;
       $row[0] = $editLink;

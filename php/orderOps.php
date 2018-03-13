@@ -18,8 +18,8 @@ function isCategory($data) {
 		case ("CreateInvoiceDescriptions"):
 		case ("walkInStatus"):
 			return FALSE;
-		
-		default: 
+
+		default:
 			return TRUE;
 	}
 }
@@ -30,16 +30,16 @@ function deleteInvoiceDesc() {
 	$invoiceID = $_POST['invoiceID'];
 
 	// Open up the database and delete all invoice descriptions that match the invoice ID
-	
+
 	// Connect to the database
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	
+
 	$sql = "DELETE FROM InvoiceDescription
 			WHERE invoiceID=" . $invoiceID;
-			
+
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		return true;
@@ -57,31 +57,18 @@ function createInvoiceDesc() {
 
 	// *********************************************
 	// * --== Create our item ID / Price array ==--
-	
+	$PriceID_Array = getItemPrices()
 	// Connect to the database and grab Item ID and Price information
 	$conn = connectDB();
-	if ($conn->connect_error) {
-		die("Connection failed: " . $conn->connect_error);
-	}
-	// Our Query String
-	$sql = "SELECT itemID, price
-			FROM Item
-			WHERE Item.isDeleted=0";
-	$itemPriceQuery = queryDB($conn, $sql);
-	
-	$PriceID_Array = array();
-	while( $itemRow = sqlFetch($itemPriceQuery) ) {
-		$PriceID_Array[$itemRow['itemID']] = $itemRow['price'];
-	}
-	
+
 	// ***********************************************
 	// * --== Create our Insertion Query ==--
-	
+
 	// Create the array to track item IDs
-	$orderIDs = array();
-	$specialIDs = array();
-	$runQuery = FALSE;
-	
+	$orderIDs   = [];
+	$specialIDs = [];
+	$runQuery   = FALSE;
+
 	// Loop through our POST information to generate an array of itemIDs and quantities
 	foreach ($_POST as $Category=>$C_Count){
 		if ( isCategory($Category) ) {
@@ -110,22 +97,22 @@ function createInvoiceDesc() {
 			}
 		}
 	}
-	
+
 	// Generate our insertion string
 	$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
 	$firstInsert = TRUE;
-	
+
 	foreach ($orderIDs as $itemID=>$qty) {
 		$totalPrice = $qty * (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0);
-		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion
 		$insertionSql .= "( $invoiceID, $itemID, $qty, $totalPrice, 0 )";
-		$firstInsert = FALSE;				
+		$firstInsert = FALSE;
 	}
 	foreach ($specialIDs as $itemID=>$qty) {
-		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion		
+		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion
 		$insertionSql .= "( $invoiceID, $itemID, $qty, ";
 		$insertionSql .= (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0) . ", 1 )";
-		$firstInsert = FALSE;				
+		$firstInsert = FALSE;
 	}
 
 	echo "Insertion query: ";
@@ -138,7 +125,7 @@ function createInvoiceDesc() {
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to insert invoices.", "red" );	
+			echoDivWithColor("Error, failed to insert invoices.", "red" );
 			closeDB($conn);
 		}
 	}
@@ -162,26 +149,26 @@ function updateStatusFromOrder() {
 			FROM Invoice
 			WHERE invoiceID=" . $_POST['invoiceID'] . "
 			LIMIT 1";
-	
+
 	$result = queryDB($conn, $sql);
 	if ($result === false) {
 		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to get current status.", "red" );	
+		echoDivWithColor("Error, failed to get current status.", "red" );
 		closeDB($conn);
 	}
 	else {
 		// Now we advance our status variable
 		$fetchData = sqlFetch($result);
-		
+
 		// Get the status, if the order status isn't set to arrived at least, set it now
 		$currStatus = ($fetchData['status'] >= GetArrivedLow()) ? $fetchData['status'] : GetArrivedLow();
 		$newStatus = AdvanceInvoiceStatus($currStatus) ;
-		
+
 		// Generate our update query with the new status
 		$sql = "UPDATE Invoice
 				SET status=" . $newStatus . "
 				WHERE invoiceID=" . $_POST['invoiceID'];
-		
+
 		// Run the query, if we're good, return success
 		if (queryDB($conn, $sql)) {
 			closeDB($conn);
@@ -231,16 +218,16 @@ elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 // **************************************************
 // * Setting an invoice to processed
 elseif (isset($_POST['SetInvoiceProcessed'])) {
-	
+
 	// *********************************************
 	// * --== Create our update query ==--
-	
+
 	// Connect to the database
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
-	
+
 	$sql = "UPDATE Invoice
 			SET status=" . (ReturnProcessedStatus($_POST['status'])) . "
 			WHERE invoiceID=" . $_POST['invoiceID'];
@@ -262,7 +249,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 	// go through the post and any time we have a post value that contains 'item' run through it
 	// search each item in the db and get it's ID, append the ID to a line in the text file
 	// itemID1,itemID2,itemID3, - use explode(",",getLine($filename)); to extract arrays of item IDs
-	
+
 	// Open our database connection
 	$conn = connectDB();
 	if ($conn->connect_error) {
@@ -270,7 +257,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 	}
 	// Open our specials file
 	$specialsFile = fopen("../specials.txt","w") or die("Unable to open specials!");
-	
+
 	$firstLine = TRUE;
 	// Go through our post data and pull out the appropriate item strings
 	foreach ($_POST as $varName=>$itemArr){
@@ -287,11 +274,11 @@ elseif (isset($_POST['SaveSpecials'])) {
 						FROM Item
 						WHERE itemName='" . $itemName . "'
 						LIMIT 1";
-						
+
 				$itemIDGrab = queryDB($conn, $sql);
-				
+
 				if ($itemIDGrab == NULL || $itemIDGrab->num_rows <= 0){
-					echo "sql error: " . mysqli_error($conn);	
+					echo "sql error: " . mysqli_error($conn);
 				}
 				else {
 					$itemID = sqlFetch($itemIDGrab);
@@ -300,7 +287,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 			}
 		}
 	}
-	
+
 	closeDB($conn);
 	fclose($specialsFile);
 	createCookie("SpecialsSaved", 1, 30);
@@ -312,33 +299,33 @@ elseif (isset($_POST['SaveSpecials'])) {
 elseif (isset($_POST['addItemToOrder'])) {
 	// POST Data to use: invoiceID, addItem, qty
 	// POST Data to pass back using 'get' global: name, visitTime, familySize,
-	
+
 	// Create our return header to go back to the correct order
-	$returnHeader = "location: /RUMCPantry/ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] . 
+	$returnHeader = "location: /RUMCPantry/ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] .
 					"&visitTime=" . $_POST['visitTime'] . "&familySize=" . $_POST['familySize'];
-	
+
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// If they already have the item in their invoice, just update the quantity
 	// If they don't, add a new invoice description
-	
+
 	$sql = "SELECT quantity, invoiceDescID as ID, price, totalItemsPrice
 			FROM InvoiceDescription
 			JOIN Item
 			ON Item.itemID = InvoiceDescription.itemID
 			WHERE invoiceID=" . $_POST['invoiceID'] . "
 			AND Item.itemName=" . makeString($_POST['addItem']);
-	
+
 	$descQuery = queryDB($conn, $sql);
 
 	if ($descQuery!=null && $descQuery->num_rows > 0) {
 		$oldData = sqlFetch($descQuery);
-		
+
 		$newQty = $oldData['quantity'] + $_POST['qty'];
 		$newPrice = $oldData['totalItemsPrice'] + ($_POST['qty'] * $oldData['price']);
-		
+
 		$sql = "UPDATE InvoiceDescription
 				SET quantity=" . $newQty . ", totalItemsPrice=" . $newPrice . "
 				WHERE invoiceDescID=" . $oldData['ID'];
@@ -349,7 +336,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to update existing item count.", "red" );	
+			echoDivWithColor("Error, failed to update existing item count.", "red" );
 			closeDB($conn);
 		}
 	}
@@ -361,15 +348,15 @@ elseif (isset($_POST['addItemToOrder'])) {
 				WHERE itemName=" . makeString($_POST['addItem']) . "
 				LIMIT 1";
 		$idQuery = queryDB($conn, $sql);
-		
+
 		// Check our query to see if we got the item
 		if ($idQuery != null) {
 			// We've got our ID now, just insert it with it's quantity
 			$itemIdFetch = sqlFetch($idQuery);
 			$itemPrice = $itemIdFetch['price'] * $_POST['qty'];
-			$sql = "INSERT INTO InvoiceDescription 
+			$sql = "INSERT INTO InvoiceDescription
 					(invoiceID, itemID, quantity, totalItemsPrice, special)
-					VALUES 
+					VALUES
 					(" . $_POST['invoiceID'] . ", " . $itemIdFetch['itemID'] . ", " .
 					 $_POST['qty'] . ", " . $itemPrice . ", 0)";
 			if (queryDB($conn, $sql) === TRUE) {
@@ -379,19 +366,19 @@ elseif (isset($_POST['addItemToOrder'])) {
 			}
 			else {
 				echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-				echoDivWithColor("Error, failed to add new item.", "red" );	
+				echoDivWithColor("Error, failed to add new item.", "red" );
 				closeDB($conn);
 			}
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-			echoDivWithColor("Error, failed to find item ID to add.", "red" );	
+			echoDivWithColor("Error, failed to find item ID to add.", "red" );
 			closeDB($conn);
 		}
-		
-		
-				
-	
+
+
+
+
 	$descQuery = queryDB($conn, $sql);
 	}
 
