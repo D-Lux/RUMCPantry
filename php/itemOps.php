@@ -3,9 +3,9 @@
 include('utilities.php');
 
 if(isset($_POST['createItem'])) {
-  $category 	  = $_POST['category'];
-  $itemName 	  = $_POST['itemName'];
-  $displayName  = $_POST['displayName'];
+  $category 	  = fixInput($_POST['category']);
+  $itemName 	  = fixInput($_POST['itemName']);
+  $displayName  = fixInput($_POST['displayName']);
   $price 		    = $_POST['price'];
   $small 		    = $_POST['small'];
   $medium 	    = $_POST['medium'];
@@ -91,9 +91,9 @@ elseif (isset($_GET['DeleteItem'])) {
 }
 elseif (isset($_POST['updateItemIndividual'])) {
   $itemID   	 = $_POST['itemID'];
-  $category 	 = $_POST['category'];
-  $itemName 	 = $_POST['itemName'];
-  $displayName = $_POST['displayName'];
+  $category 	 = fixInput($_POST['category']);
+  $itemName 	 = fixInput($_POST['itemName']);
+  $displayName = fixInput($_POST['displayName']);
   $price 		   = $_POST['price'];
   $small 		   = $_POST['small'];
   $medium 	   = $_POST['medium'];
@@ -113,13 +113,13 @@ elseif (isset($_POST['updateItemIndividual'])) {
   }
 
 
-  //check to see if category ecists, if not create it.
+  //check to see if category exists, if not create it.
   $result = queryDB($conn, "SELECT DISTINCT name FROM category WHERE name = '$category'");
 	if($result->num_rows == 0) {
     $sql = "SELECT Max(formOrder) as M FROM category";
     $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
 		$sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
-				VALUES ('$category', 0, 0, 0, 0, 0, " . $nextOrder . ")";
+				VALUES ('$category', 0, 0, 0, 0, " . $nextOrder . ")";
 		if (queryDB($conn, $sql) === TRUE) {
 			$sql = "SELECT DISTINCT name, categoryID FROM category WHERE name = '$category'";
 			$result = queryDB($conn, $sql);
@@ -149,7 +149,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
 	$sql = "UPDATE item
 			SET categoryID  = " . $categoryID . ",  itemName = '" . $itemName . "',
 				displayName = '" . $displayName . "', price = " . $price . ",
-				timestamp = now(), small = " . $small . ", medium = " . $medium . ",
+			  small = " . $small . ", medium = " . $medium . ",
 				large = " . $large . ", aisle = " . $aisle . ", rack = " . $rack . ", shelf = " . $shelf . "
 			WHERE itemID = " . $itemID;
 

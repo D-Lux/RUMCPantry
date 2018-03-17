@@ -164,7 +164,7 @@
 			</div>
 			<div class="col-sm-1">Large:</div>
 			<div class="col-sm-2">
-				<input type="number" min="0" max="20" value="<?= $small ?>" name="large" />
+				<input type="number" min="0" max="20" value="<?= $large ?>" name="large" />
 			</div>
 		</div>
 	</div>

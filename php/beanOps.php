@@ -33,7 +33,7 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	}
 	foreach ($Cans as $BeanID=>$BeanInfo) {
     echo "<div class='row'>";
-		echo "<div class='col-sm text-right'>" . $BeanInfo->Name . "</div>";
+		echo "<div class='col-sm text-right' style='margin:auto;'>" . $BeanInfo->Name . "</div>";
 		echo "<div class='selectionBoxes col-sm'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)
@@ -66,7 +66,7 @@ function showBeanCategory($Cans, $Bags, $CQty, $Order=Null) {
 	}
 	foreach ($Bags as $BeanID=>$BeanInfo) {
     echo "<div class='row'>";
-		echo "<div class='col-sm text-right'>" . $BeanInfo->Name . "</div>";
+		echo "<div class='col-sm text-right' style='margin:auto;'>" . $BeanInfo->Name . "</div>";
 		echo "<div class='selectionBoxes col-sm'>";
 		for ($i = 0; $i < $BeanInfo->QTY; $i++) {
 			// Value is the item's ID | Name is the item's category[] (in array)

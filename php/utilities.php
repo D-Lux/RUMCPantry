@@ -249,6 +249,8 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 
 	$sqlQuery = queryDB($conn, $sql);
 
+  $defaultVal = htmlspecialchars($defaultVal, ENT_QUOTES);
+  
 	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "'
 			value='" . $defaultVal . "' name='" . $inputName . "'>";
 
