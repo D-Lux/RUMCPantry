@@ -81,10 +81,10 @@
       $IDParam  = "&id=" . $result['itemID'];
 
       $editLink = "<button type='submit' class='btn-table btn-edit'
-               value='/RUMCPantry/php/redistOps.php?updateRedistItem=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
+               value='" . $basePath . "php/redistOps.php?updateRedistItem=1" . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 
       $actionLink = "<button type='submit' class='btn-icon" . (($deleted==1) ? " btn-reactivate" : "") . "'
-               value='/RUMCPantry/php/redistOps.php?" .
+               value='" . $basePath . "php/redistOps.php?" .
                (($deleted == 1) ? 'activateRedistItem' : 'deleteRedistItem') . "=1" . $IDParam . "'><i class='fa fa-" .
                (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";
 

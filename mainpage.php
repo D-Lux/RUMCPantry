@@ -9,26 +9,20 @@ include 'php/header.php';
 	}
 
 	</style>
+  
+  <div class="text-center">
 	<h3>Welcome</h3>
 
 	<div class="body-content">
 		<form action="php/mainpage.php">
-      <div id="permissionMsgs" style="display:none;"></div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <input id="loginTextBox" type="text" name="login" placeholder="Log In Name" >
-          <div style="display:none;margin:0px;" id="loginMsgs"></div>
-        </div>
-      </div>
-      <div class="form-row">
-        <div class="form-group col-md-6">
-          <input id="passwordTextBox" type="password" name="password" placeholder="Password" autocomplete="off">
-          <div style="display:none;margin:0px;" id="passwordMsgs"></div>
-        </div>
-      </div>
+      <div id="permissionMsgs" style="display:none;"></div><br>
+      <input id="loginTextBox" type="text" name="login" placeholder="Log In Name" ><br>
+      <div style="display:none;margin:0px;" id="loginMsgs"></div>
+      <input id="passwordTextBox" type="password" name="password" placeholder="Password" autocomplete="off"><br>
+      <div style="display:none;margin:0px;" id="passwordMsgs"></div><br>
 		  <button id="submitLogin" class='btn-nav' type="submit"><i class="fa fa-sign-in"></i> Log In</button>
 		</form>
-
+  </div>
 
 
 <?php include 'php/footer.php'; ?>
@@ -58,11 +52,15 @@ include 'php/header.php';
           }
           else {
             switch(parseInt(data.perm)) {
+              case 101:
+              case 100:
               case 99:
               case 10:
                 window.location.assign("ap1.php");
                 break;
               case 1:
+              case 2:
+              case 3:
               default:
                 window.location.assign("cp1.php");
             }

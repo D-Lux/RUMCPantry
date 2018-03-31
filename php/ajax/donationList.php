@@ -16,6 +16,14 @@ $results = returnAssocArray(queryDB($conn, $sql ));
 closeDB($conn);
 
 // Run our query with search and order conditions
+if (!is_array($results)) {
+  $returnData['draw'] 			      = $_GET['draw'];
+  $returnData['data']  		        = $results;
+  $returnData['recordsTotal'] 	  = 0;
+  $returnData['recordsFiltered']  = 0;
+  die( json_encode($returnData));
+}
+
 $recordCount = count($results);
 $returnData = [];
 $out = [];
@@ -29,7 +37,7 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 	}
 	$row = [];
 	// Build our link
-	$donationLink = "/RUMCPantry/ap_do4.php?donationID=" . $results[$i]['donationID'];
+	$donationLink = $basePath . "ap_do4.php?donationID=" . $results[$i]['donationID'];
 	
 	$row[0] = "<button type='submit' class='btn-edit' 
 				   value='" . $donationLink . "'><i class='fa fa-eye'> View</i></button>";

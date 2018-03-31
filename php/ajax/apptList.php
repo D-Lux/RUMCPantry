@@ -74,7 +74,7 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 	// ************************************************
 	
 	$date = date("F jS, Y", strtotime($results[$i]["visitDate"])); // Month (full spelling) day (+suffix), YYYY
-	$appLink = "/RUMCPantry/ap_ao3.php?date=" . $results[$i]['visitDate'];
+	$appLink = $basePath . "ap_ao3.php?date=" . $results[$i]['visitDate'];
 	
 	$row[0] = "<button type='submit' class='btn-edit btn-table' 
 				   value='" . $appLink . "'><i class='fa fa-eye'> View</i></button>";

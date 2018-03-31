@@ -49,7 +49,7 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 	}
 	$row = [];
 	// Build our link to view the invoice
-	$invoiceLink = "/RUMCPantry/ap_oo4e.php?invoiceID=" . $results[$i]['invoiceID'] . "&name=" . $lastName . 
+	$invoiceLink = $basePath . "ap_oo4e.php?invoiceID=" . $results[$i]['invoiceID'] . "&name=" . $lastName . 
 					"&visitTime=" . $results[$i]['visitTime'] . "&familySize=" . $familySize ;
 	
 	$row[0] = "<button type='submit' class='btn-edit' 

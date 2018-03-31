@@ -1,6 +1,9 @@
-// *************************************
-// ** Back functions
+var basePath = "/";
 
+if ($("#perms").val() == 100) {
+  basePath = "/RUMCPantry/";
+}
+// *********************************************************
 // To get url parameters using javascript, use this function
 /*
 Usage

@@ -1,23 +1,22 @@
 <?php
-
-
 if( !isset($_SESSION['last_access']) || (time() - $_SESSION['last_access']) > 60 ) 
   $_SESSION['last_access'] = time(); 
 
 if (!isset($pageRestriction)) {
   createCookie("badRestrictions", 1, 30);
-  header ("location: /RUMCPantry/mainpage.php");
+  header ("location: " . $basePath . "mainpage.php");
 }
 
 if ($pageRestriction > -1) {
   if ((!isset($_SESSION['perms'] )) || ($_SESSION['perms'] < $pageRestriction)) {
     createCookie("noPermission", 1, 30);
-    header ("location: /RUMCPantry/mainpage.php");
+    header ("location: " . $basePath . "mainpage.php");
   }
 }
 
+echo "<input type='hidden' value='" . $_SESSION['perms'] . "' id='perms'>";
 
-$debug = false; //true; //false
+$debug = false;//true;
 
 
 if ($debug) {

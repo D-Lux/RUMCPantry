@@ -16,13 +16,13 @@ updateDonationPartnerIndividual
 include('utilities.php');
 
 if (isset($_GET['UpdateItem'])) {
-	header ("location: /RUMCPantry/ap_io3.php?itemID=" . $_GET['itemID']);
+	header ("location: " . $basePath . "ap_io3.php?itemID=" . $_GET['itemID']);
 }
 elseif (isset($_GET['updateDonation'])) {
-	header ("location: /RUMCPantry/ap_do4.php?donationID=" . $_GET['donationID']);
+	header ("location: " . $basePath . "ap_do4.php?donationID=" . $_GET['donationID']);
 }
 elseif (isset($_GET['updateDonationPartner'])) {
-	header ("location: /RUMCPantry/ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
+	header ("location: " . $basePath . "ap_do5.php?donationPartnerID=" . $_GET['donationPartnerID']);
 }
 
 // ****************************

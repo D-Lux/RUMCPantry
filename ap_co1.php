@@ -43,7 +43,7 @@
 
 
 			<!-- NEW Client -->
-    <a href="/RUMCPantry/ap_co2.php" class="button">New Client</a>
+    <a href="<?=$basePath?>ap_co2.php" class="button">New Client</a>
 	<!-- Swap between active and inactive -->
     <form type="get">
       <input type="submit" class="btn-nav" name="<?=$pageBtnName?>" value="<?=$pageBtnText?>">

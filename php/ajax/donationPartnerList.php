@@ -67,7 +67,7 @@
         $row = [];
 
 		//Build our link
-		$viewLink = "/RUMCPantry/ap_do5.php?donationPartnerID=" . $results[$i]['donationPartnerID'];
+		$viewLink = $basePath . "ap_do5.php?donationPartnerID=" . $results[$i]['donationPartnerID'];
 
 		$viewButton = "<button type='submit' class='btn-table btn-edit'
                     value='" . $viewLink . "'><i class='fa fa-eye'> View</i></button>";

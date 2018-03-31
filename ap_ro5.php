@@ -33,7 +33,7 @@
   </table>
 
 	<!-- NEW Redistribution Item -->
-  <a href="/RUMCPantry/ap_ro6.php" class="button">New Reallocation Item</a>
+  <a href="<?=$basePath?>ap_ro6.php" class="button">New Reallocation Item</a>
 
 	<!-- View Deactivated Items -->
 	<form method="get">

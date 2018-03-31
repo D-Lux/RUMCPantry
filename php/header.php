@@ -7,12 +7,14 @@ include('checkLogin.php');
   <html>
     <head>
       <title>Roselle UMC</title>
-
-      <link href='includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
-      <link href='includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >
-      <link href='includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
-      <link href='includes/jquery.dataTables.min.css' rel='stylesheet' type='text/css' >
-      <link href='css/style.css' rel='stylesheet'>
+      
+      <link href="<?=$basePath?>includes/fontawesome/css/fa-brands.min.css" rel="stylesheet" type="text/css" >
+      <link href='<?=$basePath?>includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
+      <link href='<?=$basePath?>includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >
+      <link href='<?=$basePath?>includes/chosen/chosen.min.css' rel='stylesheet' type='text/css' >
+      <link href='<?=$basePath?>includes/jquery.dataTables.min.css' rel='stylesheet' type='text/css' >
+      <link href='<?=$basePath?>css/style.css' rel='stylesheet'>
+      <link rel="shortcut icon" type="image/x-icon" href="<?=$basePath?>/images/grocerybag.ico">
     </head>
     <body>
       <header>

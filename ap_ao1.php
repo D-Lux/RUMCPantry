@@ -24,7 +24,7 @@
 	<br>
 	<!-- NEW Date -->
   <?php if ($_SESSION['perms'] >= 99) { ?>
-    <a href="/RUMCPantry/ap_ao2.php" class="button">New Appointment Date</a>
+    <a href="<?=$basePath?>ap_ao2.php" class="button">New Appointment Date</a>
   <?php } ?>
 
 <?php include 'php/footer.php'; ?>

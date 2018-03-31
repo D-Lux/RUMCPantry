@@ -99,7 +99,7 @@
 <script src="js/createDonation.js"></script>
 <script type="text/javascript">
   if (<?=(int)$badLoad?>) {
-    window.location.href = '/RUMCPantry/ap_do1.php';
+    window.location.href = basePath + 'ap_do1.php';
   }
   $('#donationTable').DataTable({
     "searching"     : false,
@@ -108,7 +108,7 @@
     "emptyTable"    : "No donations in database."
                       },
     "ajax"	        : {
-        "url"       : "/RUMCPantry/php/ajax/donationList.php?pid=<?=$pID?>",
+        "url"       : basePath + "php/ajax/donationList.php?pid=<?=$pID?>",
                       },
   });
   $('#donationTable').on('click', '.btn-edit', function () {

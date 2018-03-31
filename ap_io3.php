@@ -66,7 +66,7 @@
 	?>
   <script type="text/javascript">
   if (<?=(int)$badLoad?>) {
-    window.location.href = '/RUMCPantry/ap_io7.php';
+    window.location.href = 'ap_io7.php';
   }
   </script>
 	<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">

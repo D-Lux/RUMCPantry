@@ -12,7 +12,7 @@ function toggleClientActive($isDeleted=0) {
 	// Set up server connection
 	$conn = connectDB();
 
-  $loc = "location: /RUMCPantry/ap_co1.php";
+  $loc = "location: " . $GLOBALS['basePath'] . "ap_co1.php";
 	$loc .= ($isDeleted==0 ? "?ShowInactive=1" : ""); 
 	// Create our update query, setting the flag appropriate
 	$sql = "UPDATE Client 
@@ -41,14 +41,14 @@ function toggleClientActive($isDeleted=0) {
 
 // Go to specific client/member pages based on buttons pressed
 if (isset($_POST['GoNewClient'])) {
-	header ("location: /RUMCPantry/ap_co2.php");
+	header ("location: " . $basePath . "ap_co2.php");
 }
 elseif (isset($_GET['GoUpdateClient'])) {
-	header ("location: /RUMCPantry/ap_co3.php?id=" . $_GET['id']);
+	header ("location: " . $basePath . "ap_co3.php?id=" . $_GET['id']);
 }
 // Go to various family member functions
 elseif (isset($_GET['GoUpdateMember'])) {
-	header ("location: /RUMCPantry/ap_co5.php?memberID=" . $_GET['memberID'] . "&clientID=" . $_GET['clientID']);
+	header ("location: " . $basePath . "ap_co5.php?memberID=" . $_GET['memberID'] . "&clientID=" . $_GET['clientID']);
 }
 
 // *******************************************************
@@ -252,7 +252,7 @@ elseif(isset($_POST['submitMember']))
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
-		header("location: /RUMCPantry/ap_co3.php?id=$clientID");
+		header("location: " . $basePath . "ap_co3.php?id=$clientID");
 	} 
 	else {
 		echo mysqli_errno($conn) . ": " . mysqli_error($conn). "\n";
@@ -331,7 +331,7 @@ elseif(isset($_POST['UpdateMember']))
 		closeDB($conn);
 		
 		// Go back to the client update page
-		header ("location: /RUMCPantry/ap_co3.php?id=$clientID");
+		header ("location: " . $basePath . "ap_co3.php?id=$clientID");
 	}
 	else {
 			echo "sql error (update): " . mysqli_error($conn);
@@ -360,7 +360,7 @@ elseif(isset($_GET['DeleteMember']))
 	if ($conn->query($sql) === TRUE) {
 		closeDB($conn);
 		createCookie("DelFam", 1, 30);
-		header ("location: /RUMCPantry/ap_co3.php?id=" . $_GET['clientID'] );
+		header ("location: " . $basePath . "ap_co3.php?id=" . $_GET['clientID'] );
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
@@ -373,7 +373,7 @@ elseif(isset($_GET['DeleteMember']))
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	header("location: /RUMCPantry/mainpage.php");
+	header("location: " . $basePath . "mainpage.php");
 }
 
 ?>

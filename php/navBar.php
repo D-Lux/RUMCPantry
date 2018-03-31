@@ -1,6 +1,12 @@
 <div id="pantryNavBar">
   <ul>
-    <li><a href="ap1.php">Main</a></li>
+    <li>
+      <a href="#">Admin<i class="fa fa-caret"></i></a>
+      <ul>
+          <li><a href="reporting.php">Reporting</a></li>
+          <li><a href="adjustLogins.php">Adjust Logins</a></li>
+      </ul>
+    </li>
     <li>
       <a href="#">Registration</a>
       <ul>
@@ -38,7 +44,7 @@
       <ul>
           <li><a href="ap_do1.php">View Donation Partners</a></li>
           <li><a href="ap_do2.php">New Donation</a></li>
-          <li><a href="ap_do3.php">New Donaiton Partner</a></li>
+          <li><a href="ap_do3.php">New Donation Partner</a></li>
       </ul>
     </li>
     <li>
@@ -52,13 +58,7 @@
           <li><a href="ap_ro9.php">New Reallocation</a></li>
       </ul>
     </li>
-    <li>
-      <a href="#">Admin<i class="fa fa-caret"></i></a>
-      <ul>
-          <li><a href="reporting.php">Reporting</a></li>
-          <li><a href="adjustLogins.php">Adjust Logins</a></li>
-      </ul>
-    </li>
+    <li><a href="ap1.php">Main</a></li>
   </ul>
 </div>
 
@@ -70,12 +70,14 @@
   position: absolute;
   z-index: 9;
   text-align: center;
-  width: 80%;
+  width: 100%;
   height: 40px;
   margin: auto;
   margin-top: 5px;
   margin-left: -20px;
+  pointer-events:none;
 }
+
 #pantryNavBar ul {
   padding: 0;
   margin: 0;
@@ -86,6 +88,7 @@
   background-color: #57B9FF;
   border: 1px #499BD6 solid;
   min-width: 100px;
+  pointer-events:all;
 }
 #pantryNavBar ul li a {
   display: block;

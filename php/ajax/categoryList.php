@@ -79,12 +79,12 @@
         $classList = 'btn-icon' . (($deleted == 1) ? ' btn-reactivate' : ' ');
 
 
-        $editLink = "/RUMCPantry/ap_io5.php?";
+        $editLink = $basePath . "ap_io5.php?";
         $editLink   = "<button type='submit' class='btn-table btn-edit' " . (($deleted==1) ? "disabled" : " " ) . "
                  value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
 
 
-        $baseLink = "/RUMCPantry/php/categoryOps.php?";
+        $baseLink = $basePath . "php/categoryOps.php?";
         $actionLink = "<button type='submit' class='" . $classList . "'
                  value='" . $baseLink . $functionParam . "=1&" . $IDParam . "'>
                  <i class='fa fa-" . (($deleted == 1) ? "recycle" : "trash") . "'></i></button>";

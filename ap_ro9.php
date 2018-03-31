@@ -148,7 +148,7 @@ include 'php/backButton.php'
       success: function(msg) {
         if (msg.error == '') {
           setCookie("newRedistribution", 1, 30);
-          window.location.assign("/RUMCPantry/ap_ro8.php");
+          window.location.assign(basePath + "ap_ro8.php");
         }
         else {
           $("#errorLog").html("<pre>" + msg.error + "</pre>").show(300);

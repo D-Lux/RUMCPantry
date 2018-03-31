@@ -22,7 +22,7 @@
 		</div>
 
 		<!-- NEW Redistribution Invoice -->
-    <a href="/RUMCPantry/ap_ro9.php" class="button">New Reallocation</a>
+    <a href="<?=$basePath?>ap_ro9.php" class="button">New Reallocation</a>
 
 <?php include 'php/footer.php'; ?>
 

@@ -81,11 +81,11 @@
 		
 		$IDParam  = "itemID=" . $results[$i]['itemID'];
     
-		$editLink = "/RUMCPantry/ap_io3.php?";
+		$editLink = $basePath . "ap_io3.php?";
 		$editLink   = "<button type='submit' class='btn-table btn-edit' " . (($deleted==1) ? "disabled" : " " ) . "
 					   value='" . $editLink . $IDParam . "'><i class='fa fa-eye'> View</i></button>";
              
-    $baseLink = "/RUMCPantry/php/itemOps.php?";		
+    $baseLink = $basePath . "php/itemOps.php?";		
 		$actionLink = "<button type='submit' class='btn-icon" . (($deleted==1) ? " btn-reactivate" : "") . "'
 					   value='" . $baseLink . 
 					   (($deleted == 1) ? 'categoryID=' . $results[$i]['categoryID'] . '&ReactivateItem' : 'DeleteItem') . "=1&" . $IDParam . "'><i class='fa fa-" .

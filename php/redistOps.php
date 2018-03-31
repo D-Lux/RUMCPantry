@@ -6,10 +6,10 @@ include 'utilities.php';
 
 
 if (isset($_GET['updateRedistItem'])) {
-	header ("location: /RUMCPantry/ap_ro7.php?id=" . $_GET['id']);
+	header ("location: " . $basePath . "ap_ro7.php?id=" . $_GET['id']);
 }
 elseif (isset($_POST['viewRedistribution'])) {
-	header ("location: /RUMCPantry/ap_ro10.php?id=" . $_POST['id']);
+	header ("location: " . $basePath . "ap_ro10.php?id=" . $_POST['id']);
 }
 
 // *******************************************************
@@ -115,7 +115,7 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 
 	if (queryDB($conn, $sql) === TRUE) {
 		createCookie("redistributionDeleted", 1, 30);
-		header("location: /RUMCPantry/ap_ro8.php");
+		header("location: " . $basePath . "ap_ro8.php");
 	}
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
@@ -351,7 +351,7 @@ function toggleRedistribution($table, $field, $isDeleted) {
 					WHERE " . $field . "="	. $_GET['id'];
 
 	// Create the return page string
-	$loc = "location: /RUMCPantry/ap_ro";
+	$loc = "location: " . $GLOBALS['basePath'] . "ap_ro";
 	$loc .= ($table=="client" ? "2" : "5");
 	$loc .= ($isDeleted==1 ?  ".php" : ".php?ShowInactive=1");
 

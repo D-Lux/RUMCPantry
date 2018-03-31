@@ -70,13 +70,13 @@
   
   // Open the review order form page
   function reviewOrder($ID) {
-    $returnArr['link']  = "!REDIRECT!/RUMCPantry/rof.php?invoiceID=" . $ID;
+    $returnArr['link']  = "!REDIRECT!" . $basePath . "rof.php?invoiceID=" . $ID;
     echo json_encode($returnArr);
   }
   
   // Open the print order form page
   function printOrder($ID) {
-    $returnArr['link']  = "!REDIRECT!/RUMCPantry/ap_oo4.php?invoiceID=" . $ID;
+    $returnArr['link']  = "!REDIRECT!" . $basePath . "ap_oo4.php?invoiceID=" . $ID;
     echo json_encode($returnArr);
   }
   

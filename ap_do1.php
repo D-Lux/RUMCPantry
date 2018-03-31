@@ -24,8 +24,8 @@
     </table>
   </div>
 
-  <a href="/RUMCPantry/ap_do2.php" class="button">Add a donation</a>
-  <a href="/RUMCPantry/ap_do3.php" class="button">Add a donation partner</a>
+  <a href="<?=$basePath?>ap_do2.php" class="button">Add a donation</a>
+  <a href="<?=$basePath?>ap_do3.php" class="button">Add a donation partner</a>
     
 <?php include 'php/footer.php'; ?>
 

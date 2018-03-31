@@ -1,5 +1,11 @@
 <?php
 session_start();
+
+$basePath = "/";
+
+if ($_SESSION['perms'] == 100) {
+  $basePath = "/RUMCPantry/";
+}
 // **********************************************
 // * Debug functions
 
@@ -62,17 +68,55 @@ date_default_timezone_set('America/Chicago');
 // Creating a global connection function so that if we ever need to change the database information
 // it's all in one place
 $connectionActive = false;
+function connectTestDB() {
+  $servername = "server902.webhostingpad.com";
+  $username   = "roselleu_fpadmin";
+  $password   = "Luke3:11eggsontop";
+  $dbname     = "roselleu_testpantry";
+
+	// Create and check connection
+	if (!$GLOBALS['connectionActive']){
+		$GLOBALS['connectionActive'] = true;
+		return( new mysqli($servername, $username, $password, $dbname) );
+	}
+}
+function connectHomeDB() {
+  $servername = "127.0.0.1";
+  $username   = "root";
+  $password   = "";
+  $dbname     = "foodpantry";
+ 
+	// Create and check connection
+	if (!$GLOBALS['connectionActive']){
+		$GLOBALS['connectionActive'] = true;
+		return( new mysqli($servername, $username, $password, $dbname) );
+	}
+}
 function connectDB() {
-	//Set up server connection
+  	//Set up server connection
 	 // $servername = "192.168.0.23";
 	 // $username   = "root";
 	 // $password   = "lgh598usa15";
 	 // $dbname     = "foodpantry";
-
-	$servername = "127.0.0.1";
-	$username   = "root";
-	$password   = "";
-	$dbname     = "foodpantry";
+   
+  $servername = "server902.webhostingpad.com";
+	$username   = "roselleu_fpadmin";
+	$password   = "Luke3:11eggsontop";
+	$dbname     = "roselleu_foodpantry";
+  
+  if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 ) {
+    $servername = "127.0.0.1";
+    $username   = "root";
+    $password   = "";
+    $dbname     = "foodpantry";
+  }
+  if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) {
+    $servername = "server902.webhostingpad.com";
+    $username   = "roselleu_fpadmin";
+    $password   = "Luke3:11eggsontop";
+    $dbname     = "roselleu_testpantry";
+  }
+  
 
 
 	// Create and check connection
@@ -188,40 +232,6 @@ function displayForTable($item, $length, $cutLength=2) {
 
 function hashPassword($pw) {
   return password_hash($pw, PASSWORD_BCRYPT, ['cost' => 8]);
-}
-
-function createDatalist($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
-	/*
-	argument explanations:
-	$defaultVal - default value you would like to appear in the datalist
-	$listName - Name of the list make plural (ex categories or itemNames)
-	$tableName - table you wish to pull the attribute from (ex item)
-	$attributeName - name of the attribute (ex displayName)
-	$inputName - the name of the actual input, this is what a post request can grab
-	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
-		out all that has been deleted.
-	*/
-
-    $conn = connectDB();
-	//standard DB stuff up to here
-	$sql = "SELECT DISTINCT " . $attributeName .
-			" FROM " .  $tableName ;//select distinct values from the collumn in this table
-	if($hasDeletedAttribute) {
-		$sql .= " WHERE isDeleted=0" ;//select distinct values from the collumn in this table
-	}
-
-	$result = mysql_query($sql);
-
-	echo "<input type='text' list=$listName name=$inputName value='$defaultVal' autocomplete='off'>";
-
-	echo "<datalist id=$listName>"; //this id must be the same as the list = above
-
-	while ($row = mysql_fetch_array($result)) {
-		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
-	}
-	echo "</datalist>";
-	closeDB($conn);
-
 }
 
 function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
@@ -710,11 +720,16 @@ define("AJAX_REDIRECT", "!REDIRECT!");
 
 // **************************************
 // * Permission stuff
+DEFINE("PERM_TESTHOME", 100);
+DEFINE("PERM_TESTLIVE", 101);
 DEFINE("PERM_MAX" , 99);
 DEFINE("PERM_RR"  , 10);
 DEFINE("PERM_BASE", 1);
 function decodePermissionLevel($val) {
   switch ($val) {
+    case PERM_TESTHOME:
+     case PERM_TESTLIVE:
+      return "Registration Level (Test)";
     case PERM_RR:
       return "Registration Level";
     case PERM_MAX:

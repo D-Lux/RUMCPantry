@@ -80,7 +80,7 @@
         $row = [];
 		
 		//Build our links
-		$baseLink = "/RUMCPantry/php/clientOps.php?";
+		$baseLink = $basePath . "php/clientOps.php?";
 		$IDParam  = "&id=" . $results[$i]['clientID'];
 		
 		$editLink   = "<button type='submit' class='btn-table btn-edit' 

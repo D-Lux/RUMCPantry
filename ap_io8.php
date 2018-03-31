@@ -36,7 +36,7 @@ if ($showDeleted) {
 		</div>
 
 	<!-- New Category -->
-  <a href="/RUMCPantry/ap_io4.php" class="button">Add a category</a>
+  <a href="<?=$basePath?>ap_io4.php" class="button">Add a category</a>
 
     <!-- Show Deleted Categories -->
   <?php if ($showDeleted) { ?>

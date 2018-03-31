@@ -118,5 +118,4 @@
 
 
 <?php include 'php/footer.php'; ?>
-<script type='text/javascript' src='/RUMCPantry/includes/chosen/chosen.jquery.min.js'></script>
 <script src="js/createDonation.js"></script>

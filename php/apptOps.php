@@ -1,4 +1,4 @@
-<script src="/RUMCPantry/js/utilities.js"></script>
+<script src="<?=$basePath?>js/utilities.js"></script>
 
 <?php
 
@@ -18,7 +18,7 @@ function addWalkIn($clientID) {
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		createCookie("newWalkIn", 1, 30);
-		header("location: /RUMCPantry/checkIn.php");
+		header("location: " . $GLOBALS['basePath'] . "checkIn.php");
 	}
 	else {
 		closeDB($conn);
@@ -54,7 +54,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		// Set a cookie to tell the user the date exists
 		// Done this way instead of with url params so reloading the page doesn't cause the warning
 		createCookie("badAppDate", 1, 30);
-		header("location: /RUMCPantry/ap_ao2.php");
+		header("location: " . $basePath . "ap_ao2.php");
 	}
 	else {
 		// Find the available client ID
@@ -81,7 +81,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 			closeDB($conn);
 			// go to view page with date parameter
 			createCookie("newAppt", 1, 30);
-			header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
+			header("location: " . $basePath . "ap_ao3.php?date=" . $_POST['appDate']);
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -116,7 +116,7 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		closeDB($conn);
 		// go to view page with date parameter
 		createCookie("newTimeSlots", 1, 30);
-		header("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['appDate']);
+		header("location: " . $basePath . "ap_ao3.php?date=" . $_POST['appDate']);
 
 	}
 	else {
@@ -140,7 +140,7 @@ elseif (isset($_POST['DeleteInvoice'])) {
 		closeDB($conn);
 
 		// Go back to the view invoice date page
-		header ("location: /RUMCPantry/ap_ao3.php?date=" . $_POST['returnDate']);
+		header ("location: " . $basePath . "ap_ao3.php?date=" . $_POST['returnDate']);
 	}
 	else {
 		echo "sql error: " . mysqli_error($conn);
@@ -183,7 +183,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 					closeDB($conn);
 					createCookie("clientApptSet", 1, 30);
 					// Take us back to login page
-					header("location: /RUMCPantry/login.php");
+					header("location: " . $basePath . "login.php");
 				}
 				else {
 					// Assignment failed, error back
@@ -205,11 +205,11 @@ elseif (isset($_POST['clientApptSelect'])) {
 elseif (isset($_POST['SkipApt'])) {
 	createCookie("clientSkippedAppt", 1, 30);
 	// Take us back to login page
-	header("location: /RUMCPantry/mainpage.php");
+	header("location: " . $basePath . "mainpage.php");
 }
 elseif (isset($_POST['NoApptSelection'])) {
 	// Take us back to login page
-	header("location: /RUMCPantry/mainpage.php");
+	header("location: " . $basePath . "mainpage.php");
 }
 // Walk-in appointment creation
 elseif (isset($_GET['newWalkIn'])) {
@@ -221,7 +221,7 @@ elseif (isset($_POST['existingWalkIn'])) {
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	header("location: /RUMCPantry/mainpage.php");
+	header("location: " . $basePath . "mainpage.php");
 }
 
 ?>

@@ -133,7 +133,7 @@
 	    success: function(msg) {
 	      if (msg.error == '') {
 	        setCookie("newPartner", 1, 30);
-	        window.location.assign("/RUMCPantry/ap_co3.php?id=" + msg.id);
+	        window.location.assign(basePath + "ap_co3.php?id=" + msg.id);
 	      }
 	      else {
 	        $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);

@@ -42,7 +42,7 @@
       success: function(msg) {
         if (msg.error == '') {
           setCookie("newRedistItem", 1, 30);
-          window.location.assign("/RUMCPantry/ap_ro5.php");
+          window.location.assign(basePath + "ap_ro5.php");
         }
         else {
           $("#warningMsgs").html("<pre>" + msg.error + "</pre>").show(300);

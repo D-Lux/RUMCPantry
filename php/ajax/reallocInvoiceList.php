@@ -80,7 +80,7 @@
     foreach ($results as $result) {
       //Build our link
       $date = DATE("F d, Y", strtotime($result['visitDate']));
-      $editLink   = "<a href='/RUMCPantry/ap_ro10.php?id=" . $result['invoiceID'] . "'>" . $date . "</a>";
+      $editLink   = "<a href='" . $basePath . "ap_ro10.php?id=" . $result['invoiceID'] . "'>" . $date . "</a>";
 
       $col = 0;
       $row[0] = $editLink;

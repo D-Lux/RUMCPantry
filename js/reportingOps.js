@@ -10,7 +10,7 @@ function AJAX_UpdateReport() {
 			document.getElementById("reportData").innerHTML = this.responseText;	
 		}
 	};
-	xmlhttp.open("GET","/RUMCPantry/php/ajax/updateReport.php?" +
+	xmlhttp.open("GET", basePath + "php/ajax/updateReport.php?" +
 				 "startDate=" + startDate + "&" +
 				 "endDate=" + endDate, true);
 	xmlhttp.send();

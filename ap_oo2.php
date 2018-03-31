@@ -52,7 +52,7 @@
 
   // Load the first tab
   $.ajax({
-    url: "/RUMCPantry/php/ajax/editOrderForm.php?catid=" + $("#catSelector").val(),
+    url: basePath + "php/ajax/editOrderForm.php?catid=" + $("#catSelector").val(),
     success: function(response) {
       $("#categoryHolder").html(response);
       checkQuantitySelectionsNew();
@@ -62,7 +62,7 @@
   $("#catSelector").on("change", function(e) {
     var Params = "?catid=" + $("#catSelector").val();
     $.ajax({
-      url: "/RUMCPantry/php/ajax/editOrderForm.php" + Params,
+      url: basePath + "php/ajax/editOrderForm.php" + Params,
       success: function(response) {
         $("#categoryHolder").html(response);
         checkQuantitySelectionsNew();
@@ -76,7 +76,7 @@
         Params += "&familyType=" + $(this).attr("id");
         Params += "&cQty=" + $(this).val();
     $.ajax({
-      url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+      url: basePath + "php/ajax/setOrderForm.php" + Params,
       success: function(response) {
         $("#msgLog").html(response);
         $("#msgLog").stop(true,true).show().delay(3000).hide(300);
@@ -91,7 +91,7 @@
         Params += "&familyType=" + familyTypeExtractor($(this).attr("id").substring(0,1));
         Params += "&newQty=" + $(this).val();
     $.ajax({
-      url: "/RUMCPantry/php/ajax/setOrderForm.php" + Params,
+      url: basePath + "php/ajax/setOrderForm.php" + Params,
       success: function(response) {
         $("#msgLog").html(response);
         $("#msgLog").stop(true,true).show().delay(3000).hide(300);

@@ -236,7 +236,7 @@ function AJAX_RemoveFromInvoice(callingSlot) {
 				document.getElementById('orderTable').deleteRow(callingSlot.parentNode.parentNode.rowIndex);
 			}
 		}
-		xmlhttp.open("GET","/RUMCPantry/php/ajax/removeItemFromOrder.php?" +
+		xmlhttp.open("GET",basePath + "php/ajax/removeItemFromOrder.php?" +
 					 "invoiceDescID=" + invoiceDescID, true);
 		xmlhttp.send();
 	}
@@ -260,7 +260,7 @@ function AJAX_SetInvoicePrinted(invoiceID) {
 			}
 		}
 	};
-	xmlhttp.open("GET","/RUMCPantry/php/ajax/setToPrinted.php?" +
+	xmlhttp.open("GET", basePath + "php/ajax/setToPrinted.php?" +
 				 "invoiceID=" + invoiceID, true);
 	xmlhttp.send();
 	

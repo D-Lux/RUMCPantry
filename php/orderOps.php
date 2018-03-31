@@ -1,4 +1,4 @@
-<script src="/RUMCPantry/js/utilities.js"></script>
+<script src="<?=$basePath?>js/utilities.js"></script>
 
 <?php
 
@@ -131,7 +131,7 @@ function createInvoiceDesc() {
 	}
 	else {
 		closeDB($conn);
-		header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+		header("location: " . $GLOBALS['basePath'] . "cap.php?clientID=" . $_POST['clientID']);
 	}
 }
 
@@ -188,7 +188,7 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 	if (createInvoiceDesc()) {
 		echo "Insertion successful";
 		if (updateStatusFromOrder()) {
-			header("location: /RUMCPantry/cap.php?clientID=" . $_POST['clientID']);
+			header("location: " . $basePath . "cap.php?clientID=" . $_POST['clientID']);
 		}
 		else {
 			echo "There was an error creating your order, please try again";
@@ -203,7 +203,7 @@ elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 		if (createInvoiceDesc()) {
 			if (updateStatusFromOrder()) {
 				echo "Review Successful!";
-				header("location: /RUMCPantry/checkin.php");
+				header("location: " . $basePath . "checkin.php");
 			}
 			else {
 				echo "There was an error reviewing the order, please try again";
@@ -233,13 +233,13 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 			WHERE invoiceID=" . $_POST['invoiceID'];
 	if (queryDB($conn, $sql) === TRUE) {
 		// Success, return to checkin with no issues
-		header("location: /RUMCPantry/checkIn.php");
+		header("location: " . $basePath . "checkIn.php");
 	}
 	else {
 		// There was an error, create a cookie to give a popup when we hit checkIn
 		createCookie("processError", 1, 30);
-		//header("location: /RUMCPantry/ap_oo3.php");
-		header("location: /RUMCPantry/checkIn.php");
+		//header("location: " . $basePath . "ap_oo3.php");
+		header("location: " . $basePath . "checkIn.php");
 	}
 }
 
@@ -291,7 +291,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 	closeDB($conn);
 	fclose($specialsFile);
 	createCookie("SpecialsSaved", 1, 30);
-	header("location: /RUMCPantry/ap_oo1.php");
+	header("location: " . $basePath . "ap_oo1.php");
 }
 
 // ***************************************
@@ -301,7 +301,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 	// POST Data to pass back using 'get' global: name, visitTime, familySize,
 
 	// Create our return header to go back to the correct order
-	$returnHeader = "location: /RUMCPantry/ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] .
+	$returnHeader = "location: " . $basePath . "ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] .
 					"&visitTime=" . $_POST['visitTime'] . "&familySize=" . $_POST['familySize'];
 
 	$conn = connectDB();
@@ -385,8 +385,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 }
 
 else {
-	echo "<h1>Nothing was set</h1><br>";
-	//header("location: /RUMCPantry/mainpage.php");
+	header("location: " . $basePath . "mainpage.php");
 }
 
 ?>

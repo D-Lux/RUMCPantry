@@ -14,21 +14,30 @@ $data['msg'] = "";
 $data['perm'] = "";
 
 // If no password and email, grant permissions 1
-if ($name == null || $name == "" ) {
-  if ($pw == null || $pw == "") {
-    $_SESSION['perms'] = 1;
-    $data['perm'] = 1;
-    die(json_encode($data));
-  }
-  // Else request a login (login was blank, password was filled out)
-  else {
-    $data['msg'] = "<p>Please enter a login name</p>";
-    $data['err']=1;
-    die(json_encode($data));
-  }
+if (empty($name)) {
+  $data['msg'] = "<p>Please enter a login name</p>";
+  $data['err']=1;
+  die(json_encode($data));
+}
+elseif (empty($pw)) {
+  $data['msg'] = "<p>Please enter a password</p>";
+  $data['err']=1;
+  die(json_encode($data));
 }
 else {
-  $conn = connectDB();
+  $conn = null;
+  if (strpos($name, "test")) {
+    if (strpos($name, "home") !== false) {
+      $conn = connectHomeDB();
+    }
+    else {
+      $conn = connectTestDB();
+    }
+  }
+  else {
+    $conn = connectDB();
+  }
+      
   if ($conn -> connect_errno ) {
     $data['msg'] = "<p>Database Error: " . $conn->connect_errno . "</p>";
     $data['err']= 1;

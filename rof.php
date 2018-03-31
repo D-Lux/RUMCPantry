@@ -17,7 +17,7 @@
     $invoiceID =  $_GET['invoiceID'];
   }
   else {
-    header("Location: /RUMCPantry/ap_oo3.php"); // TODO
+    header("Location: " . $basePath . "ap_oo3.php");
   } 
   
   // *******************************************************

@@ -80,7 +80,7 @@
 
       if ($deleted == 0) {
         $editLink   = "<button type='submit' class='btn-table btn-edit'
-               value='/RUMCPantry/ap_ro4.php?id=" . $result['clientID'] . "'><i class='fa fa-eye'> View</i></button>";
+               value='" . $basePath . "ap_ro4.php?id=" . $result['clientID'] . "'><i class='fa fa-eye'> View</i></button>";
         $row[$col++] = $editLink;
       }
       $row[$col++] = $result['lastName'];
@@ -88,7 +88,7 @@
       $row[$col++] = displayPhoneNo($result['phoneNumber']);
 
 
-      $baseLink = "/RUMCPantry/php/redistOps.php?";
+      $baseLink = $basePath . "php/redistOps.php?";
       $IDParam  = "&id=" . $result['clientID'];
       $actionLink = "<button type='submit' class='btn-icon" . (($deleted==1) ? " btn-reactivate" : "") . "'
              value='" . $baseLink .
