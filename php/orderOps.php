@@ -1,8 +1,8 @@
-<script src="<?=$basePath?>js/utilities.js"></script>
+
+
+<?php include 'utilities.php'; ?>
 
 <?php
-
-include 'utilities.php';
 
 // Grab Invoice and Client data from POST
 // Go through each category and store off counts of ID appearances to generate an SQL INSERT statement
@@ -57,7 +57,7 @@ function createInvoiceDesc() {
 
 	// *********************************************
 	// * --== Create our item ID / Price array ==--
-	$PriceID_Array = getItemPrices()
+	$PriceID_Array = getItemPrices();
 	// Connect to the database and grab Item ID and Price information
 	$conn = connectDB();
 
@@ -74,7 +74,7 @@ function createInvoiceDesc() {
 		if ( isCategory($Category) ) {
 			if (is_array($C_Count)) {
 				foreach ($C_Count as $itemID){
-					echo "Adding: " . $itemID . "<br>";
+					//echo "Adding: " . $itemID . "<br>";
 					// count all items with a particular ID
 					if (!isset($orderIDs[$itemID])) {
 						$orderIDs[$itemID] = null;
@@ -87,7 +87,7 @@ function createInvoiceDesc() {
 				// If the item is a special, it will not be an array
 				// Make sure we're looking at a number and not a space
 				if (is_numeric($C_Count)) {
-					echo "Special, adding: " . $C_Count . "<br>";
+					//echo "Special, adding: " . $C_Count . "<br>";
 					if (!isset($specialIDs[$C_Count])) {
 						$specialIDs[$C_Count] = null;
 					}
@@ -115,8 +115,8 @@ function createInvoiceDesc() {
 		$firstInsert = FALSE;
 	}
 
-	echo "Insertion query: ";
-	echo $insertionSql . "<br>";
+	//echo "Insertion query: ";
+	//echo $insertionSql . "<br>";
 	// Run our query
 	if ($runQuery) {
 		if (queryDB($conn, $insertionSql) === TRUE) {
@@ -131,7 +131,7 @@ function createInvoiceDesc() {
 	}
 	else {
 		closeDB($conn);
-		header("location: " . $GLOBALS['basePath'] . "cap.php?clientID=" . $_POST['clientID']);
+    redirectPage("cap.php?clientID=" . $_POST['clientID']);
 	}
 }
 
@@ -186,9 +186,9 @@ function updateStatusFromOrder() {
 // * Creating invoice descriptions and tying them together into one invoice
 if (isset($_POST['CreateInvoiceDescriptions'])) {
 	if (createInvoiceDesc()) {
-		echo "Insertion successful";
+		//echo "Insertion successful";
 		if (updateStatusFromOrder()) {
-			header("location: " . $basePath . "cap.php?clientID=" . $_POST['clientID']);
+			redirectPage("cap.php?clientID=" . $_POST['clientID']);
 		}
 		else {
 			echo "There was an error creating your order, please try again";
@@ -202,8 +202,8 @@ elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 	if (deleteInvoiceDesc()) {
 		if (createInvoiceDesc()) {
 			if (updateStatusFromOrder()) {
-				echo "Review Successful!";
-				header("location: " . $basePath . "checkin.php");
+				//echo "Review Successful!";
+				redirectPage("checkIn.php");
 			}
 			else {
 				echo "There was an error reviewing the order, please try again";
@@ -233,13 +233,13 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 			WHERE invoiceID=" . $_POST['invoiceID'];
 	if (queryDB($conn, $sql) === TRUE) {
 		// Success, return to checkin with no issues
-		header("location: " . $basePath . "checkIn.php");
+		redirectPage("checkIn.php");
 	}
 	else {
 		// There was an error, create a cookie to give a popup when we hit checkIn
 		createCookie("processError", 1, 30);
-		//header("location: " . $basePath . "ap_oo3.php");
-		header("location: " . $basePath . "checkIn.php");
+		//redirectPage("ap_oo3.php");
+		redirectPage("checkIn.php");
 	}
 }
 
@@ -291,7 +291,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 	closeDB($conn);
 	fclose($specialsFile);
 	createCookie("SpecialsSaved", 1, 30);
-	header("location: " . $basePath . "ap_oo1.php");
+	redirectPage("ap_oo1.php");
 }
 
 // ***************************************
@@ -301,7 +301,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 	// POST Data to pass back using 'get' global: name, visitTime, familySize,
 
 	// Create our return header to go back to the correct order
-	$returnHeader = "location: " . $basePath . "ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] .
+	$returnHeader = "ap_oo4e.php?invoiceID=" . $_POST['invoiceID'] . "&name=" . $_POST['name'] .
 					"&visitTime=" . $_POST['visitTime'] . "&familySize=" . $_POST['familySize'];
 
 	$conn = connectDB();
@@ -332,7 +332,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 		if (queryDB($conn, $sql) === TRUE) {
 			// Successfully updated item quantity, return to the order form!
 			closeDB($conn);
-			header($returnHeader);
+			redirectPage($returnHeader);
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -362,7 +362,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 			if (queryDB($conn, $sql) === TRUE) {
 				// Success! We've added the new item description values
 				closeDB($conn);
-				header($returnHeader);
+				redirectPage($returnHeader);
 			}
 			else {
 				echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -385,7 +385,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 }
 
 else {
-	header("location: " . $basePath . "mainpage.php");
+	redirectPage("mainpage.php");
 }
 
 ?>

@@ -252,7 +252,7 @@ elseif(isset($_POST['submitMember']))
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
-		header("location: " . $basePath . "ap_co3.php?id=$clientID");
+		redirectPage("ap_co3.php?id=$clientID");
 	} 
 	else {
 		echo mysqli_errno($conn) . ": " . mysqli_error($conn). "\n";
@@ -373,7 +373,7 @@ elseif(isset($_GET['DeleteMember']))
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	header("location: " . $basePath . "mainpage.php");
+	redirectPage("mainpage.php");
 }
 
 ?>

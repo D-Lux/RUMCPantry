@@ -18,7 +18,7 @@ function addWalkIn($clientID) {
 	if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		createCookie("newWalkIn", 1, 30);
-		header("location: " . $GLOBALS['basePath'] . "checkIn.php");
+		redirectPage("checkIn.php");
 	}
 	else {
 		closeDB($conn);
@@ -54,7 +54,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 		// Set a cookie to tell the user the date exists
 		// Done this way instead of with url params so reloading the page doesn't cause the warning
 		createCookie("badAppDate", 1, 30);
-		header("location: " . $basePath . "ap_ao2.php");
+		redirectPage("ap_ao2.php");
 	}
 	else {
 		// Find the available client ID
@@ -81,7 +81,7 @@ if (isset($_POST['CreateInvoiceDate'])) {
 			closeDB($conn);
 			// go to view page with date parameter
 			createCookie("newAppt", 1, 30);
-			header("location: " . $basePath . "ap_ao3.php?date=" . $_POST['appDate']);
+			redirectPage("ap_ao3.php?date=" . $_POST['appDate']);
 		}
 		else {
 			echoDivWithColor("Error description: " . mysqli_error($conn), "red");
@@ -116,8 +116,7 @@ elseif (isset($_POST['CreateInvoiceTimeSlot'])) {
 		closeDB($conn);
 		// go to view page with date parameter
 		createCookie("newTimeSlots", 1, 30);
-		header("location: " . $basePath . "ap_ao3.php?date=" . $_POST['appDate']);
-
+		redirectPage("ap_ao3.php?date=" . $_POST['appDate']);
 	}
 	else {
     // TODO: Remove this
@@ -183,7 +182,7 @@ elseif (isset($_POST['clientApptSelect'])) {
 					closeDB($conn);
 					createCookie("clientApptSet", 1, 30);
 					// Take us back to login page
-					header("location: " . $basePath . "login.php");
+					redirectPage("login.php");
 				}
 				else {
 					// Assignment failed, error back
@@ -205,11 +204,11 @@ elseif (isset($_POST['clientApptSelect'])) {
 elseif (isset($_POST['SkipApt'])) {
 	createCookie("clientSkippedAppt", 1, 30);
 	// Take us back to login page
-	header("location: " . $basePath . "mainpage.php");
+	redirectPage("mainpage.php");
 }
 elseif (isset($_POST['NoApptSelection'])) {
 	// Take us back to login page
-	header("location: " . $basePath . "mainpage.php");
+	redirectPage("mainpage.php");
 }
 // Walk-in appointment creation
 elseif (isset($_GET['newWalkIn'])) {
@@ -221,7 +220,7 @@ elseif (isset($_POST['existingWalkIn'])) {
 else {
 	echo "<h1>Nothing was set</h1><br>";
 	debugEchoPOST();debugEchoGET();
-	header("location: " . $basePath . "mainpage.php");
+	redirectPage("mainpage.php");
 }
 
 ?>

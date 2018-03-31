@@ -12,7 +12,7 @@ if (isset($_POST['createCategory'])) {
     /* Check connection*/
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
-      header("location: " . $basePath . "ap_io8.php");
+      redirectPage("ap_io8.php");
     } 
   
     // Check if there is a category with the same name already
@@ -43,7 +43,7 @@ if (isset($_POST['createCategory'])) {
       }
     }
     closeDB($conn);
-    header("location: ". $basePath . "ap_io8.php");
+    redirectPage("ap_io8.php");
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];
@@ -57,7 +57,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     /* Check connection*/
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
-      header("location: " . $basePath . "ap_io8.php"); 
+      redirectPage("ap_io8.php"); 
     } 
 
     //check to see if category exists, if not create it.
@@ -73,11 +73,11 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     if (queryDB($conn, $sql) === TRUE) {
       createCookie("categoryUpdated", 1, 30);
       closeDB($conn);
-      header("location: " . $basePath . "ap_io8.php"); 
+      redirectPage("ap_io8.php"); 
     } 
     else {
       createCookie("errUpdate", 1, 30);
-      header("location: " . $basePath . "ap_io8.php");   
+      redirectPage("ap_io8.php");   
     }
   closeDB($conn);
 }
@@ -85,7 +85,7 @@ elseif (isset($_GET['DeleteCategory'])) {
   $conn = connectDB();
   if ($conn->connect_error) {
     createCookie("conErr", 1, 30);
-    header("location: " . $basePath . "ap_io8.php");
+    redirectPage("ap_io8.php");
   } 
   $categoryID = $_GET['categoryID']; 
   $sql = "UPDATE category SET isDeleted = true WHERE categoryID=" . $categoryID;
@@ -103,7 +103,7 @@ elseif (isset($_GET['DeleteCategory'])) {
     }
   }
   closeDB($conn);
-  header("location: " . $basePath . "ap_io8.php");
+  redirectPage("ap_io8.php");
 }
 elseif (isset($_GET['ReactivateCategory'])) {
   $conn = connectDB();
@@ -120,7 +120,28 @@ elseif (isset($_GET['ReactivateCategory'])) {
     createCookie("categoryReactivated", 1, 30);
   }
   closeDB($conn);
-  header("location: " . $basePath . "ap_io8.php?showDeleted=1");
+  redirectPage(9*+
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  
+  "ap_io8.php?showDeleted=1");
 }
 
 ?>

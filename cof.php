@@ -50,7 +50,7 @@
 							   FROM client
 							   WHERE clientID=" . $_POST['clientID'];
 					$walkinSql = "SELECT walkIn
-							   FROM Invoice
+							   FROM invoice
 							   WHERE invoiceID=" . $_POST['invoiceID'];
 					
 					$famQuery = queryDB($conn, $famSql);

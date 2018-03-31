@@ -115,7 +115,7 @@ elseif(isset($_POST['deleteRedistInvoice'])) {
 
 	if (queryDB($conn, $sql) === TRUE) {
 		createCookie("redistributionDeleted", 1, 30);
-		header("location: " . $basePath . "ap_ro8.php");
+		redirectPage("ap_ro8.php");
 	}
 	else {
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
@@ -351,7 +351,7 @@ function toggleRedistribution($table, $field, $isDeleted) {
 					WHERE " . $field . "="	. $_GET['id'];
 
 	// Create the return page string
-	$loc = "location: " . $GLOBALS['basePath'] . "ap_ro";
+	$loc = "ap_ro";
 	$loc .= ($table=="client" ? "2" : "5");
 	$loc .= ($isDeleted==1 ?  ".php" : ".php?ShowInactive=1");
 
@@ -366,7 +366,7 @@ function toggleRedistribution($table, $field, $isDeleted) {
 	}
 	closeDB($conn);
 
-	header($loc);
+	redirectPage($loc);
 }
 
 

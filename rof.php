@@ -17,7 +17,7 @@
     $invoiceID =  $_GET['invoiceID'];
   }
   else {
-    header("Location: " . $basePath . "ap_oo3.php");
+    redirectPage("ap_oo3.php");
   } 
   
   // *******************************************************
@@ -28,8 +28,8 @@
             FROM invoice
             JOIN client
               ON client.clientID = invoice.clientID
-            JOIN FamilyMember
-              ON FamilyMember.clientID = invoice.clientID
+            JOIN familymember
+              ON familymember.clientID = invoice.clientID
             WHERE invoiceID = " . $invoiceID;
             
   $result = runQueryForOne($conn, $sql);  
@@ -69,7 +69,7 @@
 	// *****************************
 	// --== Item database query ==--
 	$sql = "SELECT itemID, itemName, displayName, item." . $familyType . " as IQty, category.name as CName, 
-			category." . $familyType . " as CQty, Item.categoryID as CID
+			category." . $familyType . " as CQty, item.categoryID as CID
 			FROM item
 			JOIN category
 			ON item.categoryID=category.categoryID

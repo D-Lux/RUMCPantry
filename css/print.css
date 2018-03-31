@@ -1,4 +1,4 @@
-#btn-back, #btn-print, h1, h2, #hide_for_print {
+#btn-back, #btn-print, h1, h2, #hide_for_print, .hide_for_print {
 	display: none !important;
 }
 

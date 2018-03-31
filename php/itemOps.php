@@ -21,7 +21,7 @@ if(isset($_POST['createItem'])) {
   $conn = connectDB();
   if ($conn->connect_error) {
     createCookie("errConnection", 1, 30);
-    header("location: " . $basePath . "ap_io7.php");
+    redirectPage("ap_io7.php");
   }
 
     //check to see if category exists, if not create it.
@@ -38,7 +38,7 @@ if(isset($_POST['createItem'])) {
 		else {
 			closeDB($conn);
 			createCookie("errCreate", 1, 30);
-			header("location: " . $basePath . "ap_io7.php");
+			redirectPage("ap_io7.php");
 		}
   }
 	else {
@@ -53,7 +53,7 @@ if(isset($_POST['createItem'])) {
   if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
 		createCookie("newItem", 1, 30);
-		header("location: " . $basePath . "ap_io7.php");
+		redirectPage("ap_io7.php");
   }
 	else {
 		if ($newCategory) {
@@ -61,8 +61,8 @@ if(isset($_POST['createItem'])) {
 		}
 		closeDB($conn);
     createCookie("errCreate", 1, 30);
-		header("location: " . $basePath . "ap_io7.php");
-    }
+		redirectPage("ap_io7.php");
+  }
 }
 elseif (isset($_GET['DeleteItem'])) {
 	$itemID = $_GET['itemID'];
@@ -85,7 +85,7 @@ elseif (isset($_GET['DeleteItem'])) {
         createCookie("errConnection", 1, 30);
       }
       closeDB($conn);
-      header("location: " . $basePath . "ap_io7.php");
+      redirectPage("ap_io7.php");
     }
 
 }
@@ -109,7 +109,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
   /* Check connection*/
   if ($conn->connect_error) {
     createCookie("errConnection", 1, 30);
-    header("location: " . $basePath . "ap_io7.php");
+    redirectPage("ap_io7.php");
   }
 
 
@@ -132,7 +132,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
 		else{
 			createCookie("errUpdate", 1, 30);
       closeDB($conn);
-			header("location: " . $basePath . "ap_io7.php");
+			redirectPage("ap_io7.php");
 		}
 	}
 	else {
@@ -155,11 +155,11 @@ elseif (isset($_POST['updateItemIndividual'])) {
 
     if (queryDB($conn, $sql) === TRUE) {
 		createCookie("itemUpdated", 1, 30);
-		header("location: " . $basePath . "ap_io7.php");
+		redirectPage("ap_io7.php");
     }
 	else {
     createCookie("errUpdate", 1, 30);
-    header("location: " . $basePath . "ap_io7.php");
+    redirectPage("ap_io7.php");
   }
 
   closeDB($conn);
@@ -168,7 +168,7 @@ elseif (isset($_GET['ReactivateItem'])) {
     $conn = connectDB();
     if ($conn->connect_error) {
       createCookie("errConnection", 1, 30);
-      header("location: " . $basePath . "ap_io7.php");
+      redirectPage("ap_io7.php");
     }
 
     $itemID = $_GET['itemID'];
@@ -190,7 +190,7 @@ elseif (isset($_GET['ReactivateItem'])) {
       createCookie("err_itemReactivated1", 1, 30);
     }
     closeDB($conn);
-    header("location: " . $basePath . "ap_io7.php?showDeleted=1");
+    redirectPage("ap_io7.php?showDeleted=1");
 
 }
 

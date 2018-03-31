@@ -87,7 +87,7 @@
 		return json_encode(array("Message" => "Connection failed: " . $conn->connect_error));
     }
 	
-    $sql = " UPDATE Invoice
+    $sql = " UPDATE invoice  
              SET status = " . GetCompletedStatus() . "
              WHERE invoiceID = " . $ID;
     

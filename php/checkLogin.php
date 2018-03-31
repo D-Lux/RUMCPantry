@@ -14,7 +14,9 @@ if ($pageRestriction > -1) {
   }
 }
 
-echo "<input type='hidden' value='" . $_SESSION['perms'] . "' id='perms'>";
+$permVal = isset($_SESSION['perms']) ? $_SESSION['perms'] : 0;
+
+echo "<input type='hidden' value='" . $permVal . "' id='perms'>";
 
 $debug = false;//true;
 

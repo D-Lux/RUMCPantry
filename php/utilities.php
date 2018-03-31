@@ -3,9 +3,17 @@ session_start();
 
 $basePath = "/";
 
-if ($_SESSION['perms'] == 100) {
+if (strpos($_SERVER['REQUEST_URI'], "RUMCPantry")) {
   $basePath = "/RUMCPantry/";
 }
+
+// **********************************************
+// * Handle redirect
+function redirectPage($address) {
+    echo "<script type='text/javascript'>window.top.location='" . $GLOBALS['basePath'] . $address . "';</script>"; 
+    die();
+}
+
 // **********************************************
 // * Debug functions
 

@@ -28,12 +28,6 @@ function runReportQueries($startDate, $endDate) {
 			AND invoice.visitDate < '" . $endDate . "' 
 			AND invoice.status = " . GetCompletedStatus();
 
-	// Test statement: replace .status blocks above
-	/*
-	AND Invoice.status > " . GetAvailableStatus() . "
-			AND Invoice.status < " . GetRedistributionStatus();
-	*/
-	
 	// Family query test
 	$result = queryDB($conn, $sql);
 	if ($result!=null && $result->num_rows > 0) {
