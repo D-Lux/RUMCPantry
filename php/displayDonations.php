@@ -21,7 +21,7 @@ if ($conn->connect_error) {
 
 
  //TODO currently I have it pulling the donationpartner ID, need to pull the donation partner name
-$sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM Donation";
+$sql = "SELECT donationID, donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refProduce, refDairyAndDeli, dryShelfStable, dryNonFood, dryFoodDrive FROM donation";
 $result = $conn->query($sql);
 $hasReal =0;
 if ($result->num_rows > 0) {
@@ -36,7 +36,7 @@ if ($result->num_rows > 0) {
     while($row = $result->fetch_assoc()) {
         $donationParnterName ="";
 
-        $sql1 = "SELECT DISTINCT name, donationPartnerID FROM DonationPartner WHERE donationPartnerID = ". $row['donationPartnerID'];
+        $sql1 = "SELECT DISTINCT name, donationPartnerID FROM donationpartner WHERE donationPartnerID = ". $row['donationPartnerID'];
         $result1 = $conn->query($sql1);
         if ($result1->num_rows > 0) {
             while($row1 = $result1->fetch_assoc()) {

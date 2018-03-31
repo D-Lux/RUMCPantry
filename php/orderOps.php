@@ -37,7 +37,7 @@ function deleteInvoiceDesc() {
 		die("Connection failed: " . $conn->connect_error);
 	}
 
-	$sql = "DELETE FROM InvoiceDescription
+	$sql = "DELETE FROM invoicedescription
 			WHERE invoiceID=" . $invoiceID;
 
 	if (queryDB($conn, $sql) === TRUE) {
@@ -99,7 +99,7 @@ function createInvoiceDesc() {
 	}
 
 	// Generate our insertion string
-	$insertionSql = "INSERT INTO InvoiceDescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
+	$insertionSql = "INSERT INTO invoicedescription (invoiceID, itemID, quantity, totalItemsPrice, special ) VALUES ";
 	$firstInsert = TRUE;
 
 	foreach ($orderIDs as $itemID=>$qty) {
@@ -146,7 +146,7 @@ function updateStatusFromOrder() {
 
 	// Generate our query to get our current status
 	$sql = "SELECT status
-			FROM Invoice
+			FROM invoice
 			WHERE invoiceID=" . $_POST['invoiceID'] . "
 			LIMIT 1";
 
@@ -165,7 +165,7 @@ function updateStatusFromOrder() {
 		$newStatus = AdvanceInvoiceStatus($currStatus) ;
 
 		// Generate our update query with the new status
-		$sql = "UPDATE Invoice
+		$sql = "UPDATE invoice
 				SET status=" . $newStatus . "
 				WHERE invoiceID=" . $_POST['invoiceID'];
 
@@ -228,7 +228,7 @@ elseif (isset($_POST['SetInvoiceProcessed'])) {
 		die("Connection failed: " . $conn->connect_error);
 	}
 
-	$sql = "UPDATE Invoice
+	$sql = "UPDATE invoice
 			SET status=" . (ReturnProcessedStatus($_POST['status'])) . "
 			WHERE invoiceID=" . $_POST['invoiceID'];
 	if (queryDB($conn, $sql) === TRUE) {
@@ -271,7 +271,7 @@ elseif (isset($_POST['SaveSpecials'])) {
 			}
 			foreach ($itemArr as $itemName){
 				$sql = "SELECT itemID
-						FROM Item
+						FROM item
 						WHERE itemName='" . $itemName . "'
 						LIMIT 1";
 
@@ -312,11 +312,11 @@ elseif (isset($_POST['addItemToOrder'])) {
 	// If they don't, add a new invoice description
 
 	$sql = "SELECT quantity, invoiceDescID as ID, price, totalItemsPrice
-			FROM InvoiceDescription
-			JOIN Item
-			ON Item.itemID = InvoiceDescription.itemID
+			FROM invoicedescription
+			JOIN item
+			ON item.itemID = invoicedescription.itemID
 			WHERE invoiceID=" . $_POST['invoiceID'] . "
-			AND Item.itemName=" . makeString($_POST['addItem']);
+			AND item.itemName=" . makeString($_POST['addItem']);
 
 	$descQuery = queryDB($conn, $sql);
 
@@ -326,7 +326,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 		$newQty = $oldData['quantity'] + $_POST['qty'];
 		$newPrice = $oldData['totalItemsPrice'] + ($_POST['qty'] * $oldData['price']);
 
-		$sql = "UPDATE InvoiceDescription
+		$sql = "UPDATE invoicedescription
 				SET quantity=" . $newQty . ", totalItemsPrice=" . $newPrice . "
 				WHERE invoiceDescID=" . $oldData['ID'];
 		if (queryDB($conn, $sql) === TRUE) {
@@ -344,7 +344,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 		// The item wasn't already in the invoice, that's okay, we can add it now
 		// First, we find the item's ID
 		$sql = "SELECT itemID, price
-				FROM Item
+				FROM item
 				WHERE itemName=" . makeString($_POST['addItem']) . "
 				LIMIT 1";
 		$idQuery = queryDB($conn, $sql);
@@ -354,7 +354,7 @@ elseif (isset($_POST['addItemToOrder'])) {
 			// We've got our ID now, just insert it with it's quantity
 			$itemIdFetch = sqlFetch($idQuery);
 			$itemPrice = $itemIdFetch['price'] * $_POST['qty'];
-			$sql = "INSERT INTO InvoiceDescription
+			$sql = "INSERT INTO invoicedescription
 					(invoiceID, itemID, quantity, totalItemsPrice, special)
 					VALUES
 					(" . $_POST['invoiceID'] . ", " . $itemIdFetch['itemID'] . ", " .

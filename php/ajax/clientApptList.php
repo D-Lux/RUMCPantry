@@ -10,11 +10,11 @@ if ($conn->connect_error) {
 }
 // Get information to create link
 $sql = "SELECT (numOfAdults + numOfKids) as familySize, lastName
-		FROM Client
-		JOIN FamilyMember
-		ON Client.clientID = FamilyMember.clientID
-		WHERE FamilyMember.isHeadOfHousehold = 1
-		AND Client.clientID = " . $_GET['cid'];
+		FROM client
+		JOIN familymember
+		ON client.clientID = familymember.clientID
+		WHERE familymember.isHeadOfHousehold = 1
+		AND client.clientID = " . $_GET['cid'];
 
 $clientInfo = returnAssocArray(queryDB($conn, $sql ));
 $familySize = $clientInfo[0]['familySize'];
@@ -22,7 +22,7 @@ $lastName = $clientInfo[0]['lastName'];
 
 // Grab invoice information
 $sql = "SELECT invoiceID, visitDate, status, visitTime
-		FROM Invoice
+		FROM invoice
 		WHERE clientID=" .  $_GET['cid'];
 $results = returnAssocArray(queryDB($conn, $sql ));
 

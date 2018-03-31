@@ -10,7 +10,7 @@
   }
   else {
     $pID = $_GET['donationPartnerID'];
-    $sql = "SELECT name, city, state, zip, address, phoneNumber FROM DonationPartner WHERE donationPartnerID =" . $pID ;
+    $sql = "SELECT name, city, state, zip, address, phoneNumber FROM donationpartner WHERE donationPartnerID =" . $pID ;
     
     $conn = connectDB();
     $result = runQueryForOne($conn, $sql);

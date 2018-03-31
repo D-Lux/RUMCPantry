@@ -4,7 +4,7 @@
   include 'php/backButton.php';
 
   $sql = "SELECT donationPartnerID as dpid, name, city
-          FROM DonationPartner"; // Eventually check for isDeleted
+          FROM donationpartner"; // Eventually check for isDeleted
   $conn = connectDB();
 
   $donationOptions = runQuery($conn, $sql);

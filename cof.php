@@ -79,18 +79,18 @@
 				}
 				
 				// --== Item databse query ==--
-				$sql = "SELECT itemID, displayName, itemName, Item." . $familyType . " as IQty, Category.name as CName, 
-						Category." . $familyType . " as CQty, Item.categoryID as CID
-						FROM Item
-						JOIN Category
-						ON Item.categoryID=Category.categoryID
-						WHERE Item.isDeleted=0
-						AND Category.isDeleted=0
-						AND Category.name<>'Specials'
-						AND Category.name<>'redistribution'
-						AND Item." . $familyType . ">0
-						AND Category." . $familyType . ">0 
-						ORDER BY Category.formOrder, Item.displayName"; //CID
+				$sql = "SELECT itemID, displayName, itemName, item." . $familyType . " as IQty, category.name as CName, 
+						category." . $familyType . " as CQty, item.categoryID as CID
+						FROM item
+						JOIN category
+						ON item.categoryID=category.categoryID
+						WHERE item.isDeleted=0
+						AND category.isDeleted=0
+						AND category.name<>'Specials'
+						AND category.name<>'redistribution'
+						AND item." . $familyType . ">0
+						AND category." . $familyType . ">0 
+						ORDER BY category.formOrder, item.displayName"; //CID
 
 				$itemList = queryDB($conn, $sql);
 				
@@ -233,7 +233,7 @@
 								// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
 								if (is_numeric($itemLine[$i])) {
 									$sql = "SELECT displayName
-											FROM Item
+											FROM item
 											WHERE itemID='" . $itemLine[$i] . "'
 											LIMIT 1";
 									$itemQuery = queryDB($conn, $sql);

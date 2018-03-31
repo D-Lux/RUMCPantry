@@ -9,7 +9,7 @@ $conn = connectDB();
 
 // Get our data
 $sql = "SELECT donationID, dateOfPickup
-        FROM Donation WHERE donationPartnerID = " . $pID;
+        FROM donation WHERE donationPartnerID = " . $pID;
         
 $results = returnAssocArray(queryDB($conn, $sql ));
 

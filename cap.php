@@ -26,7 +26,7 @@
 		
 		// Find available appointments for this client to select from
 		$sql = "SELECT visitTime, visitDate
-				FROM Invoice
+				FROM invoice
 				WHERE MONTH(visitDate)=" . $selectMonth . "
 				AND YEAR(visitDate)=" . $selectYear . "
 				AND clientID=" . $availID . "

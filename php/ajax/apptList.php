@@ -35,7 +35,7 @@ $tail = " GROUP BY visitDate
 $sql = "SELECT  visitDate,
 				SUM(CASE WHEN status = " . GetAvailableStatus() . " THEN 1 ELSE 0 END) as availCount,
 				SUM(CASE WHEN status <> " . GetRedistributionStatus() . " THEN 1 ELSE 0 END) as numApp  
-		FROM Invoice
+		FROM invoice
 		WHERE 1=1 ";
 		
 // Get our total record count

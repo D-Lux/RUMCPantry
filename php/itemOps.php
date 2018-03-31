@@ -75,7 +75,7 @@ elseif (isset($_GET['DeleteItem'])) {
     $result = queryDB($conn, "SELECT DISTINCT itemID FROM item WHERE itemID = " . $itemID);
     if($result->num_rows > 0) {
 
-      $sql = "update Item set isDeleted=true where itemID=" . $itemID;
+      $sql = "update item set isDeleted=true where itemID=" . $itemID;
 
       if (queryDB($conn, $sql) === TRUE) {
         createCookie("itemDeleted", 1, 30);

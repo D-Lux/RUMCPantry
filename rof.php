@@ -23,13 +23,13 @@
   // *******************************************************
 	// * Query for starting information
   // Using our invoice ID, get the family size, client ID and name
-  $sql = " SELECT Client.clientID, (numOfAdults + numOfKids) as familySize, 
+  $sql = " SELECT client.clientID, (numOfAdults + numOfKids) as familySize, 
                   walkIn, CONCAT(lastName , ', ', firstName) as cName
-            FROM Invoice
-            JOIN Client
-              ON Client.clientID = Invoice.clientID
+            FROM invoice
+            JOIN client
+              ON client.clientID = invoice.clientID
             JOIN FamilyMember
-              ON FamilyMember.clientID = Invoice.clientID
+              ON FamilyMember.clientID = invoice.clientID
             WHERE invoiceID = " . $invoiceID;
             
   $result = runQueryForOne($conn, $sql);  
@@ -46,7 +46,7 @@
 	// ************************************
 	// --== Client current order query ==--
 	$orderSql = "SELECT itemID, quantity, special
-				 FROM InvoiceDescription
+				 FROM invoicedescription
 				 WHERE invoiceID=" . $invoiceID;
 	$orderData = queryDB($conn, $orderSql);
 	if ($orderData === FALSE) { die("Order could not be found or has not yet been completed"); }
@@ -68,18 +68,18 @@
 	
 	// *****************************
 	// --== Item database query ==--
-	$sql = "SELECT itemID, itemName, displayName, Item." . $familyType . " as IQty, Category.name as CName, 
-			Category." . $familyType . " as CQty, Item.categoryID as CID
-			FROM Item
-			JOIN Category
-			ON Item.categoryID=Category.categoryID
-			WHERE Item.isDeleted=0
-			AND Category.isDeleted=0
-			AND Category.name<>'Specials'
-			AND Category.name<>'redistribution'
-			AND Item." . $familyType . ">0
-			AND Category." . $familyType . ">0 
-			ORDER BY Category.formOrder, Item.displayName";
+	$sql = "SELECT itemID, itemName, displayName, item." . $familyType . " as IQty, category.name as CName, 
+			category." . $familyType . " as CQty, Item.categoryID as CID
+			FROM item
+			JOIN category
+			ON item.categoryID=category.categoryID
+			WHERE item.isDeleted=0
+			AND category.isDeleted=0
+			AND category.name<>'Specials'
+			AND category.name<>'redistribution'
+			AND item." . $familyType . ">0
+			AND category." . $familyType . ">0 
+			ORDER BY category.formOrder, item.displayName";
 
 	$itemList = queryDB($conn, $sql);
 	

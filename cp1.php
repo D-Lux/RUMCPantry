@@ -16,19 +16,19 @@
 				// *************************************************
 				// ** Create a list of all active appointments today
 				
-				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, Invoice.clientID as clientID, 
+				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, invoice.clientID as clientID, 
 								status, visitDate, invoiceID
-						FROM Invoice
-						JOIN (SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
-							FROM FamilyMember
-							JOIN Client
-							ON FamilyMember.clientID = Client.clientID
-							WHERE isHeadOfHousehold=1
-							AND Client.isDeleted=0
-							AND Client.redistribution=0
-							AND firstName <> 'Available'
-							AND lastName <> 'Available') as clientInfo
-						ON clientInfo.clientID = Invoice.clientID";
+              FROM invoice
+              JOIN (SELECT firstName AS fName, lastName AS lName, familymember.clientID as clientID
+                    FROM familymember
+                  JOIN client
+                  ON familymember.clientID = client.clientID
+                  WHERE isHeadOfHousehold=1
+                  AND client.isDeleted=0
+                  AND client.redistribution=0
+                  AND firstName <> 'Available'
+                  AND lastName <> 'Available') as clientInfo
+              ON clientInfo.clientID = invoice.clientID";
 				$clientInfo = queryDB($conn, $sql);
 
 				// Close the connection

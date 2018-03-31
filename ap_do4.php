@@ -7,13 +7,13 @@
   $conn = connectDB();
   // Get donation partner names
   $sql = "SELECT donationPartnerID as dpid, name, city
-          FROM DonationPartner
+          FROM donationpartner
           ORDER BY name ASC";
   $donationOptions = runQuery($conn, $sql);
 
   // Get donation details
   $donation = [];
-  $sql = "SELECT donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refDairyAndDeli, refProduce, dryFoodDrive, dryNonFood, dryShelfStable FROM Donation WHERE donationID = ". $donationID;
+  $sql = "SELECT donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refDairyAndDeli, refProduce, dryFoodDrive, dryNonFood, dryShelfStable FROM donation WHERE donationID = ". $donationID;
   
   $result = runQueryForOne($conn, $sql);
 ?>

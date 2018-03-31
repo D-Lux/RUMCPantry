@@ -10,12 +10,12 @@
   // Query the database
   
   // Grab client information
-  $sql = "SELECT lastName, numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, Client.notes, clientType, pets
-          FROM Client
-          JOIN FamilyMember
-            ON FamilyMember.clientID = Client.ClientID
-          WHERE FamilyMember.isHeadOfHousehold = TRUE
-          AND Client.clientID=" . $_GET['id'];
+  $sql = "SELECT lastName, numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets
+          FROM client
+          JOIN familymember
+            ON familymember.clientID = client.ClientID
+          WHERE familymember.isHeadOfHousehold = TRUE
+          AND client.clientID=" . $_GET['id'];
 
   $clientInfo = runQueryForOne($conn, $sql);
   
@@ -35,7 +35,7 @@
   
   // Grab family member information
   $sql = "SELECT firstName, lastName, isHeadOfHousehold, birthDate, gender, FamilyMemberID
-      FROM FamilyMember
+      FROM familymember
       WHERE clientID=" . $_GET['id'] . "
       AND isDeleted = 0";
   $familyInfo = runQuery($conn, $sql);

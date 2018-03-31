@@ -48,7 +48,7 @@
 
 				// Get the last appointment date in the database
 				$sql = "SELECT visitDate
-						FROM Invoice
+						FROM invoice
 						ORDER BY visitDate DESC
 						LIMIT 1";
 				$result = queryDB($conn, $sql);

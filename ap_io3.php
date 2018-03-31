@@ -47,7 +47,7 @@
          
         $categoryID = $row["categoryID"];            
             
-        $sql = "SELECT DISTINCT name, categoryID FROM Category WHERE categoryID = '$categoryID'";
+        $sql = "SELECT DISTINCT name, categoryID FROM category WHERE categoryID = '$categoryID'";
         $result = $conn->query($sql);
         if ($result->num_rows > 0) {
           $row = $result->fetch_assoc();

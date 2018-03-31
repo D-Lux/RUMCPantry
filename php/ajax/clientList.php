@@ -14,9 +14,9 @@
 	// ***********************
     // * Build our column list
     // List all of the columns we want
-  $columns = array("Client.clientID", "(Client.numOfAdults + Client.numOfKids) as familySize", 
-				   "Client.email", "Client.phoneNumber", "CONCAT(fm.lastName, ', ', fm.firstName) as cName");
-	$searchableColumns = array("Client.email", "Client.phoneNumber", "fm.lastName" , "fm.firstName");
+  $columns = array("client.clientID", "(client.numOfAdults + client.numOfKids) as familySize", 
+				   "client.email", "client.phoneNumber", "CONCAT(fm.lastName, ', ', fm.firstName) as cName");
+	$searchableColumns = array("client.email", "client.phoneNumber", "fm.lastName" , "fm.firstName");
 	
 	// *********************************
     // * Generate our user search query 
@@ -44,17 +44,17 @@
 	$sql = "SELECT " . implode(", ", $columns);
 	
 	// FROM main table
-	$sql .= " FROM FamilyMember fm ";
+	$sql .= " FROM familymember fm ";
 	
 	// JOINs
-	$sql .= " JOIN Client 
-				ON Client.clientID=fm.clientID ";
+	$sql .= " JOIN client 
+				ON client.clientID=fm.clientID ";
 				
 	// WHERE clauses
-	$sql .= " 	WHERE Client.isDeleted=" . $deleted . "
-				AND	Client.clientID<>" . $availID . "
+	$sql .= " 	WHERE client.isDeleted=" . $deleted . "
+				AND	client.clientID<>" . $availID . "
 				AND	fm.isHeadOfHousehold=true
-				AND	Client.redistribution=0 ";
+				AND	client.redistribution=0 ";
 	
 	// Get our total record count
   $totalResults = returnAssocArray(queryDB($conn, $sql));

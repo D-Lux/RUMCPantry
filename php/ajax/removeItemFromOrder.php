@@ -9,7 +9,7 @@
 			echo "ERROR - No database connection";
 			die("Connection failed: " . $conn->connect_error);
 		}
-		$sql = "DELETE FROM invoiceDescription
+		$sql = "DELETE FROM invoicedescription
 				WHERE invoiceDescID=" . $_GET['invoiceDescID'];
 		if (queryDB($conn, $sql) === FALSE) {
 			echo "sql error: " . mysqli_error($conn);

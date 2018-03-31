@@ -17,15 +17,15 @@ th {
 	// Post Vars: invoiceID | name | visitTime | familySize
 	$invoiceID = (isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0;
 	
-	$sql = "SELECT FamilyMember.firstName, FamilyMember.lastName, Invoice.visitTime, Invoice.status,
-				(Client.numOfKids + numOfAdults) AS familySize 
-			FROM Invoice 
-			JOIN Client 
-			ON Invoice.clientID=Client.clientID 
-			JOIN FamilyMember 
-			ON Client.clientID=FamilyMember.clientID 
-			WHERE Invoice.invoiceID = " . $invoiceID . " 
-			AND FamilyMember.isHeadOfHousehold = true";
+	$sql = "SELECT familymember.firstName, familymember.lastName, invoice.visitTime, invoice.status,
+				(client.numOfKids + numOfAdults) AS familySize 
+			FROM invoice 
+			JOIN client 
+			ON invoice.clientID=client.clientID 
+			JOIN familymember
+			ON client.clientID=familymember.clientID 
+			WHERE invoice.invoiceID = " . $invoiceID . " 
+			AND familymember.isHeadOfHousehold = true";
 	
 	$results    = runQueryForOne($conn, $sql);
 	$name       = $results['firstName'] . " " . $results['lastName'];
@@ -38,14 +38,14 @@ th {
 	if ( ($name != null) && ($invoiceID != 0) ){
 		// Create our query to get the invoice data
 		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle
-				FROM Invoice
-				JOIN (SELECT Item.itemName as name, quantity, InvoiceDescription.invoiceID as IinvoiceID, 
+				FROM invoice
+				JOIN (SELECT item.itemName as name, quantity, invoicedescription.invoiceID as IinvoiceID, 
 						rack, shelf, aisle
-					  FROM InvoiceDescription
-					  JOIN Item
-					  ON Item.itemID=InvoiceDescription.itemID
-					  WHERE InvoiceDescription.invoiceID=" . $invoiceID . ") as I
-				ON I.IinvoiceID=Invoice.invoiceID
+					  FROM invoicedescription
+					  JOIN item
+					  ON item.itemID=invoicedescription.itemID
+					  WHERE invoicedescription.invoiceID=" . $invoiceID . ") as I
+				ON I.IinvoiceID=invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
 				ORDER BY aisle, rack, shelf, iName";
 				

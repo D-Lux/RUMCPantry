@@ -17,7 +17,7 @@
 		// *************************************************
 		// Query the database
 		$sql = "SELECT firstName, lastName, isHeadOfHousehold, notes, birthDate, gender, isDeleted, FamilyMemberID
-				FROM FamilyMember
+				FROM familymember
 				WHERE FamilyMemberID=" . $_GET['memberID'];
 		$familyInfo = queryDB($conn, $sql);
 	

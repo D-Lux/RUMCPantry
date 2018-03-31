@@ -333,7 +333,7 @@ function createAvailableClient(){
 		die("Connection failed: " . $conn->connect_error);
 	}
 	// Create insertion string
-	$sql = "INSERT INTO Client (numOfAdults, NumOfKids, timestamp, isDeleted, redistribution)
+	$sql = "INSERT INTO client (numOfAdults, NumOfKids, timestamp, isDeleted, redistribution)
 			VALUES ('0','0',now(), FALSE, FALSE)";
 
 	// Perform and test insertion
@@ -341,7 +341,7 @@ function createAvailableClient(){
 		// Get the ID Key of the client we just created (we will need it to create the family member)
 		$clientID = $conn->insert_id;
 		// Create the insert string and perform the insertion
-		$sql = "INSERT INTO FamilyMember
+		$sql = "INSERT INTO familymember
 				(firstName, lastName, isHeadOfHousehold, clientID, timestamp, isDeleted)
 				VALUES ('Available', 'Available', TRUE, $clientID, now(), FALSE)";
 		if (queryDB($conn, $sql) === TRUE) {
@@ -350,7 +350,7 @@ function createAvailableClient(){
 			return $clientID;
 		}
 		else {
-			$sql = "DELETE FROM Client
+			$sql = "DELETE FROM client
 					WHERE clientID = $clientID";
 			queryDB($conn, $sql);
 			closeDB($conn);

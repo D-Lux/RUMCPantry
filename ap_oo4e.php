@@ -26,14 +26,14 @@ th {
 	if ( $name != null ) {
 		$sql = "SELECT I.name as iName, I.quantity as iQty, I.invoiceDescID as invoiceDescID,
 					I.rack as rack, I.shelf as shelf, I.aisle as aisle
-				FROM Invoice
-				JOIN (SELECT Item.itemName as name, quantity, invoiceDescID, 
-						InvoiceDescription.invoiceID as IinvoiceID, rack, shelf, aisle
-					  FROM InvoiceDescription
-					  JOIN Item
-					  ON Item.itemID=InvoiceDescription.itemID
-					  WHERE InvoiceDescription.invoiceID=" . $invoiceID . ") as I
-				ON I.IinvoiceID=Invoice.invoiceID
+				FROM invoice
+				JOIN (SELECT item.itemName as name, quantity, invoiceDescID, 
+						invoicedescription.invoiceID as IinvoiceID, rack, shelf, aisle
+					  FROM invoicedescription
+					  JOIN item
+					  ON item.itemID=invoicedescription.itemID
+					  WHERE invoicedescription.invoiceID=" . $invoiceID . ") as I
+				ON I.IinvoiceID=invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
 				ORDER BY aisle, rack, shelf, iName";
 		

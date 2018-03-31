@@ -15,14 +15,14 @@ function toggleClientActive($isDeleted=0) {
   $loc = "location: " . $GLOBALS['basePath'] . "ap_co1.php";
 	$loc .= ($isDeleted==0 ? "?ShowInactive=1" : ""); 
 	// Create our update query, setting the flag appropriate
-	$sql = "UPDATE Client 
+	$sql = "UPDATE client 
           SET isDeleted=" . $isDeleted . "
           WHERE clientID=" . $_GET['id'];
 
 	// Perform and test update
 	if (queryDB($conn, $sql) === TRUE) {
 		// Now set all of the family members as well
-		$sql = "UPDATE FamilyMember 
+		$sql = "UPDATE familymember 
 				SET isDeleted=" . $isDeleted . "
 				WHERE clientID=" . $_GET['id'];
 
@@ -113,7 +113,7 @@ elseif(isset($_POST['submitClient'])) {
     $conn = connectDB();
 
     // Create insertion string
-    $sql = "INSERT INTO Client 
+    $sql = "INSERT INTO client 
         (numOfAdults, NumOfKids, email, phoneNumber, 
           address, city, state, zip, foodStamps, clientType, pets,
           isDeleted, redistribution)
@@ -127,12 +127,12 @@ elseif(isset($_POST['submitClient'])) {
       // Get the ID Key of the client to create the family member
       $clientID = $conn->insert_id;
       // Create the insert string and perform the insertion
-      $sql = "INSERT INTO FamilyMember 
+      $sql = "INSERT INTO familymember 
           (firstName, lastName, isHeadOfHousehold, birthDate, clientID, gender, isDeleted)
           VALUES ('{$clientFirstName}', '{$clientLastName}', TRUE, '{$birthDate}', {$clientID}, {$gender}, FALSE)";
       if (queryDB($conn, $sql) === FALSE) {
         $error = "There was an error adding the family member to the database (check with the programmer)<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
-        $sql = "DELETE FROM Client
+        $sql = "DELETE FROM client
                 WHERE clientID = $clientID";
         queryDB($conn, $sql);
       }
@@ -186,7 +186,7 @@ elseif(isset($_POST['UpdateClient'])) {
     } 
 
     // Create insertion string
-    $sql = "UPDATE Client SET
+    $sql = "UPDATE client SET
         numOfAdults = {$numAdults}, numOfKids = {$numKids}, phoneNumber = '{$phoneNo}',
         foodStamps = {$foodStamps}, email = '{$email}', notes = '{$notes}', timestamp = now(), pets = '{$pets}',
         zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}
@@ -232,7 +232,7 @@ elseif(isset($_POST['submitMember']))
 
 	// If this is the new head of household, set all others to false
 	if ($head) {
-		$sql = "UPDATE familyMember SET isHeadOfHousehold=0 WHERE clientID=$clientID";
+		$sql = "UPDATE familymember SET isHeadOfHousehold=0 WHERE clientID=$clientID";
 
 		// Perform and test insertion
 		if (queryDB($conn, $sql) === FALSE) {
@@ -242,7 +242,7 @@ elseif(isset($_POST['submitMember']))
 	}
 	$head = makeString($head);
 	// Create insertion string
-	$sql = "INSERT INTO familyMember 
+	$sql = "INSERT INTO familymember 
 			(firstName, lastName, isHeadOfHousehold, notes, birthDate, gender,
 			 timestamp, clientID, isDeleted)
 			VALUES 
@@ -290,7 +290,7 @@ elseif(isset($_POST['UpdateMember']))
 	
 	// If this is the new head of household, set all others to false
 	if ($head) {
-		$sql = "UPDATE familyMember 
+		$sql = "UPDATE familymember 
 				SET isHeadOfHousehold=0 
 				WHERE clientID=$clientID";
 
@@ -305,7 +305,7 @@ elseif(isset($_POST['UpdateMember']))
 	// (prevents an issue where there is no head of household)
 	else {
 		// Find another family member who is the head of house
-		$sql = "SELECT firstName FROM FamilyMember 
+		$sql = "SELECT firstName FROM familymember 
 				WHERE FamilyMemberID != $memberID
 				AND clientID = $clientID
 				AND isHeadOfHousehold = 1";
@@ -320,7 +320,7 @@ elseif(isset($_POST['UpdateMember']))
 	}
 	
 	// Generate the update statement
-	$sql = "UPDATE FamilyMember SET
+	$sql = "UPDATE familymember SET
 			firstName = $firstName, lastName = $lastName, isHeadOfHousehold = $head, 
 			notes = $notes, birthDate = $birthDate, gender = $gender, timestamp = now()
 			WHERE FamilyMemberID = $memberID";
@@ -352,7 +352,7 @@ elseif(isset($_GET['DeleteMember']))
 		die("Connection failed: " . $conn->connect_error);
 	}
 	
-	$sql = "UPDATE FamilyMember 
+	$sql = "UPDATE familymember 
 			SET isDeleted=1, timestamp=now() 
 			WHERE FamilyMemberID=" . $_GET['memberID'];
 

@@ -60,7 +60,7 @@ elseif(isset($_POST['createDonationPartner'])) {
 
   if ($error == '') {
     $conn = connectDB();
-    $sql = "INSERT INTO DonationPartner (name, city, state, zip, address, phoneNumber)
+    $sql = "INSERT INTO donationpartner (name, city, state, zip, address, phoneNumber)
        VALUES ('" . $name . "', '" . $city . "', '" . $state . "', " . $zip . ", '" . $address . "', " . $areaCode.$phone1.$phone2 . ")";
 
     if (queryDB($conn,$sql) === FALSE) {
@@ -106,7 +106,7 @@ elseif (isset($_POST['updateDonationPartner'])) {
 
   if ($error == '') {
     $conn = connectDB();
-    $sql = "UPDATE DonationPartner
+    $sql = "UPDATE donationpartner
             SET name = '" . $name . "', state = '" . $state . "', zip = " . $zip . ", address = '" . $address . "', city = '" . $city . "', phoneNumber = " . $phoneNumber . "
             WHERE donationPartnerID = $pid";
 
@@ -158,7 +158,7 @@ elseif(isset($_POST["createDonation"])) {
   
   if ($error == '') {
     $conn = connectDB();
-    $sql = "INSERT INTO Donation
+    $sql = "INSERT INTO donation
                         (donationPartnerID, dateOfPickup, networkPartner, agency,
                           frozenNonMeat, frozenMeat, frozenPrepared,
                           refBakery, refProduce, refDairyAndDeli,
@@ -217,7 +217,7 @@ elseif (isset($_POST['updateDonation'])) {
   
   if ($error == '') {
     $conn = connectDB();
-    $sql = "UPDATE Donation SET 
+    $sql = "UPDATE donation SET 
               donationPartnerID = " . $donorID . ",
               dateOfPickup      = '" . $pickupDate . "',
               networkPartner    = '" . $networkPartner . "',
@@ -258,10 +258,10 @@ elseif (isset($_GET['DeleteItem'])) {
     }
 
 
-    $result = $conn->query("SELECT DISTINCT itemID FROM Item WHERE itemID = '$itemID'");
+    $result = $conn->query("SELECT DISTINCT itemID FROM item WHERE itemID = '$itemID'");
     if($result->num_rows > 0) {
 
-        $sql = "update Item set isDeleted=true where itemID=$itemID";
+        $sql = "update item set isDeleted=true where itemID=$itemID";
 
          if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "<h3>Item with item id $itemID deleted</h3>", "green");
@@ -277,10 +277,10 @@ elseif (isset($_GET['deleteDonation'])) {
 	$conn       = connectDB();
   $donationID = $_GET['donationID'];
 
-  $result = $conn->query("SELECT DISTINCT donationID FROM Donation WHERE donationID = '$donationID'");
+  $result = $conn->query("SELECT DISTINCT donationID FROM donation WHERE donationID = '$donationID'");
   if($result->num_rows > 0) {
 
-      $sql = "delete from Donation where donationID=$donationID";
+      $sql = "delete from donation where donationID=$donationID";
 
        if ($conn->query($sql) === TRUE) {
               echoDivWithColor( "<h3>Donation with Donation id $donationID deleted</h3>", "green");
@@ -302,10 +302,10 @@ elseif (isset($_GET['deleteDonationPartner'])) {
         die("Connection failed: " . $conn->connect_error);
     }
 
-    $result = $conn->query("SELECT DISTINCT donationPartnerID FROM DonationPartner WHERE donationPartnerID = '$donationPartnerID'");
+    $result = $conn->query("SELECT DISTINCT donationPartnerID FROM donationpartner WHERE donationPartnerID = '$donationPartnerID'");
     if($result->num_rows > 0) {
 
-        $sql = "delete from DonationPartner where donationPartnerID=$donationPartnerID";
+        $sql = "delete from donationpartner where donationPartnerID=$donationPartnerID";
 
          if ($conn->query($sql) === TRUE) {
                 echoDivWithColor( "<h3>Donation Partner with donationPartnerID id $donationPartnerID deleted</h3>", "green");

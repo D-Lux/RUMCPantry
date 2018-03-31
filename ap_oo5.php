@@ -20,7 +20,7 @@
 			
 		// Get the last appointment date in the database
 		$sql = "SELECT itemID, itemName
-				FROM Item
+				FROM item
 				WHERE isDeleted<>TRUE
 				ORDER BY itemName DESC";
 		$result = queryDB($conn, $sql);

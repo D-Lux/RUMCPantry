@@ -47,16 +47,16 @@
     }
     // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
     $sql = " SELECT COUNT(*) as ct
-              FROM Invoice
+              FROM invoice
               WHERE visitDate = '" . $date . "'
               AND invoiceID <> " . $ID . "
-              AND visitTime = (SELECT visitTime FROM Invoice WHERE invoiceID = " . $ID . ")
+              AND visitTime = (SELECT visitTime FROM invoice WHERE invoiceID = " . $ID . ")
               AND status BETWEEN " . GetArrivedLow() . " AND " . GetCompletedStatus();
     $results = returnAssocArray(queryDB($conn, $sql));
     $currCount = current($results)['ct'];
    
     // Update my status to the next status marker above 200
-    $sql = " UPDATE Invoice
+    $sql = " UPDATE invoice
              SET status = " . (GetArrivedLow() + $currCount) . "
              WHERE invoiceID = " . $ID;
     

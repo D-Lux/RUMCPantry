@@ -12,7 +12,7 @@ function categoryDatalist($defaultVal)
             mysql_connect($servername, $username, $password);
             mysql_select_db($dbname);
             //standard DB stuff up to here
-            $sql = "SELECT DISTINCT name FROM Category "; //select distinct values from the collumn in this table
+            $sql = "SELECT DISTINCT name FROM category "; //select distinct values from the collumn in this table
             $result = mysql_query($sql);
 
             echo "<input list='categories' name='category' value=$defaultVal >";

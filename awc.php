@@ -29,13 +29,13 @@ include 'php/backButton.php';
 		// ** Generate the datalist for client drop down
 		
 		$conn = connectDB();
-		$sql = "SELECT firstName AS fName, lastName AS lName, FamilyMember.clientID as clientID
-				FROM FamilyMember
-				JOIN Client
-				ON Client.clientID=FamilyMember.clientID
+		$sql = "SELECT firstName AS fName, lastName AS lName, familymember.clientID as clientID
+				FROM familymember
+				JOIN client
+				ON client.clientID=familymember.clientID
 				WHERE isHeadOfHousehold=1
-				AND Client.redistribution=0
-				AND Client.isDeleted=0
+				AND client.redistribution=0
+				AND client.isDeleted=0
 				AND (firstName <> 'Available'
 				AND lastName <> 'Available')";
 		$clientInfo = queryDB($conn, $sql);

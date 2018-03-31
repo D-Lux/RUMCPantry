@@ -67,7 +67,7 @@ if (!$walkIn) {
 				// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
 				if (is_numeric($itemLine[$i])) {
 					$sql = "SELECT displayName
-							FROM Item
+							FROM item
 							WHERE itemID='" . $itemLine[$i] . "'
 							LIMIT 1";
 					$itemQuery = queryDB($conn, $sql);

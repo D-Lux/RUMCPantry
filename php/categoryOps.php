@@ -16,12 +16,12 @@ if (isset($_POST['createCategory'])) {
     } 
   
     // Check if there is a category with the same name already
-    $sql = "SELECT isDeleted FROM Category WHERE name='" . $name . "'";
+    $sql = "SELECT isDeleted FROM category WHERE name='" . $name . "'";
     
     $results = runQuery($conn, $sql);
     if (is_array($results) && count($results) > 0) {
       if (current($results)['isDeleted']) {
-        $sql = "UPDATE Category SET isDeleted = false WHERE name = '" . $name . "'";
+        $sql = "UPDATE category SET isDeleted = false WHERE name = '" . $name . "'";
         createCookie("categoryReactivated", 1, 30);
       }
       else {
@@ -30,9 +30,9 @@ if (isset($_POST['createCategory'])) {
     }
     
     else {
-      $sql = "SELECT Max(formOrder) as M FROM Category";
+      $sql = "SELECT Max(formOrder) as M FROM category";
       $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
-      $sql = "INSERT INTO Category (name, small, medium, large, isDeleted, formOrder)
+      $sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
               VALUES ('" . $name . "', " . $small . ", " . $medium . ", " . $large . ", 0, " . $nextOrder . ")";
 
       if (queryDB($conn, $sql) === TRUE) {
@@ -61,7 +61,7 @@ elseif (isset($_POST['UpdateCategoryIndividual'])) {
     } 
 
     //check to see if category exists, if not create it.
-    $sql = "UPDATE Category
+    $sql = "UPDATE category
             SET categoryID = "  . $categoryID . ", 
                 name 	     = '" . $name       . "', 
                 small      = "  . $small      . ", 
@@ -88,7 +88,7 @@ elseif (isset($_GET['DeleteCategory'])) {
     header("location: " . $basePath . "ap_io8.php");
   } 
   $categoryID = $_GET['categoryID']; 
-  $sql = "UPDATE Category SET isDeleted = true WHERE categoryID=" . $categoryID;
+  $sql = "UPDATE category SET isDeleted = true WHERE categoryID=" . $categoryID;
     
 	if (queryDB($conn, $sql) === FALSE) {
     createCookie("delError", 1, 30);
@@ -111,7 +111,7 @@ elseif (isset($_GET['ReactivateCategory'])) {
     createCookie("conErr", 1, 30);
   }
 
-	$sql = "UPDATE Category SET isDeleted = false WHERE categoryID=" . $_GET['categoryID'];
+	$sql = "UPDATE category SET isDeleted = false WHERE categoryID=" . $_GET['categoryID'];
 
   if (queryDB($conn, $sql) === FALSE) {
     createCookie("reactivateError", 1, 30);
