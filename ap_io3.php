@@ -1,3 +1,8 @@
+<style>
+input[type="text"] {
+    width: 500px;
+}
+</style>
 <?php
   $pageRestriction = 99;
   include 'php/header.php';
