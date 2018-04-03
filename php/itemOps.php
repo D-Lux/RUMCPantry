@@ -112,10 +112,10 @@ elseif (isset($_POST['updateItemIndividual'])) {
     redirectPage("ap_io7.php");
   }
 
-
   //check to see if category exists, if not create it.
-  $result = queryDB($conn, "SELECT DISTINCT name FROM category WHERE name = '$category'");
-	if($result->num_rows == 0) {
+  $result = runQueryForOne($conn, "SELECT categoryID FROM category WHERE name = '{$category}' LIMIT 1");
+  
+	if($result === false) {
     $sql = "SELECT Max(formOrder) as M FROM category";
     $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
 		$sql = "INSERT INTO category (name, small, medium, large, isDeleted, formOrder)
@@ -136,16 +136,10 @@ elseif (isset($_POST['updateItemIndividual'])) {
 		}
 	}
 	else {
-		$sql = "SELECT DISTINCT name, categoryID FROM category WHERE name = '$category'";
-		$result = queryDB($conn, $sql);
-		if ($result->num_rows > 0) {
-			while($row = $result->fetch_assoc()) {
-				$categoryID = $row["categoryID"];
-			}
-
-		}
+		$categoryID = $result["categoryID"];
 	}
 
+   // Update our item appropriately
 	$sql = "UPDATE item
 			SET categoryID  = " . $categoryID . ",  itemName = '" . $itemName . "',
 				displayName = '" . $displayName . "', price = " . $price . ",
@@ -158,6 +152,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
 		redirectPage("ap_io7.php");
     }
 	else {
+    die("sql: " . $sql . "<br>Err: " . sqlError($conn));
     createCookie("errUpdate", 1, 30);
     redirectPage("ap_io7.php");
   }

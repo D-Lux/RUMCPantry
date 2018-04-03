@@ -253,6 +253,8 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
 		out all that has been deleted.
 	*/
+  
+  $defaultVal = htmlspecialchars_decode($defaultVal);
 
 	$conn = connectDB();
 	if ($conn->connect_error) {
