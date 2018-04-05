@@ -1,16 +1,18 @@
 <style>
   #noMoreBox {
-    position: fixed;
     z-index: 40;
     padding-top: 3%;
-    margin-top: 10%;
-    background-color: #57B9FF; 
-    margin-left:200px;
-    width: 400px;
+    background-color: #57B9FF;
     height: 280px;
     border: solid 2px #499BD6;
     text-align: center;
     border-radius: 25px;
+    position: fixed;
+    margin-left:25%;
+    margin-top:10%;
+    width: 50%;
+    border-style: solid;
+    text-align: center;
   }
   #clickOut {
     position: fixed;
@@ -28,8 +30,8 @@
     height: 0; /* Firefox... */
     box-shadow: 0 0 10px 1px #AAA;
   }
-  hr:after {  
-      content: "\00a0";  
+  hr:after {
+      content: "\00a0";
   }
 	</style>
 <div id="clickOut" style="display:none;"></div>
