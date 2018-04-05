@@ -1,21 +1,25 @@
+// ******************************************
+// * Written and developed by: Daniel Luxa
+// * © March 2018
+
 // ****************************************************************
 // ** SPECIALS
 
 var specialSlot = 0;
 function addSpecialItem() {
 	specialSlot++;
-	
+
 	// Get a reference to the item template and copy it
 	var itm = document.getElementById("specialTemplate");
 	var cln = itm.cloneNode(true);
 	document.getElementById("newItems").appendChild(cln);
-	
+
 	// Go through the div and set appropriate information
 	cln.style.display = "block";
 	cln.id = "specialSlot" + specialSlot;
-	
+
 	var children = document.getElementById('specialSlot' + specialSlot).childNodes;
-		
+
 	// Set all IDs and Names to the appropriate values
 	for (i = 0; i < children.length; i++) {
 		if ( children[i].hasAttribute("id") ) {
@@ -34,18 +38,18 @@ function addSpecialOrItem(ele) {
 	var itm = document.getElementById("specialOrTemplate");
 	var cln = itm.cloneNode(true);
 	idNum = ele.id.substring(5);
-	
+
 	// Append to the appropriate selection
 	document.getElementById("OrSlot" + idNum).appendChild(cln);
 
 	// Set the new box to be visible
 	cln.style.display = 'block';
-	
+
 	// Update ID to something unique
 	cln.id = cln.id = cln.id + idNum + "SLOT" + OrSlot;
-	
+
 	var children = document.getElementById(cln.id).childNodes;
-		
+
 	// Set names to the appropriate values
 	for (i = 0; i < children.length; i++) {
 		if ( children[i].hasAttribute("name") ) {
@@ -77,10 +81,10 @@ function countOrder(callingSlot)	{
 	// Get the total number of items selectable in this item's category
 	var Category = document.getElementById(nameField);
 	var MaxCount = Category.value;
-	
-	// Find all other elements in the page that have the same name and tally up the check boxes	
+
+	// Find all other elements in the page that have the same name and tally up the check boxes
 	var name = document.getElementsByName(boxName);
-	
+
 	var runningTotal = 0;
 	for (var i=0; i < name.length; i++) {
 		if (name[i].checked) {
@@ -96,7 +100,7 @@ function countOrder(callingSlot)	{
 			runningTotal++;
 		}
 	}
-	
+
 	// Update the selected quantity and color it if we're at maximum
 	var e = document.getElementById("Count" + nameField);
 	if (runningTotal == MaxCount) {
@@ -134,10 +138,10 @@ function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counte
 	else {
 		var MaxCount = document.getElementById(categoryID).value;
 	}
-	
-	// Find all other elements in the page that have the same name and tally up the check boxes	
+
+	// Find all other elements in the page that have the same name and tally up the check boxes
 	var beanCounter = document.getElementsByName(counterName);
-	
+
 	var runningTotal = 0;
 	for (var i=0; i < beanCounter.length; i++) {
 		if (beanCounter[i].checked) {
@@ -153,7 +157,7 @@ function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counte
 			runningTotal++;
 		}
 	}
-	
+
 	// Update the selected quantity and color it if we're at maximum
 	var e = document.getElementById("CountBeans");
 	if (runningTotal == MaxCount) {
@@ -170,7 +174,7 @@ function countBeans(callingSlot, uncheckName, showID, hideID, categoryID, counte
 	}
 }
 function countCanBeans(callingSlot)	{
-	countBeans(callingSlot, 'BagBeans[]', 'CannedBeansSection', 'BaggedBeansSection', 
+	countBeans(callingSlot, 'BagBeans[]', 'CannedBeansSection', 'BaggedBeansSection',
 				'CanBeans', 'CanBeans[]', '(Cans)');
 }
 
@@ -196,7 +200,7 @@ function updateCheckedQuantities()	{
 			else {
 				countOrder(inputs[i]);
 			}
-			
+
 		}
 	}
 }
@@ -246,23 +250,36 @@ function AJAX_RemoveFromInvoice(callingSlot) {
 // * Set an order to 'printed' when the print button is hit
 function AJAX_SetInvoicePrinted(invoiceID) {
 	// Run the AJAX stuff
-	xmlhttp = newAJAXObj();
-	
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			if (this.responseText == "0") {
+	$.ajax ({
+		url: basePath + "php/ajax/setToPrinted.php?" + "invoiceID=" + invoiceID,
+		success: function(response) {
+			if (response==0) {
 				window.print();
 			}
 			else {
-				// Give a small alert if this was already printed, but bring up the window anyway
 				window.alert("This order has already been printed");
 				window.print();
 			}
+
 		}
-	};
-	xmlhttp.open("GET", basePath + "php/ajax/setToPrinted.php?" +
-				 "invoiceID=" + invoiceID, true);
-	xmlhttp.send();
-	
-	
+	});
+	// xmlhttp = newAJAXObj();
+
+	// xmlhttp.onreadystatechange = function() {
+	// 	if (this.readyState == 4 && this.status == 200) {
+	// 		if (this.responseText == "0") {
+	// 			window.print();
+	// 		}
+	// 		else {
+	// 			// Give a small alert if this was already printed, but bring up the window anyway
+	// 			window.alert("This order has already been printed");
+	// 			window.print();
+	// 		}
+	// 	}
+	// };
+	// xmlhttp.open("GET", basePath + "php/ajax/setToPrinted.php?" +
+	// 			 "invoiceID=" + invoiceID, true);
+	// xmlhttp.send();
+
+
 }
