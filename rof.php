@@ -1,4 +1,4 @@
-<?php 
+<?php
   $pageRestriction = 10;
   include 'php/orderFormMessageBox.php';
   include 'php/header.php';
@@ -10,20 +10,20 @@
 	// Open the database connection
   $conn = connectDB();
 	if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
-  
-  
+
+
   $invoiceID  = 0;
   if (isset($_GET['invoiceID'])) {
     $invoiceID =  $_GET['invoiceID'];
   }
   else {
     redirectPage("ap_oo3.php");
-  } 
-  
+  }
+
   // *******************************************************
 	// * Query for starting information
   // Using our invoice ID, get the family size, client ID and name
-  $sql = " SELECT client.clientID, (numOfAdults + numOfKids) as familySize, 
+  $sql = " SELECT client.clientID, (numOfAdults + numOfKids) as familySize,
                   walkIn, CONCAT(lastName , ', ', firstName) as cName
             FROM invoice
             JOIN client
@@ -31,15 +31,15 @@
             JOIN familymember
               ON familymember.clientID = invoice.clientID
             WHERE invoiceID = " . $invoiceID;
-            
-  $result = runQueryForOne($conn, $sql);  
-  
+
+  $result = runQueryForOne($conn, $sql);
+
   $clientID   = $result['clientID'];
   $familySize = $result['familySize'];
   $walkIn     = $result['walkIn'];
-  
+
   $familyType = ($walkIn == 1) ? "Small" : familySizeDecoder($familySize);
-  
+
   echo "<h3>Review Order Form</h3>";
   echo "<h4>Client: " . $result['cName'] . "</h4>";
 	echo "<div class='body-content'>";
@@ -50,7 +50,7 @@
 				 WHERE invoiceID=" . $invoiceID;
 	$orderData = queryDB($conn, $orderSql);
 	if ($orderData === FALSE) { die("Order could not be found or has not yet been completed"); }
-	
+
 	$clientOrder = FALSE;
 	$clientSpecials = FALSE;
 	while ($desc = sqlFetch($orderData)) {
@@ -65,10 +65,10 @@
 	}
 
 	if (!$clientOrder) { die("Order could not be found or has not yet been completed"); }
-	
+
 	// *****************************
 	// --== Item database query ==--
-	$sql = "SELECT itemID, itemName, displayName, item." . $familyType . " as IQty, category.name as CName, 
+	$sql = "SELECT itemID, itemName, displayName, item." . $familyType . " as IQty, category.name as CName,
 			category." . $familyType . " as CQty, item.categoryID as CID
 			FROM item
 			JOIN category
@@ -78,41 +78,41 @@
 			AND category.name<>'Specials'
 			AND category.name<>'redistribution'
 			AND item." . $familyType . ">0
-			AND category." . $familyType . ">0 
+			AND category." . $familyType . ">0
 			ORDER BY category.formOrder, item.displayName";
 
 	$itemList = queryDB($conn, $sql);
-	
+
 	if ($itemList === FALSE) {
 		echo "sql error: " . mysqli_error($conn);
 		echoDivWithColor('<button onclick="goBack()">Go Back</button>', "red" );
 	}
-  
+
 	closeDB($conn);
-	
+
 	// ************************************************************
 	// * Create the order form
-	
+
 	// Start the form and add a hidden field for client info
 	echo "<form method='post' action='php/orderOps.php' name='CreateReviewedInvoiceDescriptions'>";
 	echo "<input type='hidden' value=" . $clientID . " name='clientID'>";
 	echo "<input type='hidden' value=" . $invoiceID . " name='invoiceID'>";
 	echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
-	
+
 	// Set defaults
 	$currCategory = "";
 	$divOpen = false;
-	
+
 	// *************************************************
 	// * Normal Items
-	
+
 	// Special case ID holders for beans (bagged and canned)
 	// We have to pull them apart, because they may not be in order
 	$CanBeans = array();
 	$BagBeans = array();
-	
+
 	$BeanQty = 0;
-	
+
 	// Roll through the items and create the order form
 	while ($item = sqlFetch($itemList)) {
 		// Check skipped categories for walkIn
@@ -123,11 +123,11 @@
 					echo "</div>"; // closing orderSection div from previous loop
 					$divOpen = false;
 				}
-				if ( $BeanQty == 0 ) { 
+				if ( $BeanQty == 0 ) {
 					$BeanQty = $item['CQty'];
 				}
 				$currCategory = $item['CName'];
-				
+
 				// Canned
 				if ( strpos($item['itemName'], "Bag") === FALSE ) {
 					if (!ISSET($CanBeans[$item['itemID']])) {
@@ -152,16 +152,16 @@
 					}
 					echo "<div class='orderSection'>";
 					$divOpen = true;
-					
+
 					echo "<h4 class='text-center'>" . $item['CName'] . "</h3>";
 					// Create a special div so the client can see an updated count of selected items
-					echo "<h5 class='text-center'><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] . 
+					echo "<h5 class='text-center'><div id='Count" . $item['CName'] . "'>You may select up to " . $item['CQty'] .
 						" (" . ($item['CQty']) . " remaining)</div></h4>";
 					// Include hidden values so we can track the category
 					echo "<input type='hidden' value=" . $item['CQty'] . " id='" . $item['CName'] . "'>";
 					$currCategory = $item['CName'];
 				}
-		
+
 
         // Display the Item name
         echo "<div class='row'>";
@@ -175,7 +175,7 @@
 					$customID = "box" . $item['itemID'] . "n" . $i;
 					echo "<input type='checkbox' id=$customID value=" . $item['itemID'];
 					echo " onclick='countOrder(this)' name='" . $item['CName'] . "[]' ";
-							
+
 					// If this item was selected, check it and reduce our count
 					if ( ISSET($clientOrder[$item['itemID']]) ) {
 						if ($clientOrder[$item['itemID']] > 0) {
@@ -200,10 +200,10 @@
 	if ($currCategory == "Beans") {
 		showBeanCategory($CanBeans, $BagBeans, $BeanQty, $clientOrder);
 	}
-	
+
 	// *************************************************
 	// * Specials
-	
+
 	if (!$walkIn) {
 		echo "<div id='specialsSection'>";
 		$specialsFile = fopen("specials.txt","r") or die();
@@ -217,14 +217,14 @@
 		while(!feof($specialsFile)) {
 			$itemLine = explode(",", fgets($specialsFile));
 			if (sizeof($itemLine) > 1) {
-				
+
 				// Handle the div for the border box
 				if ($divOpen) {
 					echo "</div>"; // closing orderSection div from previous loop
 				}
 				echo "<div class='orderSection'>";
 				$divOpen = true;
-				
+
 				for ($i = 0; $i < sizeof($itemLine); $i++) {
 					// Only create a box if we've grabbed a numeric value (the eol character appears in the array)
 					if (is_numeric($itemLine[$i])) {
@@ -233,16 +233,16 @@
 								WHERE itemID='" . $itemLine[$i] . "'
 								LIMIT 1";
 						$itemQuery = queryDB($conn, $sql);
-						
+
 						if ($itemQuery == NULL || $itemQuery->num_rows <= 0){
-							echo "sql error: " . mysqli_error($conn);	
+							echo "sql error: " . mysqli_error($conn);
 						}
 						else {
 							$itemInfo = sqlFetch($itemQuery);
 							$customID = "box" . $itemLine[$i] . "s" . $i;
 							echo "<input type='radio' id=$customID value=" . $itemLine[$i];
 							echo " name='savedItem" . $specialItemNum . "' ";
-							
+
 							// Check if the item was selected
 							if ( ISSET($clientSpecials[$itemLine[$i]]) ) {
 								if ($clientSpecials[$itemLine[$i]] > 0) {
@@ -265,14 +265,15 @@
 			$divOpen = false;
 		}
 		echo "</div>"; // Closing specials div
-					
-		
+
+
 	}
 ?>
-      
-			<button type="submit" class='btn-nav' name="CreateReviewedInvoiceDescriptions">Verify Order</button>
+      <div class="text-center">
+				<button type="submit" class='btn-nav' name="CreateReviewedInvoiceDescriptions">Verify Order</button>
+			</div>
 		</form>
-    
+
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>
 
@@ -280,6 +281,6 @@
   <?php if ($specialItemNum > 1) { ?>
     //showSpecials(); // THIS DOESN'T WORK HERE because we've already closed the form
   <?php } ?>
-  updateCheckedQuantities(); 
+  updateCheckedQuantities();
 </script>
 
