@@ -4,7 +4,6 @@ $buttonText = isset($btnText) ? $btnText : "Back";
 
 echo "<button style='z-index:20;' id='btn-back' onclick='goBack()'><i style='padding-bottom=8px;font-size:0.8em;padding-right:5px;' class='fa fa-chevron-circle-left'></i>". $buttonText. "</button>";
 
-
 ?>
 
 <script type="text/javascript" >

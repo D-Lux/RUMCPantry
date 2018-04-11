@@ -1,6 +1,8 @@
 <?php
 $pageRestriction = -1;
+$_SESSION['perms'] = 0;
 include 'php/header.php';
+
 ?>
 
 	<style>
@@ -9,7 +11,7 @@ include 'php/header.php';
 	}
 
 	</style>
-  
+
   <div class="text-center">
 	<h3>Welcome</h3>
 

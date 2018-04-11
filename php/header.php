@@ -1,3 +1,6 @@
+<div style="float:left;z-index:200;position: absolute;">
+  <div id="google_translate_element"></div>
+</div>
 <?php
 include('utilities.php');
 include('checkLogin.php');
@@ -7,7 +10,7 @@ include('checkLogin.php');
   <html>
     <head>
       <title>Roselle UMC</title>
-      
+
       <link href="<?=$basePath?>includes/fontawesome/css/fa-brands.min.css" rel="stylesheet" type="text/css" >
       <link href='<?=$basePath?>includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
       <link href='<?=$basePath?>includes/bootstrap/css/bootstrap.min.css' rel='stylesheet' type='text/css' >

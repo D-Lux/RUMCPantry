@@ -1,4 +1,4 @@
-<div id="pantryNavBar">
+<div id="pantryNavBar" class="hide_for_print">
   <ul>
     <li>
       <a href="#">Admin<i class="fa fa-caret"></i></a>
