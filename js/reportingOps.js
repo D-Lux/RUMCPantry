@@ -1,17 +1,14 @@
 // Updates the report page based on dates selected
-function AJAX_UpdateReport() {
-	var startDate = document.getElementById("startDate").value;
-	var endDate = document.getElementById("endDate").value;
-
-	xmlhttp = newAJAXObj();
-	
-	xmlhttp.onreadystatechange = function() {
-		if (this.readyState == 4 && this.status == 200) {
-			document.getElementById("reportData").innerHTML = this.responseText;	
-		}
-	};
-	xmlhttp.open("GET", basePath + "php/ajax/updateReport.php?" +
-				 "startDate=" + startDate + "&" +
-				 "endDate=" + endDate, true);
-	xmlhttp.send();
+function getReport() {
+  $.ajax({
+    url: basePath + "php/ajax/updateReport.php?startDate=" + $("#startDate").val() +
+				 "&endDate=" + $("#endDate").val(),
+    success : function(data) {
+      $("#reportData").html(data);
+    }
+  });
 }
+
+$("#startDate, #endDate").on("change", function() { getReport(); });
+
+getReport();

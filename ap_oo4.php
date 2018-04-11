@@ -18,7 +18,7 @@ th {
 	$invoiceID = (isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0;
 
 	$sql = "SELECT familymember.firstName, familymember.lastName, invoice.visitTime, invoice.status,
-				(client.numOfKids + numOfAdults) AS familySize
+				numOfKids, numOfAdults
 			FROM invoice
 			JOIN client
 			ON invoice.clientID=client.clientID
@@ -31,7 +31,8 @@ th {
 	$name       = $results['firstName'] . " " . $results['lastName'];
 	$printName	= $results['lastName'];
 	$visitTime  = $results['visitTime'];
-	$familySize = $results['familySize'];
+	$numOfKids  = $results['numOfKids'];
+  $numOfAdults= $results['numOfAdults'];
   $LeanneNum  = ($results['status'] % 100) + 1;
 
 
@@ -49,7 +50,9 @@ th {
 					  WHERE invoicedescription.invoiceID=" . $invoiceID . ") as I
 				ON I.IinvoiceID=invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
-				ORDER BY cName, aisle, rack, shelf, iName";
+				ORDER BY formOrder, aisle, rack, shelf, iName";
+
+        $sql = "SELECT item.itemname as iName, invoicedescription.quantity as iQty, item.rack as rack, item.shelf as shelf, item.aisle as aisle, category.name as cName FROM invoice JOIN invoicedescription ON invoicedescription.invoiceID = invoice.invoiceID JOIN item ON item.itemID = invoicedescription.itemID JOIN category ON category.categoryID = item.categoryID WHERE invoice.invoiceID = {$invoiceID} ORDER BY formOrder, aisle, rack, shelf, iName";
 
 		$invoiceData = queryDB($conn, $sql);
 
@@ -58,19 +61,35 @@ th {
 			die("<br>Invoice is currently empty.");
 		}
 		closeDB($conn);
-
-		// Show basic client information
-		echo "<table><tr><th>Client</th><th>Time</th><th>Number</th><th>Size</th></tr>";
-		echo "<tr><td>" . $name . "</td><td>" . returnTime($visitTime) . "</td><td>" . $LeanneNum;
-		echo "</td><td>" . familySizeDecoder($familySize) . "</td></tr></table><br>";
-
-		// Print button
-		echo "<button id='btn-print' onClick='AJAX_SetInvoicePrinted(" . $invoiceID . ")'><i class='fa fa-print'></i> Print</button>";
-
+    ?>
+		<table class='table'>
+      <tr>
+        <th>Client</th>
+        <th>Time - Order Number</th>
+        <th>Family Size</th>
+        <th>Adults</th>
+        <th>Children</th>
+      </tr>
+      <tr>
+        <td><?=$name?></td>
+        <td><?=returnTime($visitTime)?> - <?=$LeanneNum?></td>
+        <td><?=familySizeDecoder($numOfKids + $numOfAdults)?></td>
+        <td><?=$numOfAdults?></td>
+        <td><?=$numOfKids?></td>
+      </tr>
+    </table>
+    <br>
+    
+		<!-- Print button -->
+		<button class='float-right' id='btn-print' onClick='AJAX_SetInvoicePrinted(<?=$invoiceID?>)'><i class='fa fa-print'></i> Print</button>
+    <div class="clearfix"></div>
+    <?php
 		// Loop through our data and spit out the data into our table
-		echo "<table id='orderTable'><tr><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr><tbody>";
+		echo "<table style='padding:10px; font-size:1.4em;' id='orderTable'>
+          <tr><th></th><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr><tbody>";
 		while( $invoice = sqlFetch($invoiceData) ) {
-			echo "<tr><td>" . $invoice['cName'] . "</td>";
+			echo "<tr><td>" . ($invoice['iQty'] > 1 ? '*' : '') . "</td>";
+      echo "<td>" . $invoice['cName'] . "</td>";
 			echo "<td>" . $invoice['iName'] . "</td>";
 			echo "<td>" . $invoice['iQty'] . "</td>";
 			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td>";
@@ -83,9 +102,9 @@ th {
 
 		//Print out name tags numLines times
 		echo "<div id='nameTags' style='display:none;padding-top:100px;'><hr><h6>";
-		$numLines = orderFormNameTagLength($familySize);
+		$numLines = orderFormNameTagLength($numOfKids + $numOfAdults);
 		for ($i = 0; $i < $numLines; $i++) {
-			echo $printName . "&emsp;&emsp;" . $printName . "<br>";
+			echo $printName . "<br>";
 		}
 		echo "</h6></div>";
 	}
