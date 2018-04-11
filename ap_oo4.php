@@ -49,9 +49,7 @@ th {
 					  WHERE invoicedescription.invoiceID=" . $invoiceID . ") as I
 				ON I.IinvoiceID=invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
-				ORDER BY formOrder, aisle, rack, shelf, iName";
-
-        $sql = "SELECT item.itemname as iName, invoicedescription.quantity as iQty, item.rack as rack, item.shelf as shelf, item.aisle as aisle, category.name as cName FROM invoice JOIN invoicedescription ON invoicedescription.invoiceID = invoice.invoiceID JOIN item ON item.itemID = invoicedescription.itemID JOIN category ON category.categoryID = item.categoryID WHERE invoice.invoiceID = {$invoiceID} ORDER BY formOrder, aisle, rack, shelf, iName";
+				ORDER BY cName, aisle, rack, shelf, iName";
 
 		$invoiceData = queryDB($conn, $sql);
 
