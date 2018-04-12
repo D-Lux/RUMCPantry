@@ -1,6 +1,6 @@
 <?php
 $pageRestriction = -1;
-$_SESSION['perms'] = 0;
+
 include 'php/header.php';
 
 ?>

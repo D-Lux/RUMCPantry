@@ -1,6 +1,9 @@
 <?php
 session_start();
 
+if (!isset($_SESSION['perms'])) {
+  $_SESSION['perms'] = 0;
+}
 $basePath = "/";
 
 if (strpos($_SERVER['REQUEST_URI'], "RUMCPantry")) {
@@ -687,8 +690,8 @@ function getItemPrices($conn = null) {
 		$closeOnExit = true;
 	}
 	$sql = "SELECT itemID, price
-					FROM Item
-					WHERE Item.isDeleted=0";
+					FROM item
+					WHERE item.isDeleted=0";
 	$results = runQuery($conn, $sql);
 	$itemPrices = [];
 	if (is_array($results)) {
@@ -697,7 +700,7 @@ function getItemPrices($conn = null) {
 		}
 	}
 	if ($closeOnExit) { closeDB($conn); }
-	return array();
+	return $itemPrices;
 }
 // ************************************************************
 // ** Disabled categories for walkIns

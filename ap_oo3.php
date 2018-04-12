@@ -3,7 +3,6 @@
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
-    <meta http-equiv="refresh" content="15" >
 
 	<h3>View Active Orders</h3>
 
@@ -40,7 +39,7 @@
 			// Loop through our data and create a list of selectable active appointments
 			while( $invoice = sqlFetch($invoiceData) ) {
 				// Display options to be printed
-				if (IsReadyToPrint($invoice['status'])) {
+				if (IsReadyToPrint($invoice['status']) || IsPrinted($invoice['status'])) {
 					echo "<form method='get' action='ap_oo4.php'>";
 					echo "<input type='hidden' value='" . $invoice['invoiceID'] . "' name='invoiceID'>";
 					echo "<input type='submit' class='btn-nav' value='View: ";

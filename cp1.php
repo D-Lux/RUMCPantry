@@ -3,6 +3,11 @@
   include 'php/header.php'; 
   include 'php/backButton.php'
 ?>
+<style>
+td, th {
+  padding: 20px;
+}
+</style>
 		<h3>Order Selection</h3>
 		<div class='body-content'>
 			<!-- Refresh button -->
@@ -17,7 +22,7 @@
 				// ** Create a list of all active appointments today
 				
 				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, invoice.clientID as clientID, 
-								status, visitDate, invoiceID
+								status, visitDate, visitTime, invoiceID
               FROM invoice
               JOIN (SELECT firstName AS fName, lastName AS lName, familymember.clientID as clientID
                     FROM familymember
@@ -43,12 +48,12 @@
 					while ($client = sqlFetch($clientInfo)) {
 						if (IsReadyToCreateOrder($client['status'])) {
 							if ($noOrdersActive) {
-								echo "<table><tr><th>Client</th><th>Date</th><th></th></tr>";
+								echo "<table class='display'><tr><th>Client</th><th>Date</th><th>Time</th><th></th></tr>";
 								$noOrdersActive = false;
 							}
 
 							echo "<tr><td>" . $client['lName'] . ", " . $client['fName'] . "</td>";
-							echo "<td>" . $client['visitDate'] . "</td>";
+							echo "<td>" . $client['visitDate'] . "</td><td>" . DATE("h:i", strtotime($client['visitTime'])) . "</td>";
 
 							echo "<form action='cof.php' method='post' >";
 							echo "<input type='hidden' name='clientID' value=" . $client['clientID'] .">";
