@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <?php
 session_start();
 

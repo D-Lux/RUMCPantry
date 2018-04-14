@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <?php
 	include('../utilities.php');
 
@@ -62,7 +64,7 @@
     <tr>
       <td><?=$item['itemName']?></td>
       <td><?=aisleDecoder($item['aisle'])?></td>
-      <td><?=rackEncoder($item['rack'])?></td>
+      <td><?=rackDecoder($item['rack'])?></td>
       <td><?=shelfDecoder($item['shelf'])?></td>
       <td><input type="text" class="input-number IQty" style="width:40px;" maxlength=2 id="s<?=$item['itemID']?>" value=<?=$item['small']?>></td>
       <td><input type="text" class="input-number IQty" style="width:40px;" maxlength=2 id="m<?=$item['itemID']?>" value=<?=$item['medium']?>></td>

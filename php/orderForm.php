@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <?php
 
 echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";

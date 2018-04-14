@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 // Updates the report page based on dates selected
 function getReport() {
   $.ajax({

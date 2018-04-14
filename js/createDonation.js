@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 // For adding a new donation
 $("#btn_newDonation").on("click", function(e) {
   e.preventDefault();

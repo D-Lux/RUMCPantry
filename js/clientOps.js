@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 function validateNewClientMember() {
     var response = "";
 	var memberFirstName = document.getElementById("memberFirstNameField").value;

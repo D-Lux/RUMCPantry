@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 function validateRedistribution() {
 	var errorCount = 0;
 	var errorMsg = "";

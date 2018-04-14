@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <?php
 $pageRestriction = -1;
 include 'php/header.php';

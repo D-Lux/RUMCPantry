@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 var basePath = "/";
 
 if ($("#perms").val() == 100) {

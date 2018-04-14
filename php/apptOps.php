@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <script src="<?=$basePath?>js/utilities.js"></script>
 
 <?php

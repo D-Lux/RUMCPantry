@@ -1,3 +1,7 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+
 function updateHiddenClientID() {
 	var input = document.getElementById('clientID');
 	list = input.getAttribute('list');

@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <div id="pantryNavBar" class="hide_for_print">
   <ul>
     <li>

@@ -1,3 +1,5 @@
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+
 <div id="clickOut" style="display:none;"></div>
 <?php
 $pageRestriction = 99;

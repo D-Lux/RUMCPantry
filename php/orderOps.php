@@ -1,4 +1,4 @@
-
+<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
 
 <?php include 'utilities.php'; ?>
 

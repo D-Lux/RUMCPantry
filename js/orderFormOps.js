@@ -1,6 +1,6 @@
-// ******************************************
-// * Written and developed by: Daniel Luxa
-// * © March 2018
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
 
 // ****************************************************************
 // ** SPECIALS
