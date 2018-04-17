@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include('../utilities.php');
 
 $cid = isset($_POST['field1']) ? trim($_POST['field1']) : -1;

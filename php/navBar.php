@@ -25,6 +25,7 @@
           <li><a href="ap_io4.php">New Category</a></li>
           <li><a href="ap_io8.php">View Categories</a></li>
           <li><a href="ap_oo6.php">Adjust Category Ordering</a></li>
+          <li><a href="inventory_management.php">Inventory Management</a></li>
       </ul>
     </li>
     <li>

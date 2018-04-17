@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 session_start();
 
 if (!isset($_SESSION['perms'])) {

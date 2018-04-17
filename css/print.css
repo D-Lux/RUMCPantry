@@ -13,3 +13,14 @@ h6 {
 #nameTags {
 	display: block !important;
 }
+
+table,
+table tr td,
+table tr th {
+	page-break-inside: avoid;
+}
+
+tr:nth-child(even):not(th) {
+  -webkit-print-color-adjust:exact;
+  background: #EEEEEE
+}

@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
-<?php 
+<?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include '../utilities.php';
 
 // passwords are generated using the password_hash function as follows

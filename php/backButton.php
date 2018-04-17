@@ -1,7 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 $buttonText = isset($btnText) ? $btnText : "Back";
 
 echo "<button style='z-index:20;' id='btn-back' onclick='goBack()'><i style='padding-bottom=8px;font-size:0.8em;padding-right:5px;' class='fa fa-chevron-circle-left'></i>". $buttonText. "</button>";
@@ -68,6 +66,7 @@ echo "<button style='z-index:20;' id='btn-back' onclick='goBack()'><i style='pad
         case (location.pathname.includes("ap_io7.php")):
         case (location.pathname.includes("ap_io8.php")):
         case (location.pathname.includes("ap_oo1.php")):
+        case (location.pathname.includes("inventory_management.php")):
             window.location.assign("<?=$basePath?>ap_io1.php");
             break;
 

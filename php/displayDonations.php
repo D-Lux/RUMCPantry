@@ -1,7 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
- <?php
-
+<?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
  include 'donationOps.php';
 
 

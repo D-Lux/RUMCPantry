@@ -1,7 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 	include '../utilities.php';
 
   // field1 is the date - immediately usable by a sql query

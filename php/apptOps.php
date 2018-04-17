@@ -1,9 +1,8 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
 
 <script src="<?=$basePath?>js/utilities.js"></script>
 
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include 'utilities.php';
 
 function addWalkIn($clientID) {

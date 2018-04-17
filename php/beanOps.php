@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 
 // *****************************
 // * Special case functions for beans

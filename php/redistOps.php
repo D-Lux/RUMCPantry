@@ -1,7 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include 'utilities.php';
 //debugEchoPOST();debugEchoGET();
 // Go to specific client/member pages based on buttons pressed

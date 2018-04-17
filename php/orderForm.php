@@ -1,7 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
 echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
 echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";

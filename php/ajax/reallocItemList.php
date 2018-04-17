@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 	include '../utilities.php';
 
   $deleted = isset($_GET['deleted']) ? 1 : 0;

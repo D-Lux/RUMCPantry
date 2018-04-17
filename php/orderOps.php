@@ -1,8 +1,7 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+<?php 
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 
-<?php include 'utilities.php'; ?>
-
-<?php
+include 'utilities.php';
 
 // Grab Invoice and Client data from POST
 // Go through each category and store off counts of ID appearances to generate an SQL INSERT statement

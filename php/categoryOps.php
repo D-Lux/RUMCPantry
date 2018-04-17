@@ -1,8 +1,7 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include('utilities.php');
+
 if (isset($_POST['createCategory'])) {
     $name 	= $_POST['category'];
     $small 	= $_POST['small']; 

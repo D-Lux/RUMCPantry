@@ -1,6 +1,5 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
   header('Content-type: application/json');
   include '../utilities.php';
   $deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;
