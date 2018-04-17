@@ -12,7 +12,7 @@
   // Query the database
   
   // Grab client information
-  $sql = "SELECT lastName, numOfAdults, numOfKids, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets
+  $sql = "SELECT lastName, numOfAdults, numOfKids, startDate, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets
           FROM client
           JOIN familymember
             ON familymember.clientID = client.ClientID
@@ -69,6 +69,13 @@
         <div class="col-sm-4">Number of Children:</div>
         <div class="col-sm-8">
           <input style="width:50px;" class="input-number" type="text" name='numKids' maxlength="2" value=<?= $clientInfo['numOfKids'] ?> >
+        </div>
+      </div>
+      <!-- Client Joined Pantry -->
+      <div class="row">
+        <div class="col-sm-4">Joined Pantry On:</div>
+        <div class="col-sm-8">
+          <input type="date" name='startDate' value=<?= $clientInfo['startDate'] ?> >
         </div>
       </div>
       <!-- Phone Number -->
