@@ -165,6 +165,7 @@ elseif(isset($_POST['UpdateClient'])) {
 	$foodStamps = $_POST['foodStamps'];
 	$clientType = $_POST['clientType'];
   $notes      = empty($_POST['notes']) ? " " : fixInput($_POST['notes']);
+  $startDate      = $_POST['startDate'];
 
   $pets = "";
   if (isset($_POST['pets'])) {
@@ -189,7 +190,7 @@ elseif(isset($_POST['UpdateClient'])) {
     $sql = "UPDATE client SET
         numOfAdults = {$numAdults}, numOfKids = {$numKids}, phoneNumber = '{$phoneNo}',
         foodStamps = {$foodStamps}, email = '{$email}', notes = '{$notes}', timestamp = now(), pets = '{$pets}',
-        zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}
+        zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}, startDAte = '{$startDate}'
         WHERE clientID = {$clientID}";
     
     // Perform and test update
