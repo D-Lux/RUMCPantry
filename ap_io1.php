@@ -12,7 +12,7 @@
   <div class="row">
     <div class="col-sm-2"></div>
     <div class="col-sm-2">
-      <a href="<?=$basePath?>inventory_management.php" class="button">Inventory Mangement</a>
+      <a href="<?=$basePath?>inventory_management.php" class="button">Inventory Management</a>
     </div>
     <div class="col-sm-2"></div>
     <div class="col-sm-2">
