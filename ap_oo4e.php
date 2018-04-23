@@ -26,10 +26,31 @@ th {
 
 	// Create our query to get the invoice data
 	if ( $name != null ) {
-		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle, I.cName
+		
+		//Connect to database
+		$conn = connectDB();
+		if ($conn->connect_error) {
+			die("Connection failed: " . $conn->connect_error);
+		}
+		
+		//Get invoice total
+		$sqlttl = "SELECT SUM(totalitemsprice) as Itotal 
+				FROM invoicedescription 
+				WHERE invoiceID=" . $invoiceID . "";
+				
+		$invttlData = queryDB($conn, $sqlttl);
+		if ($invttlData == NULL || $invttlData->num_rows <= 0) {
+			echo "error: " . mysqli_error($conn);
+			die("<br>Invoice is currently empty.");
+		}
+		$row = sqlfetch($invttlData);
+		$invtotal = $row['Itotal']; 
+		
+		//Get all of the items on the invoice 	
+		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle, I.cName, I.invoiceDescID
 				FROM invoice
 				JOIN (SELECT item.itemName as name, quantity, invoicedescription.invoiceID as IinvoiceID, category.name as cName,
-						rack, shelf, aisle
+						rack, shelf, aisle, invoiceDescID
 					  FROM invoicedescription
 					  JOIN item
 					  ON item.itemID=invoicedescription.itemID
@@ -39,14 +60,6 @@ th {
 				ON I.IinvoiceID=invoice.invoiceID
 				WHERE invoiceID=" . $invoiceID . "
 				ORDER BY cName, aisle, rack, shelf, iName";
-
-		$conn = connectDB();
-
-		// Check fail conditions
-		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
-		}
-
 		$invoiceData = queryDB($conn, $sql);
 
 		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
@@ -54,10 +67,10 @@ th {
 			die("<br>Invoice is currently empty.");
 		}
 		closeDB($conn);
-
+	
 		// Loop through our data and spit out the data into our table
 		echo "<h4>Client: " . $name . " | Appointment Time: " . returnTime($visitTime);
-		echo " | Family Size: " . familySizeDecoder($familySize) . "</h4>";
+		echo " | Family Size: " . familySizeDecoder($familySize) . " | Invoice Total: " . $invtotal . "</h4>";
 
 		// Print button
 		echo "<button id='btn-print' onClick='window.print()'>Print</button>";
@@ -70,6 +83,7 @@ th {
 			echo "<td>" . $invoice['iQty'] . "</td>";
 			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td><td>" . $invoice['rack'] . "</td><td>" . $invoice['shelf'] . "</td>";
 
+			//echo "<td><input value=' ' class='btn_trash' name='RemoveItem' ";
 			echo "<td><input value=' ' name=" . $invoice['invoiceDescID'] . " class='btn_trash' name='RemoveItem' ";
 			echo "type='submit' onclick='AJAX_RemoveFromInvoice(this)'></td></tr>";
 
