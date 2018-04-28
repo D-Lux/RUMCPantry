@@ -92,8 +92,8 @@ function countOrder(callingSlot)	{
 			if (runningTotal >= MaxCount) {
 				callingSlot.checked = false;
 				//window.alert("Cannot select more in this category");
-        $("#clickOut").fadeIn(300);
-        $("#noMoreBox").show(300);
+        //$("#clickOut").fadeIn(300);
+        //$("#noMoreBox").show(300);
 				// Break out, since we know we're done here
 				return;
 			}

@@ -136,7 +136,7 @@ function createInvoiceDesc() {
 
 // ***************************************************************
 // * Function to set the status of an invoice to the correct value
-function updateStatusFromOrder() {
+function updateStatusFromOrder($setOrder = false) {
 	// Connect to the database
 	$conn = connectDB();
 	if ($conn->connect_error) {
@@ -144,7 +144,7 @@ function updateStatusFromOrder() {
 	}
 
 	// Generate our query to get our current status
-	$sql = "SELECT status
+	$sql = "SELECT status, visitDate, visitTime
 			FROM invoice
 			WHERE invoiceID=" . $_POST['invoiceID'] . "
 			LIMIT 1";
@@ -161,7 +161,18 @@ function updateStatusFromOrder() {
 
 		// Get the status, if the order status isn't set to arrived at least, set it now
 		$currStatus = ($fetchData['status'] >= GetArrivedLow()) ? $fetchData['status'] : GetArrivedLow();
-		$newStatus = AdvanceInvoiceStatus($currStatus) ;
+    $addOrder = 0;
+    if ($setOrder) {
+      $sql = " SELECT COUNT(*) as ct
+              FROM invoice
+              WHERE visitDate = '" . $fetchData['visitDate'] . "'
+              AND invoiceID <> " . $_POST['invoiceID'] . "
+              AND visitTime = '" . $fetchData['visitTime'] . "'
+              AND status > " . GetArrivedLow();
+      $results = returnAssocArray(queryDB($conn, $sql));
+      $addOrder = current($results)['ct'];
+    }
+		$newStatus = AdvanceInvoiceStatus($currStatus + $addOrder) ;
 
 		// Generate our update query with the new status
 		$sql = "UPDATE invoice
@@ -186,7 +197,7 @@ function updateStatusFromOrder() {
 if (isset($_POST['CreateInvoiceDescriptions'])) {
 	if (createInvoiceDesc()) {
 		//echo "Insertion successful";
-		if (updateStatusFromOrder()) {
+		if (updateStatusFromOrder(true)) {
 			redirectPage("cap.php?clientID=" . $_POST['clientID']);
 		}
 		else {

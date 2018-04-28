@@ -46,6 +46,8 @@
       return json_encode(array("Message" => "Connection failed: " . sqlError($conn)));
     }
     // Find all clients that are between the order and complete stages and set my status to Ordering Min + that number
+    // Moved to after the order is finished
+    /*
     $sql = " SELECT COUNT(*) as ct
               FROM invoice
               WHERE visitDate = '" . $date . "'
@@ -59,6 +61,11 @@
     $sql = " UPDATE invoice
              SET status = " . (GetArrivedLow() + $currCount) . "
              WHERE invoiceID = " . $ID;
+             */
+    $sql = " UPDATE invoice
+             SET status = " . GetArrivedLow() . "
+             WHERE invoiceID = " . $ID;
+             
 
     if (queryDB($conn, $sql) === TRUE) {
       echo json_encode(array("Message" => "!SUCCESS!"));
