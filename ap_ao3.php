@@ -100,7 +100,8 @@
       echo "<tr><td>";
 
       $clientIDTag = "Client" . $invoice['invoiceID'];
-      echo "<select class='chosen-select' id='" . $clientIDTag . "' >";
+      $disabled = invoiceImmutable($invoice['status']) ? ' disabled ' : '';
+      echo "<select class='chosen-select' id='" . $clientIDTag . "' " . $disabled . ">";
       $selected = ($invoice['lName'] == 'Available' || empty($invoice['lName'])) ? ' selected ' : '';
       echo "<option value=" . getAvailableClient() . " " . $selected . ">Available</option>";
       foreach ($clients as $client) {

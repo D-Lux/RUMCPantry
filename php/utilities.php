@@ -547,6 +547,11 @@ function IsComplete($status) {
 			 ($status == SV_COMPLETED) );
 }
 
+function invoiceImmutable($status) {
+	return ($status >= SV_ARRIVED_LOW);
+}
+
+
 // Returns the Redistribution stats number
 function GetRedistributionStatus() {
 	return SV_REDISTRIBUTION;
