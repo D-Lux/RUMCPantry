@@ -12,7 +12,7 @@ th {
   padding:3px 5px 3px 5px;
 }
 </style>
-	<h3>Edit Order</h3>
+	<h3 class="hide_for_print">Edit Order</h3>
 
 	<div class="body-content">
 	<?php
@@ -34,7 +34,7 @@ th {
 		}
 		
 		//Get invoice total
-		$sqlttl = "SELECT SUM(totalitemsprice) as Itotal 
+		$sqlttl = "SELECT SUM(totalitemsprice) as Itotal
 				FROM invoicedescription 
 				WHERE invoiceID=" . $invoiceID . "";
 				
@@ -66,26 +66,51 @@ th {
 			//echo "error: " . mysqli_error($conn);
 			die("<br>Invoice is currently empty.");
 		}
-		closeDB($conn);
+		
+    
+    $sql = "SELECT visitDate FROM invoice where invoiceID = " . $invoiceID;
+    $dateInfo = runQueryForOne($conn, $sql);
 	
-		// Loop through our data and spit out the data into our table
-		echo "<h4>Client: " . $name . " | Appointment Time: " . returnTime($visitTime);
-		echo " | Family Size: " . familySizeDecoder($familySize) . " | Invoice Total: " . $invtotal . "</h4>";
-
+    closeDB($conn);
+    ?>
+    <table class="table">
+      <thead><tr>
+        <th>Client</th>
+        <th>Appointment Date</th>
+        <th>Family Size</th>
+        <th>Invoice Total</th>
+      </tr></thead>
+      <tbody>
+        <tr>
+          <td><?=$name?></td>
+          <td><?=date("F dS, y", strtotime($dateInfo['visitDate']))?> - <?=returnTime($visitTime)?></td>
+          <td><?=$familySize?> (<?=familySizeDecoder($familySize)?>)</td>
+          <td>$<?=number_format($invtotal,2)?></td>
+        </tr>
+      </tbody>
+    </table>
+    
+    <?php
+    
 		// Print button
 		echo "<button id='btn-print' onClick='window.print()'>Print</button>";
 
-		// Order information
-		echo "<table id='orderTable'><tr><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th></th></tr>";
+		// Loop through our data and spit out the data into our table
+		echo "<table id='orderTable'><tr><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th><th class='hide_for_print'></th></tr>";
 		while( $invoice = sqlFetch($invoiceData) ) {
 			echo "<tr><td>" . $invoice['cName'] . "</td>";
 			echo "<td>" . $invoice['iName'] . "</td>";
 			echo "<td>" . $invoice['iQty'] . "</td>";
-			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td><td>" . $invoice['rack'] . "</td><td>" . $invoice['shelf'] . "</td>";
+			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td><td>" . rackDecoder($invoice['rack']) . "</td><td>" . shelfDecoder($invoice['shelf']) . "</td>";
 
 			//echo "<td><input value=' ' class='btn_trash' name='RemoveItem' ";
-			echo "<td><input value=' ' name=" . $invoice['invoiceDescID'] . " class='btn_trash' name='RemoveItem' ";
-			echo "type='submit' onclick='AJAX_RemoveFromInvoice(this)'></td></tr>";
+        echo "<td class='hide_for_print'><button type='submit' class='btn-icon' name='RemoveItem' ";
+        echo "onclick='AJAX_RemoveFromInvoice(this)'>";
+        echo "<i class='fa fa-trash'></i></button></td></tr>";
+        
+        
+			//echo "<td><input value=' ' name=" . $invoice['invoiceDescID'] . " class='btn_trash' name='RemoveItem' ";
+			//echo "type='submit' onclick='AJAX_RemoveFromInvoice(this)'></td></tr>";
 
 		}
 		echo "</table><br>";
@@ -101,7 +126,7 @@ th {
 		echo "Item to Add:";
 		createDatalist_i('', 'itemNames', 'item', 'itemName', 'addItem', 1);
 		echo "<div style='display: inline-block; margin-left: 8px;'>Quantity:<input type='number' id='addQty' name='qty' value=1></div><br>";
-		echo "<input type='submit' name='addItemToOrder' value='Add to Invoice'>";
+		echo "<input class='btn-nav btn-nav-sm' type='submit' name='addItemToOrder' value='Add to Invoice'>";
 		echo "</form>";
 		echo "</div>"; // /hide_for_print
 
