@@ -123,7 +123,10 @@
 
       $statusIDTag = "status" . $invoice['invoiceID'];
       $status = visitStatusDecoder($invoice['status']);
-      echo "<td id='" . $statusIDTag . "'>" . $status . "</td>";
+      echo "<td id='" . $statusIDTag . "'>" . $status;
+      $Params = "?invoiceID=" . $invoice['invoiceID'] . "&name=" . $invoice['lName'] . "&visitTime=" . $invoice['visitTime'] . "&familySize=" . $invoice['familySize'];
+      echo IsComplete($invoice['status']) ? '<a href="ap_oo4e.php' . $Params . '" class="btn-nav btn-nav-sm"><i class="fa fa-eye"></i></a>': 'NO';
+      echo "</td>";
 
       // --==[*DELETE*]==-- Button start
       echo "<form action='php/apptOps.php' method='post'>";

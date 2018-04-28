@@ -542,7 +542,7 @@ function IsPrinted($status) {
 function IsComplete($status) {
 	return ( ($status == SV_BAD_DOCUMENTATION) ||
 			 ($status == SV_PARTIAL_COMPLETION) ||
-			 ($status == SV_SV_CANCELED) ||
+			 ($status == SV_CANCELED) ||
 			 ($status == SV_NO_SHOW)||
 			 ($status == SV_COMPLETED) );
 }
