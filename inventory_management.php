@@ -24,7 +24,7 @@
   $currCat = "";
   $floatBreak = 0;
 ?>
-<link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
+<link rel="stylesheet" type="text/css" href="css/printInvManagement.css" media="print" />
 <button class='float-right' id='btn-print' onClick='window.print();'><i class='fa fa-print'></i> Print</button>
 <h3 class="text-center">Inventory Management</h3>
 

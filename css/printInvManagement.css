@@ -1,0 +1,26 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+#btn-back, #btn-print, h1, h2, #hide_for_print, .hide_for_print {
+	display: none !important;
+}
+
+h6 {
+	font-size: 5em;
+	font-family: tahoma;
+	display: block !important;
+}
+#nameTags {
+	display: block !important;
+}
+
+table,
+table tr td,
+table tr th {
+	page-break-inside: avoid;
+}
+
+tr:nth-child(even):not(th) {
+  -webkit-print-color-adjust:exact;
+  background: #EEEEEE
+}
