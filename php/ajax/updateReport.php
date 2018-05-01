@@ -232,7 +232,7 @@
     },
     tooltip      : {
       headerFormat : '<span style="font-size:11px">{series.name}</span><br>',
-      pointFormat  : '<span style="color:{point.color}">\u25CF</span> {series.name}: <b>{point.percentage:.2f}% of Total</b><br/>'
+      pointFormat  : '<span style="color:{point.color}">\u25CF</span> {point.name}: <b>{point.percentage:.2f}% of Total</b><br/>'
                   },
     series      : [{
       name      : "Categories",
