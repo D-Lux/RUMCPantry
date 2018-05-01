@@ -1,0 +1,62 @@
+/*
+* © 2018 Daniel Luxa ALL RIGHTS RESERVED
+*/
+/* Style the tab pane */
+.tab {
+  float: left;
+  width: 100%;
+}
+/* Style the buttons inside the tab */
+.tab button {
+  float: left;
+  background-color: #57B9FF;
+  color: black;
+  width: 20%;
+  height: 16.667%;
+  outline: none;
+  text-align: center;
+  cursor: pointer;
+  transition: 0.3s;
+  font-size: 17px;
+}
+/* Change background color of buttons on hover */
+.tab button:hover:not(.activeButton) {
+  background-color: #93C5FF;
+}
+/* Create an active/current "tab button" class */
+.tab button.activeButton {
+  background-color: #E5E5E5;
+  color: DodgerBlue;
+  border: none;
+}
+/* Style the tab content */
+.tabcontent {
+  /* float: left; */
+  padding: 0px 12px;
+  border: 1px solid #ccc;
+  background-color: #E5E5E5;
+  width: 100%;
+  border-left: none;
+  min-height: 150px;
+  padding-bottom: 10px;
+  display: none;
+}
+
+.active {
+  display: block;
+}
+
+button p {
+  padding: 0px;
+  margin: 0px;
+  display: inline;
+}
+.btn_Action:enabled {
+	cursor: pointer;
+}
+.btn_Action:hover {
+	background-color: #CCC !important;
+}
+.btn_Action:disabled {
+	cursor: not-allowed;
+}

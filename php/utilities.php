@@ -759,4 +759,10 @@ function decodePermissionLevel($val) {
   }
 }
 
+// *****************************************
+// ** Number formatting
+function formatCurrency($amt) {
+  return "$" . number_format($amt,2,".",",");
+}
+
 ?>
