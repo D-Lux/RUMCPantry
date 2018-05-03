@@ -4,81 +4,105 @@
   $pageRestriction = 99;
   include 'php/header.php';
   include 'php/backButton.php';
-
-  $showDeleted = isset($_POST['showDeleted']) ? $_POST['showDeleted'] : (int) 0;
-  if (isset($_GET['showDeleted'])) {
-    $showDeleted = $_GET['showDeleted'];
+  
+ 
+// Set filters based on checkboxes during refresh
+// Note checkboxes are only in $_POST if checked
+  $showDeleted = 0;
+  $showZeroPrice = 0;  
+  if(isset($_POST['refresh'])){                                         
+	if(!empty($_POST['showDeleted'])){
+		$showDeleted = $_POST['showDeleted'];
+	}	
+	if(!empty($_POST['showZeroPrice'])){
+		$showZeroPrice = $_POST['showZeroPrice'];
+	}	
   }
+  $tableFilter = $showDeleted + $showZeroPrice;
+  
 ?>
-
+	
 <h3>Item Inventory</h3>
 
-<?php
-if ($showDeleted) {
-    echo "<h4>Deactivated Items</h4>";
-}
-?>
-	<div class="body-content">
+<div class="body-content">
+	
+<!-- Build Form -->
+  <form method="post" action="ap_io7.php">
+  	
+	<a href="<?=$basePath?>ap_io2.php" class="button">Add an item</a>
+	<button type="submit" class="btn-nav" name="refresh" value=1>Refresh</button>
+	<br>
+	
+	<div id='filter'>Filters: &nbsp 
+		<?php
+		
+		echo "<style>";
+		echo " 	input[type='checkbox'] {";
+		echo "  display: inline-block;}";
+		echo "</style>";
+		
+		echo "<input type='checkbox' id='filterchkbox' name='showDeleted' value='1'"; 
+		if ($showDeleted != 0) {
+			echo " checked ";
+		}
+		echo ">Show only deleted items &nbsp &nbsp &nbsp &nbsp"; 
+		
+		echo "<input type='checkbox' id='filterchkbox' name='showZeroPrice' value='2'";
+		if ($showZeroPrice != 0) {
+			echo " checked ";
+		}
+		echo ">Show only items with no price";
+		
+		?>
+	</div>
+	
+  </form>	
+	
+	<div id="datatableContainer">
+		<table width='95%' id="iItemTable" class="table table-striped">
+			<thead class="thead-dark">
+				<tr>
+					<th width='5%'></th>
+					<th width='30%'>Item</th>
+					<th width='30%'>Category</th>
+					<th width='10%'>Aisle</th>
+					<th width='10%'>Rack</th>
+					<th width='10%'>Shelf</th>
+					<th width='5%'></th>
+				</tr>
+			</thead>
+			<tbody>
+			</tbody>
+		</table>
+	</div>
 
-		<div id="datatableContainer">
-			<table width='95%' id="iItemTable" class="table table-striped">
-				<thead class="thead-dark">
-					<tr>
-						<th width='5%'></th>
-						<th width='30%'>Item</th>
-						<th width='30%'>Category</th>
-						<th width='10%'>Aisle</th>
-						<th width='10%'>Rack</th>
-						<th width='10%'>Shelf</th>
-						<th width='5%'></th>
-					</tr>
-				</thead>
-				<tbody>
-				</tbody>
-			</table>
-		</div>
-
-	<!-- New Item -->
-  <a href="<?=$basePath?>ap_io2.php" class="button">Add an item</a>
-
-  <!-- Show Deleted Items -->
-  <?php if ($showDeleted) { ?>
-    <form method="post" action="ap_io7.php">
-      <button type="submit" class="btn-nav" name="showNormal" value=1>Show Items</button>
-    </form>
-  <?php } else { ?>
-    <form method="post" action="ap_io7.php">
-      <button type="submit" class="btn-nav" name="showDeleted" value=1>Show Deactivated Items</button>
-    </form>
-  <?php } ?>
-
+     
 <?php include 'php/footer.php'; ?>
+
+
 <script type="text/javascript">
 
 	$('#iItemTable').DataTable({
       "ordering"      : false,
       "ajax": {
-          "url"       : "php/ajax/itemList.php?deleted=<?=$showDeleted?>",
+          "url"       : "php/ajax/itemList.php?filter=<?=$tableFilter?>",
       },
 	});
 
 	$(document).ready(function(){
-    var deleteMode = <?=$showDeleted?>;
+		var deleteMode = <?=$showDeleted?>;
 		$('#iItemTable').on('click', '.btn-icon, .btn-edit', function () {
 			if ($(this).hasClass('btn-icon')) {
-        var mod = "d";
-        if (deleteMode == 1) { mod = "r"; }
-
-        if (confirm("Are you sure you want to " + mod + "eactivate this item?")) {
-          window.location.assign($(this).attr('value'));
-
-        }
-
-			}
-			else {
+				var mod = "d";
+				if (deleteMode == 1) { mod = "r"; }
+				if (confirm("Are you sure you want to " + mod + "eactivate this item?")) {
+					window.location.assign($(this).attr('value'));
+				}
+			} else {
 				window.location.assign($(this).attr('value'));
 			}
 		});
+		
 		if (getCookie("newItem") != "") {
 			window.alert("New Item Added!");
 			removeCookie("newItem");
