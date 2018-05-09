@@ -1,7 +1,7 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
+  include 'php/checkLogin.php';
   include 'php/orderFormMessageBox.php';
   include 'php/header.php';
   include 'php/beanOps.php';

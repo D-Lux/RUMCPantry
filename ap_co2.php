@@ -1,15 +1,15 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 
 	<h3>Add New Client</h3>
-	
+
 	<div class="body-content">
-	
+
 		<form id="addClientForm" >
       <input type="hidden" value=1 name="submitClient">
 			<div class="row">
@@ -43,20 +43,20 @@
       <div class="row">
         <div class="col-sm-4">Gender:</div>
         <div class="col-sm-2">
-          <select name="gender"> 
+          <select name="gender">
             <option value=0>-</option>
-            <option value=-1>Male</option> 
-            <option value=1>Female</option> 
+            <option value=-1>Male</option>
+            <option value=1>Female</option>
           </select>
         </div>
       </div>
       <div class="row">
         <div class="col-sm-4">Food Stamp Status:</div>
         <div class="col-sm-4">
-          <select name="foodStamps"> 
+          <select name="foodStamps">
             <option value=-1>Unknown</option>
             <option value=1>Yes</option>
-            <option value=0>No</option> 
+            <option value=0>No</option>
 				</select>
         </div>
       </div>
@@ -67,7 +67,7 @@
             <option value=0>Unknown</option>
             <option value=1>Constituent</option>
             <option value=2>Member</option>
-            <option value=3>Resident</option> 
+            <option value=3>Resident</option>
           </select>
         </div>
       </div>
@@ -113,14 +113,14 @@
 <script type="text/javascript">
   $("select").chosen({
     placeholder_text_multiple: "Select Pet Options",
-  }); 
-  
+  });
+
   // Handle increasing the size of the div for the multi select
   $("#iPetSelect").on("change", function() {
     var count = $("#iPetSelect :selected").length;
     $("#iPetRow").height((Math.floor(count / 3) * 35) + 35);
   });
-  
+
   // For adding a new donation partner
 	$("input[type='submit']").on("click", function(e) {
     e.preventDefault();
@@ -143,6 +143,6 @@
 	    },
 		});
 	});
-  
+
 
 </script>

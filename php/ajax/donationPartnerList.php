@@ -1,5 +1,6 @@
 <?php
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  session_start();
 	include '../utilities.php';
 
 	$deleted = isset($_GET['deleted']) ? $_GET['deleted'] : 0;

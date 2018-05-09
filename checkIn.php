@@ -1,9 +1,10 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
+
 
 	$date = date("M j, Y");
 	$dbDate = date("Y-m-d", strtotime($date));
@@ -156,8 +157,9 @@
     });
   })();
 
-  $(document).ready(function() {
+  //$(document).ready(function() {
     // run the first time; all subsequent calls will take care of themselves
-    setTimeout(tabRefresher, 5000);
-  });
+    //setTimeout(tabRefresher, 5000);
+    //tabRefresher();
+  //});
 </script>

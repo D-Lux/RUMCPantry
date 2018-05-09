@@ -1,4 +1,6 @@
 <?php
+session_start();
+include 'utilities.php';
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
 if( !isset($_SESSION['last_access']) || (time() - $_SESSION['last_access']) > 60 )
   $_SESSION['last_access'] = time();
@@ -21,12 +23,12 @@ echo "<input type='hidden' value='" . $permVal . "' id='perms'>";
 
 
 if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) { ?>
-  <div class="testHover hide_for_print">TEST MODE</div>
+  <div class="testHover hide_for_print">TEST MODE <?=$_SESSION['perms']?></div>
 
 <?php }
 
 if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 ) { ?>
-  <div class="testHover hide_for_print">LOCAL TEST MODE</div>
+  <div class="testHover hide_for_print">LOCAL TEST MODE - <?=$_SESSION['perms']?></div>
 
 <?php }
 
@@ -63,3 +65,7 @@ if ($debug) {
   color: white;
 }
 </style>
+
+<script>
+    console.log("<?=$_SESSION['perms']?>");
+  </script>

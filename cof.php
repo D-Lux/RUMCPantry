@@ -1,26 +1,26 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 1;
+  include 'php/checkLogin.php';
   include 'php/orderFormMessageBox.php';
   include 'php/header.php';
   include 'php/beanOps.php';
-  include 'php/backButton.php'
+  include 'php/backButton.php';
+
+
+	if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
+		echo "<h3>" . $_POST['clientFirstName'] . " " . $_POST['clientLastName'] . "</h3>";
+	}
+	else {
+		echo "<h3>Order Form";
+		$ViewMode = false;
+		if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
+			$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
+			echo ": " . $ViewMode;
+		}
+		echo "</h3>";
+	}
 ?>
-		<?php
-			if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
-				echo "<h3>" . $_POST['clientFirstName'] . " " . $_POST['clientLastName'] . "</h3>";
-			}
-			else {
-				echo "<h3>Order Form";
-				$ViewMode = false;
-				if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
-					$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
-					echo ": " . $ViewMode;
-				}
-				echo "</h3>";
-			}
-		?>
 		<div class="body-content">
 			<?php
 

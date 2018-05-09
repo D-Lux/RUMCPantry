@@ -1,13 +1,13 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
-    <h3>Order Forms</h3>
-	
+  <h3>Order Forms</h3>
+
 	<div class="body-content">
 	<!-- View order forms -->
   	<div class="row">
@@ -33,16 +33,15 @@
         <a href="<?=$basePath?>cof.php?Large=1" class="button pull-left">View Form: 5+</a>
       </div>
     </div>
-  
+
   <div class="clearfix"></div>
-		
-		
+
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
   if (getCookie("SpecialsSaved") != "") {
     window.alert("Specials Updated!");
     removeCookie("SpecialsSaved");
-  }		
+  }
 </script>
-    

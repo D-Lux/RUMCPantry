@@ -1,9 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
@@ -26,27 +26,27 @@ th {
 
 	// Create our query to get the invoice data
 	if ( $name != null ) {
-		
+
 		//Connect to database
 		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
-		
+
 		//Get invoice total
 		$sqlttl = "SELECT SUM(totalitemsprice) as Itotal
-				FROM invoicedescription 
+				FROM invoicedescription
 				WHERE invoiceID=" . $invoiceID . "";
-				
+
 		$invttlData = queryDB($conn, $sqlttl);
 		if ($invttlData == NULL || $invttlData->num_rows <= 0) {
 			echo "error: " . mysqli_error($conn);
 			die("<br>Invoice is currently empty.");
 		}
 		$row = sqlfetch($invttlData);
-		$invtotal = $row['Itotal']; 
-		
-		//Get all of the items on the invoice 	
+		$invtotal = $row['Itotal'];
+
+		//Get all of the items on the invoice
 		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle, I.cName, I.invoiceDescID
 				FROM invoice
 				JOIN (SELECT item.itemName as name, quantity, invoicedescription.invoiceID as IinvoiceID, category.name as cName,
@@ -66,11 +66,11 @@ th {
 			//echo "error: " . mysqli_error($conn);
 			die("<br>Invoice is currently empty.");
 		}
-		
-    
+
+
     $sql = "SELECT visitDate FROM invoice where invoiceID = " . $invoiceID;
     $dateInfo = runQueryForOne($conn, $sql);
-	
+
     closeDB($conn);
     ?>
     <table class="table">
@@ -89,9 +89,9 @@ th {
         </tr>
       </tbody>
     </table>
-    
+
     <?php
-    
+
 		// Print button
 		echo "<button id='btn-print' onClick='window.print()'>Print</button>";
 
@@ -107,8 +107,8 @@ th {
         echo "<td class='hide_for_print'><button type='submit' class='btn-icon' name='RemoveItem' ";
         echo "onclick='AJAX_RemoveFromInvoice(this)'>";
         echo "<i class='fa fa-trash'></i></button></td></tr>";
-        
-        
+
+
 			//echo "<td><input value=' ' name=" . $invoice['invoiceDescID'] . " class='btn_trash' name='RemoveItem' ";
 			//echo "type='submit' onclick='AJAX_RemoveFromInvoice(this)'></td></tr>";
 

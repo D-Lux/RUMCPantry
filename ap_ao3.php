@@ -1,9 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
 <style>
@@ -60,7 +60,7 @@
 		$clients = runQuery($conn, $sql);
 
     closeDB($conn);
-    
+
     // Die if we aren't here properly
 		if (!is_array($clients)) {
 			die( "No clients available" );
@@ -68,7 +68,7 @@
     if (!is_array($invoices)) {
       die("Invalid Date");
     }
-		
+
     // ***********************************************************************
 		// Invoices in time slots
 		//                 [TIME]
@@ -95,7 +95,7 @@
         $timeSlot = $invoice['visitTime'];
         echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
       }
-      
+
       // Start the new row
       echo "<tr><td>";
 
@@ -153,7 +153,7 @@
     // Close off our table
     echo "</table>";
 
-		
+
 
 		echo "<div id='ErrorLog'></div>";
 		// --==[*NEW TIME SLOT*]==--
@@ -170,7 +170,7 @@
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
   $(".chosen-select").chosen();
-  
+
   $("#apptTable").on("change", "select", function(e) {
     var invoiceID = $(this).attr("id").substring(6);
     var clientID  = $(this).val();
@@ -185,12 +185,12 @@
           $("#phoneNo" + invoiceID).html(data.phone);
           $("#status" + invoiceID).html(data.status);
         }
-      }, 
+      },
     });
   });
-  
-  
-  
+
+
+
   if (getCookie("newAppt") != "") {
 		window.alert("New Date Added!");
 		removeCookie("newAppt");
@@ -210,7 +210,7 @@
       url      : 'php/ajax/setAppointmentClient.php' + Params,
       success  : function(data) {
         $(statusIDTag).html(data);
-      }, 
+      },
     });
 	});
 </script>

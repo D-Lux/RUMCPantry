@@ -1,15 +1,15 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
 
 <h3>Donation Operations</h3>
 <div class="body-content">
-	
-	
+
+
   <div id="datatableContainer">
     <table width='95%' id="partnerTable" class="display">
       <thead>
@@ -28,11 +28,11 @@
 
   <a href="<?=$basePath?>ap_do2.php" class="button">Add a donation</a>
   <a href="<?=$basePath?>ap_do3.php" class="button">Add a donation partner</a>
-    
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
-	
+
 	$('#partnerTable').DataTable({
       "ordering"      : false,
       "ajax": {
@@ -49,5 +49,5 @@
       window.location.assign($(this).attr('value'));
     }
   });
-		
+
 </script>

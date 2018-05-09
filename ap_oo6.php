@@ -1,17 +1,12 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
-
 ?>
 
-<link rel="stylesheet" type="text/css" href="includes/jquery.dataTables.min.css">
-
 	<h3>Order Form: Category Ordering</h3>
-
-
 
 	<div class="body-content">
 

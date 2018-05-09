@@ -1,10 +1,12 @@
+<?php
+// © 2018 Daniel Luxa ALL RIGHTS RESERVED
+session_start();
+include 'utilities.php';
+?>
 
 <script src="<?=$basePath?>js/utilities.js"></script>
 
 <?php
-// © 2018 Daniel Luxa ALL RIGHTS RESERVED
-include 'utilities.php';
-
 function addWalkIn($clientID) {
 	// Walk ins are always day-of (so grab today's date)
 	$walkInDate = makeString(date('Y-m-d', time()));

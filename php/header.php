@@ -3,10 +3,6 @@
 <div style="float:left;z-index:200;position: absolute;" class="hide_for_print">
   <div id="google_translate_element"></div>
 </div>
-<?php
-include('utilities.php');
-include('checkLogin.php');
-?>
 
 <!DOCTYPE html>
   <html>

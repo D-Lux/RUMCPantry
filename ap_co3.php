@@ -1,16 +1,16 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 
   // Set up server connection
   $conn = connectDB();
-  
+
   // *************************************************
   // Query the database
-  
+
   // Grab client information
   $sql = "SELECT lastName, numOfAdults, numOfKids, startDate, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets
           FROM client
@@ -20,7 +20,7 @@
           AND client.clientID=" . $_GET['id'];
 
   $clientInfo = runQueryForOne($conn, $sql);
-  
+
   $familySize = 1;
 
   $phone1 = $phone2 = $phone3 = '';
@@ -34,7 +34,7 @@
     $phone2 = substr($clientInfo['phoneNumber'], 0, 3);
     $phone3 = substr($clientInfo['phoneNumber'], 3, 4);
   }
-  
+
   // Grab family member information
   $sql = "SELECT firstName, lastName, isHeadOfHousehold, birthDate, gender, FamilyMemberID
       FROM familymember
@@ -46,12 +46,12 @@
 
   // Close the connection as we've gotten all the information we should need
   closeDB($conn);
-  
+
   $familySize 	   = $clientInfo['numOfKids'] + $clientInfo['numOfAdults'];
   $foodStampStatus = $clientInfo['foodStamps'];
   $clientType 	   = $clientInfo['clientType'];
 ?>
-	
+
 	<div class="body-content">
     <h3>Client: <?= $clientInfo['lastName'] ?> </h3>
     <div id="clientUpdateSuccess" class="hoverMsg hoverSuccess" style="display:none;"></div>
@@ -145,7 +145,7 @@
         <div class="col-sm-4">Foodstamp Status:</div>
         <div class="col-sm-8">
           <select id='foodStampsInput' name='foodStamps'>
-            <?php 
+            <?php
               echo "<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>";
               echo "<option value=1 "  . ($foodStampStatus == 1  ? "selected" : "") . ">Yes</option>";
               echo "<option value=0 "  . ($foodStampStatus == 0  ? "selected" : "") . ">No</option>";
@@ -157,7 +157,7 @@
       <div class="row">
         <div class="col-sm-4">Client Type:</div>
         <div class="col-sm-8">
-          <select id='clientTypeInput' name='clientType'> 
+          <select id='clientTypeInput' name='clientType'>
             <?php echo "
               <option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
               <option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
@@ -180,8 +180,8 @@
       <div class="msg-warning" id="warningMsgs"></div>
       <input class="btn-nav" type="submit" id="iUpdateBtn" name="UpdateClient" value="Save">
     </form>
-		
-		
+
+
     <!-- Family Members Area -->
 		<br><h3>Family Members</h3>
     <table class="table">
@@ -198,7 +198,7 @@
       </tr>
 
       <!-- Go through all listed family members -->
-			<?php foreach ($familyInfo as $member) { 
+			<?php foreach ($familyInfo as $member) {
         $head = $member['isHeadOfHousehold'] ? "&#10004;" : "";  ?>
         <form action="php/clientOps.php" >
           <input type="hidden" name="memberID" value="<?=$member['FamilyMemberID']?>">
@@ -216,7 +216,7 @@
               echo "<td>";
               echo "<button id='InactiveMember' name='DeleteMember' class='btn-icon' ";
               if (!$member['isHeadOfHousehold']) {
-                echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'>";	
+                echo "type='submit' onclick=\"javascript: return confirm('Are you sure you want to remove this family member?');\")'>";
               }
               else {
                 echo "type='button' onclick=\"javascript: alert('Cannot delete the head of household.');\")'>";
@@ -226,18 +226,18 @@
           </tr>
         </form>
       <?php } ?>
-	
+
 
 		</table>
-			
+
 		<br>
     <!-- New Family Member button -->
     <form action="ap_co4.php">
       <input type="hidden" name="id" value=<?=$_GET['id']?>>
 			<input type="hidden" name="lnamedefault" value="<?=$clientInfo['lastName']?>">
-      <input class="btn-nav" type="submit" name="newMember" value="New Family Member">	
+      <input class="btn-nav" type="submit" name="newMember" value="New Family Member">
 		</form>
-			
+
 		<!-- Invoices / Visits -->
     <hr><br>
     <h3>Appointments</h3>
@@ -255,16 +255,16 @@
 
     <form action="#">
       <input type="hidden" name="id" value=<?=$_GET['id']?>>
-      <input class="btn-nav" type="submit" name="newApt" value="New Appointment (NYI)" disabled>	
+      <input class="btn-nav" type="submit" name="newApt" value="New Appointment (NYI)" disabled>
 		</form>
-	
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
   $("select").chosen({
     placeholder_text_multiple: "Select Pet Options",
   });
-  
+
   // Handle increasing the size of the div for the multi select
   $("#iPetSelect").on("change", function() {
     var count = $("#iPetSelect :selected").length;
@@ -304,7 +304,7 @@
     window.alert("Cannot Remove The Head of Household!");
     removeCookie("Err_DelFam");
   }
-    
+
 	var Params = '?cid=<?=$_GET['id']?>';
 
 	$('#invoiceTable').DataTable({

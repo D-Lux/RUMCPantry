@@ -1,12 +1,7 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
-<style>
-input[type="text"] {
-    width: 500px;
-}
-</style>
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 
@@ -41,6 +36,9 @@ input[type="text"] {
 <style>
   .input-number {
     width:3em;
+  }
+  input[type="text"] {
+    width: 500px;
   }
 </style>
 <h3>Category Update</h3>

@@ -1,11 +1,11 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 
-  $donationID = $_GET['donationID'];  
+  $donationID = $_GET['donationID'];
   $conn = connectDB();
   // Get donation partner names
   $sql = "SELECT donationPartnerID as dpid, name, city
@@ -16,7 +16,7 @@
   // Get donation details
   $donation = [];
   $sql = "SELECT donationPartnerID, dateOfPickup, networkPartner, agency, frozenNonMeat, frozenMeat, frozenPrepared, refBakery, refDairyAndDeli, refProduce, dryFoodDrive, dryNonFood, dryShelfStable FROM donation WHERE donationID = ". $donationID;
-  
+
   $result = runQueryForOne($conn, $sql);
 ?>
 
@@ -72,7 +72,7 @@
         </select>
       </div>
     </div>
-    
+
     <!-- Frozen foods -->
     <div style="border: 2px solid darkblue;margin-top:20px;padding:10px;"><h4 class="text-center">Frozen</h4>
       <div class="row">
@@ -88,7 +88,7 @@
         <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenPrepared" value=<?=$result['frozenPrepared']?>></div>
       </div>
     </div>
-    
+
     <!-- Refridgerated Foods -->
     <div style="border: 2px solid green;margin-top:20px;padding:10px;"><h4 class="text-center">Refridgerated</h4>
       <div class="row">
@@ -125,6 +125,6 @@
     <input type="submit" class="btn-nav" id="btn_updateDonation" value="Update Donation">
   </form>
  </div>
-        
-<?php include 'php/footer.php'; ?>        
+
+<?php include 'php/footer.php'; ?>
 <script src="js/createDonation.js"></script>

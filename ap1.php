@@ -1,12 +1,11 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   $btnText = "Logout";
   include 'php/backButton.php';
 ?>
-
 
   <h3 class="text-center">Main Navigation</h3>
 	<div class="body-content">

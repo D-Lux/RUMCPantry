@@ -1,9 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
-  include 'php/backButton.php';  
+  include 'php/backButton.php';
 ?>
 <link href="<?=$basePath?>includes/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
 <link href="<?=$basePath?>includes/highcharts/css/highcharts.css" rel="stylesheet" type="text/css">
@@ -27,9 +27,9 @@
   </div>
   <div class="clearfix"></div>
   <hr>
-  
+
   <div id='reportData'></div>
-<?php 
+<?php
 include 'php/footer.php';
 ?>
 <script type="text/javascript" src="includes/highcharts/js/highcharts.js"></script>

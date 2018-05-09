@@ -1,4 +1,5 @@
 <?php
+session_start();
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include '../utilities.php';
 
@@ -38,13 +39,13 @@ else {
   else {
     $conn = connectDB();
   }
-      
+
   if ($conn -> connect_errno ) {
     $data['msg'] = "<p>Database Error: " . $conn->connect_errno . "</p>";
     $data['err']= 1;
     die(json_encode($data));
   }
-  
+
   $sql = "SELECT login, pw, permission_level
           FROM permissions";
   $results = queryDB($conn, $sql);
@@ -54,7 +55,7 @@ else {
     die(json_encode($data));
   }
   closeDB($conn);
-  
+
   while($result = sqlFetch($results)) {
     if (strtoupper($name) == strtoupper($result['login'])) {
       if (password_verify($pw, $result['pw'])) {

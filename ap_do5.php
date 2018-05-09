@@ -1,10 +1,10 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
-  
+
   $pID      = 0;
   $badLoad  = false;
   if (!isset($_GET['donationPartnerID'])) {
@@ -13,7 +13,7 @@
   else {
     $pID = $_GET['donationPartnerID'];
     $sql = "SELECT name, city, state, zip, address, phoneNumber FROM donationpartner WHERE donationPartnerID =" . $pID ;
-    
+
     $conn = connectDB();
     $result = runQueryForOne($conn, $sql);
     if ( $result === false ) {
@@ -38,7 +38,7 @@
   }
 </style>
 <h3>Update Donation Partner</h3>
-<div class="body-content">   
+<div class="body-content">
 <div class="body-content">
   <div id="donationSuccess" class="hoverMsg" style="display:none;"></div>
   <form id="updateDonationPartner" action="" method="post">
