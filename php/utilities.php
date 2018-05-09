@@ -44,6 +44,11 @@ function debugEchoVar($v) {
 	var_dump($v);
 	echo '</pre>';
 }
+function debugEchoMsg($msg) {
+	echo '<pre>' . $msg . '</pre>';
+}
+
+
 function decodeJsonError() {
   switch (json_last_error()) {
     case JSON_ERROR_NONE:
