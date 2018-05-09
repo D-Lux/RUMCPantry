@@ -86,7 +86,7 @@
   $itemInfo = [];   // [cat][item] - ['qty'] | ['price']
   if (!empty($results)) {
     foreach ($results as $result) {
-      if (array_key_exists ( $result['name'],  $catInfo )) {
+      if (array_key_exists ( $result['categoryID'],  $catInfo )) {
         $catInfo[$result['categoryID']]['qty']   += $result['totalQty'];
         $catInfo[$result['categoryID']]['price'] += $result['totalItemsPrice'];
       }
@@ -96,8 +96,8 @@
         $catInfo[$result['categoryID']]['name']   = $result['name'];
       }
 
-      $itemInfo[$result['categoryID']][htmlspecialchars($result['itemName'])]['qty']   = $result['totalQty'];
-      $itemInfo[$result['categoryID']][htmlspecialchars($result['itemName'])]['price'] = $result['totalItemsPrice'];
+      $itemInfo[$result['categoryID']][$result['itemName']]['qty']   = $result['totalQty'];
+      $itemInfo[$result['categoryID']][$result['itemName']]['price'] = $result['totalItemsPrice'];
     }
   }
 
@@ -132,19 +132,19 @@
   <div id="OverviewContent" class="tabcontent defaultTab">
     <table class="table">
       <tr>
-        <th>Number of families</th>
+        <th>Number of Families</th>
         <td><?=$totalFamilies?></td>
       </tr>
       <tr>
-        <th>Number of families with children</th>
+        <th>Number of Families with Children</th>
         <td><?=$familiesWithKids?></td>
       </tr>
       <tr>
-        <th>Number of people</th>
+        <th>Number of People</th>
         <td><?=$totalAffected?></td>
       </tr>
       <tr>
-        <th>Number of children</th>
+        <th>Number of Children</th>
         <td><?=$totalKids?></td>
       </tr>
       <tr>
@@ -153,7 +153,7 @@
       </tr>
 
       <tr>
-        <th>Average order cash value per family</th>
+        <th>Average Order Cash Value per Family</th>
         <?php if ( $totalFamilies != 0 ) { ?>
           <td><?=formatCurrency(round(($donationWorth / $totalFamilies), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
@@ -161,7 +161,7 @@
         <?php } ?>
       </tr>
       <tr>
-        <th>Average order cash value per person</th>
+        <th>Average Order Cash Value per Person</th>
         <?php if ( $totalFamilies != 0 ) { ?>
           <td><?=formatCurrency(round(($donationWorth / $totalAffected), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
@@ -169,14 +169,15 @@
         <?php } ?>
       </tr>
       <tr>
-        <th>Weight of items donated by partners</th>
+        <th>Weight of Items Donated by Partners</th>
         <td><?=$donatedWeight?></td>
       </tr>
     </table>
   </div>
 
   <div id="BreakdownContent" class="tabcontent">
-    <div id="breakdownPieChartHolder"></div>
+    <div id="breakdownChartHolder" style="height: 900px"></div>
+    <br><br><br><br><br>
     <div id="itemBreakdownTable">
       <table class="table">
         <thead>
@@ -210,122 +211,92 @@
 
 
   <script type="text/javascript">
-    Highcharts.chart('breakdownPieChartHolder', {
+  Highcharts.chart('breakdownChartHolder', {
     chart: {
-        type: 'bar'
+        type: 'bar',
     },
     title: {
-        text: 'Item Distribution Breakdown'
+        text: 'Item Distribution'
+    },
+    subtitle: {
+        text: 'Click a bar to view individual items'
     },
     xAxis: {
-        categories: [
-          <?php foreach ($catInfo as $catID => $info) { ?>
-            '<?=$info['name']?>',
-          <?php } ?>
-          ],
-        title: {
-            text: null
-        }
+        type: 'category'
     },
     yAxis: {
-        min: 0,
         title: {
-            text: 'Quantity Distributed',
-        },
-        labels: {
-            overflow: 'justify'
+            text: 'Quantity Distributed'
         }
+
+    },
+    /*
+    legend: {
+        layout: 'vertical',
+        floating: true,
+        backgroundColor: '#FFFFFF',
+        align: 'right',
+        verticalAlign: 'top',
+        y: 60,
+        x: -60
+    },
+    */
+    legend: {
+        enabled: false
     },
     plotOptions: {
-        bar: {
+        series: {
+            borderWidth: 0,
             dataLabels: {
-                enabled: true
+                enabled: true,
+                format: '{point.y}'
             }
         }
     },
-    legend: {
-        layout: 'vertical',
-        align: 'right',
-        verticalAlign: 'top',
-        x: -40,
-        y: 80,
-        floating: true,
-        borderWidth: 1,
-        backgroundColor: ((Highcharts.theme && Highcharts.theme.legendBackgroundColor) || '#FFFFFF'),
-        shadow: true
-    },
-    credits: {
-        enabled: false
-    },
-    series: [
-    <?php foreach ($catInfo as $catID => $info) { ?>
-          {
-            "name"      : "<?=$info['name']?>",
-            "data"      : <?=$info['qty']?>,
-          },
-    <?php } ?>
-    ]
-});
-  // Highcharts.chart('breakdownPieChartHolder', {
-  //   chart       : {
-  //     type        : 'pie',
-  //       	width: 550,
-  //         height:500,
-  //               },
-  //   title       : {
-  //     text        : 'Category and item donation breakdown'
-  //               },
-  //   subtitle    : {
-  //     text        : 'Click slices for drilldown',
-  //               },
-  //   plotOptions : {
-  //     pie         : {
-  //       allowPointSelect: true,
-  //       cursor          : 'pointer',
-  //       dataLabels      : {
-  //         enabled         : true,
-  //         format          : '{point.name}: {point.y} Item(s)'
-  //                       },
-  //       showInLegend    : true
-  //     }
-  //   },
-  //   tooltip      : {
-  //     headerFormat : '<span style="font-size:11px">{series.name}</span><br>',
-  //     pointFormat  : '<span style="color:{point.color}">\u25CF</span> {point.name}: <b>{point.percentage:.2f}% of Total</b><br/>'
-  //                 },
-  //   series      : [{
-  //     name      : "Categories",
-  //     colorByPoint: true,
-  //     data        : [
-  //       <?php foreach ($catInfo as $catID => $info) { ?>
-  //         {
-  //           "name"      : "<?=$info['name']?>",
-  //           "y"         : <?=$info['qty']?>,
-  //           "drilldown" : "drill<?=$catID?>"
-  //         },
-  //       <?php } ?>
-  //     ],
 
-  //   }],
-  //   drilldown   : {
-  //     series      : [
-  //       <?php foreach ($itemInfo as $catID => $info) { ?>
-  //         {
-  //           "name" : "<?=$catInfo[$catID]['name']?>",
-  //           "id"   : "drill<?=$catID?>",
-  //           "data" : [
-  //             <?php foreach ($info as $iName => $data) { ?>
-  //               [
-  //                 "<?=$iName?>",
-  //                 <?=$data['qty']?>
-  //               ],
-  //             <?php } ?>
-  //           ],
-  //         },
-  //       <?php } ?>
-  //               ]
-  //             }
-  // });
+    tooltip: {
+        headerFormat: '<span style="font-size:11px">{series.name}</span><br>',
+        pointFormat: '<span style="color:{point.color}">{point.name}</span>: <b>{point.y}</b> items distributed<br/>'
+    },
+
+    "series": [
+        {
+            "name": "Categories",
+            "colorByPoint": true,
+            "data": [
+                  <?php foreach ($catInfo as $catID => $info) { ?>
+                    {
+                      "name" : "<?=$info['name']?>",
+                      "y"    : <?=$info['qty']?>,
+                      "drilldown" : "<?=$info['name']?>",
+                    },
+                  <?php } ?>
+            ]
+        }
+    ],
+    
+    "drilldown": {
+        "series": [
+            
+                <?php foreach ($itemInfo as $catID => $iinfo) { ?>
+                {
+                  "name" : "<?=$catInfo[$catID]['name']?>",
+                  "id"   : "<?=$catInfo[$catID]['name']?>",
+                  "data" : [
+                    <?php foreach ($iinfo as $iName => $data) { ?>
+                      [
+                        "<?=$iName?>",
+                        <?=$data['qty']?>
+                      ],
+                    <?php } ?>
+                  ]
+                },
+              <?php } ?>
+              
+            
+        ]
+    }
+  });
   </script>
 
 
