@@ -1,5 +1,6 @@
 <?php
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  session_start();
 	include '../utilities.php';
 
   // field1 is the date - immediately usable by a sql query

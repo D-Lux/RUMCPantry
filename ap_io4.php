@@ -1,17 +1,17 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
+<?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  $pageRestriction = 99;
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 
 <style>
 input[type="text"] {
     width: 500px;
 }
 </style>
-<?php
-  $pageRestriction = 99;
-  include 'php/header.php'; 
-  include 'php/backButton.php';
-?>
 
-  
 <h3>Add Category</h3>
 <div class="body-content">
 <br>

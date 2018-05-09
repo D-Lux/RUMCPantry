@@ -1,6 +1,6 @@
 <?php
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
-	
+session_start();	
 header('Content-type: application/json');
 include '../utilities.php';
 

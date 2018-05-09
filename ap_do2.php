@@ -1,7 +1,7 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 
@@ -10,7 +10,7 @@
   $conn = connectDB();
 
   $donationOptions = runQuery($conn, $sql);
-  
+
   $dpid = isset($_GET['dpid']) ? $_GET['dpid'] : 0;
 ?>
 <style>
@@ -65,36 +65,36 @@
         </select>
       </div>
     </div>
-
-    <!-- Frozen foods -->
+    
+   <!-- Frozen foods -->
     <div style="border: 2px solid darkblue;margin-top:20px;padding:10px;"><h4 class="text-center">Frozen</h4>
       <div class="row">
         <div class="col-sm-6 text-right">Non Meat:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenNonMeat" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenNonMeat" placeholder=0>x<?=WEIGHT_FROZEN?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Meat and Seafood:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenMeat" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenMeat" placeholder=0>x<?=WEIGHT_MEAT?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Prepared Foods:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenPrepared" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="frozenPrepared" placeholder=0>x<?=WEIGHT_PREPARED?> lbs</div>
       </div>
     </div>
 
-    <!-- Refridgerated Foods -->
-    <div style="border: 2px solid green;margin-top:20px;padding:10px;"><h4 class="text-center">Refridgerated</h4>
+    <!-- Refrigerated Foods -->
+    <div style="border: 2px solid green;margin-top:20px;padding:10px;"><h4 class="text-center">Refrigerated</h4>
       <div class="row">
         <div class="col-sm-6 text-right">Bakery and Pastries</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refBakery" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refBakery" placeholder=0>x<?=WEIGHT_BAKERY?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Produce:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refProduce" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refProduce" placeholder=0>x<?=WEIGHT_PRODUCE?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Dairy and Deli Foods:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refDairyAndDeli" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="refDairyAndDeli" placeholder=0>x<?=WEIGHT_DAIRY?> lbs</div>
       </div>
     </div>
 
@@ -102,22 +102,21 @@
     <div style="border: 2px solid brown;margin-top:20px;padding:10px;"><h4 class="text-center">Assorted</h4>
       <div class="row">
         <div class="col-sm-6 text-right">Shelf-Stable:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryShelfStable" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryShelfStable" placeholder=0>x<?=WEIGHT_MIX?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Non-Food Products:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryNonFood" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryNonFood" placeholder=0>x<?=WEIGHT_NONFOOD?> lbs</div>
       </div>
       <div class="row">
         <div class="col-sm-6 text-right">Food Drive Foods:</div>
-        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryFoodDrive" placeholder=0></div>
+        <div class="col-sm-6"><input class="input-number" type="text" maxlength=6 name="dryFoodDrive" placeholder=0>x<?=WEIGHT_FOODDRIVE?> lbs</div>
       </div>
     </div>
 
     <div class="msg-warning" id="warningMsgs"></div>
     <input type="submit" class="btn-nav" id="btn_newDonation" value="Create Donation">
   </form>
-
 
 <?php include 'php/footer.php'; ?>
 <script src="js/createDonation.js"></script>

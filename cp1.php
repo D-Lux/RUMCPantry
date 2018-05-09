@@ -1,10 +1,11 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 1;
-  include 'php/header.php'; 
-  include 'php/backButton.php'
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
+
 <style>
 td, th {
   padding: 20px;
@@ -19,11 +20,11 @@ td, th {
 				if ($conn->connect_error) {
 					die("Connection failed: " . $conn->connect_error);
 				}
-				
+
 				// *************************************************
 				// ** Create a list of all active appointments today
-				
-				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, invoice.clientID as clientID, 
+
+				$sql = "SELECT clientInfo.fName as fName, clientInfo.lName as lName, invoice.clientID as clientID,
 								status, visitDate, visitTime, invoiceID
               FROM invoice
               JOIN (SELECT firstName AS fName, lastName AS lName, familymember.clientID as clientID
@@ -40,13 +41,13 @@ td, th {
 
 				// Close the connection
 				closeDB($conn);
-				
+
 				if (($clientInfo == NULL) || ($clientInfo->num_rows <= 0)) {
 					echo "No clients in the database.";
 				}
 				else {
 					$noOrdersActive = true;
-					
+
 					while ($client = sqlFetch($clientInfo)) {
 						if (IsReadyToCreateOrder($client['status'])) {
 							if ($noOrdersActive) {
@@ -75,6 +76,6 @@ td, th {
 					}
 					echo "</table>";
 				}
-				
+
 			?>
 <?php include 'php/footer.php'; ?>

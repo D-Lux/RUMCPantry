@@ -1,14 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
-<style>
-input[type="text"] {
-    width: 500px;
-}
-</style>
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
 <h3>Add Item</h3>

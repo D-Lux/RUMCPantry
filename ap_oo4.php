@@ -1,9 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
-	include 'php/header.php';
-	include 'php/backButton.php';
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
@@ -81,19 +81,19 @@ th {
       </tr>
     </table>
     <br>
-    
+
 		<!-- Print button -->
 		<button class='float-right' id='btn-print' onClick='AJAX_SetInvoicePrinted(<?=$invoiceID?>)'><i class='fa fa-print'></i> Print</button>
     <div class="clearfix"></div>
     <?php
 		// Loop through our data and spit out the data into our table
 		echo "<table style='padding:10px; font-size:1.4em;' id='orderTable'>
-          <tr><th></th><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr><tbody>";
+          <tr><th>Category</th><th>Item</th><th>Quantity</th><th>Aisle</th><th>Rack</th><th>Shelf</th></tr><tbody>";
 		while( $invoice = sqlFetch($invoiceData) ) {
-			echo "<tr><td>" . ($invoice['iQty'] > 1 ? '*' : '') . "</td>";
+			echo "<tr>";
       echo "<td>" . $invoice['cName'] . "</td>";
 			echo "<td>" . $invoice['iName'] . "</td>";
-			echo "<td>" . $invoice['iQty'] . "</td>";
+			echo "<td>" . ($invoice['iQty'] > 1 ? '*' : '') . $invoice['iQty'] . "</td>";
 			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td>";
 			echo "<td>" . rackDecoder($invoice['rack']) . "</td>";
 			echo "<td>" . shelfDecoder($invoice['shelf']) . "</td>";

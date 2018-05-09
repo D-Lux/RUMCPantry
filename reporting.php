@@ -1,9 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
-  include 'php/backButton.php';  
+  include 'php/backButton.php';
 ?>
 <link href="<?=$basePath?>includes/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
 <link href="<?=$basePath?>includes/highcharts/css/highcharts.css" rel="stylesheet" type="text/css">
@@ -27,11 +27,9 @@
   </div>
   <div class="clearfix"></div>
   <hr>
-  
+
   <div id='reportData'></div>
-<?php 
-include 'php/footer.php';
-?>
+<?php include 'php/footer.php'; ?>
 <script type="text/javascript" src="includes/highcharts/js/highcharts.js"></script>
 <script type="text/javascript" src="includes/highcharts/js/modules/drilldown.js"></script>
 <script type="text/javascript" src="includes/highcharts/js/modules/exporting.js"></script>
@@ -53,6 +51,7 @@ include 'php/footer.php';
     });
   }
 
+  // Handle the date range selector
   $(function() {
     $('.daterangepicker-field').daterangepicker({
       startDate: gStart,
@@ -75,8 +74,10 @@ include 'php/footer.php';
     });
   });
 
+  // Run the report at the start
   getReport();
 
+  // Handle opening and closing rows
   $(document).on("click", ".tablinks", function() {
     $(".tabcontent").removeClass("active");
     $(".tablinks").removeClass("activeButton");

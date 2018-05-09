@@ -1,12 +1,13 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
+
   <h3>New Reallocation Item</h3>
-  
+
 	<div class="body-content">
 
 	<form id="submitNewRedistItem" >

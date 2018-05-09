@@ -1,25 +1,26 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
+
 	<h3>Add Appointment Time Slot</h3>
 	<div class="body-content">
 	<!-- Start the form for creating a new date -->
-	<form id="AppointmentForm" name="AppointmentForm" 
+	<form id="AppointmentForm" name="AppointmentForm"
 			action="php/apptOps.php" method="post" >
 		<!-- Get the Date for this set of invoices -->
 		<?php
 			if ( (isset($_POST['newSlots'])) && (isset($_POST['date'])) ) {
 				// Our header Date box
 				echo "<h4>Date: " . $_POST['date'] . "</h4><br>";
-			
+
 				// Our short table with one time slot and one quantity
 				echo "<table id='timeTable' name='timeTable' >";
 				echo "<tr><th>Time</th><th>Count</th></tr>";
-				
+
 				echo "<tr><td><input type='time' name='time' value='10:00' step='900'></td>";
 				echo "<td><input type='number' name='qty' value='1' min='1'></td></tr>";
 			}
@@ -33,5 +34,5 @@
 		<br><br>
 		<input type="submit" class="btn-nav" name="CreateInvoiceTimeSlot" value="Create Time Slots">
 	</form>
-	
+
 <?php include 'php/footer.php'; ?>

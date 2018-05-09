@@ -1,8 +1,8 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-$pageRestriction = -1;
-include 'php/header.php';
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  $pageRestriction = -1;
+  include 'php/checkLogin.php';
+  include 'php/header.php';
 ?>
 	<div class="body-content">
 

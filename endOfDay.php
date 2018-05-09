@@ -1,16 +1,17 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 ?>
+
 <h3>End of day</h3>
 
 <div class="body-content">
   <div id="endOfDayHolder"></div>
-  
-  
+
+
 <?php include 'php/footer.php'; ?>
 
 <script type="text/javascript">
@@ -22,7 +23,7 @@
       }
     });
   }
-  
+
   $("#endOfDayHolder").on("click", ".btn-no-show", function(e) {
     e.preventDefault();
     var invoiceID = $(this).val();
@@ -53,6 +54,6 @@
       }
     });
   });
-  
+
   buildEODPage();
 </script>

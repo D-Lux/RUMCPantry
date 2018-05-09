@@ -1,15 +1,15 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
+<?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  $pageRestriction = 99;
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
+?>
 <style>
 input[type="text"] {
     width: 500px;
 }
 </style>
-<?php
-  $pageRestriction = 99;
-  include 'php/header.php';
-  include 'php/backButton.php';
-?>
 
 <h3>Update Item</h3>
 <div class="body-content">
@@ -19,7 +19,7 @@ input[type="text"] {
    // Connect to the database
   $conn = connectDB();
 
-  
+
   $badLoad = false;
 
   $sql = "SELECT item.isDeleted, itemID, itemName, displayName, price, item.small, item.medium, item.large, aisle, rack, shelf, name
@@ -45,16 +45,16 @@ input[type="text"] {
     $shelf       = $result["shelf"];;
     $categoryName = $result["name"];
   }
-    
+
 	closeDB($conn);
 ?>
-  
+
   <script type="text/javascript">
     if (<?=(int)$badLoad?>) {
       window.location.href = 'ap_io7.php';
     }
   </script>
-  
+
 	<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
     <input type="hidden" name="itemID" value="<?= $itemID ?>">
     <div class="row">
@@ -65,7 +65,7 @@ input[type="text"] {
         ?>
       </div>
     </div>
-    
+
     <div class="row">
       <div class="col-sm-4"><label class="required itemField">Item Name: </label></div>
       <div class="col-sm-8">
@@ -116,7 +116,7 @@ input[type="text"] {
           <select name="shelf">
             <option value=0>-</option>
             <?php
-              for ($i = MIN_SHELF; $i <= MAX_SHELF; $i++) { 
+              for ($i = MIN_SHELF; $i <= MAX_SHELF; $i++) {
                 echo "<option " . (($shelf==$i) ? 'selected' : '') . " value=" . $i . ">" . shelfDecoder($i) . "</option>";
               }
             ?>
@@ -133,7 +133,7 @@ input[type="text"] {
       </div>
     </div>
     <br>
-   
+
     <!-- QTY to take -->
     <div style="border: 2px solid #499BD6; padding:5px;">
       <div class="row">
@@ -156,6 +156,6 @@ input[type="text"] {
     </div>
     <input type="submit" class='btn-nav' value="Update" name="updateItemIndividual">
   </form>
- 
+
 <?php include 'php/footer.php'; ?>
 <script src="js/createItem.js"></script>

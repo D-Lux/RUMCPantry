@@ -1,10 +1,11 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-$pageRestriction = 99;
-include 'php/header.php';
-include 'php/backButton.php'
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  $pageRestriction = 99;
+  include 'php/checkLogin.php';
+  include 'php/header.php';
+  include 'php/backButton.php';
 ?>
+
 <style>
 #newItems .chosen-container {
   width:300px !important;

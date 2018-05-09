@@ -1,4 +1,5 @@
 <?php
+session_start();
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
 /*
 Submits that pass through here:

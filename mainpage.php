@@ -1,12 +1,9 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
-$pageRestriction = -1;
-
-if (isset($_SESSION['perms'])) { $_SESSION['perms'] = -1; }
-
-include 'php/header.php';
-
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  $pageRestriction = -1;
+  include 'php/checkLogin.php';
+  if (isset($_SESSION['perms'])) { $_SESSION['perms'] = -1; }
+  include 'php/header.php';
 ?>
 
 	<style>

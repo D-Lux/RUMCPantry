@@ -1,6 +1,5 @@
 <?php
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
-session_start();
 
 if (!isset($_SESSION['perms'])) {
   $_SESSION['perms'] = 0;
@@ -14,7 +13,7 @@ if (strpos($_SERVER['REQUEST_URI'], "RUMCPantry")) {
 // **********************************************
 // * Handle redirect
 function redirectPage($address) {
-    echo "<script type='text/javascript'>window.top.location='" . $GLOBALS['basePath'] . $address . "';</script>"; 
+    echo "<script type='text/javascript'>window.top.location='" . $GLOBALS['basePath'] . $address . "';</script>";
     die();
 }
 
@@ -102,7 +101,7 @@ function connectHomeDB() {
   $username   = "root";
   $password   = "";
   $dbname     = "foodpantry";
- 
+
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
 		$GLOBALS['connectionActive'] = true;
@@ -111,29 +110,29 @@ function connectHomeDB() {
 }
 function connectDB() {
   	//Set up server connection
-	 // $servername = "192.168.0.23";
-	 // $username   = "root";
-	 // $password   = "lgh598usa15";
-	 // $dbname     = "foodpantry";
-   
+	 //$servername = "192.168.0.23";
+	 //$username   = "root";
+	 //$password   = "lgh598usa15";
+	 //$dbname     = "foodpantry";
+
   $servername = "server902.webhostingpad.com";
 	$username   = "roselleu_fpadmin";
 	$password   = "Luke3:11eggsontop";
 	$dbname     = "roselleu_foodpantry";
-  
+
   if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 ) {
     $servername = "127.0.0.1";
-    $username   = "root";
-    $password   = "";
-    $dbname     = "foodpantry";
-  }
+     $username   = "root";
+     $password   = "";
+     $dbname     = "foodpantry";
+   }
   if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) {
-    $servername = "server902.webhostingpad.com";
-    $username   = "roselleu_fpadmin";
-    $password   = "Luke3:11eggsontop";
-    $dbname     = "roselleu_testpantry";
+     $servername = "server902.webhostingpad.com";
+     $username   = "roselleu_fpadmin";
+     $password   = "Luke3:11eggsontop";
+     $dbname     = "roselleu_testpantry";
   }
-  
+
 
 
 	// Create and check connection
@@ -262,7 +261,7 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
 		out all that has been deleted.
 	*/
-  
+
   $defaultVal = htmlspecialchars_decode($defaultVal);
 
 	$conn = connectDB();
@@ -279,7 +278,7 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	$sqlQuery = queryDB($conn, $sql);
 
   $defaultVal = htmlspecialchars($defaultVal, ENT_QUOTES);
-  
+
 	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "'
 			value='" . $defaultVal . "' name='" . $inputName . "'>";
 

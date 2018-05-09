@@ -1,4 +1,5 @@
 <?php
+session_start();
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
 include('utilities.php');
 
@@ -121,28 +122,7 @@ elseif (isset($_GET['ReactivateCategory'])) {
     createCookie("categoryReactivated", 1, 30);
   }
   closeDB($conn);
-  redirectPage(9*+
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  
-  "ap_io8.php?showDeleted=1");
+  redirectPage("ap_io8.php?showDeleted=1");
 }
 
 ?>

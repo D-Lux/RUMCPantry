@@ -1,11 +1,11 @@
-<!-- © 2018 Daniel Luxa ALL RIGHTS RESERVED -->
-
 <?php
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 99;
+  include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
 
-    
+
   $sql = "SELECT i.itemName, i.small, i.medium, i.large,
             i.aisle, i.rack, i.shelf,
             c.name, c.small AS csmall, c.medium AS cmedium, c.large AS clarge
@@ -16,11 +16,11 @@
           AND i.isDeleted = 0
           AND c.isDeleted = 0
           ORDER BY c.formOrder, i.aisle, i.rack, i.shelf, i.itemName";
-  
+
   $conn = connectDB();
-  
+
   $results = runQuery($conn, $sql);
-  
+
   $currCat = "";
   $floatBreak = 0;
 ?>
@@ -50,7 +50,7 @@
       echo "<td>" . shelfDecoder($result['shelf']) . "</td>";
       echo "<td>" . $result['small'] . "</td>";
       echo "<td>" . $result['medium'] . "</td>";
-      echo "<td>" . $result['large'] . "</td></tr>";    
+      echo "<td>" . $result['large'] . "</td></tr>";
     } ?>
     </table>
 

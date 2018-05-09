@@ -1,5 +1,6 @@
 <?php
-// © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  // © 2018 Daniel Luxa ALL RIGHTS RESERVED
+  session_start();
 	include '../utilities.php';
 
 	$conn = connectDB();
