@@ -271,14 +271,25 @@
 					// }
 				}
 				// Close the form if we're not in the view mode
-				if (!$ViewMode) {
-					echo "<br>";
-					echo "<div class='text-center'>";
-					echo "<button type='submit' class='btn-nav' name='CreateInvoiceDescriptions'>Submit Order</button>";
-					echo "</div>";
-					echo "</form>";
-				}
-			?>
+				if (!$ViewMode) { 
+        ?>
+					<br>
+          <div class="row" id="disclaimerHolder">
+            <div class="col-sm-6 text-right"><strong>If something is not in your bag, that means we are out of that item. There are no exchanges. I have read this and understand.</strong></div>
+            <div class="col-sm-6 text-left"><input type="checkbox" id="disclaimerConfirm"><label for="disclaimerConfirm"></label></div>
+          </div>  
+					<div class='text-center'>
+            <button type='submit' class='btn-nav' name='CreateInvoiceDescriptions' id="submitOrderBtn" disabled>Submit Order</button>
+          </div>
+          <?php }	?>
+				
+			</form>
+    
 
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>
+<script type="text/javascript">
+  $("#disclaimerConfirm").on("change", function(e) {
+    $("#submitOrderBtn").prop("disabled",!$("#disclaimerConfirm").is(":checked"));
+  });
+</script>
