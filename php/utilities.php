@@ -186,6 +186,18 @@ function sqlError($conn) {
   return ( mysqli_error($conn) );
 }
 
+function DBTransactionStart($conn){
+  $conn->begin_transaction(); //MYSQLI_TRANS_START_READ_WRITE
+}
+
+function DBTransactionRollback($conn) {
+  $conn->rollback();
+}
+
+function DBTransactionCommit($conn) {
+  $conn->commit();
+}
+
 // *****************************************************************
 // * Display and Query functions
 
