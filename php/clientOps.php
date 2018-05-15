@@ -82,14 +82,18 @@ elseif(isset($_POST['submitClient'])) {
 	$numKids    = $_POST['numKids'];
 	$email      = fixInput($_POST['email']);
 	$phoneNo    = $_POST['phone1'].$_POST['phone2'].$_POST['phone3'];
-	$foodStamps = $_POST['foodStamps'];
-	$clientType = $_POST['clientType'];
 	
 	// Family Member Fields
 	$clientFirstName  = fixInput($_POST['clientFirstName']);
 	$clientLastName   = fixInput($_POST['clientLastName']);
 	$birthDate        = $_POST['birthDate'];
 	$gender           = $_POST['gender'];
+  
+  //Demographic fields
+  $foodStamps = $_POST['foodStamps'];
+	$clientType = $_POST['clientType'];
+  $vetStatus  = $_POST['vetStatus'];
+  $ethnicity  = $_POST['ethnicity'];
 
   $pets = "";
   if (isset($_POST['pets'])) {
@@ -107,21 +111,24 @@ elseif(isset($_POST['submitClient'])) {
   if ((empty($birthDate)) || (empty($clientLastName))) {
     $error .= "<p>Birthdate is required.</p>";
   }
+  
+  $birtDate = DATE("Y-m-d", strtotime($birthDate));
 
   // If there were no form errors, create the client
   if ($error == '') {
     // Set up server connection
     $conn = connectDB();
-
+    DBTransactionStart($conn);
     // Create insertion string
     $sql = "INSERT INTO client 
         (numOfAdults, NumOfKids, email, phoneNumber, 
-          address, city, state, zip, foodStamps, clientType, pets,
+          address, city, state, zip, pets,
+          foodStamps, clientType, vetStatus, ethnicity, startDate,
           isDeleted, redistribution)
         VALUES 
         ({$numAdults}, {$numKids}, '{$email}', '{$phoneNo}',
-          '{$address}', '{$city}', '{$state}', '{$zip}', {$foodStamps}, {$clientType}, '{$pets}',
-          FALSE, FALSE)";
+          '{$address}', '{$city}', '{$state}', '{$zip}', '{$pets}', {$foodStamps}, {$clientType}, {$vetStatus}, {$ethnicity},
+          DATE_FORMAT(now(), '%Y-%m-%d'), FALSE, FALSE)";
     
     // Perform and test insertion
     if (queryDB($conn, $sql) === TRUE) {
@@ -132,14 +139,16 @@ elseif(isset($_POST['submitClient'])) {
           (firstName, lastName, isHeadOfHousehold, birthDate, clientID, gender, isDeleted)
           VALUES ('{$clientFirstName}', '{$clientLastName}', TRUE, '{$birthDate}', {$clientID}, {$gender}, FALSE)";
       if (queryDB($conn, $sql) === FALSE) {
-        $error = "There was an error adding the family member to the database (check with the programmer)<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
-        $sql = "DELETE FROM client
-                WHERE clientID = $clientID";
-        queryDB($conn, $sql);
+        DBTransactionRollback($conn);
+        $error = "There was an error adding the family member to the database<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
       }
     } 
     else {
-      $error = "There was an error adding the client to the database (Check with the programmer)<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
+      DBTransactionRollback($conn);
+      $error = "There was an error adding the client to the database<br>Query: " . $sql . "<br>Error: " . sqlError($conn) ;
+    }
+    if ($error == ''){ 
+    DBTransactionCommit($conn);
     }
     closeDB($conn);
   }
@@ -166,7 +175,9 @@ elseif(isset($_POST['UpdateClient'])) {
 	$foodStamps = $_POST['foodStamps'];
 	$clientType = $_POST['clientType'];
   $notes      = empty($_POST['notes']) ? " " : fixInput($_POST['notes']);
-  $startDate      = $_POST['startDate'];
+  $startDate  = DATE('Y-m-d', strtotime($_POST['startDate']));
+  $ethnicity  = $_POST['ethnicity'];
+  $vetStatus  = $_POST['vetStatus'];
 
   $pets = "";
   if (isset($_POST['pets'])) {
@@ -191,7 +202,8 @@ elseif(isset($_POST['UpdateClient'])) {
     $sql = "UPDATE client SET
         numOfAdults = {$numAdults}, numOfKids = {$numKids}, phoneNumber = '{$phoneNo}',
         foodStamps = {$foodStamps}, email = '{$email}', notes = '{$notes}', timestamp = now(), pets = '{$pets}',
-        zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}, startDAte = '{$startDate}'
+        zip = '{$zip}', state = '{$state}', address = '{$address}', city = '{$city}', clientType = {$clientType}, 
+        startDate = '{$startDate}', vetStatus = {$vetStatus}, ethnicity = {$ethnicity}
         WHERE clientID = {$clientID}";
     
     // Perform and test update

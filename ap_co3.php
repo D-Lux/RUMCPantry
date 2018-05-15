@@ -12,7 +12,7 @@
   // Query the database
 
   // Grab client information
-  $sql = "SELECT lastName, numOfAdults, numOfKids, startDate, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets
+  $sql = "SELECT lastName, numOfAdults, numOfKids, startDate, email, phoneNumber, address, city, state, zip, foodStamps, client.notes, clientType, pets, vetStatus, ethnicity
           FROM client
           JOIN familymember
             ON familymember.clientID = client.ClientID
@@ -43,15 +43,25 @@
   $familyInfo = runQuery($conn, $sql);
 
   $showDeleteColumn = (count($familyInfo) > 1);
+  
+  $familySize 	   = $clientInfo['numOfKids'] + $clientInfo['numOfAdults'];
+  $foodStampStatus = $clientInfo['foodStamps'];
+  $clientType 	   = $clientInfo['clientType'];
+  $vetStatus       = $clientInfo['vetStatus'];
+  $ethnicity       = $clientInfo['ethnicity'];
+  
+  
+  $ethnicityOptions = runQuery($conn, " SELECT ethnicity_id, ethnicity_name 
+                                        FROM data_ethnicity WHERE hidden=0 OR ethnicity_id = {$ethnicity}");
+  $vetOptions = runQuery($conn, "SELECT vetStatus_id, vetStatus_name FROM data_vetstatus
+                                        WHERE hidden=0 OR vetStatus_id = {$vetStatus}");
 
   // Close the connection as we've gotten all the information we should need
   closeDB($conn);
 
-  $familySize 	   = $clientInfo['numOfKids'] + $clientInfo['numOfAdults'];
-  $foodStampStatus = $clientInfo['foodStamps'];
-  $clientType 	   = $clientInfo['clientType'];
-?>
 
+?>
+  <link href="<?=$basePath?>includes/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
 	<div class="body-content">
     <h3>Client: <?= $clientInfo['lastName'] ?> </h3>
     <div id="clientUpdateSuccess" class="hoverMsg hoverSuccess" style="display:none;"></div>
@@ -75,7 +85,7 @@
       <div class="row">
         <div class="col-sm-4">Joined Pantry On:</div>
         <div class="col-sm-8">
-          <input type="date" name='startDate' value=<?= $clientInfo['startDate'] ?> >
+          <input type="text" class="dateInput" name='startDate' value=<?= $clientInfo['startDate'] ?> >
         </div>
       </div>
       <!-- Phone Number -->
@@ -101,7 +111,7 @@
           </select>
         </div>
       </div>
-      <!-- ------- Address ---- -->
+      <!-- ADDRESS -->
       <div class="row">
         <div class="col-sm-2"><strong>Address</strong></div>
       </div>
@@ -140,32 +150,62 @@
         </div>
       </div>
       <br>
-      <!-- Foodstamp Status -->
+      <!-- DEMOGRAPHIC -->
       <div class="row">
-        <div class="col-sm-4">Foodstamp Status:</div>
-        <div class="col-sm-8">
-          <select id='foodStampsInput' name='foodStamps'>
-            <?php
-              echo "<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>";
-              echo "<option value=1 "  . ($foodStampStatus == 1  ? "selected" : "") . ">Yes</option>";
-              echo "<option value=0 "  . ($foodStampStatus == 0  ? "selected" : "") . ">No</option>";
-            ?>
-          </select>
-        </div>
+        <div class="col-sm-2"><strong>Demographic</strong></div>
       </div>
-      <!-- Client Type -->
-      <div class="row">
-        <div class="col-sm-4">Client Type:</div>
-        <div class="col-sm-8">
-          <select id='clientTypeInput' name='clientType'>
-            <?php echo "
-              <option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
-              <option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
-              <option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
-              <option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
-              </select>";
-            ?>
-          </select>
+      <div style="border: 2px solid green; padding:5px;margin-top:3px;">
+        <!-- Foodstamp Status -->
+        <div class="row">
+          <div class="col-sm-4">Foodstamp Status:</div>
+          <div class="col-sm-8">
+            <select id='foodStampsInput' name='foodStamps'>
+              <?php
+                echo "<option value=-1 " . ($foodStampStatus == -1 ? "selected" : "") . ">Unknown</option>";
+                echo "<option value=1 "  . ($foodStampStatus == 1  ? "selected" : "") . ">Yes</option>";
+                echo "<option value=0 "  . ($foodStampStatus == 0  ? "selected" : "") . ">No</option>";
+              ?>
+            </select>
+          </div>
+        </div>
+        <!-- Client Type -->
+        <div class="row">
+          <div class="col-sm-4">Client Type:</div>
+          <div class="col-sm-8">
+            <select id='clientTypeInput' name='clientType'>
+              <?php echo "
+                <option value=0 " . ($clientType == 0 ? "selected" : "") . ">Unknown</option>
+                <option value=1 " . ($clientType == 1 ? "selected" : "") . ">Constituent</option>
+                <option value=2 " . ($clientType == 2 ? "selected" : "") . ">Member</option>
+                <option value=3 " . ($clientType == 3 ? "selected" : "") . ">Resident</option>
+                </select>";
+              ?>
+            </select>
+          </div>
+        </div>
+        <!-- Ethnicity -->
+        <div class="row">
+          <div class="col-sm-4">Ethnicity:</div>
+          <div class="col-sm-8">
+            <select name='ethnicity'>
+              <?php foreach($ethnicityOptions as $option) {
+                $selected = $option['ethnicity_id'] == $ethnicity ? " selected " : "";?>
+                <option value=<?=$option['ethnicity_id']?> <?=$selected?>><?=$option['ethnicity_name']?></option>
+              <?php } ?>
+            </select>
+          </div>
+        </div>
+        <!-- Vet Status -->
+        <div class="row">
+          <div class="col-sm-4">Military Status:</div>
+          <div class="col-sm-8">
+            <select name="vetStatus">
+              <?php foreach($vetOptions as $option) {
+                $selected = $option['vetStatus_id'] == $vetStatus ? " selected " : "";?>
+                <option value=<?=$option['vetStatus_id']?> <?=$selected?>><?=$option['vetStatus_name']?></option>
+              <?php } ?>
+            </select>
+          </div>
         </div>
       </div>
       <br>
@@ -259,8 +299,16 @@
 		</form>
 
 <?php include 'php/footer.php'; ?>
-
+<script type="text/javascript" src="includes/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="includes/daterangepicker/daterangepicker.js"></script>
 <script type="text/javascript">
+  $(".dateInput").daterangepicker({
+    locale: {
+          format: 'YYYY-MM-DD',
+    },
+    singleDatePicker: true,
+    showDropdowns: true
+  });
   $("select").chosen({
     placeholder_text_multiple: "Select Pet Options",
   });

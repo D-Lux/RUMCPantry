@@ -4,7 +4,15 @@
   include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';
+  
+  $conn = connectDB();
+ 
+  $ethnicityOptions = runQuery($conn, "SELECT ethnicity_id, ethnicity_name FROM data_ethnicity WHERE hidden=0");
+  $vetOptions = runQuery($conn, "SELECT vetStatus_id, vetStatus_name FROM data_vetstatus WHERE hidden=0");
+  closeDB($conn);
 ?>
+
+<link href="<?=$basePath?>includes/daterangepicker/daterangepicker.css" rel="stylesheet" type="text/css">
 
 	<h3>Add New Client</h3>
 
@@ -38,7 +46,7 @@
       </div>
       <div class="row">
         <div class="col-sm-4">Date of Birth:</div>
-        <div class="col-sm-4"><input type="date" name="birthDate" min="1900-01-01"></div>
+        <div class="col-sm-4"><input type="text" name="birthDate" id="birthdate"></div>
       </div>
       <div class="row">
         <div class="col-sm-4">Gender:</div>
@@ -68,6 +76,26 @@
             <option value=1>Constituent</option>
             <option value=2>Member</option>
             <option value=3>Resident</option>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">Veteran Status:</div>
+        <div class="col-sm-4">
+          <select name="vetStatus">
+            <?php foreach($vetOptions as $option) { ?>
+              <option value=<?=$option['vetStatus_id']?>><?=$option['vetStatus_name']?></option>
+            <?php } ?>
+          </select>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-4">Ethnicity:</div>
+        <div class="col-sm-4">
+          <select name="ethnicity">
+            <?php foreach($ethnicityOptions as $option) { ?>
+              <option value=<?=$option['ethnicity_id']?>><?=$option['ethnicity_name']?></option>
+            <?php } ?>
           </select>
         </div>
       </div>
@@ -109,8 +137,18 @@
 <?php include 'php/footer.php'; ?>
 
 <script src="js/clientOps.js"></script>
+<script type="text/javascript" src="includes/daterangepicker/moment.min.js"></script>
+<script type="text/javascript" src="includes/daterangepicker/daterangepicker.js"></script>
 
 <script type="text/javascript">
+  $("#birthdate").daterangepicker({
+    locale: {
+          format: 'YYYY-MM-DD',
+    },
+    singleDatePicker: true,
+    showDropdowns: true
+  });
+
   $("select").chosen({
     placeholder_text_multiple: "Select Pet Options",
   });
