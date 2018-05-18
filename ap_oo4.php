@@ -7,13 +7,8 @@
 ?>
 
 <link rel="stylesheet" type="text/css" href="css/print.css" media="print" />
-<style>
-th {
-  padding:3px 5px 3px 5px;
-}
-</style>
 
-	<?php
+<?php
 	$conn = connectDB();
 
 	// Post Vars: invoiceID | name | visitTime | familySize
@@ -34,8 +29,11 @@ th {
 	$printName	= $results['lastName'];
 	$visitTime  = $results['visitTime'];
 	$numOfKids  = $results['numOfKids'];
-  $numOfAdults= $results['numOfAdults'];
-  $LeanneNum  = ($results['status'] % 100) + 1;
+    $numOfAdults= $results['numOfAdults'];
+    $LeanneNum  = ($results['status'] % 100) + 1;
+    
+    $printFontSize = round(100 / (strlen($printName) * 2),2,PHP_ROUND_HALF_UP);
+    //printFontSize = 20;
 
 
 	if ( ($name != null) && ($invoiceID != 0) ){
@@ -64,27 +62,42 @@ th {
 		}
 		closeDB($conn);
     ?>
-		<table class='table'>
-      <tr>
-        <th>Client</th>
-        <th>Time - Order Number</th>
-        <th>Family Size</th>
-        <th>Adults</th>
-        <th>Children</th>
-      </tr>
-      <tr>
-        <td><?=$name?></td>
-        <td><?=returnTime($visitTime)?> - <?=$LeanneNum?></td>
-        <td><?=familySizeDecoder($numOfKids + $numOfAdults)?></td>
-        <td><?=$numOfAdults?></td>
-        <td><?=$numOfKids?></td>
-      </tr>
-    </table>
-    <br>
+<style>
+th {
+  padding:3px 5px 3px 5px;
+}
+.nameTags td {
+    font-size: <?=$printFontSize?>vw;
+}
 
-		<!-- Print button -->
-		<button class='float-right' id='btn-print' onClick='AJAX_SetInvoicePrinted(<?=$invoiceID?>)'><i class='fa fa-print'></i> Print</button>
-    <div class="clearfix"></div>
+</style>
+
+<h3 class="hide_for_print">Client Order Form</h3>
+<div class="body-content">
+    <!-- Print button -->
+    <button id="btn-print" onClick='AJAX_SetInvoicePrinted(<?=$invoiceID?>)'><i class='fa fa-print'></i>Print</button>
+    <table class="report-container" border="0" cellspacing="0" cellpadding="0">
+        <thead class="report-header">
+            <tr><th>
+            		<table class='table'>
+                  <tr>
+                    <th>Client</th>
+                    <th>Time - Order Number</th>
+                    <th>Family Size</th>
+                    <th>Adults</th>
+                    <th>Children</th>
+                  </tr>
+                  <tr>
+                    <td><?=$name?></td>
+                    <td><?=returnTime($visitTime)?> - <?=$LeanneNum?></td>
+                    <td><?=familySizeDecoder($numOfKids + $numOfAdults)?></td>
+                    <td><?=$numOfAdults?></td>
+                    <td><?=$numOfKids?></td>
+                  </tr>
+                </table>
+            </th></tr><tr></tr>
+        </thead>
+        <tbody><tr><td>
     <?php
 		// Loop through our data and spit out the data into our table
 		echo "<table style='padding:10px; font-size:1.4em;' id='orderTable'>
@@ -101,21 +114,28 @@ th {
 			echo "</tr>";
 		}
 		echo "</tbody></table>";
-
-		//Print out name tags numLines times
-		echo "<div id='nameTags' style='display:none;padding-top:100px;'><hr><h6>";
-		$numLines = orderFormNameTagLength($numOfKids + $numOfAdults);
-		for ($i = 0; $i < $numLines; $i++) {
-			echo $printName . "<br>";
-		}
-		echo "</h6></div>";
 	}
 	else {
 		echo "Something went wrong, please go back and try again.";
-	}
+	} ?>
+	
+	</td></tr></tbody></table>
+	
+	<!-- name tags -->
+	<div id="nameTags" style="display:none;padding-top:50px;">
+	    <hr>
+	    <table class="table nameTags" border=0>
+        	<?php
+        		$numLines = orderFormNameTagLength($numOfKids + $numOfAdults);
+        		for ($i = 0; $i < $numLines; $i++) {
+        			echo "<tr><td>" . $printName . "</td><td>" . $printName . "</td></tr>";
+        		}
+        	?>
+        </table>
+    </div>
 
-	echo "<div id='ErrorLog'></div>";
-	?>
+	<div id="ErrorLog"></div>
+
 
 <?php include 'php/footer.php'; ?>
 <script src="js/orderFormOps.js"></script>
