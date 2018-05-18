@@ -5,7 +5,7 @@
 	display: none !important;
 }
 
-h6 {
+#nameTags {
 	font-size: 5em;
 	font-family: tahoma;
 	display: block !important;
@@ -17,10 +17,11 @@ h6 {
 table,
 table tr td,
 table tr th {
-	page-break-inside: avoid;
+    border: 0 !important;
+	/*page-break-inside: avoid;*/
 }
 
 tr:nth-child(even):not(th) {
   -webkit-print-color-adjust:exact;
-  background: #EEEEEE
+  background: #FEFEEE
 }
