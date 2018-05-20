@@ -599,7 +599,7 @@ function familySizeDecoder($famSize){
 }
 
 function orderFormNameTagLength($familySize) {
-	return (runFamilyDecoder($familySize, 4, 5, 6));
+	return (runFamilyDecoder($familySize, 2, 3, 3));
 }
 
 // ***********************************************************

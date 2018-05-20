@@ -12,5 +12,32 @@
     <a class="button" href="<?=$basePath?>mainpage.php">Sign-In Page</a>
   </div>
 
-  <a class="float-right" href="https://www.facebook.com/Roselle-UMC-Community-Food-Pantry-292464297812413/"><span class="fab fa-facebook-square"></span></a>
+  <br> <br> <br> 
+ 
+  <style>
+ul.a {
+	aliign
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+li.a {
+    display: inline;
+	padding: 20px;
+}
+
+div.a {
+	text-align: center;
+}
+</style>
+	
+  <div class="a">
+	<ul class="a">
+		<li class="a"><a href="https://www.facebook.com/Roselle-UMC-Community-Food-Pantry-292464297812413/"><span class="fab fa-facebook-square" style="font-size:48px"></span></a></li>
+		<li class="a"><a href="http://www.roselleumcpantry.org:2096"><span class="fa fa-envelope" style="font-size:48px;color:red"></span></a></li>
+	</ul>
+    
+  </div>
+    
 <?php include 'php/footer.php'; ?>
