@@ -96,7 +96,8 @@
 	// * Create the order form
 
 	// Start the form and add a hidden field for client info
-	echo "<form method='post' action='php/orderOps.php' name='CreateReviewedInvoiceDescriptions'>";
+	echo "<form method='post' id='iReviewOrderForm' action='php/orderOps.php' name='CreateReviewedInvoiceDescriptions'>";
+  echo "<input type='hidden' value=1 name='CreateReviewedInvoiceDescriptions'>";
 	echo "<input type='hidden' value=" . $clientID . " name='clientID'>";
 	echo "<input type='hidden' value=" . $invoiceID . " name='invoiceID'>";
 	echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
@@ -271,8 +272,9 @@
 
 	}
 ?>
+      <div class="text-center" id="iSubmitError"></div>
       <div class="text-center">
-				<button type="submit" class='btn-nav' name="CreateReviewedInvoiceDescriptions">Verify Order</button>
+				<button type="submit" class='btn-nav' id="iSubmitReview" name="CreateReviewedInvoiceDescriptions">Verify Order</button>
 			</div>
 		</form>
 
@@ -280,9 +282,32 @@
 <script src='js/orderFormOps.js'></script>
 
 <script type='text/javascript'>
-  <?php if ($specialItemNum > 1) { ?>
-    //showSpecials(); // THIS DOESN'T WORK HERE because we've already closed the form
-  <?php } ?>
   updateCheckedQuantities();
+  
+  $("#iReviewOrderForm").on("submit", function(e) {
+    $("#iSubmitReview").prop("disabled", true);
+    e.preventDefault();
+    $.ajax({
+      url: "php/orderOps.php",
+      dataType: "html",
+      data: $("#iReviewOrderForm").serialize(),
+      method: "POST",
+      success: function(response) {
+        if (response == "") {
+          goBack();
+        }
+        else {
+          $("#iSubmitError").html("<strong><p style='color:red;font-size:1.4em;'>" + response + "</p></strong>");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        $("#iSubmitError").html("<strong><p style='color:red;font-size:1.4em;'>There was an error connecting to the network. " +
+          "Please wait a moment and try again. If the problem persists, please check the network connection.</p></strong>");
+      },
+      complete: function() {
+        $("#iSubmitReview").prop("disabled", false);
+      },
+    });
+  });
 </script>
 

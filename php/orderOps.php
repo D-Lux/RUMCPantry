@@ -137,7 +137,7 @@ function createInvoiceDesc() {
 
 // ***************************************************************
 // * Function to set the status of an invoice to the correct value
-function updateStatusFromOrder($setOrder = false) {
+function updateStatusFromOrder($setOrder = false, $minFinalStatus = 0, $maxFinalStatus = 10000) {
 	// Connect to the database
 	$conn = connectDB();
 	if ($conn->connect_error) {
@@ -152,9 +152,8 @@ function updateStatusFromOrder($setOrder = false) {
 
 	$result = queryDB($conn, $sql);
 	if ($result === false) {
-		echoDivWithColor("Error description: " . mysqli_error($conn), "red");
-		echoDivWithColor("Error, failed to get current status.", "red" );
 		closeDB($conn);
+    return false;
 	}
 	else {
 		// Now we advance our status variable
@@ -181,14 +180,20 @@ function updateStatusFromOrder($setOrder = false) {
 				WHERE invoiceID=" . $_POST['invoiceID'];
 
 		// Run the query, if we're good, return success
-		if (queryDB($conn, $sql)) {
-			closeDB($conn);
-			return true;
-		}
-		else {
-			closeDB($conn);
-			return false;
-		}
+    if ( ($newStatus >= $minFinalStatus) && ($newStatus <= $maxFinalStatus) ) {
+      if (queryDB($conn, $sql)) {
+        closeDB($conn);
+        return true;
+      }
+      else {
+        closeDB($conn);
+        return false;
+      }
+    }
+    
+    // The status was okay, so just assume we're good
+    closeDB($conn);
+    return true;
 	}
 }
 
@@ -198,13 +203,14 @@ function updateStatusFromOrder($setOrder = false) {
 if (isset($_POST['CreateInvoiceDescriptions'])) {
 	if (createInvoiceDesc()) {
 		//echo "Insertion successful";
-		if (updateStatusFromOrder(true)) {
-			redirectPage("cap.php?clientID=" . $_POST['clientID']);
+		if (updateStatusFromOrder(true, GetReadyToReviewLow(), GetReadyToReviewHigh())) {
+      die();
 		}
 		else {
-			echo "There was an error creating your order, please try again";
+			die("There was an error creating your order, please try again. If the problem persists, please check with a volunteer.");
 		}
 	}
+  die("There was an error creating your order, please try again. If the problem persists, please check with a volunteer.");
 }
 
 // *****************************************
@@ -212,16 +218,16 @@ if (isset($_POST['CreateInvoiceDescriptions'])) {
 elseif (isset($_POST['CreateReviewedInvoiceDescriptions'])) {
 	if (deleteInvoiceDesc()) {
 		if (createInvoiceDesc()) {
-			if (updateStatusFromOrder()) {
-				//echo "Review Successful!";
-				redirectPage("checkIn.php");
+			if (updateStatusFromOrder(false, GetReadyToPrintLow(), GetReadyToPrintHigh())) {
+				die();
 			}
 			else {
-				echo "There was an error reviewing the order, please try again";
+				echo "There was an error reviewing the order, the status failed to update. Please try again";
 			}
 		}
+    die("There was an error reviewing the order. The invoice descriptions failed to create. Please try again");
 	}
-	echo "There was an error reviewing the order, please try again";
+	die("There was an error reviewing the order. The system failed to reset the selections. Please try again");
 }
 
 
