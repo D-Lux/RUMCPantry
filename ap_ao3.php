@@ -93,7 +93,7 @@
       // If we're looking at a new time slot, put in a header row
       if ($timeSlot != $invoice['visitTime']) {
         $timeSlot = $invoice['visitTime'];
-        echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
+        echo "<tr><th colspan='4'>" . date('F dS', strtotime($_GET['date'])) . " - " . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
       }
 
       // Start the new row
