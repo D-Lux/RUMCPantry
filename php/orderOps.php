@@ -66,7 +66,7 @@ function createInvoiceDesc() {
 
 	// Create the array to track item IDs
 	$orderIDs   = [];
-	$specialIDs = [];
+	//$specialIDs = [];
 	$runQuery   = FALSE;
 
 	// Loop through our POST information to generate an array of itemIDs and quantities
@@ -84,6 +84,8 @@ function createInvoiceDesc() {
 				}
 			}
 			else {
+				// Commenting out specials
+				/*
 				// If the item is a special, it will not be an array
 				// Make sure we're looking at a number and not a space
 				if (is_numeric($C_Count)) {
@@ -94,6 +96,7 @@ function createInvoiceDesc() {
 					$specialIDs[$C_Count]++;
 					$runQuery = TRUE;
 				}
+				*/
 			}
 		}
 	}
@@ -108,12 +111,14 @@ function createInvoiceDesc() {
 		$insertionSql .= "( $invoiceID, $itemID, $qty, $totalPrice, 0 )";
 		$firstInsert = FALSE;
 	}
+	/*
 	foreach ($specialIDs as $itemID=>$qty) {
 		$insertionSql .= (!$firstInsert ? "," : "");	// Add a comma if we aren't the first insertion
 		$insertionSql .= "( $invoiceID, $itemID, $qty, ";
 		$insertionSql .= (isset($PriceID_Array[$itemID]) ? $PriceID_Array[$itemID] : 0) . ", 1 )";
 		$firstInsert = FALSE;
 	}
+	*/
 
 	//echo "Insertion query: ";
 	//echo $insertionSql . "<br>";
@@ -190,7 +195,7 @@ function updateStatusFromOrder($setOrder = false, $minFinalStatus = 0, $maxFinal
         return false;
       }
     }
-    
+
     // The status was okay, so just assume we're good
     closeDB($conn);
     return true;
