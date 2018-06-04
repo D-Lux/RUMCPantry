@@ -15,7 +15,7 @@
   // *****************************************************************************
   // * Overview information
 
-	$sql = "SELECT COUNT(*) as totalFamilies, SUM(numOfKids) as totalKids,
+	$sql = "SELECT COUNT(*) as totalAppts, SUM(numOfKids) as totalKids,
 					SUM(numOfAdults + numOfKids) as totalAffected,
 					SUM(CASE WHEN numOfKids>0 THEN 1 ELSE 0 END) as familiesWithKids
           FROM invoice
@@ -58,7 +58,7 @@
 	$donationQueryData = runQueryForOne($conn, $sql);
 
 	// Assign out our data to be more readable
-	$totalFamilies    = (isset($familyQueryData['totalFamilies']))    ? $familyQueryData['totalFamilies']     : 0;
+	$totalAppts       = (isset($familyQueryData['totalAppts']))    ? $familyQueryData['totalAppts']     : 0;
 	$totalKids        = (isset($familyQueryData['totalKids']))        ? $familyQueryData['totalKids']         : 0;
 	$totalAffected    = (isset($familyQueryData['totalAffected']))    ? $familyQueryData['totalAffected']     : 0;
 	$familiesWithKids = (isset($familyQueryData['familiesWithKids'])) ? $familyQueryData['familiesWithKids']  : 0;
@@ -75,10 +75,11 @@
           JOIN item
             ON item.itemID = invD.itemID
           JOIN category c
-            ON c.categoryID = item.categoryID
+            ON c.categoryID = item.reportID
           WHERE inv.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
           AND inv.status = " . GetCompletedStatus() . "
-          GROUP BY item.itemName";
+          GROUP BY item.itemName
+          ORDER BY c.name";
   //die($sql);
   $results = runQuery($conn, $sql);
 
@@ -105,9 +106,6 @@
   I'd also like to see monthly how many cans of kernal corn, string beans, peas, carrots, pasta sauce and peanut butter (all sizes collectively), oh and breakfast cereal (separate sweet and non-sweetened). This will help us with inventory management and ordering.
 
   */
-  // Close the database connection, we're done with it
-  closeDB($conn);
-
 
   	// ****************************************************************
 	// * Output block
@@ -132,11 +130,11 @@
   <div id="OverviewContent" class="tabcontent defaultTab">
     <table class="table">
       <tr>
-        <th>Number of Families</th>
-        <td><?=$totalFamilies?></td>
+        <th>Number of Appointments</th>
+        <td><?=$totalAppts?></td>
       </tr>
       <tr>
-        <th>Number of Families with Children</th>
+        <th>Number of Appointments with Children</th>
         <td><?=$familiesWithKids?></td>
       </tr>
       <tr>
@@ -153,16 +151,16 @@
       </tr>
 
       <tr>
-        <th>Average Order Cash Value per Family</th>
-        <?php if ( $totalFamilies != 0 ) { ?>
-          <td><?=formatCurrency(round(($donationWorth / $totalFamilies), 2, PHP_ROUND_HALF_UP))?></td>
+        <th>Average Order Cash Value per Appointment</th>
+        <?php if ( $totalAppts != 0 ) { ?>
+          <td><?=formatCurrency(round(($donationWorth / $totalAppts), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
           <td><?=formatCurrency(0)?></td>
         <?php } ?>
       </tr>
       <tr>
         <th>Average Order Cash Value per Person</th>
-        <?php if ( $totalFamilies != 0 ) { ?>
+        <?php if ( $totalAppts != 0 ) { ?>
           <td><?=formatCurrency(round(($donationWorth / $totalAffected), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
           <td><?=formatCurrency(0)?></td>
@@ -176,9 +174,8 @@
   </div>
 
   <div id="BreakdownContent" class="tabcontent">
-    <div id="breakdownChartHolder" style="height: 900px"></div>
-    <br><br><br><br><br>
-    <div id="itemBreakdownTable">
+    <div id="breakdownChartHolder" style="height: 1200px"></div>
+    <div style="padding-top:200px" id="itemBreakdownTable">
       <table class="table">
         <thead>
           <tr>
@@ -206,10 +203,22 @@
       </table>
     </div>
   </div>
+
+  <?php
+    // Build up individual client data
+    // number of distinct families / people
+    // number of distinct children
+    // Largets order worth
+    // smallest order worth
+  ?>
   <div id="ClientInfoContent" class="tabcontent">TO COME</div>
   <div id="ReallocationContent" class="tabcontent">TO COME</div>
 
 
+<?php
+  // Close the database connection, we're done with it
+  closeDB($conn);
+?>
   <script type="text/javascript">
   Highcharts.chart('breakdownChartHolder', {
     chart: {
@@ -246,6 +255,7 @@
     },
     plotOptions: {
         series: {
+            pointWidth: 20,
             borderWidth: 0,
             dataLabels: {
                 enabled: true,
@@ -274,10 +284,10 @@
             ]
         }
     ],
-    
+
     "drilldown": {
         "series": [
-            
+
                 <?php foreach ($itemInfo as $catID => $iinfo) { ?>
                 {
                   "name" : "<?=$catInfo[$catID]['name']?>",
@@ -292,8 +302,8 @@
                   ]
                 },
               <?php } ?>
-              
-            
+
+
         ]
     }
   });
