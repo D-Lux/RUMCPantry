@@ -48,8 +48,8 @@ if(isset($_POST['createItem'])) {
   }
 
 
-    $sql = "INSERT INTO item (itemName, displayName, price, isDeleted, small, medium, large, categoryID, aisle, rack, shelf)
-    VALUES ('$itemName', '$displayName', '$price', 0, '$small', '$medium', '$large', '$categoryID', '$aisle', '$rack', '$shelf')";
+    $sql = "INSERT INTO item (itemName, displayName, price, isDeleted, small, medium, large, categoryID, reportID, aisle, rack, shelf)
+    VALUES ('$itemName', '$displayName', '$price', 0, '$small', '$medium', '$large', '$categoryID', '$categoryID', '$aisle', '$rack', '$shelf')";
 
   if (queryDB($conn, $sql) === TRUE) {
 		closeDB($conn);
@@ -93,6 +93,7 @@ elseif (isset($_GET['DeleteItem'])) {
 elseif (isset($_POST['updateItemIndividual'])) {
   $itemID   	 = $_POST['itemID'];
   $category 	 = fixInput($_POST['category']);
+  $reportCat   = fixInput($_POST['reportCategory']);
   $itemName 	 = fixInput($_POST['itemName']);
   $displayName = fixInput($_POST['displayName']);
   $price 		   = $_POST['price'];
@@ -115,7 +116,7 @@ elseif (isset($_POST['updateItemIndividual'])) {
 
   //check to see if category exists, if not create it.
   $result = runQueryForOne($conn, "SELECT categoryID FROM category WHERE name = '{$category}' LIMIT 1");
-  
+
 	if($result === false) {
     $sql = "SELECT Max(formOrder) as M FROM category";
     $nextOrder = runQueryForOne($conn, $sql)['M'] + 1;
@@ -142,11 +143,10 @@ elseif (isset($_POST['updateItemIndividual'])) {
 
    // Update our item appropriately
 	$sql = "UPDATE item
-			SET categoryID  = " . $categoryID . ",  itemName = '" . $itemName . "',
-				displayName = '" . $displayName . "', price = " . $price . ",
-			  small = " . $small . ", medium = " . $medium . ",
-				large = " . $large . ", aisle = " . $aisle . ", rack = " . $rack . ", shelf = " . $shelf . "
-			WHERE itemID = " . $itemID;
+			SET reportID = {$reportCat}, categoryID = {$categoryID},  itemName = '{$itemName}',
+				displayName = '{$displayName}', price = {$price}, small = {$small}, medium = {$medium},
+				large = {$large}, aisle = {$aisle}, rack = {$rack}, shelf = {$shelf}
+			WHERE itemID = {$itemID}";
 
     if (queryDB($conn, $sql) === TRUE) {
 		createCookie("itemUpdated", 1, 30);
