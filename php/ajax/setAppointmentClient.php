@@ -6,13 +6,15 @@
 	if (isset($_GET['activate'])) {
 		$conn = connectDB();
 		if ($conn->connect_error) {
-			die("Connection failed: " . $conn->connect_error);
+      $returnArr['msg'] = "Connection failed: " . $conn->connect_error;
+      $returnArr['err'] = 1;
+      die(json_encode($returnArr));
 		}
 		$statusSql = "SELECT status
 					  FROM invoice
 					  WHERE invoiceID=" . $_GET['invoiceID'];
-		$statusQuery = queryDB($conn, $statusSql);
-		$invoiceStatus = sqlFetch($statusQuery);
+
+		$invoiceStatus = runQueryForOne($conn, $statusSql);
 
 		// Swap enabling the invoice, only if it is appropriate to do either
 		$newStatus = -1;
@@ -46,18 +48,39 @@
 		$clientID = intval($_GET['client']);
 		$invoiceID = intval($_GET['invoice']);
     $availClient = getAvailableClient();
-    
-    $newStatus = ($availClient == $clientID) ? GetAvailableStatus() : GetAssignedStatus();
 
-    
+    $setAvail = $availClient == $clientID;
+    $newStatus = $setAvail ? GetAvailableStatus() : GetAssignedStatus();
+
+    $conn = connectDB();
+    if ($conn->connect_error) {
+      $returnArr['msg'] = "<i style='color:red;' class='fa fa-exclamation-triangle'></i>  Database Connection failed: " . $conn->connect_error;
+      $returnArr['err'] = 1;
+      die(json_encode($returnArr));
+    }
+
+
+    // Make sure this client doesn't already have an appointment this month
+    if (!$setAvail) {
+      $apptYM = date("Ym", strtotime($_GET['date']));
+      $sql = "SELECT COUNT(*) as visitNum
+              FROM invoice
+              WHERE DATE_FORMAT(visitDate, '%Y%m') = '{$apptYM}'
+              AND clientID = {$clientID}
+              AND status NOT IN (" . GetCanceledStatus() . "," . GetNoShowStatus() . "," . GetBadDocumentationStatus() . ") ";
+      if (runQueryForOne($conn, $sql)['visitNum'] > 0) {
+        closeDB($conn);
+        $returnArr['msg'] = "<i style='color:red;' class='fa fa-exclamation-triangle'></i>  Client already has an appointment this month.";
+        $returnArr['err'] = 1;
+        die(json_encode($returnArr));
+      }
+    }
+
 		$sql = "UPDATE invoice
 						SET clientID=" . $clientID . ",
 						status=" . $newStatus . "
             WHERE invoiceID=" . $invoiceID;
-    
-    // TODO: Make sure this client doesn't have another appointment this month
-    // TODO: Make sure no other clients on this day have the same address
-    $conn = connectDB();
+
 		if (queryDB($conn, $sql)) {
       $sql = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber
               FROM client
@@ -69,11 +92,10 @@
       $returnArr['status']     = visitStatusDecoder($newStatus);
       $returnArr['err']        = (int)0;
       die(json_encode($returnArr));
-			// Do updates
 		}
 		else {
       closeDB($conn);
-      $returnArr['msg'] = "Failed to set appointment.";
+      $returnArr['msg'] = "<i style='color:red;' class='fa fa-exclamation-triangle'></i> Failed to set appointment.";
       $returnArr['err'] = 1;
       die(json_encode($returnArr));
     }
