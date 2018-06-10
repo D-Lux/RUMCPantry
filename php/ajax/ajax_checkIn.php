@@ -75,13 +75,19 @@
 			$dataBlock['waitCount']++;
       $dataBlock['wait'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) . " - " . ($result['status'] % 100 + 1) .
-								 "</td><td><button id='W" . $result['invoiceID'] . "' type='button' class='btn_Action'><i class='fa fa-shopping-cart'> To Produce</i></button></td></tr>";
+								 "</td><td>
+                  <button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Reprint</button>&nbsp;&nbsp;&nbsp;
+                  <button id='W" . $result['invoiceID'] . "' type='button' class='btn_Action'><i class='fa fa-shopping-cart'> To Produce</i></button>
+                  </td></tr>";
 		}
 		if ($result['status'] == GetCompletedStatus()) {
 			$dataBlock['completedCount']++;
       $dataBlock['completed'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) .
-								 "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-check '> No Action</i></button></td></tr>";
+								 "</td><td>
+                  <button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Reprint</button>
+                  <button type='button' class='btn_Action' disabled><i class='fa fa-check '> No Action</i></button>
+                  </td></tr>";
 		}
 	}
 
