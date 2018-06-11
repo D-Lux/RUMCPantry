@@ -4,7 +4,7 @@
   include '../header.php';
   
   $sql = "SELECT birthDate, clientID
-          FROM familyMember
+          FROM familymember
           WHERE isDeleted = 0;";
   
   $results = rawQuery($sql);
