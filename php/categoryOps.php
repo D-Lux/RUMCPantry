@@ -4,7 +4,7 @@ session_start();
 include('utilities.php');
 
 if (isset($_POST['createCategory'])) {
-    $name 	= $_POST['category'];
+    $name 	= fixInput($_POST['category']);
     $small 	= $_POST['small']; 
     $medium = $_POST['medium'];
     $large 	= $_POST['large'];
@@ -49,7 +49,7 @@ if (isset($_POST['createCategory'])) {
 }
 elseif (isset($_POST['UpdateCategoryIndividual'])) {
     $categoryID = $_POST['categoryID'];
-    $name 	 	  = $_POST['category'];
+    $name 	 	  = fixInput($_POST['category']);
     $small 		  = $_POST['small']; 
     $medium 	  = $_POST['medium'];
     $large 		  = $_POST['large'];
