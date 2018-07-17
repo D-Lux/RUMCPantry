@@ -108,7 +108,7 @@ function connectHomeDB() {
 		return( new mysqli($servername, $username, $password, $dbname) );
 	}
 }
-function connectDB() {
+function connectDB($useLocal = false) {
   	//Set up server connection
 	 //$servername = "192.168.0.23";
 	 //$username   = "root";
@@ -120,7 +120,7 @@ function connectDB() {
 	$password   = "Luke3:11eggsontop";
 	$dbname     = "roselleu_foodpantry";
 
-  if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 ) {
+  if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 || $useLocal) {
     $servername = "127.0.0.1";
      $username   = "root";
      $password   = "";
@@ -196,6 +196,19 @@ function DBTransactionRollback($conn) {
 
 function DBTransactionCommit($conn) {
   $conn->commit();
+}
+
+function rawQuery($sql) {
+  $conn = connectDB();
+  $results = runQuery($conn, $sql);
+  closeDB($conn);
+  return $results;
+}
+
+function rawUpdate($sql) {
+  $conn = connectDB();
+  queryDB($conn, $sql);
+  closeDB($conn);
 }
 
 // *****************************************************************
@@ -583,6 +596,7 @@ define("FAMILY_SIZE_SM_HIGH", 2);
 define("FAMILY_SIZE_MED_LOW", 3);
 define("FAMILY_SIZE_MED_HIGH", 4);
 define("FAMILY_SIZE_HIGH_THRESHOLD", 5);
+define("ADULT_AGE_CUTOFF", 18);
 
 function runFamilyDecoder($famSize, $valS, $valM, $valL){
 	switch(true) {
@@ -600,6 +614,15 @@ function familySizeDecoder($famSize){
 
 function orderFormNameTagLength($familySize) {
 	return (runFamilyDecoder($familySize, 2, 3, 3));
+}
+
+function isAdultBirthdate($birthdate) {
+  $from = new DateTime($birthdate);
+  $to   = new DateTime('today');
+  return ($from->diff($to)->y) > ADULT_AGE_CUTOFF;
+}
+
+function isKidBirthdate($birthdate) {
 }
 
 // ***********************************************************

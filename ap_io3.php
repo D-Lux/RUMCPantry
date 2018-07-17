@@ -22,7 +22,8 @@ input[type="text"] {
 
   $badLoad = false;
 
-  $sql = "SELECT item.isDeleted, itemID, itemName, displayName, price, item.small, item.medium, item.large, aisle, rack, shelf, name
+  $sql = "SELECT item.isDeleted, itemID, itemName, displayName, price, item.small, item.medium, item.large,
+                  aisle, rack, shelf, category.name, reportID
           FROM item
           JOIN category
             ON category.categoryID = item.categoryID
@@ -40,11 +41,21 @@ input[type="text"] {
     $small 	     = $result["small"];
     $medium      = $result["medium"];
     $large       = $result["large"];
-    $aisle       = $result["aisle"];;
-    $rack        = $result["rack"];;
-    $shelf       = $result["shelf"];;
+    $aisle       = $result["aisle"];
+    $rack        = $result["rack"];
+    $shelf       = $result["shelf"];
     $categoryName = $result["name"];
+    $reportID    = $result['reportID'];
   }
+
+  $sql = "SELECT categoryID, name FROM category WHERE isDeleted =0 ORDER BY name";
+  $results = runQuery($conn, $sql);
+  $reportOptions = "<select class='chosen-select' name='reportCategory'>";
+  foreach($results as $result) {
+    $selected = $reportID == $result['categoryID'] ? " selected " : "";
+    $reportOptions .= "<option value=" . $result['categoryID'] . " " . $selected . ">" . $result['name'] . "</option>";
+  }
+  $reportOptions .= "</select>";
 
 	closeDB($conn);
 ?>
@@ -58,16 +69,22 @@ input[type="text"] {
 	<form name="addItem" action="php/itemOps.php" onSubmit="return validateItemAdd()" method="post">
     <input type="hidden" name="itemID" value="<?= $itemID ?>">
     <div class="row">
-      <div class="col-sm-4"><label class="required categoryField">Category: </label></div>
+      <div class="col-sm-3"><label class="required categoryField">Category: </label></div>
       <div class="col-sm-8">
         <?php
           createDatalist_i($categoryName,"categories","category","name","category", false);
         ?>
       </div>
     </div>
+    <div class="row">
+      <div class="col-sm-3"><label class="required categoryField">Report Category: </label></div>
+      <div class="col-sm-8">
+        <?=$reportOptions?>
+      </div>
+    </div>
 
     <div class="row">
-      <div class="col-sm-4"><label class="required itemField">Item Name: </label></div>
+      <div class="col-sm-3"><label class="required itemField">Item Name: </label></div>
       <div class="col-sm-8">
         <?php
           createDatalist_i($itemName,"itemNames","item","itemName","itemName", true);
@@ -75,7 +92,7 @@ input[type="text"] {
       </div>
     </div>
     <div class="row">
-      <div class="col-sm-4"><label class="required displayField">Display Name: </label></div>
+      <div class="col-sm-3"><label class="required displayField">Display Name: </label></div>
       <div class="col-sm-8">
         <?php
           createDatalist_i($displayName,"displayNames","item","displayName","displayName", true);
@@ -126,7 +143,7 @@ input[type="text"] {
     </div>
     <br>
     <div class="row">
-      <div class="col-sm-4">Price:</div>
+      <div class="col-sm-3">Price:</div>
       <div class="col-sm-8">
         <span>$</span>
         <input  style="width: 8em;" type="number" min="0" value="<?= $price ?>" step="0.01" name="price">
@@ -159,3 +176,6 @@ input[type="text"] {
 
 <?php include 'php/footer.php'; ?>
 <script src="js/createItem.js"></script>
+<script type="text/javascript">
+  $(".chosen-select").chosen();
+</script>

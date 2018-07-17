@@ -74,13 +74,15 @@
 		//                 [TIME]
 		// Name | Family Size | Phone Number | Status | Remove
     ?>
-    <table id="apptTable">
+    <div style="display:none;" class="hoverMsg hoverSuccess" id="apptMsgs"></div>
+    <table id="apptTable" style="width:100%;">
       <thead>
         <tr>
           <th>Client Name</th>
           <th>Family Size</th>
           <th>Phone Number</th>
           <th>Status</th>
+          <th colspan=2>Actions</th>
         </tr>
       </thead>
 
@@ -93,7 +95,7 @@
       // If we're looking at a new time slot, put in a header row
       if ($timeSlot != $invoice['visitTime']) {
         $timeSlot = $invoice['visitTime'];
-        echo "<tr><th colspan='4'>" . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
+        echo "<tr><th colspan='6'>" . date('F jS', strtotime($_GET['date'])) . " - " . date('h:i a', strtotime($invoice['visitTime'])) . "</th></tr>";
       }
 
       // Start the new row
@@ -165,25 +167,36 @@
     }
 	?>
 
+
+
 <?php include 'php/footer.php'; ?>
 
 <script src="js/apptOps.js"></script>
 <script type="text/javascript">
   $(".chosen-select").chosen();
 
-  $("#apptTable").on("change", "select", function(e) {
+  var savedDropdown = 0;
+  $("#apptTable").on('chosen:showing_dropdown', "select", function() {
+    savedDropdown = $(this).val();
+    console.log("saving " + savedDropdown + "\n");
+  }).on("change", "select", function(e) {
     var invoiceID = $(this).attr("id").substring(6);
     var clientID  = $(this).val();
-    var Params = "?invoice=" + invoiceID + "&client=" + clientID;
+    var Params = "?invoice=" + invoiceID + "&client=" + clientID + "&date=<?=$_GET['date']?>";
+    var thisObj = $(this);
     $.ajax({
       url      : 'php/ajax/setAppointmentClient.php' + Params,
       dataType : 'json',
       success  : function(data) {
-        //$("#loginMsgs").stop(true,true).hide().html(data.msg).show(250).delay(5000).hide(800);
         if (data.err == 0) {
           $("#famSize" + invoiceID).html(data.familySize);
           $("#phoneNo" + invoiceID).html(data.phone);
           $("#status" + invoiceID).html(data.status);
+        }
+        else {
+          $("#apptMsgs").stop(true,true).hide().html(data.msg).show(250).delay(5000).hide(800);
+          console.log("setting this dropdown to " + savedDropdown);
+          thisObj.val(savedDropdown).trigger("chosen:updated");
         }
       },
     });

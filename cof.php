@@ -107,7 +107,8 @@
 
 				// Start the form and add a hidden field for client info (If we're not in viewmode)
 				if (!$ViewMode) {
-					echo "<form method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
+					echo "<form id='iClientOrderForm' method='post' action='php/orderOps.php' name='CreateInvoiceDescriptions'>";
+          echo "<input type='hidden' value=1 name='CreateInvoiceDescriptions'>";
 					echo "<input type='hidden' value=" . $_POST['clientID'] . " name='clientID'>";
 					echo "<input type='hidden' value=" . $_POST['invoiceID'] . " name='invoiceID'>";
 					echo "<input type='hidden' value=" . $walkIn . " name='walkInStatus'>";
@@ -277,7 +278,8 @@
           <div class="row" id="disclaimerHolder">
             <div class="col-sm-6 text-right"><strong>If something is not in your bag, that means we are out of that item. There are no exchanges. I have read this and understand.</strong></div>
             <div class="col-sm-6 text-left"><input type="checkbox" id="disclaimerConfirm"><label for="disclaimerConfirm"></label></div>
-          </div>  
+          </div>
+          <div class="text-center" id="iSubmitError"></div>
 					<div class='text-center'>
             <button type='submit' class='btn-nav' name='CreateInvoiceDescriptions' id="submitOrderBtn" disabled>Submit Order</button>
           </div>
@@ -292,4 +294,32 @@
   $("#disclaimerConfirm").on("change", function(e) {
     $("#submitOrderBtn").prop("disabled",!$("#disclaimerConfirm").is(":checked"));
   });
+  
+  $("#iClientOrderForm").on("submit", function(e) {
+    $("#submitOrderBtn").prop("disabled", true);
+    e.preventDefault();
+    $.ajax({
+      url: "php/orderOps.php",
+      dataType: "html",
+      data: $("#iClientOrderForm").serialize(),
+      method: "POST",
+      success: function(response) {
+        if (response == "") {
+          window.location.assign("<?=$basePath?>cap.php?clientID=<?=$_POST['clientID']?>");
+        }
+        else {
+          $("#iSubmitError").html("<strong><p style='color:red;font-size:1.4em;'>" + response + "</p></strong>");
+        }
+      },
+      error: function(jqXHR, textStatus, errorThrown) {
+        $("#iSubmitError").html("<strong><p style='color:red;font-size:1.4em;'>There was an error connecting to the network. " +
+          "Please wait a moment and try again. If the problem persists, please check with one of the volunteers.</p></strong>");
+      },
+      complete: function() {
+        $("#submitOrderBtn").prop("disabled", false);
+      },
+    });
+  });
+  
+  
 </script>

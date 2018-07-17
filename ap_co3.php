@@ -51,10 +51,12 @@
   $ethnicity       = $clientInfo['ethnicity'];
   
   
-  $ethnicityOptions = runQuery($conn, " SELECT ethnicity_id, ethnicity_name 
-                                        FROM data_ethnicity WHERE hidden=0 OR ethnicity_id = {$ethnicity}");
-  $vetOptions = runQuery($conn, "SELECT vetStatus_id, vetStatus_name FROM data_vetstatus
-                                        WHERE hidden=0 OR vetStatus_id = {$vetStatus}");
+  $ethnicityQuery = "SELECT ethnicity_id, ethnicity_name FROM data_ethnicity WHERE hidden=0" .
+                    ($ethnicity==null ? "" : " OR ethnicity_id = {$ethnicity}") ;
+  $ethnicityOptions = runQuery($conn, $ethnicityQuery);
+  $vetQuery = "SELECT vetStatus_id, vetStatus_name FROM data_vetstatus WHERE hidden=0" .
+                    ($vetStatus==null ? "" : " OR vetStatus_id = {$vetStatus}") ;
+  $vetOptions = runQuery($conn, $vetQuery);
 
   // Close the connection as we've gotten all the information we should need
   closeDB($conn);

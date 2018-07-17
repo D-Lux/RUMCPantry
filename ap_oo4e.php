@@ -16,19 +16,31 @@ th {
 
 	<div class="body-content">
 	<?php
+    $conn = connectDB();
+    $invoiceID = ((isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0);
+    // Get Vars: invoiceID | name | visitTime | familySize
 
-	// Get Vars: invoiceID | name | visitTime | familySize
+    $sql = "SELECT familymember.firstName, familymember.lastName, invoice.visitTime, invoice.status,
+                  (numOfKids + numOfAdults) as familySize, client.notes
+          FROM invoice
+          JOIN client
+          ON invoice.clientID=client.clientID
+          JOIN familymember
+          ON client.clientID=familymember.clientID
+          WHERE invoice.invoiceID = " . $invoiceID . "
+          AND familymember.isHeadOfHousehold = true";
 
-	$invoiceID = ((isset($_GET['invoiceID'])) ? $_GET['invoiceID'] : 0);
-	$name = ((isset($_GET['name'])) ? $_GET['name'] : null);
-	$visitTime = ((isset($_GET['visitTime'])) ? $_GET['visitTime'] : 0);
-	$familySize = ((isset($_GET['familySize'])) ? $_GET['familySize'] : 0);
-
+    $results    = runQueryForOne($conn, $sql);
+    $name       = $results['firstName'] . " " . $results['lastName'];
+    $printName	= $results['lastName'];
+    $visitTime  = $results['visitTime'];
+    $familySize = $results['familySize'];
+    $notes      = $results['notes'];
+  
 	// Create our query to get the invoice data
 	if ( $name != null ) {
 
 		//Connect to database
-		$conn = connectDB();
 		if ($conn->connect_error) {
 			die("Connection failed: " . $conn->connect_error);
 		}
@@ -47,19 +59,16 @@ th {
 		$invtotal = $row['Itotal'];
 
 		//Get all of the items on the invoice
-		$sql = "SELECT I.name as iName, I.quantity as iQty, I.rack as rack, I.shelf as shelf, I.aisle as aisle, I.cName, I.invoiceDescID
-				FROM invoice
-				JOIN (SELECT item.itemName as name, quantity, invoicedescription.invoiceID as IinvoiceID, category.name as cName,
-						rack, shelf, aisle, invoiceDescID
-					  FROM invoicedescription
-					  JOIN item
-					  ON item.itemID=invoicedescription.itemID
-					  JOIN category
-					  ON item.categoryID=category.categoryID
-					  WHERE invoicedescription.invoiceID=" . $invoiceID . ") as I
-				ON I.IinvoiceID=invoice.invoiceID
-				WHERE invoiceID=" . $invoiceID . "
-				ORDER BY cName, aisle, rack, shelf, iName";
+		$sql = "SELECT item.itemname as iName, invoicedescription.quantity as iQty, item.rack as rack, item.shelf as shelf, item.aisle as aisle, category.name as cName 
+            FROM invoice
+            JOIN invoicedescription
+              ON invoicedescription.invoiceID = invoice.invoiceID
+            JOIN item 
+              ON item.itemID = invoicedescription.itemID
+            JOIN category 
+              ON category.categoryID = item.categoryID 
+            WHERE invoice.invoiceID = {$invoiceID}
+            ORDER BY aisle, rack, shelf, formOrder, iName";
 		$invoiceData = queryDB($conn, $sql);
 
 		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
@@ -74,55 +83,73 @@ th {
     closeDB($conn);
     ?>
     <button id="btn-print" onClick="window.print()">Print</button>
-    <table class="report-container tabcontent" border="0" cellspacing="0" cellpadding="0">
-        <thead class="report-header">
-            <tr><th>
-                <table class="table">
-                  <thead><tr>
-                    <th>Client</th>
-                    <th>Appointment Date</th>
-                    <th>Family Size</th>
-                    <th>Invoice Total</th>
-                  </tr></thead>
-                  <tbody>
-                    <tr>
-                      <td><?=$name?></td>
-                      <td><?=date("F dS, y", strtotime($dateInfo['visitDate']))?> - <?=returnTime($visitTime)?></td>
-                      <td><?=$familySize?> (<?=familySizeDecoder($familySize)?>)</td>
-                      <td>$<?=number_format($invtotal,2)?></td>
-                    </tr>
-                    <tr></tr>
-                  </tbody>
-                </table>
-            </th></tr>
-        </thead>
-        
-        <tbody class="report-content">
-            <tr><td>
-                <table id='orderTable'>
-                    <tr>
-                        <th>Category</th>
-                        <th>Item</th>
-                        <th>Quantity</th>
-                        <th>Aisle</th>
-                        <th>Rack</th>
-                        <th>Shelf</th>
-                        <th class="hide_for_print"></th>
-                    </tr>
-                    <?php
-            		// Loop through our data and spit out the data into our table
-            		while( $invoice = sqlFetch($invoiceData) ) {
-            			echo "<tr><td>" . $invoice['cName'] . "</td>";
-            			echo "<td>" . $invoice['iName'] . "</td>";
-            			echo "<td>" . $invoice['iQty'] . "</td>";
-            			echo "<td>" . aisleDecoder($invoice['aisle']) . "</td><td>" . rackDecoder($invoice['rack']) . "</td><td>" . shelfDecoder($invoice['shelf']) . "</td>";
-        
-                    echo "<td class='hide_for_print'><button type='submit' class='btn-icon' name='RemoveItem' ";
-                    echo "onclick='AJAX_RemoveFromInvoice(this)'>";
-                    echo "<i class='fa fa-trash'></i></button></td></tr>";
-            		} ?>
+    <table class='tabcontent'>
+      <thead>
+        <tr>
+          <th>
+            <table class="table" style="padding:10px; font-size:1.4em;">
+              <thead>
+                <tr>
+                  <th>Client</th>
+                  <th>Appointment Date</th>
+                  <th>Family Size</th>
+                  <th>Invoice Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><?=$name?></td>
+                  <td><?=date("F dS, y", strtotime($dateInfo['visitDate']))?> - <?=returnTime($visitTime)?></td>
+                  <td style="font-size:1.2em;"><?=$familySize?> (<?=familySizeDecoder($familySize)?>)</td>
+                  <td>$<?=number_format($invtotal,2)?></td>
+                </tr>
+                <?php if (!empty($notes)) { ?>
+                  <tr>
+                    <td colspan=5>
+                      <?=$notes?>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
+            </table>
+          </th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>
+            <table id='orderTable' style="padding:10px; font-size:1.4em;">
+              <thead>
+                <tr>
+                  <th>Category</th>
+                  <th>Item</th>
+                  <th>Quantity</th>
+                  <th>Aisle</th>
+                  <th>Rack</th>
+                  <th>Shelf</th>
+                  <th class="hide_for_print"></th>
+                </tr>
+              </thead>
+              <!-- Loop through our data and spit out the data into our table -->
+              <tbody>
+                <?php while( $invoice = sqlFetch($invoiceData) ) { ?>
+                  <tr>
+                    <td><?=$invoice['cName']?></td>
+                    <td><?=$invoice['iName']?></td>
+                    <td><?=$invoice['iQty']?></td>
+                    <td><?=aisleDecoder($invoice['aisle'])?></td>
+                    <td><?=rackDecoder($invoice['rack'])?></td>
+                    <td><?=shelfDecoder($invoice['shelf'])?></td>
+                    <td class='hide_for_print'>
+                      <button type='submit' class='btn-icon' name='RemoveItem' onclick='AJAX_RemoveFromInvoice(this)'>
+                      <i class='fa fa-trash'></i></button>
+                    </td>
+                  </tr>
+                <?php } ?>
+              </tbody>
     		    </table>
-    		</td></tr>
+          </td>
+        </tr>
     	</tbody>
     </table>	
 	<br>
@@ -141,15 +168,13 @@ th {
 	echo "<input class='btn-nav btn-nav-sm' type='submit' name='addItemToOrder' value='Add to Invoice'>";
 	echo "</form>";
 	echo "</div>"; // /hide_for_print
-
-
-	}
-	else {
-		echo "Something went wrong, please go back and try again.";
-	}
-    ?>
+}
+else {
+  echo "Something went wrong, please go back and try again.";
+}
+?>
  
-    <div id='ErrorLog'></div>
+<div id='ErrorLog'></div>
 
 <?php include 'php/footer.php'; ?>
 <script src="js/orderFormOps.js"></script>
