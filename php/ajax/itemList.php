@@ -27,9 +27,9 @@ if ($conn->connect_error) {
 // ***********************
 // * Build our column list
 // List all of the columns we want
-$columns = array("itemID", "itemName", "category.name as cName", "category.categoryID", "aisle", "rack", "shelf");
+$columns = array("itemID", "itemName", "displayName", "category.name as cName", "category.categoryID", "aisle", "rack", "shelf");
     
-$searchableColumns = array("itemName", "category.name", "aisle", "rack", "shelf");
+$searchableColumns = array("itemName",  "displayName", "category.name", "aisle", "rack", "shelf");
     
 // *********************************
 // * Generate our user search query 
@@ -112,11 +112,12 @@ for ($i = $_GET['start']; $i < ($_GET['start'] + $showTo); $i++) {
 		
 	$row[0] = $editLink;
 	$row[1] = $results[$i]['itemName'];
-	$row[2] = $results[$i]['cName'];
-	$row[3] = aisleDecoder($results[$i]['aisle']);
-	$row[4] = rackDecoder($results[$i]['rack']);
-	$row[5] = shelfDecoder($results[$i]['shelf']);
-	$row[6] = $actionLink;
+	$row[2] = $results[$i]['displayName'];
+	$row[3] = $results[$i]['cName'];
+	$row[4] = aisleDecoder($results[$i]['aisle']);
+	$row[5] = rackDecoder($results[$i]['rack']);
+	$row[6] = shelfDecoder($results[$i]['shelf']);
+	$row[7] = $actionLink;
 		
 	$out[] = $row;
 }	

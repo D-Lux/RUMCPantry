@@ -1,13 +1,13 @@
 <?php
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
-
 if (!isset($_SESSION['perms'])) {
   $_SESSION['perms'] = 0;
 }
 $basePath = "/";
-
-if (strpos($_SERVER['REQUEST_URI'], "RUMCPantry")) {
-  $basePath = "/RUMCPantry/";
+if (isset($_SERVER['REQUEST_URI'])) {
+    if (strpos($_SERVER['REQUEST_URI'], "RUMCPantry")) {
+        $basePath = "/RUMCPantry/";
+    }
 }
 
 // **********************************************
@@ -16,23 +16,19 @@ function redirectPage($address) {
     echo "<script type='text/javascript'>window.top.location='" . $GLOBALS['basePath'] . $address . "';</script>";
     die();
 }
-
 // **********************************************
 // * Debug functions
-
 // TODO: Find all of these and replace with proper error messages for users
 function echoDivWithColor($message, $color){
 	echo  '<div>';
   echo $message;
   echo  '</div>';
 }
-
 function debugEchoPOST() {
 	echo '<b>POST:</b><pre>';
 	var_dump($_POST);
 	echo '</pre>';
 }
-
 function debugEchoGET() {
 	echo '<b>GET:</b><pre>';
 	var_dump($_GET);
@@ -46,8 +42,6 @@ function debugEchoVar($v) {
 function debugEchoMsg($msg) {
 	echo '<pre>' . $msg . '</pre>';
 }
-
-
 function decodeJsonError() {
   switch (json_last_error()) {
     case JSON_ERROR_NONE:
@@ -76,11 +70,8 @@ function decodeJsonError() {
 // ************************************************************
 // ** Setting default timezone
 date_default_timezone_set('America/Chicago');
-
-
 // ***********************************************************
 // * Database Access Functions
-
 // Creating a global connection function so that if we ever need to change the database information
 // it's all in one place
 $connectionActive = false;
@@ -89,7 +80,6 @@ function connectTestDB() {
   $username   = "roselleu_fpadmin";
   $password   = "Luke3:11eggsontop";
   $dbname     = "roselleu_testpantry";
-
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
 		$GLOBALS['connectionActive'] = true;
@@ -101,40 +91,36 @@ function connectHomeDB() {
   $username   = "root";
   $password   = "";
   $dbname     = "foodpantry";
-
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
 		$GLOBALS['connectionActive'] = true;
 		return( new mysqli($servername, $username, $password, $dbname) );
 	}
 }
-function connectDB($useLocal = false) {
+function connectDB() {
   	//Set up server connection
 	 //$servername = "192.168.0.23";
 	 //$username   = "root";
 	 //$password   = "lgh598usa15";
 	 //$dbname     = "foodpantry";
-
   $servername = "server902.webhostingpad.com";
 	$username   = "roselleu_fpadmin";
 	$password   = "Luke3:11eggsontop";
 	$dbname     = "roselleu_foodpantry";
-
-  if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2 || $useLocal) {
-    $servername = "127.0.0.1";
-     $username   = "root";
-     $password   = "";
-     $dbname     = "foodpantry";
-   }
-  if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) {
-     $servername = "server902.webhostingpad.com";
-     $username   = "roselleu_fpadmin";
-     $password   = "Luke3:11eggsontop";
-     $dbname     = "roselleu_testpantry";
-  }
-
-
-
+ if (ISSET($_SESSION['perms'])){
+      if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2) {
+        $servername = "127.0.0.1";
+         $username   = "root";
+         $password   = "";
+         $dbname     = "foodpantry";
+       }
+      if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) {
+         $servername = "server902.webhostingpad.com";
+         $username   = "roselleu_fpadmin";
+         $password   = "Luke3:11eggsontop";
+         $dbname     = "roselleu_testpantry";
+      }
+ }
 	// Create and check connection
 	if (!$GLOBALS['connectionActive']){
 		$GLOBALS['connectionActive'] = true;
@@ -169,11 +155,9 @@ function returnAssocArray($queryResult) {
   }
   return false;
 }
-
 function runQuery($conn, $query) {
   return returnAssocArray(queryDB($conn, $query));
 }
-
 function runQueryForOne($conn, $query) {
   $queryResult = returnAssocArray(queryDB($conn, $query));
   if (is_array($queryResult)) {
@@ -181,39 +165,37 @@ function runQueryForOne($conn, $query) {
   }
   return false;
 }
-
 function sqlError($conn) {
   return ( mysqli_error($conn) );
 }
-
 function DBTransactionStart($conn){
   $conn->begin_transaction(); //MYSQLI_TRANS_START_READ_WRITE
 }
-
 function DBTransactionRollback($conn) {
   $conn->rollback();
 }
-
 function DBTransactionCommit($conn) {
   $conn->commit();
 }
-
 function rawQuery($sql) {
   $conn = connectDB();
   $results = runQuery($conn, $sql);
   closeDB($conn);
   return $results;
 }
-
 function rawUpdate($sql) {
   $conn = connectDB();
   queryDB($conn, $sql);
   closeDB($conn);
 }
-
+function storeCronEvent($conn, $job, $result) {
+  $sql = "INSERT INTO cronjob_results (cronjob_name, cronjob_date, cronjob_result) VALUES ('" . $job . "',
+                              '" . date('Y-m-d') . "',
+                              '" . $result . "')";
+  queryDB($conn, $sql);
+}
 // *****************************************************************
 // * Display and Query functions
-
 // Fix input to prevent injection errors
 function fixInput($data) {
 	$data = trim($data);
@@ -223,7 +205,6 @@ function fixInput($data) {
 	$data = str_replace ( "'", "''", $data);
 	return $data;
 }
-
 // This is for data lists to display names of objects with a single quote in the name
 function displaySingleQuote($data) {
 	return str_replace("'", "&#39", $data);
@@ -231,12 +212,10 @@ function displaySingleQuote($data) {
 function revertSingleQuote($data) {
 	return str_replace("'", "''", $data);
 }
-
 // Made this function to turn data into a single-quote string for storing and viewing
 function makeString($data) {
 	return "'" . $data . "'";
 }
-
 // Displays a phone number as expected (###)-###-####
 // If it is not 10 digits long, just return as is
 function displayPhoneNo($data) {
@@ -253,13 +232,11 @@ function displayPhoneNo($data) {
 		return $data;
 	}
 }
-
 // Takes in a string and strips all spaces, dashes and non-integers and return the first 10 digits
 // Inside single quotes to be stored properly
 function storePhoneNo($data) {
 	return "'" . substr((preg_replace('/[^0-9]/','',$data)), 0, 10) . "'";
 }
-
 // Truncate output to a specified number of characters
 function displayForTable($item, $length, $cutLength=2) {
 	if ( (! (is_string($item))) || ($item == NULL) ) {
@@ -270,11 +247,9 @@ function displayForTable($item, $length, $cutLength=2) {
 	}
 	return stripslashes($item);
 }
-
 function hashPassword($pw) {
   return password_hash($pw, PASSWORD_BCRYPT, ['cost' => 8]);
 }
-
 function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $inputName, $hasDeletedAttribute) {
 	/*
 	argument explanations:
@@ -286,36 +261,27 @@ function createDatalist_i($defaultVal, $listName, $tableName, $attributeName, $i
 	$hasDeletedAttribute - whether the isDeleted attribute is in the table or not, this will allow it to filter
 		out all that has been deleted.
 	*/
-
   $defaultVal = htmlspecialchars_decode($defaultVal);
-
 	$conn = connectDB();
 	if ($conn->connect_error) {
 		die("Connection failed: " . $conn->connect_error);
 	}
 	$sql = "SELECT DISTINCT " . $attributeName . "
 			FROM " . $tableName;
-
 	if ($hasDeletedAttribute) {
 		$sql .= " WHERE isDeleted=0";
 	}
-
 	$sqlQuery = queryDB($conn, $sql);
-
   $defaultVal = htmlspecialchars($defaultVal, ENT_QUOTES);
-
 	echo "<input type='text' id='" . $inputName . "' list='" . $listName . "'
 			value='" . $defaultVal . "' name='" . $inputName . "'>";
-
 	echo "<datalist id='" . $listName . "'>";
 	while($row = sqlFetch($sqlQuery)) {
 		echo "<option value='" . $row[$attributeName] . "' >" . $row[$attributeName] . "</option>";
 	}
 	echo "</datalist>";
 	closeDB($conn);
-
 }
-
 // Requires passing an open database connection and an SQL query
 // Returns a single data point with the indicated keyName
 function getSingleDataPoint($sql, $conn, $keyName) {
@@ -328,37 +294,29 @@ function getSingleDataPoint($sql, $conn, $keyName) {
 		return false;
 	}
 }
-
 // **********************************************
 // * Cookie functions
 function createCookie($cookieName, $cookieValue, $duration) {
 	setcookie($cookieName, $cookieValue, time() + $duration, "/");
 }
-
 function removeCookie($cookieName) {
 	setcookie($cookieName, 0, time() -1, "/");
 }
-
 // ***********************************************************************
 // * "Available" Client functions
-
 // We need a custom client named 'available' to put into invoices that don't have real clients yet
 // This function will check the database for this client, and create it if it doesn't exist yet
 // Returns the appropriate clientID
 function getAvailableClient() {
 	$conn = connectDB();
-
 	$clientName = makeString("Available");
-
 	// Find the 'available' client FROM FamilyMember fm
 	$sql = "SELECT fm.clientID as id
 			FROM familymember fm
 			WHERE fm.firstName = " . $clientName . "
 			AND fm.lastName = " . $clientName;
-
 	$availableClient = queryDB($conn, $sql);
 	closeDB($conn);
-
 	// If we didn't get a match, we need to create the 'Available' client
 	if ( $availableClient==null || $availableClient->num_rows <= 0 ) {
 		return createAvailableClient();
@@ -369,7 +327,6 @@ function getAvailableClient() {
 		return $getID['id'];
 	}
 }
-
 function createAvailableClient(){
 	$conn = connectDB();
 	if ($conn->connect_error) {
@@ -378,7 +335,6 @@ function createAvailableClient(){
 	// Create insertion string
 	$sql = "INSERT INTO client (numOfAdults, NumOfKids, timestamp, isDeleted, redistribution)
 			VALUES ('0','0',now(), FALSE, FALSE)";
-
 	// Perform and test insertion
 	if (queryDB($conn, $sql) === TRUE) {
 		// Get the ID Key of the client we just created (we will need it to create the family member)
@@ -409,7 +365,6 @@ function createAvailableClient(){
 		echoDivWithColor("Error, failed to connect to database.", "red" );
 	}
 }
-
 // **********************************************************
 // * Status decoder for invoices
 // SV = Status Value
@@ -417,7 +372,6 @@ define("SV_AVAILABLE", 0);
 define("SV_ASSIGNED", 100);
 define("SV_LOCKED", 101);
 define("SV_ACTIVE", 200);
-
 define("SV_ARRIVED_LOW", 300);
 define("SV_ARRIVED_HIGH", 399);
 define("SV_READY_TO_REVIEW_LOW", 400);
@@ -428,14 +382,11 @@ define("SV_PRINTED_LOW", 600);
 define("SV_PRINTED_HIGH", 699);
 define("SV_COMPLETED", 700);
 define("SV_ADVANCE_STATUS", 100);
-
 define("SV_PARTIAL_COMPLETION", 996);
 define("SV_BAD_DOCUMENTATION", 997);
 define("SV_CANCELED", 998);
 define("SV_NO_SHOW", 999);
-
 define("SV_REDISTRIBUTION", 9999);
-
 function visitStatusDecoder($visitStatus){
 	switch(true) {
 		case ($visitStatus == SV_AVAILABLE): return 'Available';
@@ -447,19 +398,15 @@ function visitStatusDecoder($visitStatus){
 		case ($visitStatus >= SV_READY_TO_PRINT_LOW && $visitStatus < SV_READY_TO_PRINT_HIGH): return 'Ready to print';
 		case ($visitStatus >= SV_PRINTED_LOW && $visitStatus < SV_PRINTED_HIGH): return 'Printed';
 		case ($visitStatus == SV_COMPLETED): return 'Completed';
-
 		// special cases
 		case ($visitStatus == SV_PARTIAL_COMPLETION): return 'Partial completion';
 		case ($visitStatus == SV_BAD_DOCUMENTATION): return 'Bad documentation';
 		case ($visitStatus == SV_CANCELED): return 'Client canceled';
 		case ($visitStatus == SV_NO_SHOW): return 'Client did not show';
-
 		case ($visitStatus == SV_REDISTRIBUTION): return 'Reallocation order';
-
 		default: return 'Status not recognized';
 	}
 }
-
 // *****
 // Basic functions to get the status definitions if needed
 // Return the status # for bad documentation
@@ -478,7 +425,6 @@ function GetNoShowStatus() {
 function GetPartialCompletionStatus() {
 	return SV_PARTIAL_COMPLETION;
 }
-
 // Return the status # for available
 function GetAvailableStatus() {
 	return SV_AVAILABLE;
@@ -495,8 +441,6 @@ function GetActiveStatus() {
 function GetHighestActiveStatus() {
 	return SV_READY_TO_PRINT_HIGH;
 }
-
-
 // Return the status # for lowest arrived
 function GetArrivedLow() {
 	return SV_ARRIVED_LOW;
@@ -521,7 +465,6 @@ function GetReadyToPrintLow() {
 function GetReadyToPrintHigh() {
 	return SV_READY_TO_PRINT_HIGH;
 }
-
 // Return the status # for lowest printed
 function GetPrintedLow() {
 	return SV_PRINTED_LOW;
@@ -534,7 +477,6 @@ function GetPrintedHigh() {
 function GetCompletedStatus() {
 	return SV_COMPLETED;
 }
-
 // *******
 // Returns the value of the passed status elevated to the next status
 function AdvanceInvoiceStatus($status) {
@@ -542,7 +484,6 @@ function AdvanceInvoiceStatus($status) {
 	//echo "<script>window.alert('CurrStatus: " . $status . " Advancing by: " . SV_ADVANCE_STATUS . "');</script>";
 	return ($status + SV_ADVANCE_STATUS);
 }
-
 // **********
 // Function to test status
 // Returns a bool indicating whether the appointment is active or not
@@ -575,12 +516,9 @@ function IsComplete($status) {
 			 ($status == SV_NO_SHOW)||
 			 ($status == SV_COMPLETED) );
 }
-
 function invoiceImmutable($status) {
 	return ($status >= SV_ARRIVED_LOW);
 }
-
-
 // Returns the Redistribution stats number
 function GetRedistributionStatus() {
 	return SV_REDISTRIBUTION;
@@ -588,7 +526,6 @@ function GetRedistributionStatus() {
 function GetRedistributionStatuses() {
 	return array(SV_REDISTRIBUTION);
 }
-
 // **********************************************************
 // * Decoder for family sizes
 define("FAMILY_SIZE_SM_LOW", 1);
@@ -597,62 +534,55 @@ define("FAMILY_SIZE_MED_LOW", 3);
 define("FAMILY_SIZE_MED_HIGH", 4);
 define("FAMILY_SIZE_HIGH_THRESHOLD", 5);
 define("ADULT_AGE_CUTOFF", 18);
-
+define("SENIOR_AGE_CUTOFF", 65);
 function runFamilyDecoder($famSize, $valS, $valM, $valL){
 	switch(true) {
 		case ($famSize >= FAMILY_SIZE_SM_LOW && $famSize <= FAMILY_SIZE_SM_HIGH): return $valS;
 		case ($famSize >= FAMILY_SIZE_MED_LOW && $famSize <= FAMILY_SIZE_MED_HIGH): return  $valM;
 		case ($famSize >= FAMILY_SIZE_HIGH_THRESHOLD): return $valL;
-
 		default: return 'Small';
 	}
 }
-
 function familySizeDecoder($famSize){
 	return (runFamilyDecoder($famSize, 'Small', 'Medium', 'Large'));
 }
-
 function orderFormNameTagLength($familySize) {
 	return (runFamilyDecoder($familySize, 2, 3, 3));
 }
-
 function isAdultBirthdate($birthdate) {
   $from = new DateTime($birthdate);
   $to   = new DateTime('today');
-  return ($from->diff($to)->y) > ADULT_AGE_CUTOFF;
+  return ($from->diff($to)->y) >= ADULT_AGE_CUTOFF;
 }
-
 function isKidBirthdate($birthdate) {
+ return !isAdultBirthdate($birthdate);
 }
-
+function isSeniorBirthdate($birthdate) {
+  $from = new DateTime($birthdate);
+  $to   = new DateTime('today');
+  return ($from->diff($to)->y) >= SENIOR_AGE_CUTOFF;  
+}
 // ***********************************************************
 // * Simple function to return the number of occurrences of a value in an array
 function returnCountOfItem($item, $data) {
     $counts = array_count_values($data);
     return $counts[$item];
 }
-
 // ***********************************************************
 // * Returns a string of a time value of the form hh:mm:ss to hh:mm
-
 function returnTime($time) {
 	return DateTime::createFromFormat('g:i:s',$time)->format('g:i a');
 }
-
 // ************************************************************
 // * Return all state options, with an optional 'selected' state
-
 function getStateOptions($s = 'IL') {
-
 	$stateOptions = array('AL','AK','AZ','AR','CA','CO','CT','DE','DC','FL','GA','HI','ID','IL','IN','IA',
 						 'KS','LA','MD','MA','MI','MN','MS','MO','MT','NE','NV','NH','NJ','NM','NY','NC','ND',
 						 'OH','OK','OR','PA','RI','SC','SD','TN','TX','UT','VT','VA','WA','WV','WI','WY');
 	foreach ($stateOptions as $option) {
 		echo "<option value='" . $option . "' " . (($option == $s) ? ' selected ' : ' ' ) . ">" . $option . "</option>";
 	}
-
 }
-
 function getPetOptions($s = '') {
   $petOptions = array('A' => 'Small Dog', 'B' => 'Medium Dog', 'C' => 'Large Dog', 'D' => 'Cat');
   foreach ($petOptions as $letter => $option) {
@@ -660,39 +590,41 @@ function getPetOptions($s = '') {
     echo "<option value='" . $letter . "' " . $selected . ">" . $option . "</option>";
   }
 }
-
+function decodePets($s) {
+    $petOptions = array('A' => 'Small Dog', 'B' => 'Medium Dog', 'C' => 'Large Dog', 'D' => 'Cat');
+    $returnString = "";
+    foreach($petOptions as $letter => $option) {
+        if (strpos($s,$letter)  !== false) {
+            $returnString .= $returnString == "" ? $option : ", " . $option;
+        }
+    }
+    return empty($returnString) ? "None" : $returnString;
+}
 // ************************************************************
 // ** Decoder for client type
-
 define("CLIENT_TYPE_UNKNOWN", 0);
 define("CLIENT_TYPE_CONSTIT", 1);
 define("CLIENT_TYPE_MEMBER", 2);
 define("CLIENT_TYPE_RESIDENT", 3);
-
 function clientTypeDecoder($clientType){
 	switch(true) {
 		case ($clientType == CLIENT_TYPE_UNKNOWN): return 'Unknown';
 		case ($clientType == CLIENT_TYPE_CONSTIT): return 'Constituent';
 		case ($clientType == CLIENT_TYPE_MEMBER): return 'Member';
 		case ($clientType == CLIENT_TYPE_RESIDENT): return 'Resident';
-
 		default: return 'Unknown';
 	}
 }
-
 // ************************************************************
 // ** Decoder for gender type
-
 define("GENDER_UNKNOWN", 0);
 define("GENDER_MALE", -1);
 define("GENDER_FEMALE", 1);
-
 function genderDecoder($gender){
 	switch(true) {
 		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'Male';
 		case ($gender == GENDER_FEMALE): return 'Female';
-
 		default: return '-';
 	}
 }
@@ -701,11 +633,9 @@ function genderDecoderShort($gender){
 		case ($gender == GENDER_UNKNOWN): return '?';
 		case ($gender == GENDER_MALE): return 'M';
 		case ($gender == GENDER_FEMALE): return 'F';
-
 		default: return '-';
 	}
 }
-
 // ************************************************************
 // ** Decoder/Encoders for item locations
 define("MIN_AISLE", 1);
@@ -719,13 +649,10 @@ function aisleEncoder($aisle){ return $aisle; }
 // Adding this here in case we want to do something in the future
 function shelfDecoder($shelf){ return (($shelf > 0) ? $shelf : "-"); }
 function shelfEncoder($shelf){ return $shelf; }
-
 function rackEncoder($rack){	return $rack; }
-
 function rackDecoder($rack){
 	return (($rack > 0) ? chr($rack) : "-");
 }
-
 // ************************************************************
 // ** Get price information for items by ID
 function getItemPrices($conn = null) {
@@ -749,17 +676,14 @@ function getItemPrices($conn = null) {
 }
 // ************************************************************
 // ** Disabled categories for walkIns
-
 function showCategory($walkIn, $category){
 	// If we need to make more in the future, just add them here
 	$DisabledCategories = array("medicine","specials","redistribution");
-
 	if (($walkIn) && (in_array(strtolower($category), $DisabledCategories)) ) {
 		return false;
 	}
 	return true;
 }
-
 // **************************************
 // ** Weight information for donations
 define("WEIGHT_BAKERY"	 , 15);
@@ -771,11 +695,9 @@ define("WEIGHT_PREPARED" , 25);
 define("WEIGHT_PRODUCE"	 , 30);
 define("WEIGHT_FROZEN"	 , 25);
 define("WEIGHT_FOODDRIVE", 25);
-
 // ****************************************
 // * AJAX defines
 define("AJAX_REDIRECT", "!REDIRECT!");
-
 // **************************************
 // * Permission stuff
 DEFINE("PERM_TESTHOME", 100);
@@ -797,11 +719,9 @@ function decodePermissionLevel($val) {
       return "Basic";
   }
 }
-
 // *****************************************
 // ** Number formatting
 function formatCurrency($amt) {
   return "$" . number_format($amt,2,".",",");
 }
-
 ?>

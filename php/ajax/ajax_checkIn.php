@@ -12,7 +12,7 @@
 	$date = $_POST['field1'];
 
   // Query the database to get all of our client data for the passed date
-	$sql = "SELECT  CONCAT(fm.LastName, ', ' , fm.firstName) as cName,
+	$sql = "SELECT  CONCAT(fm.LastName, ', ' , fm.firstName) as cName, c.clientID,
 					(c.numOfKids + numOfAdults) AS familySize, i.invoiceID, i.clientID,
 				    i.visitTime, i.status, i2.firstVisit
 			FROM invoice i
@@ -43,37 +43,38 @@
 	}
 
 	if (count($results) < 1) { die(); }
-
+//ap_co3.php?id=$result['clientID']
 	foreach ($results as $result) {
 		$fv = $result['firstVisit'] == date("Y-m-d", strtotime("today")) ? "<i class='fa fa-star' style='color:blue;'></i> " : "";
+		$client = $fv . "<a href='" . $basePath . "ap_co3.php?id=" . $result['clientID'] . "' target='_blank'>" . $result['cName'] . "</a>";
     // If the client has yet to arrive, build their row
 		if ($result['status'] == GetActiveStatus()) {
 			$dataBlock['dueCount']++;
-			$dataBlock['due'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+			$dataBlock['due'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) .
 								 "</td><td><button id='D" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-sign-in'></i> Check-In</button></td></tr>";
 		}
 		else if (($result['status'] >= GetArrivedLow()) && ($result['status'] <= GetArrivedHigh())) {
 			$dataBlock['orderCount']++;
-      $dataBlock['order'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+      $dataBlock['order'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) .
 								 "</td><td><button type='button' class='btn_Action' disabled><i class='fa fa-wpforms'> Client Ordering...</i></button></td></tr>";
 		}
 		else if (($result['status'] >= GetReadyToReviewLow()) && ($result['status'] <= GetReadyToReviewHigh())) {
 			$dataBlock['reviewCount']++;
-      $dataBlock['review'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+      $dataBlock['review'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) . " - " . ($result['status'] % 100 + 1) .
 								 "</td><td><button id='R" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-edit'></i> Review</button></td></tr>";
 		}
 		else if (($result['status'] >= GetReadyToPrintLow()) && ($result['status'] <= GetReadyToPrintHigh())) {
 			$dataBlock['printCount']++;
-			$dataBlock['print'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+			$dataBlock['print'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) . " - " . ($result['status'] % 100 + 1) .
 								 "</td><td><button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Print</button></td></tr>";
 		}
 		else if (($result['status'] >= GetPrintedLow()) && ($result['status'] <= GetPrintedHigh())) {
 			$dataBlock['waitCount']++;
-      $dataBlock['wait'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+      $dataBlock['wait'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) . " - " . ($result['status'] % 100 + 1) .
 								 "</td><td>
                   <button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Reprint</button>&nbsp;&nbsp;&nbsp;
@@ -82,7 +83,7 @@
 		}
 		if ($result['status'] == GetCompletedStatus()) {
 			$dataBlock['completedCount']++;
-      $dataBlock['completed'] .= "<tr><td>" . $fv . $result['cName'] . "</td><td>" . $result['familySize'] .
+      $dataBlock['completed'] .= "<tr><td>" . $client . "</td><td>" . $result['familySize'] .
 								 "</td><td>" . returnTime($result['visitTime']) .
 								 "</td><td>
                   <button id='P" . $result['invoiceID'] . "' class='btn_Action'><i class='fa fa-print'></i> Reprint</button>

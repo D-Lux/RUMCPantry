@@ -28,7 +28,7 @@ elseif (empty($pw)) {
 }
 else {
   $conn = null;
-  if (strpos($name, "test")) {
+  if (strpos($name, "test") !== false) {
     if (strpos($name, "home") !== false) {
       $conn = connectHomeDB();
     }
@@ -46,7 +46,7 @@ else {
     die(json_encode($data));
   }
 
-  $sql = "SELECT login, pw, permission_level
+  $sql = "SELECT permission_id, login, pw, permission_level
           FROM permissions";
   $results = queryDB($conn, $sql);
   if ($results === false) {
@@ -60,8 +60,9 @@ else {
     if (strtoupper($name) == strtoupper($result['login'])) {
       if (password_verify($pw, $result['pw'])) {
         // We found a match, apply my permissions and break out
-        $_SESSION['perms']= $result['permission_level'];
-        $data['perm']     = $result['permission_level'];
+        $_SESSION['perms'] = $result['permission_level'];
+        $_SESSION['permid']= $result['permission_id'];
+        $data['perm']      = $result['permission_level'];
         die(json_encode($data));
       }
       else {

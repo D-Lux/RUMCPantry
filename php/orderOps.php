@@ -84,8 +84,8 @@ function createInvoiceDesc() {
 				}
 			}
 			else {
-				// Commenting out specials
-				/*
+			    // Commeting out specials
+			    /*
 				// If the item is a special, it will not be an array
 				// Make sure we're looking at a number and not a space
 				if (is_numeric($C_Count)) {
@@ -195,7 +195,7 @@ function updateStatusFromOrder($setOrder = false, $minFinalStatus = 0, $maxFinal
         return false;
       }
     }
-
+    
     // The status was okay, so just assume we're good
     closeDB($conn);
     return true;

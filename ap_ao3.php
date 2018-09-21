@@ -1,6 +1,7 @@
 <?php
   // © 2018 Daniel Luxa ALL RIGHTS RESERVED
   $pageRestriction = 10;
+  $newTitle = date("M jS, Y", strtotime($_GET['date']));
   include 'php/checkLogin.php';
   include 'php/header.php';
   include 'php/backButton.php';

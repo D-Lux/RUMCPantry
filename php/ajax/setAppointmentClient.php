@@ -61,7 +61,8 @@
 
 
     // Make sure this client doesn't already have an appointment this month
-    if (!$setAvail) {
+    //if (!$setAvail) {
+    if (false) {    // disabled for now per request
       $apptYM = date("Ym", strtotime($_GET['date']));
       $sql = "SELECT COUNT(*) as visitNum
               FROM invoice
@@ -76,10 +77,11 @@
       }
     }
 
+        $setCreator = isset($_SESSION['permid']) ? ", setby = " . $_SESSION['permid'] . " " : "";
 		$sql = "UPDATE invoice
-						SET clientID=" . $clientID . ",
-						status=" . $newStatus . "
-            WHERE invoiceID=" . $invoiceID;
+				SET clientID=" . $clientID . ",
+				status=" . $newStatus . " " . $setCreator . "
+                WHERE invoiceID=" . $invoiceID;
 
 		if (queryDB($conn, $sql)) {
       $sql = "SELECT (numOfAdults + numOfKids) AS familySize, phoneNumber

@@ -63,6 +63,7 @@
 				<tr>
 					<th width='5%'></th>
 					<th width='30%'>Item</th>
+					<th width='30%'>Display Name</th>
 					<th width='30%'>Category</th>
 					<th width='10%'>Aisle</th>
 					<th width='10%'>Rack</th>

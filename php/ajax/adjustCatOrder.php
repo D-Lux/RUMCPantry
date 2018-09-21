@@ -1,4 +1,4 @@
- <?php
+<?php
   session_start();
 // © 2018 Daniel Luxa ALL RIGHTS RESERVED
 	include '../utilities.php';

@@ -22,8 +22,22 @@ $permVal = isset($_SESSION['perms']) ? $_SESSION['perms'] : 0;
 echo "<input type='hidden' value='" . $permVal . "' id='perms'>";
 
 
-if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) { ?>
-  <div class="testHover hide_for_print">TEST MODE <?=$_SESSION['perms']?></div>
+if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) { 
+    $dbname     = "roselleu_foodpantry";
+    if (ISSET($_SESSION['perms'])){
+      if ($_SESSION['perms'] == 100 || $_SESSION['perms'] == 2) {
+         $dbname     = "foodpantry";
+       }
+      if ($_SESSION['perms'] == 101 || $_SESSION['perms'] == 3 ) {
+         $dbname     = "roselleu_testpantry";
+      }
+    }
+?>
+    <div class="testHover hide_for_print">
+      <p>TEST MODE <?=$_SESSION['perms']?></p>
+      <p>dbName: <?=$dbname?></p>
+      <p>Login ID: <?=$_SESSION['permid']?></p>
+    </div>
 
 <?php }
 

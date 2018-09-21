@@ -71,10 +71,10 @@ th {
             ORDER BY aisle, rack, shelf, formOrder, iName";
 		$invoiceData = queryDB($conn, $sql);
 
-		if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
-			//echo "error: " . mysqli_error($conn);
-			die("<br>Invoice is currently empty.");
-		}
+		//if ($invoiceData == NULL || $invoiceData->num_rows <= 0){
+		//	//echo "error: " . mysqli_error($conn);
+		//	die("<br>Invoice is currently empty.");
+		//}
 
 
     $sql = "SELECT visitDate FROM invoice where invoiceID = " . $invoiceID;
@@ -132,7 +132,14 @@ th {
               </thead>
               <!-- Loop through our data and spit out the data into our table -->
               <tbody>
-                <?php while( $invoice = sqlFetch($invoiceData) ) { ?>
+                <?php if ($invoiceData == NULL || $invoiceData->num_rows <= 0){ ?>
+                <tr>
+                    <td colspan = 7>Invoice is currently empty.</td>
+                </tr>
+                <?php
+		        }
+		        else {
+		            while( $invoice = sqlFetch($invoiceData) ) { ?>
                   <tr>
                     <td><?=$invoice['cName']?></td>
                     <td><?=$invoice['iName']?></td>
@@ -145,7 +152,7 @@ th {
                       <i class='fa fa-trash'></i></button>
                     </td>
                   </tr>
-                <?php } ?>
+                <?php } } ?>
               </tbody>
     		    </table>
           </td>

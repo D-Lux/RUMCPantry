@@ -7,105 +7,21 @@
   include 'php/beanOps.php';
   include 'php/backButton.php';
 
-  // Default to walkIn
-	$familyType = "Small";
-  $ViewMode = false;
+
 	if ( isset($_POST['clientFirstName']) && isset($_POST['clientLastName']) ) {
 		echo "<h3>" . $_POST['clientFirstName'] . " " . $_POST['clientLastName'] . "</h3>";
 	}
 	else {
 		echo "<h3>Order Form";
+		$ViewMode = false;
 		if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
-			$viewMode = true;
-			$familyType = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
-			echo ": " . $familyType;
+			$ViewMode = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
+			echo ": " . $ViewMode;
 		}
 		echo "</h3>";
 	}
-	$sql = "SELECT numOfAdults, numOfKids, email, phoneNumber, firstName, lastName, address, city, state, zip, pets
-					FROM client c
-					LEFT JOIN familymember fm
-					ON fm.clientID = c.clientID
-					WHERE fm.isHeadOfHousehold = 1
-					AND c.clientID = " . $_POST['clientID'];
-	$clientInfo = current(rawQuery($sql));
 ?>
 		<div class="body-content">
-			<input type="hidden" id="viewMode" value="<?=$viewMode?>">
-			<?php if (!$viewmode) { ?>
-				<div id="infoVerificationWrapper">
-					<div class="row">
-						<div class="col-sm-4" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=$clientInfo['firstName'] . " " . $clientInfo['lastName']?>
-							</div>
-							<div class="row">
-								<small>
-									Client Name
-								</small>
-							</div>
-						</div>
-						<div class="col-sm-4" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=$clientInfo['numOfKids'] + $clientInfo['numOfAdults']?> (<?=$clientInfo['numOfKids'] > 0 ? $clientInfo['numOfKids'] . " Children, " : ""?><?=$clientInfo['numOfAdults']?> Adults)
-							</div>
-							<div class="row">
-								<small>
-									Family Size
-								</small>
-							</div>
-						</div>
-						<div class="col-sm-4" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=decodePets($clientInfo['pets'])?>
-							</div>
-							<div class="row">
-								<small>
-									Pets
-								</small>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-10" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=$clientInfo['address'] . " " . $clientInfo['city'] . ", " . $clientInfo['state'] . " " . $clientInfo['zip']?>
-							</div>
-							<div class="row">
-								<small>
-									Address
-								</small>
-							</div>
-						</div>
-					</div>
-					<div class="row">
-						<div class="col-sm-6" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=empty($clientInfo['email']) || strtoupper($clientInfo['email']) == "N/A" ? "-" : $clientInfo['email']?>
-							</div>
-							<div class="row">
-								<small>
-									Email
-								</small>
-							</div>
-						</div>
-						<div class="col-sm-4" style="border:1px solid white; margin: 10px;padding-left:20px">
-							<div class="row">
-								<?=displayPhoneNo($clientInfo['phoneNumber'])?>
-							</div>
-							<div class="row">
-								<small>
-									Phone Number
-								</small>
-							</div>
-						</div>
-					</div>
-					<div class="text-center">
-						<button class='btn-nav' id="btnVerifyInfo">Verify Information</button>
-					</div>
-				</div>
-			<?php } ?>
-			<div style="display:none" id="formWrapper">
 			<?php
 
 				// *******************************************************
@@ -113,10 +29,22 @@
 				// * 1.) Family size information
 				// * 2.) Order form database
 
+				// Default to walkIn
+				$familyType = "Small";
 				$walkIn = 0;
+
 				// Open the database connection
 				$conn = connectDB();
 				if ($conn->connect_error) { die("Connection failed: " . $conn->connect_error); }
+
+				// Check if we are just viewing (from admin)
+				// Viewing means we're looking at an order form without an attached client
+				$ViewMode = false;
+				if ( (isset($_GET['Small'])) || (isset($_GET['Medium'])) || (isset($_GET['Large'])) ) {
+					$ViewMode = true;
+					// Set the family type as appropriate
+					$familyType = (isset($_GET['Small'])) ? "Small" : ((isset($_GET['Medium'])) ? "Medium" : "Large");
+				}
 
 				if (!$ViewMode) {
 					// -= Family size query =-
@@ -152,7 +80,7 @@
 					}
 				}
 
-				// --== Item database query ==--
+				// --== Item databse query ==--
 				$sql = "SELECT itemID, displayName, itemName, item." . $familyType . " as IQty, category.name as CName,
 						category." . $familyType . " as CQty, item.categoryID as CID
 						FROM item
@@ -359,22 +287,11 @@
           <?php }	?>
 				
 			</form>
-		</div>
     
 
 <?php include 'php/footer.php'; ?>
 <script src='js/orderFormOps.js'></script>
 <script type="text/javascript">
-	// client information verification handlers
-	if ($("#viewMode").val() == "true") {
-		$("#formWrapper").show();
-	}
-	$("#btnVerifyInfo").on("click", function(e){
-		e.preventDefault();
-		$("#infoVerificationWrapper").hide();
-		$("#formWrapper").show();
-	});
-
   $("#disclaimerConfirm").on("change", function(e) {
     $("#submitOrderBtn").prop("disabled",!$("#disclaimerConfirm").is(":checked"));
   });

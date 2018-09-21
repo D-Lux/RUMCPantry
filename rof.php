@@ -208,7 +208,7 @@
 	// * Specials
 
 	//if (!$walkIn) {
-  if (false) {
+	if (false) {
 		echo "<div id='specialsSection'>";
 		$specialsFile = fopen("specials.txt","r") or die();
 		echo "<hr><h2>Specials</h2><h3>Please select one from each section</h3>";
@@ -284,7 +284,7 @@
 
 <script type='text/javascript'>
   updateCheckedQuantities();
-
+  
   $("#iReviewOrderForm").on("submit", function(e) {
     $("#iSubmitReview").prop("disabled", true);
     e.preventDefault();

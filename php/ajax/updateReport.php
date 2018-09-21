@@ -102,12 +102,7 @@
     }
   }
 
-  /*
-  I'd also like to see monthly how many cans of kernal corn, string beans, peas, carrots, pasta sauce and peanut butter (all sizes collectively), oh and breakfast cereal (separate sweet and non-sweetened). This will help us with inventory management and ordering.
-
-  */
-
-  	// ****************************************************************
+ 	// ****************************************************************
 	// * Output block
   ?>
 <style>
@@ -124,7 +119,7 @@
     <button class="tablinks" id="Overview">Overview<br><i class="fab fa-stack-overflow fa-3x"></i></button>
     <button class="tablinks" id="Breakdown">Distribution Breakdown<br><i class="fa fa-bar-chart fa-3x"></i></button>
     <button class="tablinks" id="ClientInfo">Client Information<br><i class="fa fa-user fa-3x"></i></button>
-    <button class="tablinks" id="ClientInfo">Reallocation Information<br><i class="fa fa-gift fa-3x"></i></button>
+    <button class="tablinks" id="ReallocationContent">Reallocation Information<br><i class="fa fa-gift fa-3x"></i></button>
   </div>
 
   <div id="OverviewContent" class="tabcontent defaultTab">
@@ -146,12 +141,12 @@
         <td><?=$totalKids?></td>
       </tr>
       <tr>
-        <th>Total Value Distributed</th>
+        <th>Total Retail Cash Value of Foods Distributed</th>
         <td><?=formatCurrency($donationWorth)?></td>
       </tr>
 
       <tr>
-        <th>Average Order Cash Value per Appointment</th>
+        <th>Average Retail Cash Value per Appointment</th>
         <?php if ( $totalAppts != 0 ) { ?>
           <td><?=formatCurrency(round(($donationWorth / $totalAppts), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
@@ -159,7 +154,7 @@
         <?php } ?>
       </tr>
       <tr>
-        <th>Average Order Cash Value per Person</th>
+        <th>Average Retail Cash Value per Person</th>
         <?php if ( $totalAppts != 0 ) { ?>
           <td><?=formatCurrency(round(($donationWorth / $totalAffected), 2, PHP_ROUND_HALF_UP))?></td>
         <?php } else { ?>
@@ -205,54 +200,120 @@
   </div>
 
   <?php
-    // Build up individual client data
-    // number of distinct families / people
-    // number of distinct children
-    // Largets order worth
-    // smallest order worth
+    // *********************************************************************
+    // * Client breakdown information
+    $completedStatus = GetCompletedStatus();
+    $sql = "SELECT familyMemberID, firstName, lastName, birthDate, gender, isHeadOfHousehold, client.clientID
+            FROM invoice
+            JOIN client
+            ON invoice.clientID = client.clientID
+            JOIN familymember
+            ON familymember.clientID = client.clientID
+            WHERE invoice.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
+            AND invoice.status = {$completedStatus} 
+            AND familymember.isDeleted = 0 
+            GROUP BY familyMemberID";
+
+    $cbResults = runQuery($conn, $sql);
+
+    $Clients = [];
+    $Women   = 0;
+    $Men     = 0;
+    $NoGender= 0;
+
+    foreach ($cbResults as $result) {
+      if ($result['isHeadOfHousehold'] == 1) {
+        $Clients['family'][$result['clientID']] = $result['lastName'];
+      }
+
+      // Put our client in the right bins
+      $addGender = false;
+      if (isKidBirthdate($result['birthDate'])) {
+        $Clients['kids'][$result['familyMemberID']] = $result['firstName'] . " " . $result['lastName'];
+      }
+      elseif (isSeniorBirthdate($result['birthDate'])) {
+        $Clients['seniors'][$result['familyMemberID']] = $result['firstName'] . " " . $result['lastName'];
+      }
+      else {
+        $Clients['adults'][$result['familyMemberID']] = $result['firstName'] . " " . $result['lastName'];
+      }
+
+      if ($result['gender'] == -1)   { $Men++;      }
+      elseif($result['gender'] == 1) { $Women++;    }
+      else                           { $NoGender++; }
+      
+    }
+  
+    $sql = "SELECT clientID, SUM(totalItemsPrice) as minDonation, visitDate
+            FROM invoice
+            JOIN invoicedescription
+            ON invoicedescription.InvoiceID = invoice.InvoiceID
+            WHERE invoice.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
+            AND invoice.status = {$completedStatus} 
+            GROUP BY invoice.invoiceID
+            HAVING SUM(totalItemsPrice) = 
+                ( SELECT MIN(totalDonation) 
+                  FROM  ( SELECT SUM(totalItemsPrice) as totalDonation
+                          FROM invoice
+                          JOIN invoicedescription
+                          ON invoicedescription.InvoiceID = invoice.InvoiceID
+                          WHERE invoice.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
+                          AND invoice.status = {$completedStatus} 
+                          GROUP BY invoice.invoiceID) subQ)";
+
+    $minOrder = runQueryForOne($conn, $sql);
+
+    $sql = "SELECT clientID, SUM(totalItemsPrice) as maxDonation, visitDate
+            FROM invoice
+            JOIN invoicedescription
+            ON invoicedescription.InvoiceID = invoice.InvoiceID
+            WHERE invoice.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
+            AND invoice.status = {$completedStatus} 
+            GROUP BY invoice.invoiceID
+            HAVING SUM(totalItemsPrice) = 
+                ( SELECT MAX(totalDonation) 
+                  FROM  ( SELECT SUM(totalItemsPrice) as totalDonation
+                          FROM invoice
+                          JOIN invoicedescription
+                          ON invoicedescription.InvoiceID = invoice.InvoiceID
+                          WHERE invoice.visitDate BETWEEN '{$startDate}' AND '{$endDate}'
+                          AND invoice.status = {$completedStatus} 
+                          GROUP BY invoice.invoiceID) subQ)";
+
+    $maxOrder = runQueryForOne($conn, $sql);
+
   ?>
-  <div id="ClientInfoContent" class="tabcontent">TO COME</div>
+  <div id="ClientInfoContent" class="tabcontent">
+    <table class="table">
+      <tr><td>Number of Families</td><td><?=count($Clients['family'])?></td></tr>
+      <tr><td>Number of Distinct People</td><td><?=$Women + $Men + $NoGender?></td></tr>
+      <tr><td>Number of Distinct Adults</td><td><?=count($Clients['adults']) + count($Clients['seniors'])?></td></tr>
+      <tr><td>Number of Distinct Children Under the Age of 18</td><td><?=count($Clients['kids'])?></td></tr>
+      <tr><td>Number of Distinct People Aged <?=SENIOR_AGE_CUTOFF?> or Older</td><td><?=count($Clients['seniors'])?></td></tr>
+      <tr><td>Number of Men</td><td><?=$Men?></td></tr>
+      <tr><td>Number of Women</td><td><?=$Women?></td></tr>
+      <tr><td>Number of Unknown Gender</td><td><?=$NoGender?></td></tr>
+      <tr><td>Largest Redistribution Worth</td><td>$<?=$maxOrder['maxDonation']?> - <?=$Clients['family'][$maxOrder['clientID']]?> - <?=$maxOrder['visitDate']?></td></tr>
+      <tr><td>Smallest Redistribution Worth</td><td>$<?=$minOrder['minDonation']?> - <?=$Clients['family'][$minOrder['clientID']]?> - <?=$minOrder['visitDate']?></td></tr>
+    </table>
+  </div>
+
+
+  <?php
+    // TODO: Reallocation data
+  ?>
   <div id="ReallocationContent" class="tabcontent">TO COME</div>
 
 
-<?php
-  // Close the database connection, we're done with it
-  closeDB($conn);
-?>
-  <script type="text/javascript">
+<?php closeDB($conn); ?>
+<script type="text/javascript">
   Highcharts.chart('breakdownChartHolder', {
-    chart: {
-        type: 'bar',
-    },
-    title: {
-        text: 'Item Distribution'
-    },
-    subtitle: {
-        text: 'Click a bar to view individual items'
-    },
-    xAxis: {
-        type: 'category'
-    },
-    yAxis: {
-        title: {
-            text: 'Quantity Distributed'
-        }
-
-    },
-    /*
-    legend: {
-        layout: 'vertical',
-        floating: true,
-        backgroundColor: '#FFFFFF',
-        align: 'right',
-        verticalAlign: 'top',
-        y: 60,
-        x: -60
-    },
-    */
-    legend: {
-        enabled: false
-    },
+    chart     : { type: 'bar' },
+    title     : { text: 'Item Distribution' },
+    subtitle  : { text: 'Click a bar to view individual items' },
+    xAxis     : { type: 'category' },
+    yAxis     : { title: { text: 'Quantity Distributed' } },
+    legend    : { enabled: false },
     plotOptions: {
         series: {
             pointWidth: 20,
@@ -262,6 +323,23 @@
                 format: '{point.y}'
             }
         }
+    },
+    events        : {
+      // Drill events to change the subtitle to be helpful
+      drillup       : function (e) {
+                      var chart = this;
+                      chart.setTitle(null, { text: "Click a bar to view individual items", });
+                      var newSize = 25 * (e.seriesOptions.data.length + 10);
+                      chart.setSize(undefined, newSize);
+                      $("#breakdownChartHolder").height(newSize + 20);
+                  },
+      drilldown     : function (e) {
+                        var chart = this;
+                        chart.setTitle(null, { text: e.seriesOptions.name , });
+                        var newSize = 25 * (e.seriesOptions.data.length + 10);
+                        chart.setSize(undefined, newSize);
+                        $("#breakdownChartHolder").height(newSize + 20);
+                      }
     },
 
     tooltip: {
@@ -305,7 +383,7 @@
 
 
         ]
-    }
+    },
   });
   </script>
 

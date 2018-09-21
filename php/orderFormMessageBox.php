@@ -17,7 +17,7 @@
     text-align: center;
   }
   #clickOut {
-    position: fixed;
+    position: absolute;
     z-index: 20;
     width: 200%;
     height: 100%;

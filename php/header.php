@@ -7,7 +7,13 @@
 <!DOCTYPE html>
   <html>
     <head>
-      <title>Roselle UMC</title>
+        <!--<link rel="icon" href="<?=$basePath?>images/Cannedfood.ico">-->
+        <?php if (isset($newTitle)) { ?>
+            <title><?=$newTitle?> - Roselle UMC</title>
+        <?php } else { ?>
+            <title>Roselle UMC</title>
+        <?php } ?>
+      
 
       <link href="<?=$basePath?>includes/fontawesome/css/fa-brands.min.css" rel="stylesheet" type="text/css" >
       <link href='<?=$basePath?>includes/fontawesome/css/font-awesome.min.css' rel='stylesheet' type='text/css' >
