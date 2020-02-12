@@ -10,6 +10,8 @@
     <h1 class="text-center">Welcome</h1>
     <h2 class="text-center">Roselle United Methodist Community Food Pantry Portal</h2>
     <a class="button" href="<?=$basePath?>mainpage.php">Sign-In Page</a>
+	<br> <br>
+	<a class="button" href="<?=$basePath?>gala2020.php">Gala Tickets & Info</a>
   </div>
 
   <br> <br> <br> 
