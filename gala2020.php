@@ -20,14 +20,13 @@ h2 {
 	color : red;
 	}
 
-
 </style>
 
 <div class="body-content">
 	<div>
 		<h2>Click below to purchase tickets</h2>
 		<a href="https://www.eventbrite.com/e/roselle-food-pantry-give-where-you-live-gala-2020-tickets-88702943893">
-			<img src="https://cdn.evbuc.com/images/91950333/212805894256/1/logo.jpg" alt="Purchase Tickets" width="500" height="300" border="0">
+			<img src="https://cdn.evbuc.com/images/92378869/212805894256/1/logo.jpg" alt="Purchase Tickets" width="500" height="300" border="0">
 		</a>	
 	</div>
 	
