@@ -12,6 +12,9 @@
     <a class="button" href="<?=$basePath?>mainpage.php">Sign-In Page</a>
 	<br> <br>
 	<a class="button" href="<?=$basePath?>gala2020.php">Gala Tickets & Info</a>
+	<br> <br>
+	<a class="button" href="https://roselle-umc-community-food-pantry.square.site/">Donate</a>
+	
   </div>
 
   <br> <br> <br> 
